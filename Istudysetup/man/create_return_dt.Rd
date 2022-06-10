@@ -9,7 +9,7 @@ create_return_dt(
   exp_age = 30,
   exp_len = 10,
   wash_len = 2,
-  out_len = 8,
+  obs_len = 8,
   endpt = "J10_ASTHMA"
 )
 }
@@ -31,14 +31,14 @@ the input variable \code{endpt}.}
 \item{wash_len}{An integer. Length of the washout period
 (in years).}
 
-\item{out_len}{An integer. Length of the prediction period
+\item{obs_len}{An integer. Length of the prediction period
 (in years).}
 
 \item{endpt}{A string. The column name of the current endpoint of
 interest.}
 }
 \value{
-A list(\code{data}, \code{exp_age}, \code{exp_len}, \code{wash_len}, \code{out_len}):
+A list(\code{data}, \code{exp_age}, \code{exp_len}, \code{wash_len}, \code{obs_len}):
 \itemize{
 \item \code{data}: The actual data.frame.
 \item \code{exp_age} An integer. Age at which exposure period starts
@@ -47,7 +47,7 @@ A list(\code{data}, \code{exp_age}, \code{exp_len}, \code{wash_len}, \code{out_l
 (in years).
 \item \code{wash_len} An integer. Length of the washout period
 (in years).
-\item \code{out_len} An integer. Length of the prediction period
+\item \code{obs_len} An integer. Length of the prediction period
 (in years).
 }
 }

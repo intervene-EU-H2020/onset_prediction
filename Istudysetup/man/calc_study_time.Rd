@@ -4,7 +4,7 @@
 \alias{calc_study_time}
 \title{Calculates total study time interval}
 \usage{
-calc_study_time(bds, exp_age, exp_len, wash_len, out_len)
+calc_study_time(bds, exp_age, exp_len, wash_len, obs_len)
 }
 \arguments{
 \item{bds}{A Date. The birth days of the individuals.}
@@ -18,7 +18,7 @@ calc_study_time(bds, exp_age, exp_len, wash_len, out_len)
 \item{wash_len}{An integer. Length of the washout period
 (in years).}
 
-\item{out_len}{An integer. Length of the prediction period.}
+\item{obs_len}{An integer. Length of the prediction period.}
 }
 \value{
 A lubdridate interval. The total study time interval.
@@ -37,7 +37,7 @@ calc_study_time(bds,
                 exp_age=30,
                 exp_len=10,
                 wash_len=2,
-                out_len=8)
+                obs_len=8)
 
 }
 \author{

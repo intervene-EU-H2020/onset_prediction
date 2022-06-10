@@ -9,7 +9,7 @@ add_study_interval_cols(
   exp_age = 30,
   exp_len = 10,
   wash_len = 2,
-  out_len = 8
+  obs_len = 8
 )
 }
 \arguments{
@@ -26,7 +26,7 @@ add_study_interval_cols(
 \item{wash_len}{An integer. Length of the washout period
 (in years).}
 
-\item{out_len}{An integer. Length of the prediction period
+\item{obs_len}{An integer. Length of the prediction period
 (in years).}
 }
 \value{

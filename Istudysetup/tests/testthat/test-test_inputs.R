@@ -31,7 +31,7 @@ test_that("test_length_vars_are_integers works", {
                                    exp_age=30,
                                    exp_len=10,
                                    wash_len=2,
-                                   out_len=8,
+                                   obs_len=8,
                                    endpt="J10_ASTHMA"), 
                 regexp=NA)
 
@@ -40,7 +40,7 @@ test_that("test_length_vars_are_integers works", {
                                    exp_age=30.3,
                                    exp_len=10,
                                    wash_len=2,
-                                   out_len=8,
+                                   obs_len=8,
                                    endpt="J10_ASTHMA"), 
                 regexp="The variable exp_age needs to be an integer.")
 
@@ -48,7 +48,7 @@ test_that("test_length_vars_are_integers works", {
                                    exp_age="bla",
                                    exp_len=10,
                                    wash_len=2,
-                                   out_len=8,
+                                   obs_len=8,
                                    endpt="J10_ASTHMA"), 
                 regexp="The variable exp_age needs to be an integer.")
 })

@@ -28,7 +28,7 @@
 #'                               (in years).
 #' @param wash_len An integer. Length of the washout period
 #'                                (in years).
-#' @param out_len An integer. Length of the prediction period
+#' @param obs_len An integer. Length of the prediction period
 #'                               (in years).
 #' @param endpt A string. The column name of the current endpoint of 
 #'                        interest.
@@ -54,7 +54,7 @@ get_study_elig_indv <- function(pheno_data,
                                 exp_age=30,
                                 exp_len=10,
                                 wash_len=2,
-                                out_len=8,
+                                obs_len=8,
                                 endpt="J10_ASTHMA",
                                 downsample_fctr=NA) {
     test_length_vars_are_integers(as.list(environment()))             
@@ -64,7 +64,7 @@ get_study_elig_indv <- function(pheno_data,
                                           exp_age, 
                                           exp_len, 
                                           wash_len, 
-                                          out_len)
+                                          obs_len)
 
     pheno_data <- filter_missing_endpt_data(pheno_data, endpt)
     pheno_data <- filter_early_endpt(pheno_data, endpt)

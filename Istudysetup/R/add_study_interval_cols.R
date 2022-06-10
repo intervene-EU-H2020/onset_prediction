@@ -33,7 +33,7 @@ add_study_interval_cols <- function(pheno_data,
                                     exp_age=30, 
                                     exp_len=10, 
                                     wash_len=2, 
-                                    out_len=8) {
+                                    obs_len=8) {
     test_length_vars_are_integers(as.list(environment()))
 
     followup <- get_followup_time(pheno_data)
@@ -46,7 +46,7 @@ add_study_interval_cols <- function(pheno_data,
                                         exp_age, 
                                         exp_len, 
                                         wash_len, 
-                                        out_len)
+                                        obs_len)
 
     pheno_data <- tibble::add_column(pheno_data, 
                                      FOLLOWUP=followup,
