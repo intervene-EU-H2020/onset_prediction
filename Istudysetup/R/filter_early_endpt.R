@@ -1,0 +1,47 @@
+#' Filters out early endpoint
+#' 
+#' Filters out individuals where the endpoint occured before the 
+#' observation period began.
+#' 
+#' The endpoint free interval is the period from birth until the 
+#' observation period begins. Thus, the interval also contains the 
+#' exposure and washout period. See function 
+#' \code{\link{calc_endpt_free_time}}.
+#' 
+#' For the input data format see: 
+#' \href{https://docs.google.com/document/d/1GbZszpPeyf-hyb0V_YDx828YbM7woh8OBJhvzkEwo2g/edit}{INTERVENE Phenotype File Definition}. To create the endpoint free interval, use either the
+#' function \code{\link{calc_endpt_free_time}} directly or 
+#' \code{\link{add_study_interval_cols}}.
+#' 
+#' @param pheno_data A data.frame with at least columns `ENDPT_FREE`
+#'                   and i.e. `J10_ASTHMA`, and `J10_ASTHMA_DATE` 
+#'                   where the columns are the study endpoint and 
+#'                   date, which will differ depending on the input 
+#'                   variable `endpt`.
+#' @param endpt A string. The current endpoint of interest.
+#'                  
+#' @return The filtered data.frame without individuals where the 
+#'         endpoint occured before the observation period. 
+#' 
+#' @importFrom lubridate %within%
+#' @export
+#' 
+#' @examples 
+#' test_data <- Istudysetup::create_test_df(30)
+#' test_data <- add_study_interval_cols(test_data,
+#'                                      exp_age=20,
+#'                                      exp_length=10,
+#'                                      wash_length=2,
+#'                                      out_length=8)
+#' filter_early_endpt(test_data, "J10_ASTHMA")
+#'  
+#' @author Kira Detrois
+filter_early_endpt <- function(pheno_data, 
+                               endpt) {
+    test_endpt_input_correct(as.list(environment()))
+    
+    # Endpoint happens after Endpoint free interval
+    dplyr::filter(pheno_data, 
+                  !(get(paste0(endpt, "_DATE")) %within% ENDPT_FREE) | 
+                  is.na(get(paste0(endpt, "_DATE")))) # If no endpoint date then NA 
+}
