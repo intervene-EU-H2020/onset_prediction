@@ -38,10 +38,24 @@ the input variable \code{endpt}.}
 interest.}
 }
 \value{
-A list(\code{data}, \code{exp_age}, \code{exp_len}, \code{wash_len})
+A list(\code{data}, \code{exp_age}, \code{exp_len}, \code{wash_len}, \code{out_len}):
+\itemize{
+\item \code{data}: The actual data.frame.
+\item \code{exp_age} An integer. Age at which exposure period starts
+(in years).
+\item \code{exp_len} An integer. Length of the exposure period
+(in years).
+\item \code{wash_len} An integer. Length of the washout period
+(in years).
+\item \code{out_len} An integer. Length of the observation period
+(in years).
+}
 }
 \description{
 Gets only the columns relevant for the current endpoint.
 Creates a list with the data, as well as the selected
 study period intervals.
+}
+\author{
+Kira Detrois
 }

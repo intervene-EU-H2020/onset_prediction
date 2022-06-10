@@ -16,5 +16,6 @@ Imports:
     assertthat,
     dplyr,
     lubridate,
+    readr,
     stats,
     tibble

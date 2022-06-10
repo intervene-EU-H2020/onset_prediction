@@ -32,14 +32,14 @@ add_study_interval_cols(
 \value{
 The phenotype data.frame with added columns:
 \itemize{
-\item FOLLOWUP: lubdridate intervals created using columns
+\item \code{FOLLOWUP}: lubdridate intervals created using columns
 \code{START_OF_FOLLOWUP} and \code{END_OF_FOLLOWUP}.
-\item ENDPT_FREE: lubdridate intervals
+\item \code{ENDPT_FREE}: lubdridate intervals
 which ranges from \code{DATE_OF_BIRTH} to the
 end of the washout period. In this time
 period there should be no endpoint
 occurance for eligible study participants.
-\item STUDY_TIME: lubdridate intervals which range from
+\item \code{STUDY_TIME}: lubdridate intervals which range from
 the start of the exposure period to the
 end of the observation period.
 }
