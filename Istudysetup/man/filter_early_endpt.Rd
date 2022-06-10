@@ -38,9 +38,9 @@ function \code{\link{calc_endpt_free_time}} directly or
 test_data <- Istudysetup::create_test_df(30)
 test_data <- add_study_interval_cols(test_data,
                                      exp_age=20,
-                                     exp_length=10,
-                                     wash_length=2,
-                                     out_length=8)
+                                     exp_len=10,
+                                     wash_len=2,
+                                     out_len=8)
 filter_early_endpt(test_data, "J10_ASTHMA")
  
 }

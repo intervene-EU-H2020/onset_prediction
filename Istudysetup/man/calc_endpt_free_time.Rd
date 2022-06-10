@@ -4,7 +4,7 @@
 \alias{calc_endpt_free_time}
 \title{Calcualtes endpoint free intervals}
 \usage{
-calc_endpt_free_time(bds, exp_age = 30, exp_length = 10, wash_length = 2)
+calc_endpt_free_time(bds, exp_age = 30, exp_len = 10, wash_len = 2)
 }
 \arguments{
 \item{bds}{A Date. The birth days of the individuals.}
@@ -12,10 +12,10 @@ calc_endpt_free_time(bds, exp_age = 30, exp_length = 10, wash_length = 2)
 \item{exp_age}{An integer. Age at which exposure period starts
 (in years).}
 
-\item{exp_length}{An integer. Length of the exposure period
+\item{exp_len}{An integer. Length of the exposure period
 (in years).}
 
-\item{wash_length}{An integer. Length of the washout period
+\item{wash_len}{An integer. Length of the washout period
 (in years).}
 }
 \value{
@@ -34,8 +34,8 @@ Creates lubridate \code{\link[lubridate]{interval}}s.
 bds <- c(as.Date("1923/07/01"), as.Date("1823/07/02"), as.Date("2002/04/01"))
 calc_endpt_free_time(bds,
                      exp_age=30,
-                     exp_length=10,
-                     wash_length=2)
+                     exp_len=10,
+                     wash_len=2)
 
 }
 \author{

@@ -13,9 +13,9 @@ test_that("get_study_elig_indv works", {
 
   res = get_study_elig_indv(test_data,
                             exp_age=30,
-                            exp_length=2,
-                            wash_length=2,
-                            out_length=8,
+                            exp_len=2,
+                            wash_len=2,
+                            out_len=8,
                             endpt="J10_ASTHMA")$data
 
   expected_res_ids = c("FG000004", "FG000005", "FG000006", "FG000007", "FG000009", "FG0000010",
@@ -38,9 +38,9 @@ test_that("get_study_elig_indv adj case control works", {
 
   res = get_study_elig_indv(test_data,
                             exp_age=30,
-                            exp_length=2,
-                            wash_length=2,
-                            out_length=8,
+                            exp_len=2,
+                            wash_len=2,
+                            out_len=8,
                             endpt="J10_ASTHMA")$data
 
   expected_res = c(0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0)   
@@ -61,9 +61,9 @@ test_that("get_study_elig_indv downsampling works", {
 
   res = get_study_elig_indv(test_data,
                             exp_age=30,
-                            exp_length=2,
-                            wash_length=2,
-                            out_length=8,
+                            exp_len=2,
+                            wash_len=2,
+                            out_len=8,
                             endpt="J10_ASTHMA",
                             downsample_fctr=4)$data
 

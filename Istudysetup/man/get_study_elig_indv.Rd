@@ -7,9 +7,9 @@
 get_study_elig_indv(
   pheno_data,
   exp_age = 30,
-  exp_length = 10,
-  wash_length = 2,
-  out_length = 8,
+  exp_len = 10,
+  wash_len = 2,
+  out_len = 8,
   endpt = "J10_ASTHMA",
   downsample_fctr = NA
 )
@@ -26,13 +26,13 @@ the input variable \code{endpt}.}
 \item{exp_age}{An integer. Age at which exposure period starts
 (in years).}
 
-\item{exp_length}{An integer. Length of the exposure period
+\item{exp_len}{An integer. Length of the exposure period
 (in years).}
 
-\item{wash_length}{An integer. Length of the washout period
+\item{wash_len}{An integer. Length of the washout period
 (in years).}
 
-\item{out_length}{An integer. Length of the observation period
+\item{out_len}{An integer. Length of the observation period
 (in years).}
 
 \item{endpt}{A string. The column name of the current endpoint of

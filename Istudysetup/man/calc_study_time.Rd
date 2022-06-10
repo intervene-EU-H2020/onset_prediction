@@ -4,7 +4,7 @@
 \alias{calc_study_time}
 \title{Calculates total study time interval}
 \usage{
-calc_study_time(bds, exp_age, exp_length, wash_length, out_length)
+calc_study_time(bds, exp_age, exp_len, wash_len, out_len)
 }
 \arguments{
 \item{bds}{A Date. The birth days of the individuals.}
@@ -12,13 +12,13 @@ calc_study_time(bds, exp_age, exp_length, wash_length, out_length)
 \item{exp_age}{An integer. Age at which exposure period starts
 (in years).}
 
-\item{exp_length}{An integer. Length of the exposure period
+\item{exp_len}{An integer. Length of the exposure period
 (in years).}
 
-\item{wash_length}{An integer. Length of the washout period
+\item{wash_len}{An integer. Length of the washout period
 (in years).}
 
-\item{out_length}{An integer. Length of the observation period.}
+\item{out_len}{An integer. Length of the observation period.}
 }
 \value{
 A lubdridate interval. The total study time interval.
@@ -35,9 +35,9 @@ Creates lubridate \code{\link[lubridate]{interval}}s.
 bds <- c(as.Date("1923/07/01"), as.Date("1823/07/02"), as.Date("2002/04/01"))
 calc_study_time(bds,
                 exp_age=30,
-                exp_length=10,
-                wash_length=2,
-                out_length=8)
+                exp_len=10,
+                wash_len=2,
+                out_len=8)
 
 }
 \author{

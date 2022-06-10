@@ -7,7 +7,7 @@
 #' Creates lubridate \code{\link[lubridate]{interval}}s.
 #' 
 #' @param bds A Date. The birth days of the individuals.
-#' @param out_length An integer. Length of the observation period.
+#' @param out_len An integer. Length of the observation period.
 #' @inheritParams get_study_elig_indv
 #' 
 #' @return A lubdridate interval. The total study time interval.
@@ -20,21 +20,21 @@
 #' bds <- c(as.Date("1923/07/01"), as.Date("1823/07/02"), as.Date("2002/04/01"))
 #' calc_study_time(bds,
 #'                 exp_age=30,
-#'                 exp_length=10,
-#'                 wash_length=2,
-#'                 out_length=8)
+#'                 exp_len=10,
+#'                 wash_len=2,
+#'                 out_len=8)
 #' 
 #' @author Kira E. Detrois
 calc_study_time <- function(bds, 
                             exp_age, 
-                            exp_length, 
-                            wash_length, 
-                            out_length) {
+                            exp_len, 
+                            wash_len, 
+                            out_len) {
     test_date_var_correct(bds, "bds")
     test_length_vars_are_integers(as.list(environment()))
     
     exp_start_date <- calc_exp_start_date(bds, exp_age)
-    end_time <- exp_start_date %m+% lubridate::years(exp_length + wash_length + out_length)
+    end_time <- exp_start_date %m+% lubridate::years(exp_len + wash_len + out_len)
     total_time <- exp_start_date %--% end_time
     return(total_time)
 }

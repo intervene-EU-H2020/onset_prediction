@@ -27,11 +27,11 @@
 #'                   the input variable `endpt`.
 #' @param exp_age An integer. Age at which exposure period starts 
 #'                            (in years).
-#' @param exp_length An integer. Length of the exposure period
+#' @param exp_len An integer. Length of the exposure period
 #'                               (in years).
-#' @param wash_length An integer. Length of the washout period
+#' @param wash_len An integer. Length of the washout period
 #'                                (in years).
-#' @param out_length An integer. Length of the observation period
+#' @param out_len An integer. Length of the observation period
 #'                               (in years).
 #' @param endpt A string. The column name of the current endpoint of 
 #'                        interest.
@@ -55,9 +55,9 @@
 #' @author Kira E. Detrois
 get_study_elig_indv <- function(pheno_data,
                                 exp_age=30,
-                                exp_length=10,
-                                wash_length=2,
-                                out_length=8,
+                                exp_len=10,
+                                wash_len=2,
+                                out_len=8,
                                 endpt="J10_ASTHMA",
                                 downsample_fctr=NA) {
     test_length_vars_are_integers(as.list(environment()))             
@@ -65,9 +65,9 @@ get_study_elig_indv <- function(pheno_data,
 
     pheno_data <- add_study_interval_cols(pheno_data,
                                           exp_age, 
-                                          exp_length, 
-                                          wash_length, 
-                                          out_length)
+                                          exp_len, 
+                                          wash_len, 
+                                          out_len)
 
     pheno_data <- filter_missing_endpt_data(pheno_data, endpt)
     pheno_data <- filter_early_endpt(pheno_data, endpt)
@@ -80,46 +80,3 @@ get_study_elig_indv <- function(pheno_data,
 
     return(elig_data)
 }
-
-create_return_dt <- function(pheno_data,
-                             exp_age=30,
-                             exp_length=10,
-                             wash_length=2,
-                             out_length=8,
-                             endpt="J10_ASTHMA") {
-    test_endpt_input_correct(as.list(environment()))
-    test_length_vars_are_integers(as.list(environment()))
-    
-    elig_data <- dplyr::select(pheno_data, 
-                               ID, 
-                               SEX, 
-                               DATE_OF_BIRTH, 
-                               START_OF_FOLLOWUP,
-                               END_OF_FOLLOWUP, 
-                               ANCESTRY, 
-                               # Otherwise dplyr will throw error. 
-                               # test_endpt_correct already checks that
-                               # this is only a single string and not
-                               # a vector
-                               dplyr::all_of(endpt), 
-                               paste0(endpt, "_DATE"))
-    elig_data <- list(data=elig_data, 
-                      exp_age=exp_age,
-                      exp_length=exp_length,
-                      wash_length=wash_length,
-                      out_length=out_length)
-}
-
-look_at_cases <- function(pheno_data, endpt, exp_age, show_cols=NA) {
-    case_data_1 = dplyr::filter(pheno_data, get(endpt) == 1)
-    case_data_1 <- add_age_at_diag_col(case_data_1, endpt)
-    case_data_1 <- tibble::add_column(case_data_1, DATE_EXP=calc_exp_start_date(case_data_1$DATE_OF_BIRTH, exp_age))
-    if(is.na(show_cols))
-        print(dplyr::select(case_data_1, DATE_OF_BIRTH, DATE_EXP, paste0(endpt, "_DATE"), AGE_AT_DIAG), width=500)
-    else {
-        print(dplyr::select(case_data_1, ID, DATE_OF_BIRTH, DATE_EXP, FOLLOWUP, paste0(endpt, "_DATE"), AGE_AT_DIAG, show_cols), width=500)
-    }
-}
-
-
-

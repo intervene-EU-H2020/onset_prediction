@@ -31,22 +31,22 @@
 #' @author Kira E. Detrois
 add_study_interval_cols <- function(pheno_data,
                                     exp_age=30, 
-                                    exp_length=10, 
-                                    wash_length=2, 
-                                    out_length=8) {
+                                    exp_len=10, 
+                                    wash_len=2, 
+                                    out_len=8) {
     test_length_vars_are_integers(as.list(environment()))
 
     followup <- get_followup_time(pheno_data)
     
     endpt_free <- calc_endpt_free_time(pheno_data$DATE_OF_BIRTH, 
                                        exp_age, 
-                                       exp_length, 
-                                       wash_length)
+                                       exp_len, 
+                                       wash_len)
     total_study_time <- calc_study_time(pheno_data$DATE_OF_BIRTH, 
                                         exp_age, 
-                                        exp_length, 
-                                        wash_length, 
-                                        out_length)
+                                        exp_len, 
+                                        wash_len, 
+                                        out_len)
 
     pheno_data <- tibble::add_column(pheno_data, 
                                      FOLLOWUP=followup,
