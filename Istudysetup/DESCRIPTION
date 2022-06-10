@@ -1,9 +1,9 @@
 Package: Istudysetup
-Title: INTERVEN - Study Setup
+Title: INTERVENE - Study Setup
 Version: 1.1.0
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
+    person("Kira E.", "Detrois", , "kira.detrois@helsinki.fi", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-7193-624X"))
 Description: What the package does (one paragraph).
 License: MIT + file LICENSE
 Encoding: UTF-8
