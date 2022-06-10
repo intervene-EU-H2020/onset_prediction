@@ -1,26 +1,14 @@
----
-output: github_document
----
-
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "100%"
-)
-```
-
 # Istudysetup
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of Istudysetup is to select individuals 
+The goal of Istudysetup is to select individuals from the data that are eligible given a certain study setup.
+A study setup consists of an exposure, a washout, and a prediction period. Eligible individuals cannot have the selected endpoint of interest inside the endpoint free period. The endpoint free period ranges from birth until the prediction period begins.
 
-\href{https://docs.google.com/document/d/1GbZszpPeyf-hyb0V_YDx828YbM7woh8OBJhvzkEwo2g/edit}{INTERVENE Phenotype File Definition}
+For the input file format see: [https://docs.google.com/document/d/1GbZszpPeyf-hyb0V_YDx828YbM7woh8OBJhvzkEwo2g/edit](INTERVENE Phenotype File Definition). Additionally, the important column names the date.frame needs to at least have are inidicated in each function documentation.
+
+![BLa]("man/Study_setup_schema.png")
 
 ## Installation
 
