@@ -10,7 +10,8 @@ get_study_elig_indv(
   exp_length = 10,
   wash_length = 2,
   out_length = 8,
-  endpt = "J10_ASTHMA"
+  endpt = "J10_ASTHMA",
+  downsample = FALSE
 )
 }
 \arguments{

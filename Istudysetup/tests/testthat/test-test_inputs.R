@@ -6,8 +6,8 @@ test_that("test_endpt_is_single_string works", {
   expect_error(adj_case_cntrl_status(test_data, "J10_ASTHMA"), regexp=NA)
 
   # Errors
-  expect_error(adj_case_cntrl_status(test_data, 2, regexp="The variable endpt nedds to be a character (string)."))
-  expect_error(adj_case_cntrl_status(test_data, c("J10_ASTHMA", "C3_BREAST")), regexp="The variable endpt nedds to be a character (string) and not a vector of characters.")
+  expect_error(adj_case_cntrl_status(test_data, 2, regexp="The variable endpt needs to be a character (string)."))
+  expect_error(adj_case_cntrl_status(test_data, c("J10_ASTHMA", "C3_BREAST")), regexp="The variable endpt needs to be a character (string) and not a vector of characters.")
   expect_error(adj_case_cntrl_status(test_data, "ASTHMA"), regexp="The chosen endpoint is not part of the data.")
 
 })

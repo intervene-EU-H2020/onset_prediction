@@ -6,9 +6,9 @@
 test_endpt_input_correct <- function(envir) {
     cols = colnames(envir$pheno_data)
     assertthat::assert_that(is.character(envir$endpt),
-                            msg="The variable endpt nedds to be a character string.")
+                            msg="The variable endpt needs to be a character string.")
     assertthat::assert_that(length(envir$endpt) == 1, 
-                            msg="The variable endpt nedds to be a character string and not a vector of characters.")
+                            msg="The variable endpt needs to be a character string and not a vector of characters.")
     assertthat::assert_that(envir$endpt %in% cols,
                             msg="The chosen endpoint is not part of the data.")
 }
@@ -18,7 +18,7 @@ test_endpt_input_correct <- function(envir) {
 #' @param var Ideally a numeric or integer.
 test_length_vars_are_integers <- function(envir) {
     for(name in names(envir)) {
-        if(!(name %in% c("pheno_data", "endpt", "bds"))) {
+        if(!(name %in% c("pheno_data", "endpt", "bds", "downsample_fctr"))) {
             var = envir[[name]]
             assertthat::assert_that(is.numeric(var) | is.integer(var),
                                     msg=paste0("The variable ", name, " needs to be an integer."))

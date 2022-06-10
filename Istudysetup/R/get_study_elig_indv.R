@@ -53,8 +53,9 @@ get_study_elig_indv <- function(pheno_data,
                                 exp_length=10,
                                 wash_length=2,
                                 out_length=8,
-                                endpt="J10_ASTHMA") {
-    test_length_vars_are_integers(as.list(environment()))                      
+                                endpt="J10_ASTHMA",
+                                downsample_fctr=NA) {
+    test_length_vars_are_integers(as.list(environment()))             
     test_endpt_input_correct(as.list(environment()))
 
     pheno_data <- add_study_interval_cols(pheno_data,
@@ -67,6 +68,9 @@ get_study_elig_indv <- function(pheno_data,
     pheno_data <- filter_early_endpt(pheno_data, endpt)
     pheno_data <- adj_case_cntrl_status(pheno_data, endpt)
 
+    if(!is.na(downsample_fctr)) {
+        pheno_data <- downsample_cntrls(pheno_data, endpt)
+    }
     elig_data <- create_return_dt(pheno_data)
 
     return(elig_data)
