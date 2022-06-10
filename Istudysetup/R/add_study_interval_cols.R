@@ -23,7 +23,7 @@
 #'                           occurance for eligible study participants.
 #'          \item `STUDY_TIME`: lubdridate intervals which range from 
 #'                           the start of the exposure period to the 
-#'                           end of the observation period.
+#'                           end of the prediction period.
 #'          }
 #' 
 #' @export 

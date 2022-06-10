@@ -31,7 +31,7 @@ the input variable \code{endpt}.}
 \item{wash_len}{An integer. Length of the washout period
 (in years).}
 
-\item{out_len}{An integer. Length of the observation period
+\item{out_len}{An integer. Length of the prediction period
 (in years).}
 
 \item{endpt}{A string. The column name of the current endpoint of
@@ -47,7 +47,7 @@ A list(\code{data}, \code{exp_age}, \code{exp_len}, \code{wash_len}, \code{out_l
 (in years).
 \item \code{wash_len} An integer. Length of the washout period
 (in years).
-\item \code{out_len} An integer. Length of the observation period
+\item \code{out_len} An integer. Length of the prediction period
 (in years).
 }
 }

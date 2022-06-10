@@ -17,7 +17,7 @@ the follow-up period doesn't cover the study period.
 \description{
 Filters out individuals where the follow-up interval does
 not cover the whole study period. The whole study period is defined
-as the exposure, washout, and observation period. See function:
+as the exposure, washout, and prediction period. See function:
 \code{\link{calc_study_time}}.
 }
 \details{

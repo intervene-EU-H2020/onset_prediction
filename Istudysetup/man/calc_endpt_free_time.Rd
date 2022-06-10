@@ -24,7 +24,7 @@ A lubdridate interval. The endpoint free intervals.
 \description{
 Calculates the endpoint free interval for each individual. The
 endpoint free interval is the period from birth until the
-observation period begins. Thus, the interval also contains the
+prediction period begins. Thus, the interval also contains the
 exposure and washout period.
 }
 \details{

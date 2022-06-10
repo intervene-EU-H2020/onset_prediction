@@ -2,18 +2,15 @@
 #' 
 #' \itemize{
 #'  \item The study setup consist of an exposure window, 
-#'        a washout period, and a observation period. See function 
+#'        a washout period, and a prediction period. See function 
 #'        \code{\link{calc_study_time}}.
-#'  \item Eligible individuals must have a follow-up period that
-#'        covers the whole study time interval. See function
-#'        \code{\link{filter_too_short_followup}}.
 #'  \item Eligible individuals cannot have missing date in the
 #'        column for the endpoint of interest. See function 
 #'        \code{\link{filter_missing_endpt_data}}.
 #'  \item Eligible individuals cannot have the
 #'        selected endpoint of interest inside the endpoint free
 #'        period. The endpoint free interval is the period from birth 
-#'        until the observation period begins. See function
+#'        until the prediction period begins. See function
 #'        \code{\link{filter_early_endpt}}. 
 #'  
 #' }
@@ -31,7 +28,7 @@
 #'                               (in years).
 #' @param wash_len An integer. Length of the washout period
 #'                                (in years).
-#' @param out_len An integer. Length of the observation period
+#' @param out_len An integer. Length of the prediction period
 #'                               (in years).
 #' @param endpt A string. The column name of the current endpoint of 
 #'                        interest.

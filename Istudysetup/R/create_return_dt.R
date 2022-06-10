@@ -16,7 +16,7 @@
 #'                               (in years).
 #'          \item `wash_len` An integer. Length of the washout period
 #'                                (in years).
-#'          \item `out_len` An integer. Length of the observation period
+#'          \item `out_len` An integer. Length of the prediction period
 #'                               (in years).
 #'          }
 #' 

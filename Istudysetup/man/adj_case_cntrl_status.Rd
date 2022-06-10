@@ -17,7 +17,7 @@ variable \code{endpt}.}
 interest.}
 }
 \description{
-Those individuals where the endpoint date is after the observation
+Those individuals where the endpoint date is after the prediction
 period are considered cases in our setup.
 }
 \author{

@@ -32,7 +32,7 @@ the input variable \code{endpt}.}
 \item{wash_len}{An integer. Length of the washout period
 (in years).}
 
-\item{out_len}{An integer. Length of the observation period
+\item{out_len}{An integer. Length of the prediction period
 (in years).}
 
 \item{endpt}{A string. The column name of the current endpoint of
@@ -52,7 +52,7 @@ and i.e. \code{J10_ASTHMA}, and \verb{J10_ASTHMA_DATE. where the last two column
 \description{
 \itemize{
 \item The study setup consist of an exposure window,
-a washout period, and a observation period. See function
+a washout period, and a prediction period. See function
 \code{\link{calc_study_time}}.
 \item Eligible individuals must have a follow-up period that
 covers the whole study time interval. See function
@@ -63,7 +63,7 @@ column for the endpoint of interest. See function
 \item Eligible individuals cannot have the
 selected endpoint of interest inside the endpoint free
 period. The endpoint free interval is the period from birth
-until the observation period begins. See function
+until the prediction period begins. See function
 \code{\link{filter_early_endpt}}.
 
 }

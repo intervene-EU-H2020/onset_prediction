@@ -2,12 +2,12 @@
 #' 
 #' Calculates the total study time for each individual. The study time
 #' is the time from the begining of the exposure period to the end 
-#' of the observation period.
+#' of the prediction period.
 #' 
 #' Creates lubridate \code{\link[lubridate]{interval}}s.
 #' 
 #' @param bds A Date. The birth days of the individuals.
-#' @param out_len An integer. Length of the observation period.
+#' @param out_len An integer. Length of the prediction period.
 #' @inheritParams get_study_elig_indv
 #' 
 #' @return A lubdridate interval. The total study time interval.

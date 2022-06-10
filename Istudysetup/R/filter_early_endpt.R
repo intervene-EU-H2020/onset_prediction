@@ -1,10 +1,10 @@
 #' Filters out early endpoint
 #' 
 #' Filters out individuals where the endpoint occured before the 
-#' observation period began.
+#' prediction period began.
 #' 
 #' The endpoint free interval is the period from birth until the 
-#' observation period begins. Thus, the interval also contains the 
+#' prediction period begins. Thus, the interval also contains the 
 #' exposure and washout period. See function 
 #' \code{\link{calc_endpt_free_time}}.
 #' 
@@ -21,7 +21,7 @@
 #' @param endpt A string. The column name of the current endpoint of interest.
 #'                  
 #' @return The filtered data.frame without individuals where the 
-#'         endpoint occured before the observation period. 
+#'         endpoint occured before the prediction period. 
 #' 
 #' @importFrom lubridate %within%
 #' @export

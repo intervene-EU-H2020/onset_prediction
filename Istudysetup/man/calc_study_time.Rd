@@ -18,7 +18,7 @@ calc_study_time(bds, exp_age, exp_len, wash_len, out_len)
 \item{wash_len}{An integer. Length of the washout period
 (in years).}
 
-\item{out_len}{An integer. Length of the observation period.}
+\item{out_len}{An integer. Length of the prediction period.}
 }
 \value{
 A lubdridate interval. The total study time interval.
@@ -26,7 +26,7 @@ A lubdridate interval. The total study time interval.
 \description{
 Calculates the total study time for each individual. The study time
 is the time from the begining of the exposure period to the end
-of the observation period.
+of the prediction period.
 }
 \details{
 Creates lubridate \code{\link[lubridate]{interval}}s.

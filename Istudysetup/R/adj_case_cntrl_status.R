@@ -1,6 +1,6 @@
 #' Adjusts the case status of individuals with late onset endpoints
 #'
-#' Those individuals where the endpoint date is after the observation
+#' Those individuals where the endpoint date is after the prediction
 #' period are considered cases in our setup.
 #' 
 #' @param pheno_data A data.frame with at least columns `STUDY_TIME`

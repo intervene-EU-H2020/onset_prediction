@@ -26,7 +26,7 @@ add_study_interval_cols(
 \item{wash_len}{An integer. Length of the washout period
 (in years).}
 
-\item{out_len}{An integer. Length of the observation period
+\item{out_len}{An integer. Length of the prediction period
 (in years).}
 }
 \value{
@@ -41,7 +41,7 @@ period there should be no endpoint
 occurance for eligible study participants.
 \item \code{STUDY_TIME}: lubdridate intervals which range from
 the start of the exposure period to the
-end of the observation period.
+end of the prediction period.
 }
 }
 \description{
