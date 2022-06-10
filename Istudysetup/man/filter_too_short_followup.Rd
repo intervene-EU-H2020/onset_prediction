@@ -35,7 +35,6 @@ directly, or \code{\link{add_study_interval_cols}}.
 \examples{
 test_data <- create_test_df()
 test_data <- add_study_interval_cols(test_data)
-filter_data <- filter_too_short_followup(test_data)
 
 }
 \author{

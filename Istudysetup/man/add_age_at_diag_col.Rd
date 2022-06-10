@@ -8,12 +8,13 @@ for each individual}
 add_age_at_diag_col(pheno_data, endpt)
 }
 \arguments{
-\item{pheno_data}{A data.frame.
-Needs at least columns \code{DATE_OF_BIRTH}, and i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_DATE}.
-The twp last columns for the study endpoint and date differ depending on
-the input variable \code{endpt}.}
+\item{pheno_data}{A data.frame with at least the columns:
+i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_DATE} where
+the columns are the study endpoint and date,
+which will differ depending on the input variable
+\code{endpt}.}
 
-\item{endpt}{A string. The current endpoint of interest.}
+\item{endpt}{A string. The column name of the current endpoint of interest.}
 }
 \description{
 A helper function to add a column with the age at diagnosis

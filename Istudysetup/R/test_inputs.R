@@ -15,7 +15,7 @@ test_endpt_input_correct <- function(envir) {
 
 #' Tests that the length variables of the function call are integers.
 #' 
-#' @param var Ideally a numeric or integer.
+#' @param envir A list. The function call variables.
 test_length_vars_are_integers <- function(envir) {
     for(name in names(envir)) {
         if(!(name %in% c("pheno_data", "endpt", "bds", "downsample_fctr"))) {
@@ -31,6 +31,13 @@ test_length_vars_are_integers <- function(envir) {
 #' Tests that variables that need to be a date are of correct type.
 #' 
 #' @param var Ideally a Date.
-test_date_var_correct <- function(var, var_name) {
-    assertthat::assert_that(is.Date(var), msg=paste0("The variable ", var_name, " should be of type Date."))
+#' @param var_name A character. The name of the variable for more precise error printing.
+test_date_var_correct <- function(var, var_name=NA) {
+    if(!is.na(var_name))
+        message = paste0("The variable ", var_name, " should be of type Date.")
+    else {
+       message = paste0("Some variable needs to be of type Date but is not.")
+    }
+    assertthat::assert_that(lubridate::is.Date(var), 
+                            msg=paste0("The variable ", var_name, " should be of type Date."))
 }

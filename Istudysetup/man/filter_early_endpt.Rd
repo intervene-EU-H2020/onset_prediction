@@ -13,7 +13,7 @@ where the columns are the study endpoint and
 date, which will differ depending on the input
 variable \code{endpt}.}
 
-\item{endpt}{A string. The current endpoint of interest.}
+\item{endpt}{A string. The column name of the current endpoint of interest.}
 }
 \value{
 The filtered data.frame without individuals where the

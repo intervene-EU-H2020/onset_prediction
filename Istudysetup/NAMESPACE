@@ -2,11 +2,13 @@
 
 export(add_age_at_diag_col)
 export(add_study_interval_cols)
+export(adj_case_cntrl_status)
 export(calc_age_at_diag)
 export(calc_endpt_free_time)
 export(calc_exp_start_date)
 export(calc_study_time)
 export(create_test_df)
+export(downsample_cntrls)
 export(filter_early_endpt)
 export(filter_missing_endpt_data)
 export(get_study_elig_indv)

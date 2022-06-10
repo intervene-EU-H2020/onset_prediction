@@ -25,7 +25,6 @@
 #' @examples 
 #' test_data <- create_test_df()
 #' test_data <- add_study_interval_cols(test_data)
-#' filter_data <- filter_too_short_followup(test_data)
 #' 
 #' @author Kira E. Detrois
 filter_too_short_followup <- function(pheno_data) {

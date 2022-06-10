@@ -35,7 +35,8 @@ the input variable \code{endpt}.}
 \item{out_length}{An integer. Length of the observation period
 (in years).}
 
-\item{endpt}{A string. The column name of the study endpoint.}
+\item{endpt}{A string. The column name of the current endpoint of
+interest.}
 
 \item{downsample_fctr}{A numeric. Defines how many controls there
 should be for every case.

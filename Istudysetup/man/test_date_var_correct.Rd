@@ -4,10 +4,12 @@
 \alias{test_date_var_correct}
 \title{Tests that variables that need to be a date are of correct type.}
 \usage{
-test_date_var_correct(var, var_name)
+test_date_var_correct(var, var_name = NA)
 }
 \arguments{
 \item{var}{Ideally a Date.}
+
+\item{var_name}{A character. The name of the variable for more precise error printing.}
 }
 \description{
 Tests that variables that need to be a date are of correct type.

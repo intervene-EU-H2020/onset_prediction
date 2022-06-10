@@ -7,7 +7,7 @@
 test_length_vars_are_integers(envir)
 }
 \arguments{
-\item{var}{Ideally a numeric or integer.}
+\item{envir}{A list. The function call variables.}
 }
 \description{
 Tests that the length variables of the function call are integers.

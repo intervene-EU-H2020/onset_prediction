@@ -101,7 +101,7 @@ create_return_dt <- function(pheno_data,
                                # test_endpt_correct already checks that
                                # this is only a single string and not
                                # a vector
-                               all_of(endpt), 
+                               dplyr::all_of(endpt), 
                                paste0(endpt, "_DATE"))
     elig_data <- list(data=elig_data, 
                       exp_age=exp_age,

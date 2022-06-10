@@ -9,7 +9,7 @@ calc_age_at_diag(bds, diag_dates)
 \arguments{
 \item{bds}{A Date. The birth days of the individuals.}
 
-\item{diag_dates}{A Date. Date of diagnosis.}
+\item{diag_dates}{A Date. The dates of diagnosis.}
 }
 \description{
 A helper function to calculate the age at diagnosis.
