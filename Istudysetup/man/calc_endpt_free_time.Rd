@@ -4,7 +4,7 @@
 \alias{calc_endpt_free_time}
 \title{Calcualtes endpoint free intervals}
 \usage{
-calc_endpt_free_time(bds, exp_age, exp_length, wash_length)
+calc_endpt_free_time(bds, exp_age = 30, exp_length = 10, wash_length = 2)
 }
 \arguments{
 \item{bds}{A Date. The birth days of the individuals.}

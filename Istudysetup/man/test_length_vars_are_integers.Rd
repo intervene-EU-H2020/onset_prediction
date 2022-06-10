@@ -2,13 +2,13 @@
 % Please edit documentation in R/test_inputs.R
 \name{test_length_vars_are_integers}
 \alias{test_length_vars_are_integers}
-\title{Tests that the variable is an integer.}
+\title{Tests that the length variables of the function call are integers.}
 \usage{
-test_length_vars_are_integers(var)
+test_length_vars_are_integers(envir)
 }
 \arguments{
-\item{var}{A numeric or integer.}
+\item{var}{Ideally a numeric or integer.}
 }
 \description{
-Tests that the variable is an integer.
+Tests that the length variables of the function call are integers.
 }
