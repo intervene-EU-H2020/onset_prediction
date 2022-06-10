@@ -23,9 +23,9 @@ devtools::install_github("intervene-EU-H2020/onset_prediction")
 - assertthat (For testing)
 - stats (For creating test data)
 - lubridate (For handling dates)
-- dplyr (For)
-- tibble
-- readr
+- dplyr (For data manipulation)
+- tibble (For better data.frames)
+- readr (For reading and writing files)
 
 ## Example
 
