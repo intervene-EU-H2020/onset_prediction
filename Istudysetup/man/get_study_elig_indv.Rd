@@ -36,6 +36,11 @@ the input variable \code{endpt}.}
 (in years).}
 
 \item{endpt}{A string. The column name of the study endpoint.}
+
+\item{downsample_fctr}{A numeric. Defines how many controls there
+should be for every case.
+Default is NA, which means no
+downsampling is performed.}
 }
 \value{
 A tibble with the information for the eligible individuals

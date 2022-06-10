@@ -33,7 +33,12 @@
 #'                                (in years).
 #' @param out_length An integer. Length of the observation period
 #'                               (in years).
-#' @param endpt A string. The column name of the study endpoint.
+#' @param endpt A string. The column name of the current endpoint of 
+#'                        interest.
+#' @param downsample_fctr A numeric. Defines how many controls there
+#'                                   should be for every case.
+#'                                   Default is NA, which means no
+#'                                   downsampling is performed.
 #' 
 #' @return A tibble with the information for the eligible individuals 
 #'         with columns: `ID`, `SEX`, `DATE_OF_BIRTH`, 

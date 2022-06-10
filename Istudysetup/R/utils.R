@@ -1,7 +1,7 @@
 #' A helper function to calculate the age at diagnosis.
 #' 
 #' @param bds A Date. The birth days of the individuals.
-#' @param diag_dates A Date. Date of diagnosis.
+#' @param diag_dates A Date. The dates of diagnosis.
 #' 
 #' @importFrom lubridate %--%
 #' @export
@@ -17,11 +17,7 @@ calc_age_at_diag <- function(bds, diag_dates) {
 #' A helper function to add a column with the age at diagnosis
 #' for each individual
 #' 
-#' @param pheno_data A data.frame. 
-#'                   Needs at least columns `DATE_OF_BIRTH`, and i.e. `J10_ASTHMA`, and `J10_ASTHMA_DATE`.
-#'                   The twp last columns for the study endpoint and date differ depending on 
-#'                   the input variable `endpt`.
-#' @param endpt A string. The current endpoint of interest.
+#' @inheritParams filter_missing_endpt_data
 #' 
 #' @importFrom lubridate %--%
 #' @export

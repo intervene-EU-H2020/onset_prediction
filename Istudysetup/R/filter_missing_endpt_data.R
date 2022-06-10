@@ -14,7 +14,7 @@
 #'                   the columns are the study endpoint and date, 
 #'                   which will differ depending on the input variable 
 #'                  `endpt`.
-#' @param endpt A string. The current endpoint of interest.
+#' @param endpt A string. The column name of the current endpoint of interest.
 #'                  
 #' @return The filtered data.frame without any missing information about the endpoint of interest.
 #' 
