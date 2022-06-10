@@ -19,7 +19,8 @@ You can install the development version of Istudysetup from [GitHub](https://git
 devtools::install_github("intervene-EU-H2020/onset_prediction")
 ```
 ### R package Dependencies
-
+ All packages are alread installed in the FinnGen Sandbox.
+ 
 - assertthat (For testing)
 - stats (For creating test data)
 - lubridate (For handling dates)
