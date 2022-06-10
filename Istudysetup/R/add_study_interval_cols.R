@@ -14,14 +14,14 @@
 #' 
 #' @return The phenotype data.frame with added columns:
 #'         \itemize{
-#'          \item FOLLOWUP: lubdridate intervals created using columns 
+#'          \item `FOLLOWUP`: lubdridate intervals created using columns 
 #'                         `START_OF_FOLLOWUP` and `END_OF_FOLLOWUP`.
-#'          \item ENDPT_FREE: lubdridate intervals
+#'          \item `ENDPT_FREE`: lubdridate intervals
 #'                           which ranges from `DATE_OF_BIRTH` to the 
 #'                           end of the washout period. In this time 
 #'                           period there should be no endpoint 
 #'                           occurance for eligible study participants.
-#'          \item STUDY_TIME: lubdridate intervals which range from 
+#'          \item `STUDY_TIME`: lubdridate intervals which range from 
 #'                           the start of the exposure period to the 
 #'                           end of the observation period.
 #'          }
