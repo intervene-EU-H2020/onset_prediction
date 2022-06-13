@@ -19,6 +19,6 @@ preprocess_long_data <- function(long_data,
     long_data <- ILongDataUtils::get_exposure_data(long_data, 
                                                    exp_start, 
                                                    exp_end)
-    long_data <- ILongDataUtils::add_num_id_col(long_data)
+    long_data <- add_num_id_col(long_data)
     return(long_data)
 }
