@@ -18,8 +18,9 @@ adj_case_cntrl_status <- function(pheno_data,
                                   endpt) {                                  
     test_endpt_input_correct(as.list(environment()))
 
+    endpt_date_str <- paste0(endpt, "_DATE")
     cases_to_cntrls <- dplyr::filter(pheno_data, 
-                                     get(paste0(endpt, "_DATE")) > 
+                                     get(endpt_date_str) > 
                                         lubridate::int_end(STUDY_TIME))
     pheno_data[pheno_data$ID %in% cases_to_cntrls$ID, endpt] = rep(0, nrow(cases_to_cntrls))
 

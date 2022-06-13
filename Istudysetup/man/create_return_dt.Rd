@@ -6,11 +6,11 @@
 \usage{
 create_return_dt(
   pheno_data,
+  endpt,
   exp_age = 30,
   exp_len = 10,
   wash_len = 2,
-  obs_len = 8,
-  endpt = "J10_ASTHMA"
+  obs_len = 8
 )
 }
 \arguments{
@@ -21,6 +21,9 @@ create_return_dt(
 \code{J10_ASTHMA_DATE} where the columns are the study
 endpoint and date, which will differ depending on
 the input variable \code{endpt}.}
+
+\item{endpt}{A string. The column name of the current endpoint of
+interest.}
 
 \item{exp_age}{An integer. Age at which exposure period starts
 (in years).}
@@ -33,9 +36,6 @@ the input variable \code{endpt}.}
 
 \item{obs_len}{An integer. Length of the prediction period
 (in years).}
-
-\item{endpt}{A string. The column name of the current endpoint of
-interest.}
 }
 \value{
 A list(\code{data}, \code{exp_age}, \code{exp_len}, \code{wash_len}, \code{obs_len}):

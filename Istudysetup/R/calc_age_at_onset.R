@@ -24,12 +24,17 @@
 #' 
 #' @author Kira E. Detrois
 calc_age_at_onset <- function(pheno_data, 
+                              endpt,
                               exp_age, 
                               exp_len, 
                               wash_len, 
-                              obs_len,
-                              endpt) {
-    endpt_diag <- dplyr::pull(pheno_data, get(paste0(endpt, "_DATE")))
+                              obs_len) {
+
+    test_length_vars_are_integers(as.list(environment()))             
+    test_endpt_input_correct(as.list(environment()))
+
+    endpt_date_str <- paste0(endpt, "_DATE")
+    endpt_diag <- dplyr::pull(pheno_data, get(endpt_date_str))
 
     study_end <- calc_end_of_study(pheno_data$DATE_OF_BIRTH,
                                    exp_age, 

@@ -4,7 +4,7 @@
 \alias{calc_age_at_onset}
 \title{Calculates the age at onset}
 \usage{
-calc_age_at_onset(pheno_data, exp_age, exp_len, wash_len, obs_len, endpt)
+calc_age_at_onset(pheno_data, endpt, exp_age, exp_len, wash_len, obs_len)
 }
 \arguments{
 \item{pheno_data}{A data.frame with at least the columns:
@@ -14,6 +14,9 @@ calc_age_at_onset(pheno_data, exp_age, exp_len, wash_len, obs_len, endpt)
 \code{J10_ASTHMA_DATE} where the columns are the study
 endpoint and date, which will differ depending on
 the input variable \code{endpt}.}
+
+\item{endpt}{A string. The column name of the current endpoint of
+interest.}
 
 \item{exp_age}{An integer. Age at which exposure period starts
 (in years).}
@@ -26,9 +29,6 @@ the input variable \code{endpt}.}
 
 \item{obs_len}{An integer. Length of the prediction period
 (in years).}
-
-\item{endpt}{A string. The column name of the current endpoint of
-interest.}
 }
 \value{
 A numeric. The age at onset of the endpoint in days from birth

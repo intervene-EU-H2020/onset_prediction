@@ -22,11 +22,11 @@
 #' 
 #' @author Kira Detrois
 create_return_dt <- function(pheno_data,
+                             endpt,
                              exp_age=30,
                              exp_len=10,
                              wash_len=2,
-                             obs_len=8,
-                             endpt="J10_ASTHMA") {
+                             obs_len=8) {
     test_endpt_input_correct(as.list(environment()))
     test_length_vars_are_integers(as.list(environment()))
     

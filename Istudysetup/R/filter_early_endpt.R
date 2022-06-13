@@ -40,8 +40,10 @@ filter_early_endpt <- function(pheno_data,
                                endpt) {
     test_endpt_input_correct(as.list(environment()))
     
+    endpt_date_str <- paste0(endpt, "_DATE")
+
     # Endpoint happens after Endpoint free interval
     dplyr::filter(pheno_data, 
-                  !(get(paste0(endpt, "_DATE")) %within% ENDPT_FREE) | 
-                  is.na(get(paste0(endpt, "_DATE")))) # If no endpoint date then NA 
+                  !(get(endpt_date_str) %within% ENDPT_FREE) | 
+                  is.na(get(endpt_date_str))) # If no endpoint date then NA 
 }

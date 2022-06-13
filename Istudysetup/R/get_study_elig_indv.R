@@ -22,6 +22,8 @@
 #'                   `J10_ASTHMA_DATE` where the columns are the study 
 #'                   endpoint and date, which will differ depending on 
 #'                   the input variable `endpt`.
+#' @param endpt A string. The column name of the current endpoint of 
+#'                        interest.
 #' @param exp_age An integer. Age at which exposure period starts 
 #'                            (in years).
 #' @param exp_len An integer. Length of the exposure period
@@ -30,8 +32,6 @@
 #'                                (in years).
 #' @param obs_len An integer. Length of the prediction period
 #'                               (in years).
-#' @param endpt A string. The column name of the current endpoint of 
-#'                        interest.
 #' @param downsample_fctr A numeric. Defines how many controls there
 #'                                   should be for every case.
 #'                                   Default is NA, which means no
@@ -51,11 +51,11 @@
 #' 
 #' @author Kira E. Detrois
 get_study_elig_indv <- function(pheno_data,
+                                endpt,
                                 exp_age=30,
                                 exp_len=10,
                                 wash_len=2,
                                 obs_len=8,
-                                endpt="J10_ASTHMA",
                                 downsample_fctr=NA) {
     test_length_vars_are_integers(as.list(environment()))             
     test_endpt_input_correct(as.list(environment()))
@@ -73,14 +73,20 @@ get_study_elig_indv <- function(pheno_data,
     if(!is.na(downsample_fctr)) {
         pheno_data <- downsample_cntrls(pheno_data, endpt)
     }
-    age_at_onset <- calc_age_at_onset(pheno_data, 
+    age_at_onset <- calc_age_at_onset(pheno_data,
+                                      endpt,
                                       exp_age, 
                                       exp_len, 
                                       wash_len, 
-                                      obs_len,
-                                      endpt)
+                                      obs_len)
+
     pheno_data[,paste0(endpt, "_AGE_DAYS")] <- age_at_onset
-    elig_data <- create_return_dt(pheno_data)
+    elig_data <- create_return_dt(pheno_data,
+                                  endpt,
+                                  exp_age, 
+                                  exp_len, 
+                                  wash_len, 
+                                  obs_len)
 
     return(elig_data)
 }

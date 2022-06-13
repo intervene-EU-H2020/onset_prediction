@@ -27,29 +27,29 @@ test_that("test_length_vars_are_integers works", {
   test_data = create_test_df(10)
 
   # No error
-  expect_error(get_study_elig_indv(test_data, 
+  expect_error(get_study_elig_indv(test_data,
+                                   endpt="J10_ASTHMA", 
                                    exp_age=30,
                                    exp_len=10,
                                    wash_len=2,
-                                   obs_len=8,
-                                   endpt="J10_ASTHMA"), 
+                                   obs_len=8), 
                 regexp=NA)
 
   # Errors
-  expect_error(get_study_elig_indv(test_data, 
+  expect_error(get_study_elig_indv(test_data,
+                                   endpt="J10_ASTHMA",
                                    exp_age=30.3,
                                    exp_len=10,
                                    wash_len=2,
-                                   obs_len=8,
-                                   endpt="J10_ASTHMA"), 
+                                   obs_len=8), 
                 regexp="The variable exp_age needs to be an integer.")
 
-  expect_error(get_study_elig_indv(test_data, 
+  expect_error(get_study_elig_indv(test_data,
+                                   endpt="J10_ASTHMA",
                                    exp_age="bla",
                                    exp_len=10,
                                    wash_len=2,
-                                   obs_len=8,
-                                   endpt="J10_ASTHMA"), 
+                                   obs_len=8), 
                 regexp="The variable exp_age needs to be an integer.")
 })
 

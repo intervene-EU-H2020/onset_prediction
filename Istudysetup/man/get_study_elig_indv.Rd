@@ -6,11 +6,11 @@
 \usage{
 get_study_elig_indv(
   pheno_data,
+  endpt,
   exp_age = 30,
   exp_len = 10,
   wash_len = 2,
   obs_len = 8,
-  endpt = "J10_ASTHMA",
   downsample_fctr = NA
 )
 }
@@ -23,6 +23,9 @@ get_study_elig_indv(
 endpoint and date, which will differ depending on
 the input variable \code{endpt}.}
 
+\item{endpt}{A string. The column name of the current endpoint of
+interest.}
+
 \item{exp_age}{An integer. Age at which exposure period starts
 (in years).}
 
@@ -34,9 +37,6 @@ the input variable \code{endpt}.}
 
 \item{obs_len}{An integer. Length of the prediction period
 (in years).}
-
-\item{endpt}{A string. The column name of the current endpoint of
-interest.}
 
 \item{downsample_fctr}{A numeric. Defines how many controls there
 should be for every case.
