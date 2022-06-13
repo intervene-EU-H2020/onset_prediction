@@ -40,7 +40,7 @@ create_return_dt <- function(pheno_data,
                                # this is only a single string and not
                                # a vector
                                dplyr::all_of(endpt), 
-                               paste0(endpt, "_DATE"))
+                               paste0(endpt, "_AGE_DAYS"))
     elig_data <- list(data=elig_data, 
                       exp_age=exp_age,
                       exp_len=exp_len,

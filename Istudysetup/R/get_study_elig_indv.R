@@ -73,6 +73,13 @@ get_study_elig_indv <- function(pheno_data,
     if(!is.na(downsample_fctr)) {
         pheno_data <- downsample_cntrls(pheno_data, endpt)
     }
+    age_at_onset <- calc_age_at_onset(pheno_data, 
+                                      exp_age, 
+                                      exp_len, 
+                                      wash_len, 
+                                      obs_len,
+                                      endpt)
+    pheno_data[,paste0(endpt, "_AGE_DAYS")] <- age_at_onset
     elig_data <- create_return_dt(pheno_data)
 
     return(elig_data)

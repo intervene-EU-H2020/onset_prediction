@@ -32,9 +32,10 @@ calc_study_time <- function(bds,
                             obs_len) {
     test_date_var_correct(bds, "bds")
     test_length_vars_are_integers(as.list(environment()))
-    
+
     exp_start_date <- calc_exp_start_date(bds, exp_age)
-    end_time <- exp_start_date %m+% lubridate::years(exp_len + wash_len + obs_len)
+    end_time <- calc_end_of_study(bds, exp_age, exp_len, wash_len, obs_len)
+
     total_time <- exp_start_date %--% end_time
     return(total_time)
 }

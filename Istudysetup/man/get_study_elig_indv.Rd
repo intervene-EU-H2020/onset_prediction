@@ -54,9 +54,6 @@ and i.e. \code{J10_ASTHMA}, and \verb{J10_ASTHMA_DATE. where the last two column
 \item The study setup consist of an exposure window,
 a washout period, and a prediction period. See function
 \code{\link{calc_study_time}}.
-\item Eligible individuals must have a follow-up period that
-covers the whole study time interval. See function
-\code{\link{filter_too_short_followup}}.
 \item Eligible individuals cannot have missing date in the
 column for the endpoint of interest. See function
 \code{\link{filter_missing_endpt_data}}.
