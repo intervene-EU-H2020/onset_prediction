@@ -6,11 +6,11 @@
 test_endpt_input_correct <- function(envir) {
     cols = colnames(envir$pheno_data)
     assertthat::assert_that(is.character(envir$endpt),
-                            msg="The variable endpt needs to be a character string.")
+                            msg=paste0("The variable endpt needs to be a character string. Instead got: ", class(envir$endpt)))
     assertthat::assert_that(length(envir$endpt) == 1, 
                             msg="The variable endpt needs to be a character string and not a vector of characters.")
     assertthat::assert_that(envir$endpt %in% cols,
-                            msg="The chosen endpoint is not part of the data.")
+                            msg=paste0("The chosen endpoint ", envir$endpt, " is not part of the data.\nThe data.frame pheno_data has columns:\n", paste0(cols, collapse=", ")))
 }
 
 #' Tests that the length variables of the function call are integers.
