@@ -11,7 +11,9 @@ get_study_elig_indv(
   exp_len = 10,
   wash_len = 2,
   obs_len = 8,
-  downsample_fctr = NA
+  downsample_fctr = NA,
+  write_log = NA,
+  log_file_path = NA
 )
 }
 \arguments{
@@ -42,6 +44,14 @@ interest.}
 should be for every case.
 Default is NA, which means no
 downsampling is performed.}
+
+\item{write_log}{A character or NA. How to write the log. Can be either
+\code{NA}: No log. \code{file}: Write to file, or \code{print}: Print
+to console. \code{file}, and \code{print} can be used at the same
+time.}
+
+\item{log_file_path}{A character. Has to be set when \code{write_log = file}
+Complete path, including file name of the log file.}
 }
 \value{
 A tibble with the information for the eligible individuals

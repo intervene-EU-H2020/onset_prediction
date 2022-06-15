@@ -10,8 +10,8 @@
 #' @return A list(`data`, `exp_age`, `exp_len`, `wash_len`, `obs_len`):
 #'         \itemize{
 #'          \item `data`: The actual data.frame.
-#'          \item `exp_age` An integer. Age at which exposure period starts 
-#'                            (in years).
+#'          \item `exp_age` An integer. Age at which exposure period  
+#'                            starts (in years).
 #'          \item `exp_len` An integer. Length of the exposure period
 #'                               (in years).
 #'          \item `wash_len` An integer. Length of the washout period
@@ -20,7 +20,7 @@
 #'                               (in years).
 #'          }
 #' 
-#' @author Kira Detrois
+#' @author Kira E. Detrois
 create_return_dt <- function(pheno_data,
                              endpt,
                              exp_age=30,
@@ -41,9 +41,12 @@ create_return_dt <- function(pheno_data,
                                # a vector
                                dplyr::all_of(endpt), 
                                paste0(endpt, "_AGE_DAYS"))
+
     elig_data <- list(data=elig_data, 
                       exp_age=exp_age,
                       exp_len=exp_len,
                       wash_len=wash_len,
-                      obs_len=obs_len)
+                      obs_len=obs_len,
+                      n_cases=get_n_cases(pheno_data, endpt),
+                      n_ctrls=get_n_ctrls(pheno_data, endpt))
 }

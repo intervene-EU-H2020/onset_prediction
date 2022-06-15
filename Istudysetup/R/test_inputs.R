@@ -18,7 +18,7 @@ test_endpt_input_correct <- function(envir) {
 #' @param envir A list. The function call variables.
 test_length_vars_are_integers <- function(envir) {
     for(name in names(envir)) {
-        if(!(name %in% c("pheno_data", "endpt", "bds", "downsample_fctr"))) {
+        if(!(name %in% c("pheno_data", "endpt", "bds", "downsample_fctr", "write_log", "log_file_path"))) {
             var = envir[[name]]
             assertthat::assert_that(is.numeric(var) | is.integer(var),
                                     msg=paste0("The variable ", name, " needs to be an integer."))

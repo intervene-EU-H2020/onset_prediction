@@ -1,4 +1,5 @@
 test_that("test_endpt_is_single_string works", {
+  
   test_data <- create_test_df(2)
   test_data <- add_study_interval_cols(test_data)
 
@@ -32,15 +33,16 @@ test_that("test_date_var_correct works", {
 })
 
 test_that("test_length_vars_are_integers works", {
+  set.seed(9123)
   test_data = create_test_df(10)
 
   # No error
-  expect_error(get_study_elig_indv(test_data,
+  expect_error(suppressMessages(get_study_elig_indv(test_data,
                                    endpt="J10_ASTHMA", 
                                    exp_age=30,
                                    exp_len=10,
                                    wash_len=2,
-                                   obs_len=8), 
+                                   obs_len=8)), 
                 regexp=NA)
 
   # Errors

@@ -45,5 +45,5 @@ filter_early_endpt(test_data, "J10_ASTHMA")
  
 }
 \author{
-Kira Detrois
+Kira E. Detrois
 }

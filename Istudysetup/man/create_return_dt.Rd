@@ -41,8 +41,8 @@ interest.}
 A list(\code{data}, \code{exp_age}, \code{exp_len}, \code{wash_len}, \code{obs_len}):
 \itemize{
 \item \code{data}: The actual data.frame.
-\item \code{exp_age} An integer. Age at which exposure period starts
-(in years).
+\item \code{exp_age} An integer. Age at which exposure period
+starts (in years).
 \item \code{exp_len} An integer. Length of the exposure period
 (in years).
 \item \code{wash_len} An integer. Length of the washout period
@@ -57,5 +57,5 @@ Creates a list with the data, as well as the selected
 study period intervals.
 }
 \author{
-Kira Detrois
+Kira E. Detrois
 }

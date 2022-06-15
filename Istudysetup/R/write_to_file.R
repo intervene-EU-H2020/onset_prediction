@@ -12,8 +12,10 @@
 write_to_file <- function(final_data, 
                           file_dir=paste0(getwd(), "/results/"),
                           file_name="eligible_indv") {
-    if(!dir.exists(file_dir))
+    if(!dir.exists(file_dir)) {
+        message(paste0("The file directory ", file_dir, " does not exist. Trying to create it."))
         dir.create(file_dir)
+    }
     readr::write_delim(final_data, 
                        paste0(file_dir, file_name, ".tsv"),
                        delim="\t")

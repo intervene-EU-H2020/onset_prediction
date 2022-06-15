@@ -36,6 +36,12 @@
 #'                                   should be for every case.
 #'                                   Default is NA, which means no
 #'                                   downsampling is performed.
+#' @param write_log A character or NA. How to write the log. Can be either
+#'                  `NA`: No log. `file`: Write to file, or `print`: Print
+#'                  to console. `file`, and `print` can be used at the same
+#'                  time.
+#' @param log_file_path A character. Has to be set when `write_log = file`
+#'                      Complete path, including file name of the log file.
 #' 
 #' @return A tibble with the information for the eligible individuals 
 #'         with columns: `ID`, `SEX`, `DATE_OF_BIRTH`, 
@@ -56,7 +62,9 @@ get_study_elig_indv <- function(pheno_data,
                                 exp_len=10,
                                 wash_len=2,
                                 obs_len=8,
-                                downsample_fctr=NA) {
+                                downsample_fctr=NA,
+                                write_log=NA,
+                                log_file_path=NA) {
     test_length_vars_are_integers(as.list(environment()))             
     test_endpt_input_correct(as.list(environment()))
 
@@ -73,6 +81,7 @@ get_study_elig_indv <- function(pheno_data,
     if(!is.na(downsample_fctr)) {
         pheno_data <- downsample_cntrls(pheno_data, endpt)
     }
+
     age_at_onset <- calc_age_at_onset(pheno_data,
                                       endpt,
                                       exp_age, 
@@ -81,6 +90,9 @@ get_study_elig_indv <- function(pheno_data,
                                       obs_len)
 
     pheno_data[,paste0(endpt, "_AGE_DAYS")] <- age_at_onset
+
+    write_log(as.list(environment()))
+
     elig_data <- create_return_dt(pheno_data,
                                   endpt,
                                   exp_age, 

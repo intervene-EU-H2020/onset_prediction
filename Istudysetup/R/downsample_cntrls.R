@@ -16,7 +16,7 @@ downsample_cntrls <- function(pheno_data,
     test_endpt_input_correct(as.list(environment()))
     assertthat::assert_that(is.numeric(downsample_fctr))
     
-    n_cases <- sum(pheno_data[[endpt]], na.rm=TRUE)
+    n_cases <- get_n_cases(pheno_data, endpt)
     n_cntrls <- downsample_fctr*n_cases
 
     cntrl_idxs <- which(pheno_data[[endpt]] == 0)

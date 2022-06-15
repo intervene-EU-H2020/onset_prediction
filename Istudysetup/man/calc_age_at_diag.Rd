@@ -14,3 +14,6 @@ calc_age_at_diag(bds, diag_dates)
 \description{
 A helper function to calculate the age at diagnosis.
 }
+\author{
+Kira E. Detrois
+}

@@ -11,12 +11,12 @@ test_that("get_study_elig_indv works", {
   test_data[test_data$ID == "FG0000016",]$J10_ASTHMA_DATE = NA
 
 
-  res = get_study_elig_indv(test_data,
+  res = suppressMessages(get_study_elig_indv(test_data,
                             endpt="J10_ASTHMA",
                             exp_age=30,
                             exp_len=2,
                             wash_len=2,
-                            obs_len=8)$data
+                            obs_len=8)$data)
 
   expected_res_ids = c("FG000004", "FG000005", "FG000006", "FG000007", "FG000009", "FG0000010",
                        "FG0000012", "FG0000013", "FG0000014", "FG0000015", "FG0000017", 
@@ -60,13 +60,13 @@ test_that("get_study_elig_indv downsampling works", {
   test_data[test_data$ID == "FG0000013",]$J10_ASTHMA_DATE = as.Date("1955/01/01")
 
 
-  res = get_study_elig_indv(test_data,
+  res = suppressMessages(get_study_elig_indv(test_data,
                             endpt="J10_ASTHMA",
                             exp_age=30,
                             exp_len=2,
                             wash_len=2,
                             obs_len=8,
-                            downsample_fctr=4)$data
+                            downsample_fctr=4)$data)
 
   expected_res_ids = c("FG000004", "FG000005", "FG000007", "FG000009", 
                        "FG0000012", "FG0000013", "FG0000014", "FG0000017", "FG0000023", "FG0000025")
@@ -79,6 +79,16 @@ test_that("get_study_elig_indv works also with other endpoints", {
   test_data <- create_test_df(25)
 
  # Expect no error
- expect_error(get_study_elig_indv(test_data, endpt="I9_VTE"),
+ expect_error(suppressMessages(get_study_elig_indv(test_data, endpt="I9_VTE")),
               regexp=NA)
 })
+
+# test_that("get_study_elig_indv log messages work", {
+#   set.seed(9231)
+#   test_data <- create_test_df(500)
+
+#   get_study_elig_indv(test_data, 
+#                       endpt="I9_VTE", 
+#                       write_log="file",
+#                       log_file_path="/home/kira/duni/helsinki/DSGE/Code/onset_prediction/Istudysetup/R/log/test_log.txt")
+# })

@@ -20,3 +20,6 @@ which will differ depending on the input variable
 A helper function to add a column with the age at diagnosis
 for each individual
 }
+\author{
+Kira E. Detrois
+}

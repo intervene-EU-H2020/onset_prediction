@@ -35,7 +35,7 @@
 #'                                      obs_len=8)
 #' filter_early_endpt(test_data, "J10_ASTHMA")
 #'  
-#' @author Kira Detrois
+#' @author Kira E. Detrois
 filter_early_endpt <- function(pheno_data, 
                                endpt) {
     test_endpt_input_correct(as.list(environment()))
