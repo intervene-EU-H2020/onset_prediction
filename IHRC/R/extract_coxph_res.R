@@ -5,7 +5,7 @@ get_CI <- function(betas, std_errs) {
     return(c(neg=CIneg, pos=CIpos))
 }
 
-extract_coxph_res <- function(coxph_res) {
+extract_surv_res <- function(coxph_res) {
     betas <- summary(coxph_res)$coefficients[,"coef"]
     std_errs <- summary(coxph_res)$coefficients[,"se(coef)"]
     pvals <- summary(coxph_res)$coefficients[,"Pr(>|z|)"]
