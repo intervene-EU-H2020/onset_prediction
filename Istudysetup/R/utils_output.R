@@ -81,14 +81,17 @@ write_res <- function(envir) {
             message("Variable write_res was set to TRUE but res_dir was not provided. Cannot write results to file.")
         } else {
             if(!dir.exists(envir$res_dir)) {
-                message(paste0("The log file directory ", envir$res_dir, " does not exist. Trying to create it."))
+                message(paste0("The file directory ", envir$res_dir, " does not exist. Trying to create it."))
                 dir.create(envir$res_dir, recursive=TRUE)
-            }
-            res_file_name <- paste0(get_study_file_name(envir), 
+            } 
+            if(get_n_cases(envir$pheno_data, envir$endpt) > 0) {
+                res_file_name <- paste0(get_study_file_name(envir), 
                                     "_elig_indv.tsv")
-            readr::write_delim(envir$elig_data$data, 
-                               paste0(envir$res_dir, res_file_name),
-                               delim="\t")
+                readr::write_delim(envir$elig_data$data, 
+                                   paste0(envir$res_dir, res_file_name),
+                                   delim="\t")
+            }
+
         }
     }
 }

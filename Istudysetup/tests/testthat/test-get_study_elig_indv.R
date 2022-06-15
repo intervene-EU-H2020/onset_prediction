@@ -83,14 +83,14 @@ test_that("get_study_elig_indv works also with other endpoints", {
               regexp=NA)
 })
 
-# test_that("get_study_elig_indv log messages work", {
-#   set.seed(9231)
-#   test_data <- create_test_df(500)
+test_that("get_study_elig_indv log messages work", {
+  set.seed(9231)
+  test_data <- create_test_df(500)
 
-#   get_study_elig_indv(test_data, 
-#                       endpt="I9_VTE", 
-#                       write_res=TRUE,
-#                       res_dir = "/home/kira/duni/helsinki/DSGE/Code/onset_prediction/Istudysetup/results/",
-#                       write_log="file",
-#                       log_dir="/home/kira/duni/helsinki/DSGE/Code/onset_prediction/Istudysetup/results/")
-# })
+  get_study_elig_indv(test_data, 
+                      endpt="I9_VTE", 
+                      write_res=TRUE,
+                      res_dir = "/home/kira/duni/helsinki/DSGE/Code/onset_prediction/Istudysetup/results/",
+                      write_log="file",
+                      log_dir="/home/kira/duni/helsinki/DSGE/Code/onset_prediction/Istudysetup/results/")
+})
