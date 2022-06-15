@@ -4,7 +4,7 @@ Version: 1.1.0
 Authors@R: 
     person("Kira E.", "Detrois", , "kira.detrois@helsinki.fi", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-7193-624X"))
-Description: What the package does (one paragraph).
+Description: The goal of this package is to select individuals from the data that are eligible given a certain study setup. A study setup consists of an exposure, a washout, and an observation period. Eligible individuals cannot have the selected endpoint of interest inside the endpoint free period. The endpoint free period ranges from birth until the observation period begins.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
