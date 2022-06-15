@@ -89,6 +89,8 @@ test_that("get_study_elig_indv works also with other endpoints", {
 
 #   get_study_elig_indv(test_data, 
 #                       endpt="I9_VTE", 
+#                       write_res=TRUE,
+#                       res_dir = "/home/kira/duni/helsinki/DSGE/Code/onset_prediction/Istudysetup/results/",
 #                       write_log="file",
-#                       log_file_path="/home/kira/duni/helsinki/DSGE/Code/onset_prediction/Istudysetup/R/log/test_log.txt")
+#                       log_dir="/home/kira/duni/helsinki/DSGE/Code/onset_prediction/Istudysetup/results/")
 # })

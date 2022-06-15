@@ -12,8 +12,10 @@ get_study_elig_indv(
   wash_len = 2,
   obs_len = 8,
   downsample_fctr = NA,
+  write_res = FALSE,
+  res_dir = NA,
   write_log = NA,
-  log_file_path = NA
+  log_dir = NA
 )
 }
 \arguments{
@@ -45,12 +47,17 @@ should be for every case.
 Default is NA, which means no
 downsampling is performed.}
 
+\item{write_res}{A boolean that defines whether to write the results to
+a file or not. Default is FALSE.}
+
+\item{res_dir}{A character. The directory to write the results to.}
+
 \item{write_log}{A character or NA. How to write the log. Can be either
 \code{NA}: No log. \code{file}: Write to file, or \code{print}: Print
 to console. \code{file}, and \code{print} can be used at the same
 time.}
 
-\item{log_file_path}{A character. Has to be set when \code{write_log = file}
+\item{log_dir}{A character. Has to be set when \code{write_log = file}
 Complete path, including file name of the log file.}
 }
 \value{

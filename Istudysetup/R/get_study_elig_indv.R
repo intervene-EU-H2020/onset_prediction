@@ -36,11 +36,14 @@
 #'                                   should be for every case.
 #'                                   Default is NA, which means no
 #'                                   downsampling is performed.
+#' @param write_res A boolean that defines whether to write the results to
+#'                  a file or not. Default is FALSE.
+#' @param res_dir A character. The directory to write the results to.
 #' @param write_log A character or NA. How to write the log. Can be either
 #'                  `NA`: No log. `file`: Write to file, or `print`: Print
 #'                  to console. `file`, and `print` can be used at the same
 #'                  time.
-#' @param log_file_path A character. Has to be set when `write_log = file`
+#' @param log_dir A character. Has to be set when `write_log = file`
 #'                      Complete path, including file name of the log file.
 #' 
 #' @return A tibble with the information for the eligible individuals 
@@ -63,8 +66,10 @@ get_study_elig_indv <- function(pheno_data,
                                 wash_len=2,
                                 obs_len=8,
                                 downsample_fctr=NA,
+                                write_res=FALSE,
+                                res_dir=NA,
                                 write_log=NA,
-                                log_file_path=NA) {
+                                log_dir=NA) {
     test_length_vars_are_integers(as.list(environment()))             
     test_endpt_input_correct(as.list(environment()))
 
@@ -82,16 +87,15 @@ get_study_elig_indv <- function(pheno_data,
         pheno_data <- downsample_cntrls(pheno_data, endpt)
     }
 
-    age_at_onset <- calc_age_at_onset(pheno_data,
-                                      endpt,
-                                      exp_age, 
-                                      exp_len, 
-                                      wash_len, 
-                                      obs_len)
+    onset_time <- calc_onset_time(pheno_data,
+                                  endpt,
+                                  exp_age, 
+                                  exp_len, 
+                                  wash_len, 
+                                  obs_len)
 
-    pheno_data[,paste0(endpt, "_AGE_DAYS")] <- age_at_onset
-
-    write_log(as.list(environment()))
+    pheno_data[,paste0(endpt, "_AGE_DAYS")] <- onset_time$age_days
+    pheno_data[,paste0(endpt, "_DATE")] <- onset_time$onset_date
 
     elig_data <- create_return_dt(pheno_data,
                                   endpt,
@@ -99,6 +103,9 @@ get_study_elig_indv <- function(pheno_data,
                                   exp_len, 
                                   wash_len, 
                                   obs_len)
+
+    write_log(as.list(environment()))
+    write_res(as.list(environment()))
 
     return(elig_data)
 }
