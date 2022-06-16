@@ -1,16 +1,16 @@
 #' Writes model results to a tab-delim file
 #'  
-#' @param envir A list with at least entries `write_coxph_res`, `res_dir` ,
+#' @param envir A list with at least entries `write_hr_res`, `res_dir` ,
 #'              `all_coxph_res`, `endpt`, `exp_age`, `exp_len`, `wash_len`, 
 #'              and `obs_len`.
 #' 
 #' @export 
 #' 
 #' @author Kira E. Detrois
-write_coxph_res <- function(envir) {
-    if(envir$write_coxph_res) {
+write_hr_res <- function(envir) {
+    if(envir$write_hr_res) {
         if(is.na(envir$res_dir)) {
-            message("Variable write_coxph_res was set to TRUE but res_dir was not provided. Cannot write results to file.")
+            message("Variable write_hr_res was set to TRUE but res_dir was not provided. Cannot write results to file.")
         } else {
             if(!dir.exists(envir$res_dir)) {
                 message(paste0("The file directory ", envir$res_dir, " does not exist. Trying to create it."))
