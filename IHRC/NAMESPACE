@@ -2,4 +2,4 @@
 
 export(calc_endpt_hr)
 export(run_coxph_ana)
-export(write_coxph_res)
+export(write_hr_res)
