@@ -78,6 +78,16 @@ calc_endpt_hrs <- function(pheno_data,
             elig_endpt_indv <- dplyr::left_join(elig_endpt_indv,
                                                 score_data,
                                                 by="ID")
+            plot_endpt_score_distr(elig_endpt_indv,
+                                   "SCORE",
+                                   endpt,
+                                   score_type,
+                                   exp_age, 
+                                   exp_len,
+                                   wash_len,
+                                   obs_len,
+                                   save_plot=write_study_res,
+                                   plot_dir=res_dir)
             coxph_res <- run_coxph_ana(elig_endpt_indv, 
                                       endpt)
             all_coxph_res <- add_coxph_row(all_coxph_res,

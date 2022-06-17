@@ -27,7 +27,7 @@ test_that("calc_endpt_hrs works", {
                     write_coxph_res=TRUE,
                     write_study_res=TRUE,
                     write_study_log=TRUE,
-                    res_dir="/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/results/")
+                    res_dir="/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/")
    } else {
       message("Could not run tests, because ICCI is not available.")
    }
