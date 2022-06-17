@@ -19,6 +19,5 @@ Imports:
     ggplot2,
     Istudysetup,
     readr,
-    scales,
     survival,
     tibble
