@@ -1,4 +1,4 @@
-test_that("calc_endpt_hr works", {
+test_that("calc_endpt_hrs works", {
 
   if (requireNamespace("ICCI", quietly = TRUE)) {
       set.seed(919923)
@@ -11,7 +11,7 @@ test_that("calc_endpt_hr works", {
       score_data <- ICCI::calc_cci(icd_data,
                                   exp_start=30,
                                   exp_end=40)
-      calc_endpt_hr(pheno_data, 
+      calc_endpt_hrs(pheno_data, 
                     score_data,
                     score_col_name="score", 
                     score_type="CCI",

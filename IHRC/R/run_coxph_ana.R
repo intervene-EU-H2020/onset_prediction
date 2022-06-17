@@ -7,7 +7,7 @@
 run_coxph_ana <- function(data,
                           endpt) {
     cox_formula <- stats::as.formula(paste0(
-                    "survival::Surv(", endpt, "_AGE_DAYS,") ~ SCORE"
+                    "survival::Surv(", endpt, "_AGE_DAYS,) ~ SCORE"
                    ))
     coxph_res <- survival::coxph(cox_formula,
                                  data=data)

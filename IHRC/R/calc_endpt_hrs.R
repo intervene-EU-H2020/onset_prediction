@@ -26,7 +26,7 @@
 #'                                   should be for every case.
 #'                                   Default is NA, which means no
 #'                                   downsampling is performed.
-#' @param write_hr_res A boolean that defines whether to write the results
+#' @param write_coxph_res A boolean that defines whether to write the results
 #'                     from the cox-ph model to a file or not. Default is FALSE.
 #' @param write_study_res A boolean that defines whether to write the results from
 #'                        the study selection of eligible individuals for each 
@@ -40,7 +40,7 @@
 #' @export 
 #' 
 #' @author Kira E. Detrois
-calc_endpt_hr <- function(pheno_data, 
+calc_endpt_hrs <- function(pheno_data, 
                           score_data,
                           score_col_name,
                           score_type,
@@ -50,7 +50,7 @@ calc_endpt_hr <- function(pheno_data,
                           wash_len=2,
                           obs_len=8,
                           downsample_fctr=NA,
-                          write_hr_res=FALSE,
+                          write_coxph_res=FALSE,
                           write_study_res=FALSE,
                           write_study_log=NA,
                           res_dir=NA) {
@@ -89,6 +89,12 @@ calc_endpt_hr <- function(pheno_data,
             message(paste0("Not enough cases for endpoint: ", endpt, " No of cases: ", Istudysetup::get_n_cases(elig_endpt_indv, endpt)))
         }
     }
-    write_hr_res(as.list(environment()))
+    plt <- plot_score_distr(score_data, 
+                            "SCORE",
+                            score_type,
+                            save_plot=TRUE,
+                            plot_dir=res_dir,
+                            plot_descr=paste0(exp_age, "_to_", exp_age+exp_len))
+    write_coxph_res(as.list(environment()))
     return(all_coxph_res)
 }

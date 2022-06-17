@@ -16,7 +16,9 @@ Config/testthat/edition: 3
 Imports: 
     assertthat,
     dplyr,
+    ggplot2,
     Istudysetup,
     readr,
+    scales,
     survival,
     tibble

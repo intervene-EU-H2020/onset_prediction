@@ -110,6 +110,10 @@ write_log <- function(envir) {
         if("file" %in% envir$write_log) {
             write_log_file(envir)
         }
+        if(!("print" %in% envir$write_log) & !("file" %in% envir$write_log)) {
+            message(paste0("Message: var write_log needs to be set to either `file` and or `print`. 
+                            Have, ", envir$write_log))
+        }
     } else if(get_n_cases(envir$pheno_data, envir$endpt) == 0) {
         message("Message: Careful there are no cases eligible under the current study setup.")
         message(log_msg_string(envir))
