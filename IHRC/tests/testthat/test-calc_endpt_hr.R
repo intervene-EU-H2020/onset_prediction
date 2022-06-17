@@ -11,23 +11,25 @@ test_that("calc_endpt_hrs works", {
       score_data <- ICCI::calc_cci(icd_data,
                                   exp_start=30,
                                   exp_end=40)
-      calc_endpt_hrs(pheno_data, 
-                    score_data,
-                    score_col_name="score", 
-                    score_type="CCI",
-                    exp_age=30,
-                    exp_len=10,
-                    wash_len=2,
-                    obs_len=8,
-                    endpts=c("J10_ASTHMA", 
-                            "I9_VTE",
-                            "C3_BREAST", 
-                            "COVHOSP"),
-                    downsample_fctr=4,
-                    write_coxph_res=TRUE,
-                    write_study_res=TRUE,
-                    write_study_log=TRUE,
-                    res_dir="/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/")
+      all_coxph_res <- calc_endpt_hrs(pheno_data, 
+                                       score_data,
+                                       score_col_name="score", 
+                                       score_type="CCI",
+                                       exp_age=30,
+                                       exp_len=10,
+                                       wash_len=2,
+                                       obs_len=8,
+                                       endpts=c("J10_ASTHMA", 
+                                                "I9_VTE",
+                                                "C3_BREAST", 
+                                                "COVHOSP"),
+                                       downsample_fctr=4,
+                                       write_coxph_res=TRUE,
+                                       write_study_res=TRUE,
+                                       write_study_log=TRUE,
+                                       res_dir="/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/")
+
+      plot_hrs()
    } else {
       message("Could not run tests, because ICCI is not available.")
    }

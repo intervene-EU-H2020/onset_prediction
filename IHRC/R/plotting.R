@@ -70,8 +70,8 @@ plot_endpt_score_distr <- function(pheno_data,
 
     p <- ggplot(pheno_data, 
                 aes(x=get(endpt), y=get(score_col_name),
-                    colour=get(endpt))) + 
-                geom_jitter(width=0.3, show.legend = FALSE) +
+                    fill=get(endpt))) + 
+                geom_boxplot(show.legend = FALSE) +
                 scale_x_discrete(labels=c("Controls", "Cases")) +
                 labs(title=paste0(score_type, " Scores for ", endpt),
                      subtitle=paste0("Age: ", exp_age, " Exp: ", exp_len, " Wash: ", wash_len, " Obs: ", obs_len, " Years"),
