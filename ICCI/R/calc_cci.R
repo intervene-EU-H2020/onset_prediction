@@ -50,5 +50,5 @@ calc_cci <- function(long_data,
     total_cci_scores <- add_up_cci_scores(all_cci_scores)
     total_cci_scores <- add_back_orig_ids(total_cci_scores, 
                                           long_data) 
-    return(dplyr::select(total_cci_scores, ID, score))
+    return(dplyr::select(total_cci_scores, ID, CCI_score))
 }
