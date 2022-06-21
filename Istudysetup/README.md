@@ -35,6 +35,6 @@ elig_list <- Istudysetup::get_study_elig_indv(pheno_data,
                                               wash_len=2,
                                               obs_len=8
                                               downsample_fctr=4,
-                                              write_log="print")
+                                              write_res=TRUE)
 elig_data <- elig_list$data
 ```

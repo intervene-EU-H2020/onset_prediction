@@ -11,5 +11,5 @@ log_msg_string(envir)
 \code{exp_age}, \code{exp_len}, \code{wash_len}, and \code{obs_len}.}
 }
 \description{
-Only used inside \code{write_log} function.
+Only used inside \code{write_res} function.
 }

@@ -5,14 +5,17 @@
 \title{Writes results to a tab-delim file}
 \usage{
 write_res(envir)
+
+write_res(envir)
 }
 \arguments{
-\item{envir}{A list with at least entries \code{write_res}, \code{res_dir} ,
-\code{elig_data}, \code{endpt}, \code{exp_age}, \code{exp_len}, \code{wash_len},
-and \code{obs_len}.}
+\item{envir}{A list with at least entries \code{write_res}, \code{pheno_data},
+\code{endpt}, \code{exp_age}, \code{exp_len}, \code{wash_len}, and \code{obs_len}.}
 }
 \description{
 This should be called after \code{create_return_df}.
+
+Only used inside \code{create_test_df} function.
 }
 \author{
 Kira E. Detrois

@@ -36,15 +36,9 @@
 #'                                   should be for every case.
 #'                                   Default is NA, which means no
 #'                                   downsampling is performed.
-#' @param write_res A boolean that defines whether to write the results to
+#' @param write_res A boolean. Defines whether to write the results to
 #'                  a file or not. Default is FALSE.
 #' @param res_dir A character. The directory to write the results to.
-#' @param write_log A character or NA. How to write the log. Can be either
-#'                  `NA`: No log. `file`: Write to file, or `print`: Print
-#'                  to console. `file`, and `print` can be used at the same
-#'                  time.
-#' @param log_dir A character. Has to be set when `write_log = file`
-#'                      Complete path, including file name of the log file.
 #' 
 #' @return A tibble with the information for the eligible individuals 
 #'         with columns: `ID`, `SEX`, `DATE_OF_BIRTH`, 
@@ -67,9 +61,7 @@ get_study_elig_indv <- function(pheno_data,
                                 obs_len=8,
                                 downsample_fctr=NA,
                                 write_res=FALSE,
-                                res_dir=NA,
-                                write_log=NA,
-                                log_dir=NA) {
+                                res_dir=NA) {
     test_length_vars_are_integers(as.list(environment()))             
     test_endpt_input_correct(as.list(environment()))
 
@@ -104,7 +96,7 @@ get_study_elig_indv <- function(pheno_data,
                                   wash_len, 
                                   obs_len)
 
-    write_log(as.list(environment()))
+    write_res(as.list(environment()))
     write_res(as.list(environment()))
 
     return(elig_data)
