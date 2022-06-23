@@ -90,7 +90,5 @@ test_that("get_study_elig_indv log messages work", {
   get_study_elig_indv(test_data, 
                       endpt="I9_VTE", 
                       write_res=TRUE,
-                      res_dir = "/home/kira/duni/helsinki/DSGE/Code/onset_prediction/Istudysetup/results/",
-                      write_log="file",
-                      log_dir="/home/kira/duni/helsinki/DSGE/Code/onset_prediction/Istudysetup/results/")
+                      res_dir = "/home/kira/duni/helsinki/DSGE/Code/onset_prediction/Istudysetup/results/")
 })

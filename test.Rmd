@@ -14,18 +14,137 @@ phenocols <- c("J10_ASTHMA", "I9_VTE")
 score_data <- ICCI::calc_cci(icd_data,
                              exp_start=30,
                              exp_end=40)
-IHRC::calc_endpt_hr(pheno_data,
-                    score_data,
-                    score_col_name="score",
-                    score_type="CCI",
-                    endpts=phenocols,
-                    exp_age=30,
-                    exp_len=10,
-                    wash_len=2,
-                    obs_len=8,
-                    downsample_fctr=4,
-                    write_hr_res=TRUE,
-                    write_study_res=TRUE,
-                    write_study_log="file",
-                    res_dir="results/")
+IHRC::calc_endpt_hrs(pheno_data,
+                     score_data,
+                     score_col_name="score",
+                     score_type="CCI",
+                     endpts=phenocols,
+                     exp_age=30,
+                     exp_len=10,
+                     wash_len=2,
+                     obs_len=8,
+                     downsample_fctr=4,
+                     write_coxph_res=TRUE,
+                     write_study_res=TRUE,
+                     write_study_log=TRUE,
+                     res_dir="results/")
+```
+
+
+
+```{r}
+calc_endpt_hrs <- function(pheno_data, 
+                          score_data,
+                          score_col_name,
+                          score_type,
+                          endpts,
+                          exp_age=30,
+                          exp_len=10,
+                          wash_len=2,
+                          obs_len=8,
+                          downsample_fctr=NA,
+                          write_coxph_res=FALSE,
+                          write_study_res=FALSE,
+                          write_study_log=NA,
+                          res_dir=NA) {
+
+    score_data <- preprocess_score_data(score_data, 
+                                        score_col_name)
+    
+    all_coxph_res <- create_empty_coxph_res_tib()       
+
+    for(endpt in endpts) {
+        elig_endpt_indv <- Istudysetup::get_study_elig_indv(
+                                    pheno_data,
+                                    endpt,
+                                    exp_age,
+                                    exp_len,
+                                    wash_len,
+                                    obs_len,
+                                    downsample_fctr,
+                                    write_res=write_study_res,
+                                    res_dir=res_dir,
+                                    write_log=ifelse(write_study_log, "file", NA),
+                                    log_dir=res_dir)$data
+
+        if(Istudysetup::get_n_cases(elig_endpt_indv, endpt) > 2) {
+            elig_endpt_indv <- dplyr::left_join(elig_endpt_indv,
+                                                score_data,
+                                                by="ID")
+            plot_endpt_score_distr(elig_endpt_indv,
+                                   "SCORE",
+                                   endpt)
+            coxph_res <- run_coxph_ana(elig_endpt_indv, 
+                                      endpt)
+            all_coxph_res <- add_coxph_row(all_coxph_res,
+                                         coxph_res,
+                                         score_type,
+                                         endpt,
+                                         elig_endpt_indv)
+        } else {
+            message(paste0("Not enough cases for endpoint: ", endpt, " No of cases: ", Istudysetup::get_n_cases(elig_endpt_indv, endpt)))
+        }
+    }
+    plt <- IHRC::plot_score_distr(score_data, 
+                            "SCORE",
+                            score_type,
+                            save_plot=write_study_res,
+                            plot_dir=res_dir,
+                            plot_descr=paste0(exp_age, "_to_", exp_age+exp_len))
+    write_coxph_res(as.list(environment()))
+    return(all_coxph_res)
+}
+```
+
+```{r}
+plot_score_distr <- function(score_data,
+                             score_col_name="SCORE",
+                             score_type,
+                             save_plot=FALSE,
+                             plot_dir="",
+                             plot_descr="") {
+    score_data <- dplyr::filter(score_data, 
+                                !is.na(get(score_col_name)))
+
+    plt <- ggplot(score_data, aes(x=get(score_col_name))) + 
+                geom_histogram(alpha=.8, fill="#214a2a", binwidth = 1.0)  +
+                labs(title=paste0(score_type, " Score Histogram"),
+                     subtitle=paste0("All ", nrow(score_data), " Individuals"),
+                     x=score_type,
+                     y="Count") +
+                theme_minimal() + 
+                theme(text=element_text(size=21))
+
+    if(save_plot) {
+        ggsave(paste0(plot_dir, score_type, "_score_distr_", plot_descr, ".png"),
+               plot=plt, device="png", bg="white")
+    }
+
+    return(plt)
+}
+```
+
+```{r}
+plot_endpt_score_distr <- function(elig_data,
+                                   score_col_name="SCORE",
+                                   endpt,
+                                   score_type,
+                                   save_plot=FALSE,
+                                   plot_dir="",
+                                   plot_descr="") {
+    print("yess")
+
+}
+library(ggplot2)
+res <- calc_endpt_hrs(pheno_data,
+                            score_data,
+                            score_col_name="score",
+                            score_type="CCI",
+                            endpts=phenocols,
+                            exp_age=30,
+                            exp_len=10,
+                            wash_len=2,
+                            obs_len=8,
+                            downsample_fctr=4,
+                            res_dir="results/")
 ```

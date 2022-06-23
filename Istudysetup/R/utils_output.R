@@ -54,8 +54,8 @@ create_return_dt <- function(pheno_data,
 
 #' Creates a file name for the current study setup
 #' 
-#' @param envir A list. Needs to contain at least entries `endpt`,
-#'              `exp_age`, `exp_len`, `wash_len`, and `obs_len`.
+#' @param envir A list with at least entries `endpt`, `exp_age`, `exp_len`, 
+#'              `wash_len`, and `obs_len`.
 #' 
 #' @export 
 #' 
@@ -100,20 +100,11 @@ write_res <- function(envir) {
 #' 
 #' Only used inside `create_test_df` function.
 #' 
-#' @param envir A list with at least entries `write_log`, `pheno_data`, 
+#' @param envir A list with at least entries `write_res`, `pheno_data`, 
 #'              `endpt`, `exp_age`, `exp_len`, `wash_len`, and `obs_len`.
-write_log <- function(envir) {
-    if(!is.na(envir$write_log)) {
-        if("print" %in% envir$write_log) {
-            print_log_msg(envir)
-        } 
-        if("file" %in% envir$write_log) {
-            write_log_file(envir)
-        }
-        if(!("print" %in% envir$write_log) & !("file" %in% envir$write_log)) {
-            message(paste0("Message: var write_log needs to be set to either `file` and or `print`. 
-                            Have, ", envir$write_log))
-        }
+write_res <- function(envir) {
+    if(envir$write_res) {
+        write_res_file(envir)
     } else if(get_n_cases(envir$pheno_data, envir$endpt) == 0) {
         message("Message: Careful there are no cases eligible under the current study setup.")
         message(log_msg_string(envir))
@@ -122,7 +113,7 @@ write_log <- function(envir) {
 
 #' Creates a string of the current study setup
 #' 
-#' Only used inside `write_log` function.
+#' Only used inside `write_res` function.
 #' 
 #' @param envir A list with at least entries `pheno_data`, `endpt`, 
 #'              `exp_age`, `exp_len`, `wash_len`, and `obs_len`.
@@ -140,7 +131,7 @@ log_msg_string <- function(envir) {
 
 #' Creates a string of the current study setup
 #' 
-#' Only used inside `write_log` function.
+#' Only used inside `write_res` function.
 #' 
 #' @inheritParams log_msg_string
 print_log_msg <- function(envir) {
@@ -154,20 +145,20 @@ print_log_msg <- function(envir) {
 #' Prints the current study setup or writes it to a file
 #' 
 #' @inheritParams log_msg_string
-write_log_file <- function(envir) {
+write_res_file <- function(envir) {
     n_cases <- get_n_cases(envir$pheno_data, envir$endpt)
     n_ctrls <- get_n_ctrls(envir$pheno_data, envir$endpt)
     
-    if(is.na(envir$log_dir)) {
-        message("Variable write_log was set to `file` but no log file path was provided. Printing instead.")
+    if(is.na(envir$res_dir)) {
+        message("Variable write_res was set to `file` but no log file path was provided. Printing instead.")
         print_log_msg(envir)
     } else {
-        if(!dir.exists(envir$log_dir)) {
-            message(paste0("The log file directory ", envir$log_dir, " does not exist. Trying to create it."))
-            dir.create(envir$log_dir, recursive=TRUE)
+        if(!dir.exists(envir$res_dir)) {
+            message(paste0("The log file directory ", envir$res_dir, " does not exist. Trying to create it."))
+            dir.create(envir$res_dir, recursive=TRUE)
         }
         readr::write_file(log_msg_string(envir), 
-                          paste0(envir$log_dir, 
+                          paste0(envir$res_dir, 
                                  get_study_file_name(envir), 
                                  "_log.txt"))
     }

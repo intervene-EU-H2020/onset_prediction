@@ -4,7 +4,7 @@
 \alias{run_coxph_ana}
 \title{Fits the cox-ph model for the current endpoint}
 \usage{
-run_coxph_ana(data, endpt)
+run_coxph_ana(data, endpt, predictor = "SCORE_GROUP")
 }
 \arguments{
 \item{data}{TODO}

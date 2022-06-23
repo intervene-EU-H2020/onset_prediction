@@ -10,7 +10,7 @@ extract_coxph_res(coxph_res)
 \item{coxph_res}{A coxph model.}
 }
 \value{
-A list(\code{beta}, \code{std_err}, \code{p_val}, \code{HR}, \code{CI}).
+A list(\code{beta}, \code{std_err}, \code{p_val}, \code{HR}, \code{CI}, \code{groups}).
 }
 \description{
 Extracts the relevant results from the cox-ph model

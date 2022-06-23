@@ -15,9 +15,7 @@ calc_endpt_hrs(
   wash_len = 2,
   obs_len = 8,
   downsample_fctr = NA,
-  write_coxph_res = FALSE,
-  write_study_res = FALSE,
-  write_study_log = NA,
+  write_res = FALSE,
   res_dir = NA
 )
 }
@@ -58,19 +56,11 @@ should be for every case.
 Default is NA, which means no
 downsampling is performed.}
 
-\item{write_coxph_res}{A boolean that defines whether to write the results
-from the cox-ph model to a file or not. Default is FALSE.}
+\item{write_res}{A boolean. Defines whether to save the results to
+files.}
 
-\item{write_study_res}{A boolean that defines whether to write the results from
-the study selection of eligible individuals for each
-endpoint, to files or not. Default is FALSE.}
-
-\item{write_study_log}{A character or NA. How to write the log for the study setup.
-Can be either \code{NA}: No log. \code{file}: Write to file, or
-\code{print}: Print to console. \code{file}, and \code{print} can be used
-at the same time.}
-
-\item{res_dir}{A character. The directory to write the results to.}
+\item{res_dir}{A character. The directory to write the results and
+log to.}
 }
 \description{
 Calcualtes HR from a cox-ph model for each endpoint

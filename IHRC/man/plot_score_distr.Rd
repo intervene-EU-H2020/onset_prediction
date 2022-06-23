@@ -4,31 +4,12 @@
 \alias{plot_score_distr}
 \title{Creates a plot of the score distribution}
 \usage{
-plot_score_distr(
-  score_data,
-  score_col_name = "SCORE",
-  score_type,
-  save_plot = FALSE,
-  plot_dir = "",
-  plot_descr = ""
-)
+plot_score_distr(envir)
 }
 \arguments{
-\item{score_data}{A data.frame with the score results for each individuals.
-Should have at least column defined in \code{score_col_name}.}
-
-\item{score_col_name}{A character. The name of the column with the scores.}
-
-\item{score_type}{A character. The name of the score used for the model,
-i.e. CCI, or PheRS.}
-
-\item{save_plot}{A boolean. Whether to save the plot to a file.}
-
-\item{plot_dir}{A character. The directory where the plot should
-be saved to.}
-
-\item{plot_descr}{A character. Extra description to add to the plot
-file name.}
+\item{envir}{A list with at least entries \code{write_res},
+\code{score_data}, \code{score_type}, \code{exp_age}, and \code{exp_len},
+and \code{res_dir}.}
 }
 \value{
 The ggplot object.

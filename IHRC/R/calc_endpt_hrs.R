@@ -26,40 +26,27 @@
 #'                                   should be for every case.
 #'                                   Default is NA, which means no
 #'                                   downsampling is performed.
-#' @param write_coxph_res A boolean that defines whether to write the results
-#'                     from the cox-ph model to a file or not. Default is FALSE.
-#' @param write_study_res A boolean that defines whether to write the results from
-#'                        the study selection of eligible individuals for each 
-#'                        endpoint, to files or not. Default is FALSE.
-#' @param write_study_log A character or NA. How to write the log for the study setup.
-#'                        Can be either `NA`: No log. `file`: Write to file, or
-#'                       `print`: Print to console. `file`, and `print` can be used 
-#'                        at the same time.
-#' @param res_dir A character. The directory to write the results to.
+#' @param write_res A boolean. Defines whether to save the results to 
+#'                             files.
+#' @param res_dir A character. The directory to write the results and
+#'                             log to.
 #' 
 #' @export 
 #' 
 #' @author Kira E. Detrois
 calc_endpt_hrs <- function(pheno_data, 
-                          score_data,
-                          score_col_name,
-                          score_type,
-                          endpts,
-                          exp_age=30,
-                          exp_len=10,
-                          wash_len=2,
-                          obs_len=8,
-                          downsample_fctr=NA,
-                          write_coxph_res=FALSE,
-                          write_study_res=FALSE,
-                          write_study_log=NA,
-                          res_dir=NA) {
-
-    score_data <- preprocess_score_data(score_data, 
-                                        score_col_name)
+                           score_data,
+                           score_type,
+                           endpts,
+                           exp_age,
+                           exp_len=10,
+                           wash_len=2,
+                           obs_len=8,
+                           downsample_fctr=NA,
+                           write_res=FALSE,
+                           res_dir=NA) {
     
-    all_coxph_res <- create_empty_coxph_res_tib()       
-
+    coxph_res <- create_empty_coxph_res_tib()       
     for(endpt in endpts) {
         elig_endpt_indv <- Istudysetup::get_study_elig_indv(
                                     pheno_data,
@@ -69,42 +56,48 @@ calc_endpt_hrs <- function(pheno_data,
                                     wash_len,
                                     obs_len,
                                     downsample_fctr,
-                                    write_res=write_study_res,
-                                    res_dir=res_dir,
-                                    write_log=ifelse(write_study_log, "file", NA),
-                                    log_dir=res_dir)$data
+                                    write_res,
+                                    res_dir)$data
 
-        if(Istudysetup::get_n_cases(elig_endpt_indv, endpt) > 2) {
-            elig_endpt_indv <- dplyr::left_join(elig_endpt_indv,
-                                                score_data,
-                                                by="ID")
-            plot_endpt_score_distr(elig_endpt_indv,
-                                   "SCORE",
-                                   endpt,
-                                   score_type,
-                                   exp_age, 
-                                   exp_len,
-                                   wash_len,
-                                   obs_len,
-                                   save_plot=write_study_res,
-                                   plot_dir=res_dir)
-            coxph_res <- run_coxph_ana(elig_endpt_indv, 
-                                      endpt)
-            all_coxph_res <- add_coxph_row(all_coxph_res,
-                                         coxph_res,
-                                         score_type,
-                                         endpt,
-                                         elig_endpt_indv)
+        if(Istudysetup::get_n_cases(elig_endpt_indv, endpt) > 100) {
+            pheno_score_data <- join_dfs(elig_endpt_indv, 
+                                         score_data)
+            plt <- plot_endpt_score_distr(as.list(environment()))
+            pheno_score_data <- add_risk_group_col(pheno_score_data)
+            coxph_res <- run_and_add_coxph_ana(as.list(environment()),
+                                               "SCORE_GROUP")
+            coxph_res <- run_and_add_coxph_ana(as.list(environment()),
+                                               "SCORE")
+            write_score_groups_to_log(as.list(environment()))
         } else {
             message(paste0("Not enough cases for endpoint: ", endpt, " No of cases: ", Istudysetup::get_n_cases(elig_endpt_indv, endpt)))
         }
     }
-    plt <- plot_score_distr(score_data, 
-                            "SCORE",
-                            score_type,
-                            save_plot=TRUE,
-                            plot_dir=res_dir,
-                            plot_descr=paste0(exp_age, "_to_", exp_age+exp_len))
-    write_coxph_res(as.list(environment()))
-    return(all_coxph_res)
+    write_res(as.list(environment()))
+
+    return(coxph_res)
+}
+
+#' Runs the cox-PH analysis and adds the results to the data.frame
+#' `coxph_res`
+#'  
+#' 
+#' @param envir A list with at least entries `coxph_res`, 
+#'              `score_type`, `endpt`, `pheno_score_data`.
+#' @param predictor A character. The predictor for the survival 
+#'                               analyis string.
+#' 
+#' @return A tibble the results data.fram `coxph_res` with added 
+#'         columns from the analysis run. 
+run_and_add_coxph_ana <- function(envir,
+                                  predictor) {
+    curnt_coxph_res <- run_coxph_ana(envir$pheno_score_data, 
+                                     envir$endpt,
+                                     predictor)
+    envir$coxph_res <- add_coxph_row(envir$coxph_res,
+                                     curnt_coxph_res,
+                                     envir$score_type,
+                                     envir$endpt,
+                                     envir$pheno_score_data)
+    return(envir$coxph_res)
 }

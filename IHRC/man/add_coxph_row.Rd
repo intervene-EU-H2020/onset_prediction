@@ -7,8 +7,6 @@
 add_coxph_row(all_coxph_res, coxph_res, score_type, endpt, elig_endpt_indv)
 }
 \arguments{
-\item{all_coxph_res}{A tibble. The results for the previous endpoints.}
-
 \item{coxph_res}{A tibble with the results for the current endpoints.}
 
 \item{score_type}{A character. The name of the score used for the model,

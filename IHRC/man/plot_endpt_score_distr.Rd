@@ -4,51 +4,12 @@
 \alias{plot_endpt_score_distr}
 \title{Plots a jittered scatter}
 \usage{
-plot_endpt_score_distr(
-  pheno_data,
-  score_col_name = "SCORE",
-  endpt,
-  score_type,
-  exp_age,
-  exp_len,
-  wash_len,
-  obs_len,
-  save_plot = FALSE,
-  plot_dir = ""
-)
+plot_endpt_score_distr(envir)
 }
 \arguments{
-\item{pheno_data}{A data.frame with at least the columns:
-\code{ID}, \code{SEX}, \code{DATE_OF_BIRTH}, \code{ANCESTRY},
-\code{START_OF_FOLLOWUP}, \code{END_OF_FOLLOWUP},
-\code{DATE_OF_BIRTH}, and i.e. \code{J10_ASTHMA}, and
-\code{J10_ASTHMA_DATE} where the columns are the study
-endpoint and date, which will differ depending on
-the input variable \code{endpts}.}
-
-\item{score_col_name}{A character. The name of the column with the scores.}
-
-\item{endpt}{A string. The column name of the current endpoint of
-interest.}
-
-\item{score_type}{A character. The name of the score used for the model,
-i.e. CCI, or PheRS.}
-
-\item{exp_age}{An integer. Age at which exposure period starts
-(in years).}
-
-\item{exp_len}{An integer. Length of the exposure period
-(in years).}
-
-\item{wash_len}{An integer. Length of the washout period
-(in years).}
-
-\item{obs_len}{An integer. Length of the prediction period
-(in years).}
-
-\item{save_plot}{A boolean. Whether not to save the plots.}
-
-\item{plot_dir}{A character. Directory to save the plots to.}
+\item{envir}{A list with at least entries \code{write_res},
+\code{pheno_data}, \code{endpt}, \code{score_type}, and \code{exp_age},
+and \code{exp_len}, \code{wash_len}, \code{obs_len}, and \code{res_dir}.}
 }
 \value{
 A ggplot object
