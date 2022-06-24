@@ -15,10 +15,14 @@
 #' 
 #' @author Kira E. Detrois
 adj_case_cntrl_status <- function(pheno_data,
-                                  endpt) {                                  
-    endpt_date_str <- paste0(endpt, "_DATE")
+                                  endpt) {   
+    check_cols_exist(pheno_data, 
+                     c(endpt, paste0(endpt, "_DATE"), "STUDY_TIME"),
+                     "adj_case_cntrl_status")  
+
+    # Cases with endpoint after study ended                     
     cases_to_cntrls <- dplyr::filter(pheno_data, 
-                                     get(endpt_date_str) > 
+                                     get(paste0(endpt, "_DATE")) > 
                                         lubridate::int_end(STUDY_TIME))
     pheno_data[pheno_data$ID %in% cases_to_cntrls$ID, endpt] = rep(0, nrow(cases_to_cntrls))
 

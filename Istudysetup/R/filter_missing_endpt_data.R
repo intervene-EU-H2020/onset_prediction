@@ -26,7 +26,11 @@
 #' 
 #' @author Kira E. Detrois
 filter_missing_endpt_data <- function(pheno_data,       
-                                      endpt) {  
+                                      endpt) { 
+    check_cols_exist(pheno_data,
+                     c(endpt, paste0(endpt, "_DATE")),
+                     "filter_missing_endpt_data")
+
     dplyr::filter(pheno_data, 
                   !is.na(get(endpt)),
                   !((get(endpt) == 1) & is.na(get(paste0(endpt, "_DATE")))))

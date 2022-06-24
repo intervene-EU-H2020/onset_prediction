@@ -7,10 +7,9 @@
 get_n_cases(pheno_data, endpt)
 }
 \arguments{
-\item{pheno_data}{A data.frame with at least the column defined in
-the variable endpoint.}
+\item{pheno_data}{A data.frame with at least the column defined in \code{endpt}.}
 
-\item{endpt}{A string. The column name of the current endpoint of
+\item{endpt}{A character. The column name of the current endpoint of
 interest.}
 }
 \description{

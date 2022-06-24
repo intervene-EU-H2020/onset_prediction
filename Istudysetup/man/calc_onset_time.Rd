@@ -4,19 +4,16 @@
 \alias{calc_onset_time}
 \title{Calculates the date of onset and the age in days}
 \usage{
-calc_onset_time(pheno_data, endpt)
+calc_onset_time(pheno_data, study)
 }
 \arguments{
-\item{pheno_data}{A data.frame with at least the columns:
-\code{ID}, \code{SEX}, \code{DATE_OF_BIRTH}, \code{ANCESTRY},
-\code{START_OF_FOLLOWUP}, \code{END_OF_FOLLOWUP},
-\code{DATE_OF_BIRTH}, and i.e. \code{J10_ASTHMA}, and
-\code{J10_ASTHMA_DATE} where the columns are the study
-endpoint and date, which will differ depending on
-the input variable \code{endpt}.}
+\item{pheno_data}{A data.frame with at least columns \code{DATE_OF_BIRTH}
+and i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_DATE}
+where the columns are the study endpoint and
+date, which will differ depending on the input
+variable \code{endpt}.}
 
-\item{endpt}{A string. The column name of the current endpoint of
-interest.}
+\item{study}{A study object with the current study setup.}
 }
 \value{
 A list(\code{age_days}, \code{age_date}).
@@ -32,7 +29,7 @@ end of the study period for controls.
 }
 \examples{
 bds <- c(as.Date("1923/07/01"), as.Date("1823/07/02"), as.Date("2002/04/01"))
-study <- new("study", exp_age=10, exp_len=10, wash_len=2, obs_len=8)
+study <- methods::new("study", endpt="J10_ASTHMA", exp_age=30, exp_len=10, wash_len=2, obs_len=8)
 calc_study_time(bds, study)
 
 }

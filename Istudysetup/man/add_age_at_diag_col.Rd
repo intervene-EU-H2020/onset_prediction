@@ -5,7 +5,7 @@
 \title{A helper function to add a column with the age at diagnosis
 for each individual}
 \usage{
-add_age_at_diag_col(pheno_data)
+add_age_at_diag_col(pheno_data, endpt)
 }
 \arguments{
 \item{pheno_data}{A data.frame with at least the columns:
@@ -13,6 +13,8 @@ i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_DATE} where
 the columns are the study endpoint and date,
 which will differ depending on the input variable
 \code{endpt}.}
+
+\item{endpt}{A string. The column name of the current endpoint of interest.}
 }
 \description{
 A helper function to add a column with the age at diagnosis

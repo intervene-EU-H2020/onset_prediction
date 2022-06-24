@@ -3,7 +3,7 @@
 #' Calculates the date of the start of the exposure period for each 
 #' individual.
 #' 
-#' @param bds A Date. The birth days of the individuals.
+#' @inheritParams calc_end_of_study
 #' @inheritParams get_study_elig_indv
 #' 
 #' @return A Date. The dates of the start of the exposure period 
@@ -14,12 +14,12 @@
 #' 
 #' @examples 
 #' bds <- c(as.Date("1923/07/01"), as.Date("1823/07/02"), as.Date("2002/04/01"))
-#' study <- new("study", exp_age=30, exp_len=10, wash_len=2, obs_len=8)
+#' study <- methods::new("study", endpt="J10_ASTHMA", exp_age=30, exp_len=10, wash_len=2, obs_len=8)
 #' calc_exp_start_date(bds, study@exp_age)
 #' 
 #' @author Kira E. Detrois
 calc_exp_start_date <- function(bds, 
                                 exp_age) {
-    #test_date_var_correct(bds, "bds")
+    test_date_var_correct(bds, "bds")
     bds %m+% lubridate::years(exp_age)
 }

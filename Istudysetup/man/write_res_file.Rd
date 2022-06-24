@@ -2,14 +2,21 @@
 % Please edit documentation in R/utils_output.R
 \name{write_res_file}
 \alias{write_res_file}
-\title{Prints the current study setup or writes it to a file}
+\title{Writes results to a tab-delim file}
 \usage{
-write_res_file(envir)
+write_res_file(study, write_res, res_dir)
 }
 \arguments{
-\item{envir}{A list with at least entries \code{pheno_data}, \code{endpt},
-\code{exp_age}, \code{exp_age}, \code{exp_age}, and \code{exp_age}.}
+\item{study}{A study object with the current study setup.}
+
+\item{write_res}{A boolean. Defines whether to write the results to
+a file or not. Default is FALSE.}
+
+\item{res_dir}{A character. The directory to write the results to.}
 }
 \description{
-Prints the current study setup or writes it to a file
+Writes results to a tab-delim file
+}
+\author{
+Kira E. Detrois
 }

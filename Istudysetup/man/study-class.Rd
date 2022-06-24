@@ -11,17 +11,25 @@ An S4 class representing the study setup
 \section{Slots}{
 
 \describe{
-\item{\code{data}}{The actual data.frame with eligible individuals under the
+\item{\code{elig_indv}}{The actual data.frame with eligible individuals under the
 current study setup.}
+
+\item{\code{endpt}}{A character. The column name of the current endpoint of interest.}
 
 \item{\code{exp_age}}{An integer. Age at which exposure period starts (in years)}
 
-\item{\code{exp_len}}{asdf}
+\item{\code{exp_len}}{An integer. Length of the exposure period (in years)}
 
-\item{\code{wash_len}}{as}
+\item{\code{wash_len}}{An integer. Length of the washout period (in years)}
 
-\item{\code{n_cases}}{asdf}
+\item{\code{obs_len}}{An integer. Length of the observation period (in years)}
 
-\item{\code{n_cntrls}}{asdf}
+\item{\code{downsample_fctr}}{An integer. Defines how many controls there
+should be for every case.
+Default is NA, which means no
+downsampling is performed.}
 }}
 
+\author{
+Kira E. Detrois
+}

@@ -4,11 +4,10 @@
 \alias{get_study_file_name}
 \title{Creates a file name for the current study setup}
 \usage{
-get_study_file_name(envir)
+get_study_file_name(study)
 }
 \arguments{
-\item{envir}{A list with at least entries \code{endpt}, \code{exp_age}, \code{exp_age},
-\code{exp_age}, and \code{exp_age}.}
+\item{study}{A study object with the current study setup.}
 }
 \description{
 Creates a file name for the current study setup

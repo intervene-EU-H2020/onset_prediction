@@ -4,12 +4,17 @@
 \alias{log_msg_string}
 \title{Creates a string of the current study setup}
 \usage{
-log_msg_string(envir)
+log_msg_string(study)
 }
 \arguments{
-\item{envir}{A list with at least entries \code{pheno_data}, \code{endpt},
-\code{exp_age}, \code{exp_age}, \code{exp_age}, and \code{exp_age}.}
+\item{study}{A study object with the current study setup.}
+}
+\value{
+The log message character string
 }
 \description{
-Only used inside \code{write_res} function.
+Creates a string of the current study setup
+}
+\author{
+Kira E. Detrois
 }

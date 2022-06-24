@@ -22,11 +22,12 @@
 #' @return The filtered data.frame without the individuals where the
 #'         the follow-up period doesn't cover the study period. 
 #' 
-#' @examples 
-#' test_data <- create_test_df()
-#' test_data <- add_study_interval_cols(test_data)
-#' 
 #' @author Kira E. Detrois
 filter_too_short_followup <- function(pheno_data) {
+
+    check_cols_exist(pheno_data,
+                     c("STUDY_TIME", "FOLLOWUP"),
+                     "filter_missing_endpt_data")
+
     dplyr::filter(pheno_data, STUDY_TIME %within% FOLLOWUP)
 }

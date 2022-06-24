@@ -8,8 +8,8 @@
 #' 
 #' @author Kira E. Detrois
 calc_age_at_diag <- function(bds, diag_dates) {
-    #test_date_var_correct(bds, "bds")
-    #test_date_var_correct(diag_dates, "diag_dates")
+    test_date_var_correct(bds, "bds")
+    test_date_var_correct(diag_dates, "diag_dates")
 
     interval = bds %--% diag_dates
     age = interval %/% lubridate::years(1)
@@ -25,9 +25,11 @@ calc_age_at_diag <- function(bds, diag_dates) {
 #' @export
 #' 
 #' @author Kira E. Detrois
-add_age_at_diag_col <- function(pheno_data) {
-    #test_endpt_input_correct(as.list(environment()))
-
+add_age_at_diag_col <- function(pheno_data,
+                                endpt) {
+    check_cols_exist(pheno_data, 
+                     c("DATE_OF_BIRTH", paste0(endpt, "_DATE")),
+                     "add_age_at_diag_col")
     age_at_diag <- calc_age_at_diag(pheno_data$DATE_OF_BIRTH, 
                                     pheno_data[[paste0(endpt, "_DATE")]])
     pheno_data <- tibble::add_column(pheno_data, 
@@ -44,7 +46,8 @@ add_age_at_diag_col <- function(pheno_data) {
 #' the study setup. This should be handled prior using functions 
 #' `add_study_interval_cols`, and `adj_case_cntrl_status`.
 #' 
-#' @inheritParams downsample_cntrls
+#' @param pheno_data A data.frame with at least the column defined in `endpt`.
+#' @inheritParams get_study_elig_indv
 #' 
 #' @export 
 #' 
@@ -62,7 +65,7 @@ get_n_cases <- function(pheno_data,
 #' period from the study setup. This should be handled prior using 
 #' functions `add_study_interval_cols`, and `adj_case_cntrl_status`.
 #' 
-#' @inheritParams downsample_cntrls
+#' @inheritParams get_n_cases
 #' 
 #' @export 
 #' 

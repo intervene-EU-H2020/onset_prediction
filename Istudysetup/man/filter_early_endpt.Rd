@@ -8,12 +8,12 @@ filter_early_endpt(pheno_data, endpt)
 }
 \arguments{
 \item{pheno_data}{A data.frame with at least columns \code{ENDPT_FREE}
-and i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_DATE}
-where the columns are the study endpoint and
-date, which will differ depending on the input
+and i.e. \code{J10_ASTHMA_DATE} where the columns are the study
+endpoint and date, which will differ depending on the input
 variable \code{endpt}.}
 
-\item{endpt}{A string. The column name of the current endpoint of interest.}
+\item{endpt}{A character. The column name of the current endpoint of
+interest.}
 }
 \value{
 The filtered data.frame without individuals where the
@@ -36,8 +36,8 @@ function \code{\link{calc_endpt_free_time}} directly or
 }
 \examples{
 test_data <- Istudysetup::create_test_df(30)
-study <- new("study", exp_age=10, exp_len=10, wash_len=2, obs_len=8)
-test_data <- add_study_interval_cols(test_data, stduy)
+study <- methods::new("study", endpt="J10_ASTHMA", exp_age=30, exp_len=10, wash_len=2, obs_len=8)
+test_data <- add_study_interval_cols(test_data, study)
 filter_early_endpt(test_data, "J10_ASTHMA")
  
 }

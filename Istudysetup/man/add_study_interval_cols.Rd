@@ -7,15 +7,13 @@
 add_study_interval_cols(pheno_data, study)
 }
 \arguments{
-\item{pheno_data}{A data.frame with at least the columns:
-\code{START_OF_FOLLOWUP}, \code{END_OF_FOLLOWUP}, and
-\code{DATE_OF_BIRTH}.}
+\item{pheno_data}{A data.frame with at least the column \code{DATE_OF_BIRTH}.}
+
+\item{study}{A study object with the current study setup.}
 }
 \value{
 The phenotype data.frame with added columns:
 \itemize{
-\item \code{FOLLOWUP}: lubdridate intervals created using columns
-\code{START_OF_FOLLOWUP} and \code{END_OF_FOLLOWUP}.
 \item \code{ENDPT_FREE}: lubdridate intervals
 which ranges from \code{DATE_OF_BIRTH} to the
 end of the washout period. In this time

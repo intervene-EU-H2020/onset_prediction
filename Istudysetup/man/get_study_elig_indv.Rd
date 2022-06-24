@@ -13,7 +13,7 @@ get_study_elig_indv(
   obs_len = 8,
   downsample_fctr = NA_integer_,
   write_res = FALSE,
-  res_dir = NA
+  res_dir = NA_character_
 )
 }
 \arguments{
@@ -25,7 +25,7 @@ get_study_elig_indv(
 endpoint and date, which will differ depending on
 the input variable \code{endpt}.}
 
-\item{endpt}{A string. The column name of the current endpoint of
+\item{endpt}{A character. The column name of the current endpoint of
 interest.}
 
 \item{exp_age}{An integer. Age at which exposure period starts
@@ -40,7 +40,7 @@ interest.}
 \item{obs_len}{An integer. Length of the prediction period
 (in years).}
 
-\item{downsample_fctr}{A numeric. Defines how many controls there
+\item{downsample_fctr}{An integer. Defines how many controls there
 should be for every case.
 Default is NA, which means no
 downsampling is performed.}

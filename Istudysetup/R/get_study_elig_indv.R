@@ -22,7 +22,7 @@
 #'                   `J10_ASTHMA_DATE` where the columns are the study 
 #'                   endpoint and date, which will differ depending on 
 #'                   the input variable `endpt`.
-#' @param endpt A string. The column name of the current endpoint of 
+#' @param endpt A character. The column name of the current endpoint of 
 #'                        interest.
 #' @param exp_age An integer. Age at which exposure period starts 
 #'                            (in years).
@@ -32,7 +32,7 @@
 #'                                (in years).
 #' @param obs_len An integer. Length of the prediction period
 #'                               (in years).
-#' @param downsample_fctr A numeric. Defines how many controls there
+#' @param downsample_fctr An integer. Defines how many controls there
 #'                                   should be for every case.
 #'                                   Default is NA, which means no
 #'                                   downsampling is performed.
@@ -61,35 +61,33 @@ get_study_elig_indv <- function(pheno_data,
                                 obs_len=8,
                                 downsample_fctr=NA_integer_,
                                 write_res=FALSE,
-                                res_dir=NA) {
-    #test_endpt_input_correct(as.list(environment()))
+                                res_dir=NA_character_) {
 
-    study <- new("study", 
-                 endpt=endpt,
-                 exp_age=exp_age,
-                 exp_len=exp_len,
-                 wash_len=wash_len,
-                 obs_len=obs_len,
-                 downsample_fctr=downsample_fctr)
+    study <- methods::new("study", 
+                          endpt=endpt,
+                          exp_age=exp_age,
+                          exp_len=exp_len,
+                          wash_len=wash_len,
+                          obs_len=obs_len,
+                          downsample_fctr=downsample_fctr)
 
-    test_endpt_input_correct(pheno_data, endpt)
+    check_cols_exist(pheno_data, endpt, "get_study_elig_indv")
 
     pheno_data <- add_study_interval_cols(pheno_data, study)
     pheno_data <- filter_missing_endpt_data(pheno_data, endpt)
     pheno_data <- filter_early_endpt(pheno_data, endpt)
     pheno_data <- adj_case_cntrl_status(pheno_data, endpt)
-
     if(!is.na(downsample_fctr)) {
         pheno_data <- downsample_cntrls(pheno_data, study)
     }
 
     onset_time <- calc_onset_time(pheno_data, study)
-
     pheno_data[,paste0(endpt, "_AGE_DAYS")] <- onset_time$age_days
     pheno_data[,paste0(endpt, "_DATE")] <- onset_time$onset_date
-    study@elig_indv <- create_return_dt(pheno_data, endpt)
-    write_res(as.list(environment()))
-    write_res(as.list(environment()))
+
+    study@elig_indv <- create_return_tib(pheno_data, endpt)
+
+    write_res(study, write_res, res_dir)
 
     return(study)
 }

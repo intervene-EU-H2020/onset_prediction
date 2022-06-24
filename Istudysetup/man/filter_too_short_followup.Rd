@@ -32,11 +32,6 @@ To add the columns \code{STUDY_TIME} and \code{FOLLOWUP} use either functions
 \code{\link{calc_study_time}} and \code{\link{get_followup_time}}
 directly, or \code{\link{add_study_interval_cols}}.
 }
-\examples{
-test_data <- create_test_df()
-test_data <- add_study_interval_cols(test_data)
-
-}
 \author{
 Kira E. Detrois
 }

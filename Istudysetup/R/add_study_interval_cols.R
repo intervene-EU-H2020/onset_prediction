@@ -7,15 +7,11 @@
 #' For the input data format see: 
 #' \href{https://docs.google.com/document/d/1GbZszpPeyf-hyb0V_YDx828YbM7woh8OBJhvzkEwo2g/edit}{INTERVENE Phenotype File Definition}
 #' 
-#' @param pheno_data A data.frame with at least the columns: 
-#'                   `START_OF_FOLLOWUP`, `END_OF_FOLLOWUP`, and 
-#'                   `DATE_OF_BIRTH`.
-#' @inheritParams get_study_elig_indv
+#' @param pheno_data A data.frame with at least the column `DATE_OF_BIRTH`.
+#' @param study A study object with the current study setup.
 #' 
 #' @return The phenotype data.frame with added columns:
 #'         \itemize{
-#'          \item `FOLLOWUP`: lubdridate intervals created using columns 
-#'                         `START_OF_FOLLOWUP` and `END_OF_FOLLOWUP`.
 #'          \item `ENDPT_FREE`: lubdridate intervals
 #'                           which ranges from `DATE_OF_BIRTH` to the 
 #'                           end of the washout period. In this time 
@@ -31,14 +27,14 @@
 #' @author Kira E. Detrois
 add_study_interval_cols <- function(pheno_data,
                                     study) {
-    followup <- get_followup_time(pheno_data)
+    check_cols_exist(pheno_data, c("DATE_OF_BIRTH"), "add_study_interval_cols")
+
     endpt_free <- calc_endpt_free_time(pheno_data$DATE_OF_BIRTH, 
                                        study)
     total_study_time <- calc_study_time(pheno_data$DATE_OF_BIRTH, 
                                         study)
 
     pheno_data <- tibble::add_column(pheno_data, 
-                                     FOLLOWUP=followup,
                                      ENDPT_FREE=endpt_free,
                                      STUDY_TIME=total_study_time)
 

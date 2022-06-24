@@ -7,14 +7,12 @@
 downsample_cntrls(pheno_data, study)
 }
 \arguments{
-\item{pheno_data}{A data.frame with at least the column defined in
-the variable endpoint.}
+\item{pheno_data}{A data.frame with at least the column \code{DATE_OF_BIRTH}.}
 
-\item{endpt}{A string. The column name of the current endpoint of
-interest.}
-
-\item{downsample_fctr}{A numeric. Defines how many controls there
-should be for every case.}
+\item{study}{A study object with the current study setup.}
+}
+\value{
+The downsampled data.frame.
 }
 \description{
 Downsamples the number of controls in the data

@@ -14,11 +14,10 @@
 #' \code{\link{add_study_interval_cols}}.
 #' 
 #' @param pheno_data A data.frame with at least columns `ENDPT_FREE`
-#'                   and i.e. `J10_ASTHMA`, and `J10_ASTHMA_DATE` 
-#'                   where the columns are the study endpoint and 
-#'                   date, which will differ depending on the input 
+#'                   and i.e. `J10_ASTHMA_DATE` where the columns are the study 
+#'                   endpoint and date, which will differ depending on the input 
 #'                   variable `endpt`.
-#' @param endpt A string. The column name of the current endpoint of interest.
+#' @inheritParams get_study_elig_indv
 #'                  
 #' @return The filtered data.frame without individuals where the 
 #'         endpoint occured before the prediction period. 
@@ -28,14 +27,17 @@
 #' 
 #' @examples 
 #' test_data <- Istudysetup::create_test_df(30)
-#' study <- new("study", exp_age=10, exp_len=10, wash_len=2, obs_len=8)
-#' test_data <- add_study_interval_cols(test_data, stduy)
+#' study <- methods::new("study", endpt="J10_ASTHMA", exp_age=30, exp_len=10, wash_len=2, obs_len=8)
+#' test_data <- add_study_interval_cols(test_data, study)
 #' filter_early_endpt(test_data, "J10_ASTHMA")
 #'  
 #' @author Kira E. Detrois
 filter_early_endpt <- function(pheno_data, 
                                endpt) {    
     endpt_date_str <- paste0(endpt, "_DATE")
+    check_cols_exist(pheno_data,
+                     c(endpt_date_str, "ENDPT_FREE"),
+                     "filter_early_endpt")
 
     # Endpoint happens after Endpoint free interval
     dplyr::filter(pheno_data, 
