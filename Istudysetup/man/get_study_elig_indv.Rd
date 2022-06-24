@@ -11,7 +11,7 @@ get_study_elig_indv(
   exp_len = 10,
   wash_len = 2,
   obs_len = 8,
-  downsample_fctr = NA,
+  downsample_fctr = NA_integer_,
   write_res = FALSE,
   res_dir = NA
 )

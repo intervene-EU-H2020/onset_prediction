@@ -28,13 +28,12 @@ file_name <- "/finngen/red/Zhiyu/Share/Phenotype/FinnGenR8_Phenotype"
 pheno_data <- readr::read_delim(file_name_pheno,
                                 delim="\t",
                                 col_types=list(SEX="f", DATE_OF_BIRTH="D", ANCESTRY="f", SMOKING="i"))
-elig_list <- Istudysetup::get_study_elig_indv(pheno_data,
-                                              endpt="J10_ASTHMA",
-                                              exp_age=30,
-                                              exp_len=10,
-                                              wash_len=2,
-                                              obs_len=8
-                                              downsample_fctr=4,
-                                              write_res=TRUE)
-elig_data <- elig_list$data
+study <- Istudysetup::get_study_elig_indv(pheno_data,
+                                          endpt="J10_ASTHMA",
+                                          exp_age=30,
+                                          exp_len=10,
+                                          wash_len=2,
+                                          obs_len=8
+                                          downsample_fctr=4,
+                                          write_res=TRUE)
 ```

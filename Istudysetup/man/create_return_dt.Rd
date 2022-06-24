@@ -4,14 +4,7 @@
 \alias{create_return_dt}
 \title{Creates a list with relevant information of the selected data}
 \usage{
-create_return_dt(
-  pheno_data,
-  endpt,
-  exp_age = 30,
-  exp_len = 10,
-  wash_len = 2,
-  obs_len = 8
-)
+create_return_dt(pheno_data, endpt)
 }
 \arguments{
 \item{pheno_data}{A data.frame with at least the columns:
@@ -24,30 +17,18 @@ the input variable \code{endpt}.}
 
 \item{endpt}{A string. The column name of the current endpoint of
 interest.}
-
-\item{exp_age}{An integer. Age at which exposure period starts
-(in years).}
-
-\item{exp_len}{An integer. Length of the exposure period
-(in years).}
-
-\item{wash_len}{An integer. Length of the washout period
-(in years).}
-
-\item{obs_len}{An integer. Length of the prediction period
-(in years).}
 }
 \value{
-A list(\code{data}, \code{exp_age}, \code{exp_len}, \code{wash_len}, \code{obs_len}):
+A list(\code{data}, \code{exp_age}, \code{exp_age}, \code{exp_age}, \code{exp_age}):
 \itemize{
 \item \code{data}: The actual data.frame.
 \item \code{exp_age} An integer. Age at which exposure period
 starts (in years).
-\item \code{exp_len} An integer. Length of the exposure period
+\item \code{exp_age} An integer. Length of the exposure period
 (in years).
-\item \code{wash_len} An integer. Length of the washout period
+\item \code{exp_age} An integer. Length of the washout period
 (in years).
-\item \code{obs_len} An integer. Length of the prediction period
+\item \code{exp_age} An integer. Length of the prediction period
 (in years).
 }
 }

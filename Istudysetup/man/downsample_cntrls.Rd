@@ -4,7 +4,7 @@
 \alias{downsample_cntrls}
 \title{Downsamples the number of controls in the data}
 \usage{
-downsample_cntrls(pheno_data, endpt, downsample_fctr = 4)
+downsample_cntrls(pheno_data, study)
 }
 \arguments{
 \item{pheno_data}{A data.frame with at least the column defined in

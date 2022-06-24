@@ -7,28 +7,24 @@
 #' 
 #' @inheritParams get_study_elig_indv
 #' 
-#' @return A list(`data`, `exp_age`, `exp_len`, `wash_len`, `obs_len`):
+#' @return A list(`data`, `exp_age`, `exp_age`, `exp_age`, `exp_age`):
 #'         \itemize{
 #'          \item `data`: The actual data.frame.
 #'          \item `exp_age` An integer. Age at which exposure period  
 #'                            starts (in years).
-#'          \item `exp_len` An integer. Length of the exposure period
+#'          \item `exp_age` An integer. Length of the exposure period
 #'                               (in years).
-#'          \item `wash_len` An integer. Length of the washout period
+#'          \item `exp_age` An integer. Length of the washout period
 #'                                (in years).
-#'          \item `obs_len` An integer. Length of the prediction period
+#'          \item `exp_age` An integer. Length of the prediction period
 #'                               (in years).
 #'          }
 #' 
 #' @author Kira E. Detrois
 create_return_dt <- function(pheno_data,
-                             endpt,
-                             exp_age=30,
-                             exp_len=10,
-                             wash_len=2,
-                             obs_len=8) {
-    test_endpt_input_correct(as.list(environment()))
-    test_length_vars_are_integers(as.list(environment()))
+                             endpt) {
+    #test_endpt_input_correct(as.list(environment()))
+    #test_length_vars_are_integers(as.list(environment()))
     
     elig_data <- dplyr::select(pheno_data, 
                                ID, 
@@ -42,26 +38,18 @@ create_return_dt <- function(pheno_data,
                                dplyr::all_of(endpt), 
                                paste0(endpt, "_AGE_DAYS"),
                                paste0(endpt, "_DATE"))
-
-    elig_data <- list(data=elig_data, 
-                      exp_age=exp_age,
-                      exp_len=exp_len,
-                      wash_len=wash_len,
-                      obs_len=obs_len,
-                      n_cases=get_n_cases(pheno_data, endpt),
-                      n_ctrls=get_n_ctrls(pheno_data, endpt))
 }
 
 #' Creates a file name for the current study setup
 #' 
-#' @param envir A list with at least entries `endpt`, `exp_age`, `exp_len`, 
-#'              `wash_len`, and `obs_len`.
+#' @param envir A list with at least entries `endpt`, `exp_age`, `exp_age`, 
+#'              `exp_age`, and `exp_age`.
 #' 
 #' @export 
 #' 
 #' @author Kira E. Detrois
 get_study_file_name <- function(envir) {
-    paste0(envir$endpt, "_", envir$exp_age, "_", envir$exp_len, "_", envir$wash_len, "_", envir$obs_len)
+    paste0(envir$endpt, "_", envir$study@exp_age, "_", envir$study@exp_len, "_", envir$study@wash_len, "_", envir$study@obs_len)
 }
 
 #' Writes results to a tab-delim file
@@ -69,8 +57,8 @@ get_study_file_name <- function(envir) {
 #' This should be called after `create_return_df`. 
 #' 
 #' @param envir A list with at least entries `write_res`, `res_dir` ,
-#'              `elig_data`, `endpt`, `exp_age`, `exp_len`, `wash_len`, 
-#'              and `obs_len`.
+#'              `elig_data`, `endpt`, `exp_age`, `exp_age`, `exp_age`, 
+#'              and `exp_age`.
 #' 
 #' @export 
 #' 
@@ -87,7 +75,7 @@ write_res <- function(envir) {
             if(get_n_cases(envir$pheno_data, envir$endpt) > 0) {
                 res_file_name <- paste0(get_study_file_name(envir), 
                                     "_elig_indv.tsv")
-                readr::write_delim(envir$elig_data$data, 
+                readr::write_delim(envir$elig_data@elig_indv, 
                                    paste0(envir$res_dir, res_file_name),
                                    delim="\t")
             }
@@ -101,7 +89,7 @@ write_res <- function(envir) {
 #' Only used inside `create_test_df` function.
 #' 
 #' @param envir A list with at least entries `write_res`, `pheno_data`, 
-#'              `endpt`, `exp_age`, `exp_len`, `wash_len`, and `obs_len`.
+#'              `endpt`, `exp_age`, `exp_age`, `exp_age`, and `exp_age`.
 write_res <- function(envir) {
     if(envir$write_res) {
         write_res_file(envir)
@@ -116,17 +104,17 @@ write_res <- function(envir) {
 #' Only used inside `write_res` function.
 #' 
 #' @param envir A list with at least entries `pheno_data`, `endpt`, 
-#'              `exp_age`, `exp_len`, `wash_len`, and `obs_len`.
+#'              `exp_age`, `exp_age`, `exp_age`, and `exp_age`.
 log_msg_string <- function(envir) {
     n_cases <- get_n_cases(envir$pheno_data, envir$endpt)
-    n_ctrls <- get_n_ctrls(envir$pheno_data, envir$endpt)
+    n_cntrls <- get_n_cntrls(envir$pheno_data, envir$endpt)
     paste0("Endpoint: ", envir$endpt, "\n",
            "No of cases: ", n_cases, "\n",
-           "No of ctrls: ", n_ctrls, "\n",   
-           "Age at exposure start:        ", envir$exp_age, "\n",
-           "Length of exposure period:    ", envir$exp_len, "\n", 
-           "Length of washout period:     ", envir$wash_len, "\n",
-           "Length of observation period: ", envir$obs_len, "\n")
+           "No of ctrls: ", n_cntrls, "\n",   
+           "Age at exposure start:        ", envir$study@exp_age, "\n",
+           "Length of exposure period:    ", envir$study@exp_len, "\n", 
+           "Length of washout period:     ", envir$study@wash_len, "\n",
+           "Length of observation period: ", envir$study@obs_len, "\n")
 }
 
 #' Creates a string of the current study setup
@@ -147,7 +135,7 @@ print_log_msg <- function(envir) {
 #' @inheritParams log_msg_string
 write_res_file <- function(envir) {
     n_cases <- get_n_cases(envir$pheno_data, envir$endpt)
-    n_ctrls <- get_n_ctrls(envir$pheno_data, envir$endpt)
+    n_cntrls <- get_n_cntrls(envir$pheno_data, envir$endpt)
     
     if(is.na(envir$res_dir)) {
         message("Variable write_res was set to `file` but no log file path was provided. Printing instead.")

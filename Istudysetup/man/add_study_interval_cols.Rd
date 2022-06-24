@@ -4,30 +4,12 @@
 \alias{add_study_interval_cols}
 \title{Adds columns for the study setup}
 \usage{
-add_study_interval_cols(
-  pheno_data,
-  exp_age = 30,
-  exp_len = 10,
-  wash_len = 2,
-  obs_len = 8
-)
+add_study_interval_cols(pheno_data, study)
 }
 \arguments{
 \item{pheno_data}{A data.frame with at least the columns:
 \code{START_OF_FOLLOWUP}, \code{END_OF_FOLLOWUP}, and
 \code{DATE_OF_BIRTH}.}
-
-\item{exp_age}{An integer. Age at which exposure period starts
-(in years).}
-
-\item{exp_len}{An integer. Length of the exposure period
-(in years).}
-
-\item{wash_len}{An integer. Length of the washout period
-(in years).}
-
-\item{obs_len}{An integer. Length of the prediction period
-(in years).}
 }
 \value{
 The phenotype data.frame with added columns:

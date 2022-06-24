@@ -1,7 +1,7 @@
 Endpoint: I9_VTE
-No of cases: 1
-No of ctrls: 481
+No of cases: 15
+No of ctrls: 467
 Age at exposure start:        30
 Length of exposure period:    10
 Length of washout period:     2
-Length of observation period: 8
+Length of observation period: NA

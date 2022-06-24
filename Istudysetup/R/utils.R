@@ -8,8 +8,8 @@
 #' 
 #' @author Kira E. Detrois
 calc_age_at_diag <- function(bds, diag_dates) {
-    test_date_var_correct(bds, "bds")
-    test_date_var_correct(diag_dates, "diag_dates")
+    #test_date_var_correct(bds, "bds")
+    #test_date_var_correct(diag_dates, "diag_dates")
 
     interval = bds %--% diag_dates
     age = interval %/% lubridate::years(1)
@@ -25,8 +25,8 @@ calc_age_at_diag <- function(bds, diag_dates) {
 #' @export
 #' 
 #' @author Kira E. Detrois
-add_age_at_diag_col <- function(pheno_data, endpt) {
-    test_endpt_input_correct(as.list(environment()))
+add_age_at_diag_col <- function(pheno_data) {
+    #test_endpt_input_correct(as.list(environment()))
 
     age_at_diag <- calc_age_at_diag(pheno_data$DATE_OF_BIRTH, 
                                     pheno_data[[paste0(endpt, "_DATE")]])
@@ -67,7 +67,7 @@ get_n_cases <- function(pheno_data,
 #' @export 
 #' 
 #' @author Kira E. Detrois 
-get_n_ctrls <- function(pheno_data, 
+get_n_cntrls <- function(pheno_data, 
                         endpt) {
     sum(pheno_data[[endpt]] == 0, na.rm=TRUE)
 }

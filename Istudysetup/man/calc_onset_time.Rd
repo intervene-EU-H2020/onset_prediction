@@ -4,7 +4,7 @@
 \alias{calc_onset_time}
 \title{Calculates the date of onset and the age in days}
 \usage{
-calc_onset_time(pheno_data, endpt, exp_age, exp_len, wash_len, obs_len)
+calc_onset_time(pheno_data, endpt)
 }
 \arguments{
 \item{pheno_data}{A data.frame with at least the columns:
@@ -17,18 +17,6 @@ the input variable \code{endpt}.}
 
 \item{endpt}{A string. The column name of the current endpoint of
 interest.}
-
-\item{exp_age}{An integer. Age at which exposure period starts
-(in years).}
-
-\item{exp_len}{An integer. Length of the exposure period
-(in years).}
-
-\item{wash_len}{An integer. Length of the washout period
-(in years).}
-
-\item{obs_len}{An integer. Length of the prediction period
-(in years).}
 }
 \value{
 A list(\code{age_days}, \code{age_date}).
@@ -44,11 +32,8 @@ end of the study period for controls.
 }
 \examples{
 bds <- c(as.Date("1923/07/01"), as.Date("1823/07/02"), as.Date("2002/04/01"))
-calc_study_time(bds,
-                exp_age=30,
-                exp_len=10,
-                wash_len=2,
-                obs_len=8)
+study <- new("study", exp_age=10, exp_len=10, wash_len=2, obs_len=8)
+calc_study_time(bds, study)
 
 }
 \author{

@@ -4,21 +4,10 @@
 \alias{calc_end_of_study}
 \title{Calculates the end of the study time}
 \usage{
-calc_end_of_study(bds, exp_age, exp_len, wash_len, obs_len)
+calc_end_of_study(bds, study)
 }
 \arguments{
 \item{bds}{A Date. The birth days of the individuals.}
-
-\item{exp_age}{An integer. Age at which exposure period starts
-(in years).}
-
-\item{exp_len}{An integer. Length of the exposure period
-(in years).}
-
-\item{wash_len}{An integer. Length of the washout period
-(in years).}
-
-\item{obs_len}{An integer. Length of the prediction period.}
 }
 \value{
 A lubdridate interval. The total study time interval.
@@ -30,11 +19,8 @@ of the prediction period.
 }
 \examples{
 bds <- c(as.Date("1923/07/01"), as.Date("1823/07/02"), as.Date("2002/04/01"))
-calc_study_time(bds,
-                exp_age=30,
-                exp_len=10,
-                wash_len=2,
-                obs_len=8)
+study <- new("study", exp_age=30, exp_len=10, wash_len=2, obs_len=8)
+calc_end_of_study(bds, study)
 
 }
 \author{

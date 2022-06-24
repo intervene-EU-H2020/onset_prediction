@@ -8,7 +8,7 @@ print_log_msg(envir)
 }
 \arguments{
 \item{envir}{A list with at least entries \code{pheno_data}, \code{endpt},
-\code{exp_age}, \code{exp_len}, \code{wash_len}, and \code{obs_len}.}
+\code{exp_age}, \code{exp_age}, \code{exp_age}, and \code{exp_age}.}
 }
 \description{
 Only used inside \code{write_res} function.

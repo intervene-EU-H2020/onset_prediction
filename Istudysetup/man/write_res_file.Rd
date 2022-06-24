@@ -8,7 +8,7 @@ write_res_file(envir)
 }
 \arguments{
 \item{envir}{A list with at least entries \code{pheno_data}, \code{endpt},
-\code{exp_age}, \code{exp_len}, \code{wash_len}, and \code{obs_len}.}
+\code{exp_age}, \code{exp_age}, \code{exp_age}, and \code{exp_age}.}
 }
 \description{
 Prints the current study setup or writes it to a file

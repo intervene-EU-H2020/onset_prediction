@@ -10,7 +10,7 @@ write_res(envir)
 }
 \arguments{
 \item{envir}{A list with at least entries \code{write_res}, \code{pheno_data},
-\code{endpt}, \code{exp_age}, \code{exp_len}, \code{wash_len}, and \code{obs_len}.}
+\code{endpt}, \code{exp_age}, \code{exp_age}, \code{exp_age}, and \code{exp_age}.}
 }
 \description{
 This should be called after \code{create_return_df}.

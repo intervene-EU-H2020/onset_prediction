@@ -18,31 +18,18 @@
 #' 
 #' @examples 
 #' bds <- c(as.Date("1923/07/01"), as.Date("1823/07/02"), as.Date("2002/04/01"))
-#' calc_study_time(bds,
-#'                 exp_age=30,
-#'                 exp_len=10,
-#'                 wash_len=2,
-#'                 obs_len=8)
+#' study <- new("study", exp_age=10, exp_len=10, wash_len=2, obs_len=8)
+#' calc_study_time(bds, study)
 #' 
 #' @author Kira E. Detrois
 calc_onset_time <- function(pheno_data, 
-                            endpt,
-                            exp_age, 
-                            exp_len, 
-                            wash_len, 
-                            obs_len) {
+                            study) {
 
-    test_length_vars_are_integers(as.list(environment()))             
-    test_endpt_input_correct(as.list(environment()))
-
-    endpt_date_str <- paste0(endpt, "_DATE")
+    endpt_date_str <- paste0(study@endpt, "_DATE")
     endpt_diag <- dplyr::pull(pheno_data, get(endpt_date_str))
 
     study_end <- calc_end_of_study(pheno_data$DATE_OF_BIRTH,
-                                   exp_age, 
-                                   exp_len, 
-                                   wash_len, 
-                                   obs_len)
+                                   study)
 
     endpt_diag[is.na(endpt_diag)] <- study_end[is.na(endpt_diag)]
 

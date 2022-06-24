@@ -16,8 +16,6 @@
 #' @author Kira E. Detrois
 adj_case_cntrl_status <- function(pheno_data,
                                   endpt) {                                  
-    test_endpt_input_correct(as.list(environment()))
-
     endpt_date_str <- paste0(endpt, "_DATE")
     cases_to_cntrls <- dplyr::filter(pheno_data, 
                                      get(endpt_date_str) > 

@@ -12,11 +12,11 @@ test_that("get_study_elig_indv works", {
 
 
   res = suppressMessages(get_study_elig_indv(test_data,
-                            endpt="J10_ASTHMA",
-                            exp_age=30,
-                            exp_len=2,
-                            wash_len=2,
-                            obs_len=8)$data)
+                                             endpt="J10_ASTHMA",
+                                             exp_age=30,
+                                             exp_len=2,
+                                             wash_len=2,
+                                             obs_len=8)@elig_indv)
 
   expected_res_ids = c("FG000004", "FG000005", "FG000006", "FG000007", "FG000009", "FG0000010",
                        "FG0000012", "FG0000013", "FG0000014", "FG0000015", "FG0000017", 
@@ -41,7 +41,7 @@ test_that("get_study_elig_indv adj case control works", {
                             exp_age=30,
                             exp_len=2,
                             wash_len=2,
-                            obs_len=8)$data
+                            obs_len=8)@elig_indv
 
   expected_res = c(0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0)   
   expect_equal(res$J10_ASTHMA, expected_res)
@@ -66,7 +66,7 @@ test_that("get_study_elig_indv downsampling works", {
                             exp_len=2,
                             wash_len=2,
                             obs_len=8,
-                            downsample_fctr=4)$data)
+                            downsample_fctr=4)@elig_indv)
 
   expected_res_ids = c("FG000004", "FG000005", "FG000007", "FG000009", 
                        "FG0000012", "FG0000013", "FG0000014", "FG0000017", "FG0000023", "FG0000025")
@@ -83,12 +83,12 @@ test_that("get_study_elig_indv works also with other endpoints", {
               regexp=NA)
 })
 
-test_that("get_study_elig_indv log messages work", {
-  set.seed(9231)
-  test_data <- create_test_df(500)
+# test_that("get_study_elig_indv log messages work", {
+#   set.seed(9231)
+#   test_data <- create_test_df(500)
 
-  get_study_elig_indv(test_data, 
-                      endpt="I9_VTE", 
-                      write_res=TRUE,
-                      res_dir = "/home/kira/duni/helsinki/DSGE/Code/onset_prediction/Istudysetup/results/")
-})
+#   get_study_elig_indv(test_data, 
+#                       endpt="I9_VTE", 
+#                       write_res=TRUE,
+#                       res_dir = "/home/kira/duni/helsinki/DSGE/Code/onset_prediction/Istudysetup/results/")
+# })

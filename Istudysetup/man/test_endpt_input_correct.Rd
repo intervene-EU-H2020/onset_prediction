@@ -6,7 +6,7 @@
 Meaning, a string and not a vector of strings. Also tests
 that the endpoint is actually included in the data.frame}
 \usage{
-test_endpt_input_correct(envir)
+test_endpt_input_correct(pheno_data, endpt)
 }
 \arguments{
 \item{envir}{A list. The function call variables.}

@@ -26,9 +26,7 @@
 #' 
 #' @author Kira E. Detrois
 filter_missing_endpt_data <- function(pheno_data,       
-                                      endpt) {
-    test_endpt_input_correct(as.list(environment()))
-
+                                      endpt) {  
     dplyr::filter(pheno_data, 
                   !is.na(get(endpt)),
                   !((get(endpt) == 1) & is.na(get(paste0(endpt, "_DATE")))))

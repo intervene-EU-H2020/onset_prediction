@@ -14,13 +14,12 @@
 #' 
 #' @examples 
 #' bds <- c(as.Date("1923/07/01"), as.Date("1823/07/02"), as.Date("2002/04/01"))
-#' calc_exp_start_date(bds, exp_age=30)
+#' study <- new("study", exp_age=30, exp_len=10, wash_len=2, obs_len=8)
+#' calc_exp_start_date(bds, study@exp_age)
 #' 
 #' @author Kira E. Detrois
 calc_exp_start_date <- function(bds, 
                                 exp_age) {
-    test_date_var_correct(bds, "bds")
-    test_length_vars_are_integers(as.list(environment()))
-    
+    #test_date_var_correct(bds, "bds")
     bds %m+% lubridate::years(exp_age)
 }

@@ -11,17 +11,14 @@
 #' 
 #' @author Kira E. Detrois
 downsample_cntrls <- function(pheno_data,
-                              endpt,
-                              downsample_fctr=4) {
-    test_endpt_input_correct(as.list(environment()))
-    assertthat::assert_that(is.numeric(downsample_fctr))
+                              study) {
     
-    n_cases <- get_n_cases(pheno_data, endpt)
-    n_cntrls <- downsample_fctr*n_cases
+    study@n_cases <- get_n_cases(pheno_data, study@endpt)
+    study@n_cntrls <- study@downsample_fctr*study@n_cases 
 
-    cntrl_idxs <- which(pheno_data[[endpt]] == 0)
-    case_idxs <- which(pheno_data[[endpt]] == 1)
-    cntrl_idxs_down <- sample(cntrl_idxs, size=n_cntrls, replace=FALSE)
+    cntrl_idxs <- which(pheno_data[[study@endpt]] == 0)
+    case_idxs <- which(pheno_data[[study@endpt]] == 1)
+    cntrl_idxs_down <- sample(cntrl_idxs, size=study@n_cntrls, replace=FALSE)
 
     select_idxs <- sort(c(cntrl_idxs_down, case_idxs))
 

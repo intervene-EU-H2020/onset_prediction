@@ -7,8 +7,8 @@
 get_study_file_name(envir)
 }
 \arguments{
-\item{envir}{A list. Needs to contain at least entries \code{endpt},
-\code{exp_age}, \code{exp_len}, \code{wash_len}, and \code{obs_len}.}
+\item{envir}{A list with at least entries \code{endpt}, \code{exp_age}, \code{exp_age},
+\code{exp_age}, and \code{exp_age}.}
 }
 \description{
 Creates a file name for the current study setup
