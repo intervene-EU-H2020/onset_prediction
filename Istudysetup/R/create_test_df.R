@@ -43,20 +43,7 @@ create_test_df <- function(n_indv=10) {
         J10_ASTHMA_DATE=asthma_samples$dates,
     )
 
-    pheno_data <- adjust_followup_time(pheno_data)
-    return(pheno_data)
-}
-
-adjust_followup_time <- function(pheno_data) {
-    date_cols = colnames(dplyr::select(pheno_data, 
-                                       dplyr::matches("(*.)_DATE$")))
-    followup_interval <- get_followup_time(pheno_data)
-    for(date_col in date_cols) {
-        not_nas = !is.na(pheno_data[[date_col]])
-        selector = !(pheno_data[[date_col]] %within% followup_interval)
-        selector[is.na(selector)] = FALSE
-        pheno_data$END_OF_FOLLOWUP[selector] = NA
-    }
+    #pheno_data <- adjust_followup_time(pheno_data)
     return(pheno_data)
 }
 

@@ -51,9 +51,6 @@ test_integer_correct <- function(msg, var, var_name, not_na=FALSE) {
         if (length(var) != 1) {
             msg <- paste0(msg, "@", var_name, " needs to be a single integer not a vector of integers.\n")
         }
-        if (!(is.numeric(var) | is.integer(var))) {
-            msg <- paste0(msg, "@", var_name, " needs to be an integer. Instead got: ", class(var), "\n")
-        } 
         if(!(as.integer(var) == var)) {
             msg <- paste0(msg, "@", var_name, " needs to be an integer. Instead got: ", var, "\n")
         }
@@ -65,14 +62,11 @@ test_integer_correct <- function(msg, var, var_name, not_na=FALSE) {
 }
 
 test_endpt_input_correct <- function(msg, endpt) {
-    if(is.na(endpt)) {
-        msg <- paste0(msg, "Endpoint needs to be provided for a valid study setup.")
-    }
-    if(!is.character(endpt)) {
-        msg <- paste0(msg, "The variable endpt needs to be a character string. Instead got: ", class(endpt), "\n")
-     }
-     if(!(length(endpt) == 1)) {
+    if(!(length(endpt) == 1)) {
         msg <- paste0(msg, "The variable endpt needs to be a character string and not a vector of characters.")
-     }
+    } else if(is.na(endpt)) {
+        msg <- paste0(msg, "Endpoint needs to be provided for a valid study setup.")
+    }   
+     
     return(msg)
 }
