@@ -61,14 +61,13 @@ add_case_dates <- function(all_samples, start_dates) {
     return(date_samples)
 }
 
-#' @importFrom stats rbinom
 draw_sex_spec_cases <- function(n_indv, sex_samples, sex, case_prob, start_dates) {
     # Initializing
     all_samples <- rep(0, n_indv)
     n_sex_spec_indv <- sum(sex_samples == sex)
 
     # Drawing
-    sex_spex_case_draws <- rbinom(n_sex_spec_indv, 1, case_prob)
+    sex_spex_case_draws <- stats::rbinom(n_sex_spec_indv, 1, case_prob)
     all_samples[sex_samples == sex] <- sex_spex_case_draws
     date_samples <- add_case_dates(all_samples, start_dates)
 
@@ -79,23 +78,21 @@ draw_case_dates <- function(n_indv, start_dates=as.Date("1887/01/01")) {
     draw_dates_unif(n_indv, start_dates)
 }
 
-#' @importFrom stats rbinom
 draw_cases <- function(n_indv, case_prob, na_prob, bd_samples) {
     # Initalizing
     all_samples <- rep(NA, n_indv)
 
     # Drawing
-    na_draws <- rbinom(n_indv, 1, na_prob)
-    case_draws <- rbinom(n_indv-sum(na_draws), 1, case_prob)
+    na_draws <- stats::rbinom(n_indv, 1, na_prob)
+    case_draws <- stats::rbinom(n_indv-sum(na_draws), 1, case_prob)
     all_samples[!na_draws] <- case_draws
     date_samples <- add_case_dates(all_samples, bd_samples)
 
     return(list(draws=all_samples, dates=date_samples))
 }
 
-#' @importFrom stats rbinom
 draw_anc_samples <- function(n_indv) {
-    bin_samples <- rbinom(n_indv, 3, prob = 0.1)
+    bin_samples <- stats::rbinom(n_indv, 3, prob = 0.1)
     ifelse(bin_samples == 0, "EUR",
         ifelse(bin_samples == 1, "AMR",
         ifelse(bin_samples == 2, "EAS", "AFR")))
@@ -133,9 +130,8 @@ draw_sf_samples <- function(n_indv, bd_samples) {
     draw_dates_unif(n_indv, bd_samples)
 }
 
-#' @importFrom stats rbinom
 draw_sex_samples <- function(n_indv) {
-    bin_samples <- rbinom(n_indv, 1, prob = 0.5)
+    bin_samples <- stats::rbinom(n_indv, 1, prob = 0.5)
     ifelse(bin_samples, "male", "female")
 }
 
