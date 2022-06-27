@@ -9,7 +9,7 @@ calc_study_time(bds, study)
 \arguments{
 \item{bds}{A Date. The birth days of the individuals.}
 
-\item{study}{A study object with the current study setup.}
+\item{study}{An S4 class representing the study setup.}
 }
 \value{
 A lubdridate interval. The total study time interval.

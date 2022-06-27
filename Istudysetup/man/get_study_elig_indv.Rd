@@ -6,12 +6,7 @@
 \usage{
 get_study_elig_indv(
   pheno_data,
-  endpt,
-  exp_age = 30,
-  exp_len = 10,
-  wash_len = 2,
-  obs_len = 8,
-  downsample_fctr = NA_integer_,
+  study,
   write_res = FALSE,
   res_dir = NA_character_
 )
@@ -25,25 +20,7 @@ get_study_elig_indv(
 endpoint and date, which will differ depending on
 the input variable \code{endpt}.}
 
-\item{endpt}{A character. The column name of the current endpoint of
-interest.}
-
-\item{exp_age}{An integer. Age at which exposure period starts
-(in years).}
-
-\item{exp_len}{An integer. Length of the exposure period
-(in years).}
-
-\item{wash_len}{An integer. Length of the washout period
-(in years).}
-
-\item{obs_len}{An integer. Length of the prediction period
-(in years).}
-
-\item{downsample_fctr}{An integer. Defines how many controls there
-should be for every case.
-Default is NA, which means no
-downsampling is performed.}
+\item{study}{An S4 class representing the study setup.}
 
 \item{write_res}{A boolean. Defines whether to write the results to
 a file or not. Default is FALSE.}

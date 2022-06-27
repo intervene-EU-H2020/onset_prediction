@@ -1,30 +1,26 @@
 #' An S4 class representing the study setup
 #' 
-#' @slot elig_indv The actual data.frame with eligible individuals under the
-#'       current study setup.
 #' @slot endpt A character. The column name of the current endpoint of interest. 
-#' @slot exp_age An integer. Age at which exposure period starts (in years)
-#' @slot exp_len An integer. Length of the exposure period (in years)
-#' @slot wash_len An integer. Length of the washout period (in years)
-#' @slot obs_len  An integer. Length of the observation period (in years)
+#' @slot exp_age An integer. Age at which exposure period starts (in years).
+#' @slot exp_len An integer. Length of the exposure period (in years).
+#' @slot wash_len An integer. Length of the washout period (in years).
+#' @slot obs_len  An integer. Length of the observation period (in years).
 #' @slot downsample_fctr An integer. Defines how many controls there
 #'                                   should be for every case.
 #'                                   Default is NA, which means no
 #'                                   downsampling is performed.
-#' 
+#' @importFrom methods new
 #' @export
 #' 
 #' @author Kira E. Detrois
 study <- methods::setClass("study", 
-                            slots=list(elig_indv="tbl",
-                                        endpt="character",
+                            slots=list(endpt="character",
                                         exp_age="numeric",
                                         exp_len="numeric",
                                         wash_len="numeric",
                                         obs_len="numeric",
                                         downsample_fctr="numeric"),
-                            prototype=list(elig_indv=tibble::tibble(),
-                                        endpt=NA_character_,
+                            prototype=list(endpt=NA_character_,
                                         exp_age=NA_integer_,
                                         exp_len=NA_integer_,
                                         wash_len=NA_integer_,

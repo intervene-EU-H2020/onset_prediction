@@ -8,7 +8,7 @@
 #' \href{https://docs.google.com/document/d/1GbZszpPeyf-hyb0V_YDx828YbM7woh8OBJhvzkEwo2g/edit}{INTERVENE Phenotype File Definition}
 #' 
 #' @param pheno_data A data.frame with at least the column `DATE_OF_BIRTH`.
-#' @param study A study object with the current study setup.
+#' @inheritParams get_study_elig_indv
 #' 
 #' @return The phenotype data.frame with added columns:
 #'         \itemize{

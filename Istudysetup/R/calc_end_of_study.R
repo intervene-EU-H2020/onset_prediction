@@ -5,7 +5,7 @@
 #' of the prediction period.
 #' 
 #' @param bds A Date. The birth days of the individuals.
-#' @inheritParams add_study_interval_cols
+#' @inheritParams get_study_elig_indv
 #' 
 #' @return A lubdridate interval. The total study time interval.
 #' 

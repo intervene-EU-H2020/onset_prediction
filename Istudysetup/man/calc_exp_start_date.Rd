@@ -10,7 +10,7 @@ calc_exp_start_date(bds, exp_age)
 \item{bds}{A Date. The birth days of the individuals.}
 
 \item{exp_age}{An integer. Age at which exposure period starts
-(in years).}
+(in years)}
 }
 \value{
 A Date. The dates of the start of the exposure period

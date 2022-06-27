@@ -4,10 +4,13 @@
 \alias{log_msg_string}
 \title{Creates a string of the current study setup}
 \usage{
-log_msg_string(study)
+log_msg_string(elig_indv, study)
 }
 \arguments{
-\item{study}{A study object with the current study setup.}
+\item{elig_indv}{A tibble with the information for the eligible
+individuals that should be written to the file.}
+
+\item{study}{An S4 class representing the study setup.}
 }
 \value{
 The log message character string

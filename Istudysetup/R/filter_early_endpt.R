@@ -18,7 +18,8 @@
 #'                   endpoint and date, which will differ depending on the input 
 #'                   variable `endpt`.
 #' @inheritParams get_study_elig_indv
-#'                  
+#' @inheritParams adj_case_cntrl_status
+#'                 
 #' @return The filtered data.frame without individuals where the 
 #'         endpoint occured before the prediction period. 
 #' 

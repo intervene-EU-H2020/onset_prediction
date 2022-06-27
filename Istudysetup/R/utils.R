@@ -19,7 +19,7 @@ calc_age_at_diag <- function(bds, diag_dates) {
 #' A helper function to add a column with the age at diagnosis
 #' for each individual
 #' 
-#' @inheritParams filter_missing_endpt_data
+#' @inheritParams adj_case_cntrl_status
 #' 
 #' @importFrom lubridate %--%
 #' @export
@@ -47,13 +47,14 @@ add_age_at_diag_col <- function(pheno_data,
 #' `add_study_interval_cols`, and `adj_case_cntrl_status`.
 #' 
 #' @param pheno_data A data.frame with at least the column defined in `endpt`.
-#' @inheritParams get_study_elig_indv
+#' @inheritParams adj_case_cntrl_status
 #' 
 #' @export 
 #' 
 #' @author Kira E. Detrois
 get_n_cases <- function(pheno_data, 
                         endpt) {
+    check_cols_exist(pheno_data, endpt, "get_n_cases")
     sum(pheno_data[[endpt]], na.rm=TRUE)
 }
 
@@ -72,6 +73,7 @@ get_n_cases <- function(pheno_data,
 #' @author Kira E. Detrois 
 get_n_cntrls <- function(pheno_data, 
                         endpt) {
+    check_cols_exist(pheno_data, endpt, "get_n_cntrls")
     sum(pheno_data[[endpt]] == 0, na.rm=TRUE)
 }
 

@@ -6,6 +6,7 @@
 #' study period intervals.
 #' 
 #' @inheritParams get_study_elig_indv
+#' @inheritParams adj_case_cntrl_status
 #' 
 #' @return The results data.frame to return
 #' 
@@ -42,34 +43,37 @@ get_study_file_name <- function(study) {
 #' 
 #' Prints to console if something goes wrong.
 #' 
+#' @param elig_indv A tibble with the information for the eligible 
+#'                  individuals that should be written to the file.
 #' @inheritParams get_study_file_name
 #' @inheritParams get_study_elig_indv
 #' 
 #' @author Kira E. Detrois
-write_res <- function(study,
+write_res_files <- function(elig_indv,
+                      study,
                       write_res,
                       res_dir) {
-    write_res_file(study, write_res, res_dir)
-    write_log_file(study, write_res, res_dir)
+    write_res_file(elig_indv, study, write_res, res_dir)
+    write_log_file(elig_indv, study, write_res, res_dir)
 
-    if(get_n_cases(study@elig_indv, study@endpt) == 0) {
+    if(get_n_cases(elig_indv, study@endpt) == 0) {
         message("Message: Careful there are no cases eligible under the current study setup.")
-        message(log_msg_string(study))
+        message(log_msg_string(elig_indv, study))
     }
 }
 
 #' Writes results to a tab-delim file
 #' 
-#' @inheritParams get_study_file_name
-#' @inheritParams get_study_elig_indv
+#' @inheritParams write_res_files
 #' 
 #' @author Kira E. Detrois
-write_res_file <- function(study,
+write_res_file <- function(elig_indv,
+                           study,
                            write_res,
                            res_dir) {
  
     if(check_res_dir(write_res, res_dir) & 
-        get_n_cases(study@elig_indv, study@endpt) > 0) {
+        get_n_cases(elig_indv, study@endpt) > 0) {
         res_file_name <- paste0(get_study_file_name(study), 
                                 "_elig_indv.tsv")
         readr::write_delim(study@elig_indv, 
@@ -80,14 +84,15 @@ write_res_file <- function(study,
 
 #' Creates a string of the current study setup
 #' 
-#' @inheritParams get_study_file_name
+#' @inheritParams write_res_files
 #' 
 #' @return The log message character string
 #' 
 #' @author Kira E. Detrois
-log_msg_string <- function(study) {
-    n_cases <- get_n_cases(study@elig_indv, study@endpt)
-    n_cntrls <- get_n_cntrls(study@elig_indv, study@endpt)
+log_msg_string <- function(elig_indv,
+                           study) {
+    n_cases <- get_n_cases(elig_indv, study@endpt)
+    n_cntrls <- get_n_cntrls(elig_indv, study@endpt)
     paste0("Endpoint: ", study@endpt, "\n",
            "No of cases: ", n_cases, "\n",
            "No of ctrls: ", n_cntrls, "\n",   
@@ -99,16 +104,16 @@ log_msg_string <- function(study) {
 
 #' Writes study setup to a file
 #' 
-#' @inheritParams get_study_file_name
-#' @inheritParams get_study_elig_indv
+#' @inheritParams write_res_files
 #' 
 #' @author Kira E. Detrois
-write_log_file <- function(study,
+write_log_file <- function(elig_indv,
+                           study,
                            write_res,
                            res_dir) {
     if(check_res_dir(write_res, res_dir)) {
-        n_cases <- get_n_cases(study@elig_indv, study@endpt)
-        n_cntrls <- get_n_cntrls(study@elig_indv, study@endpt)
+        n_cases <- get_n_cases(elig_indv, study@endpt)
+        n_cntrls <- get_n_cntrls(elig_indv, study@endpt)
 
         readr::write_file(log_msg_string(study), 
                           paste0(res_dir, 
@@ -121,7 +126,7 @@ write_log_file <- function(study,
 #' 
 #' If the directory does not exists tries to create it, recursively.
 #' 
-#' @inheritParams get_study_elig_indv
+#' @inheritParams write_res_files
 #' 
 #' @return A boolean. Whether to write the results to the `res_dir`.
 #' 

@@ -9,7 +9,7 @@ add_study_interval_cols(pheno_data, study)
 \arguments{
 \item{pheno_data}{A data.frame with at least the column \code{DATE_OF_BIRTH}.}
 
-\item{study}{A study object with the current study setup.}
+\item{study}{An S4 class representing the study setup.}
 }
 \value{
 The phenotype data.frame with added columns:

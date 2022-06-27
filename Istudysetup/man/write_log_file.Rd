@@ -4,10 +4,13 @@
 \alias{write_log_file}
 \title{Writes study setup to a file}
 \usage{
-write_log_file(study, write_res, res_dir)
+write_log_file(elig_indv, study, write_res, res_dir)
 }
 \arguments{
-\item{study}{A study object with the current study setup.}
+\item{elig_indv}{A tibble with the information for the eligible
+individuals that should be written to the file.}
+
+\item{study}{An S4 class representing the study setup.}
 
 \item{write_res}{A boolean. Defines whether to write the results to
 a file or not. Default is FALSE.}

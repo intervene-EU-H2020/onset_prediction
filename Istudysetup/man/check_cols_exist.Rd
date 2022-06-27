@@ -9,7 +9,7 @@ check_cols_exist(pheno_data, cols, func_name)
 \arguments{
 \item{pheno_data}{A data.frame.}
 
-\item{cols}{A charachter. The columns \code{pheno_data} needs to contain.}
+\item{cols}{A character. The columns \code{pheno_data} needs to contain.}
 
 \item{func_name}{A character. The name of the function to print in the error message.}
 }

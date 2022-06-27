@@ -1,6 +1,7 @@
 #' Downsamples the number of controls in the data
 #' 
-#' @inheritParams add_study_interval_cols
+#' @inheritParams get_n_cases
+#' @inheritParams get_study_elig_indv
 #' 
 #' @return The downsampled data.frame.
 #' 
@@ -9,7 +10,7 @@
 #' @author Kira E. Detrois
 downsample_cntrls <- function(pheno_data,
                               study) {
-    
+
     n_cases <- get_n_cases(pheno_data, study@endpt)
     n_cntrls <- study@downsample_fctr*n_cases 
 

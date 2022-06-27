@@ -28,6 +28,6 @@ calc_endpt_free_time <- function(bds,
     exp_start_date <- calc_exp_start_date(bds, study@exp_age)
     endpt_free_end <- exp_start_date %m+% lubridate::years(study@exp_len + study@wash_len)
     endpt_free_time <- bds %--% endpt_free_end
-
+    
     return(endpt_free_time)
 }

@@ -7,9 +7,9 @@
 downsample_cntrls(pheno_data, study)
 }
 \arguments{
-\item{pheno_data}{A data.frame with at least the column \code{DATE_OF_BIRTH}.}
+\item{pheno_data}{A data.frame with at least the column defined in \code{endpt}.}
 
-\item{study}{A study object with the current study setup.}
+\item{study}{An S4 class representing the study setup.}
 }
 \value{
 The downsampled data.frame.

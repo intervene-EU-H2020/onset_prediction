@@ -4,7 +4,8 @@
 #' individual.
 #' 
 #' @inheritParams calc_end_of_study
-#' @inheritParams get_study_elig_indv
+#' @param exp_age An integer. Age at which exposure period starts
+#'                   (in years)
 #' 
 #' @return A Date. The dates of the start of the exposure period 
 #'                 for each individual.

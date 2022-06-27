@@ -203,11 +203,7 @@ get_followup_time <- function(pheno_data) {
 #'                   
 #' @return The filtered data.frame without the individuals where the
 #'         the follow-up period doesn't cover the study period. 
-#' 
-#' @examples 
-#' test_data <- create_test_df()
-#' test_data <- add_study_interval_cols(test_data)
-#' 
+#'
 #' @author Kira E. Detrois
 filter_too_short_followup <- function(pheno_data) {
     dplyr::filter(pheno_data, STUDY_TIME %within% FOLLOWUP)

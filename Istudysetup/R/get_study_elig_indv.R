@@ -22,20 +22,7 @@
 #'                   `J10_ASTHMA_DATE` where the columns are the study 
 #'                   endpoint and date, which will differ depending on 
 #'                   the input variable `endpt`.
-#' @param endpt A character. The column name of the current endpoint of 
-#'                        interest.
-#' @param exp_age An integer. Age at which exposure period starts 
-#'                            (in years).
-#' @param exp_len An integer. Length of the exposure period
-#'                               (in years).
-#' @param wash_len An integer. Length of the washout period
-#'                                (in years).
-#' @param obs_len An integer. Length of the prediction period
-#'                               (in years).
-#' @param downsample_fctr An integer. Defines how many controls there
-#'                                   should be for every case.
-#'                                   Default is NA, which means no
-#'                                   downsampling is performed.
+#' @param study An S4 class representing the study setup.
 #' @param write_res A boolean. Defines whether to write the results to
 #'                  a file or not. Default is FALSE.
 #' @param res_dir A character. The directory to write the results to.
@@ -54,41 +41,26 @@
 #' 
 #' @author Kira E. Detrois
 get_study_elig_indv <- function(pheno_data,
-                                endpt,
-                                exp_age=30,
-                                exp_len=10,
-                                wash_len=2,
-                                obs_len=8,
-                                downsample_fctr=NA_integer_,
+                                study,
                                 write_res=FALSE,
                                 res_dir=NA_character_) {
 
-    study <- methods::new("study", 
-                          endpt=endpt,
-                          exp_age=exp_age,
-                          exp_len=exp_len,
-                          wash_len=wash_len,
-                          obs_len=obs_len,
-                          downsample_fctr=downsample_fctr)
-
-    check_cols_exist(pheno_data, endpt, "get_study_elig_indv")
+    check_cols_exist(pheno_data, study@endpt, "get_study_elig_indv")
 
     pheno_data <- add_study_interval_cols(pheno_data, study)
-    pheno_data <- filter_missing_endpt_data(pheno_data, endpt)
-    pheno_data <- filter_early_endpt(pheno_data, endpt)
-    pheno_data <- adj_case_cntrl_status(pheno_data, endpt)
-    if(!is.na(downsample_fctr)) {
+
+    pheno_data <- filter_missing_endpt_data(pheno_data, study@endpt)
+    pheno_data <- filter_early_endpt(pheno_data, study@endpt)
+    pheno_data <- adj_case_cntrl_status(pheno_data, study@endpt)
+
+    if(!is.na(study@downsample_fctr)) {
         pheno_data <- downsample_cntrls(pheno_data, study)
     }
 
-    onset_time <- calc_onset_time(pheno_data, study)
-    pheno_data[,paste0(endpt, "_AGE_DAYS")] <- onset_time$age_days
-    pheno_data[,paste0(endpt, "_DATE")] <- onset_time$onset_date
+    pheno_data <- add_diag_time_cols(pheno_data, study)
+    elig_indv <- create_return_tib(pheno_data, study@endpt)
+    write_res_files(elig_indv, study, write_res, res_dir)
 
-    study@elig_indv <- create_return_tib(pheno_data, endpt)
-
-    write_res(study, write_res, res_dir)
-
-    return(study)
+    return(elig_indv)
 }
 
