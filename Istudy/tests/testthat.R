@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/reference/test_package.html#special-files
 
 library(testthat)
-library(Istudysetup)
+library(Istudy)
 
-test_check("Istudysetup")
+test_check("Istudy")
