@@ -43,7 +43,20 @@ create_test_df <- function(n_indv=10) {
         J10_ASTHMA_DATE=asthma_samples$dates,
     )
 
-    #pheno_data <- adjust_followup_time(pheno_data)
+    pheno_data <- adjust_followup_time(pheno_data)
+    return(pheno_data)
+}
+
+adjust_followup_time <- function(pheno_data) {
+    date_cols = colnames(dplyr::select(pheno_data, 
+                                       dplyr::matches("(*.)_DATE$")))
+    followup_interval <- get_followup_time(pheno_data)
+    for(date_col in date_cols) {
+        not_nas = !is.na(pheno_data[[date_col]])
+        selector = !(pheno_data[[date_col]] %within% followup_interval)
+        selector[is.na(selector)] = FALSE
+        pheno_data$END_OF_FOLLOWUP[selector] = NA
+    }
     return(pheno_data)
 }
 
@@ -138,4 +151,64 @@ draw_sex_samples <- function(n_indv) {
 create_indv_ids <- function(n_indv) {
     id_nums <- seq(n_indv)
     paste0("FG00000", id_nums)
+}
+
+#' Gets the follow-up period
+#' 
+#' Gets the follow-up period for each individual as a lubridate 
+#' \code{\link[lubridate]{interval}}. 
+#' 
+#' Currently, if there is NAs in the `END_OF_FOLLOWUP` column replaces 
+#' it with the current date. This assumes that the missingness comes 
+#' from the fact that the followup has not yet ended and is not dues 
+#' some other reason.
+#' 
+#' @param pheno_data A data.frame with at least the columns:
+#'                   `END_OF_FOLLOWUP` and `START_OF_FOLLOWUP`.
+#' 
+#' @importFrom lubridate %--%
+#' 
+#' @author Kira E. Detrois
+get_followup_time <- function(pheno_data) {
+    # Replacing NAs with current date
+    followup_complete = pheno_data$END_OF_FOLLOWUP
+    followup_complete[is.na(followup_complete)] = lubridate::today()
+
+    # Creating intervals
+    followup_time <- pheno_data$START_OF_FOLLOWUP %--% followup_complete
+
+    return(followup_time)
+}
+
+#' Filters out too short follow-up interval
+#' 
+#' Filters out individuals where the follow-up interval does
+#' not cover the whole study period. The whole study period is defined 
+#' as the exposure, washout, and prediction period. See function:
+#' \code{\link{calc_study_time}}.
+#' 
+#' This is obsolete at the moment, because the follow-up data
+#' doesn't seem to be accurat, i.e. in our data sometimes and
+#' inidividual has an entry in the endpoint date column that
+#' precedes the start of followup date.
+#' 
+#' The idea is that the data comes from a phenotype file in INTERVENE format: 
+#' \href{https://docs.google.com/document/d/1GbZszpPeyf-hyb0V_YDx828YbM7woh8OBJhvzkEwo2g/edit}{INTERVENE Phenotype File Definition}.
+#' To add the columns `STUDY_TIME` and `FOLLOWUP` use either functions
+#' \code{\link{calc_study_time}} and \code{\link{get_followup_time}}
+#' directly, or \code{\link{add_study_interval_cols}}.
+#' 
+#' @param pheno_data A data.frame with at least the columns: 
+#'                   `STUDY_TIME`, and `FOLLOWUP`.
+#'                   
+#' @return The filtered data.frame without the individuals where the
+#'         the follow-up period doesn't cover the study period. 
+#' 
+#' @examples 
+#' test_data <- create_test_df()
+#' test_data <- add_study_interval_cols(test_data)
+#' 
+#' @author Kira E. Detrois
+filter_too_short_followup <- function(pheno_data) {
+    dplyr::filter(pheno_data, STUDY_TIME %within% FOLLOWUP)
 }
