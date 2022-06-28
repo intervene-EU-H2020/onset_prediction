@@ -13,13 +13,16 @@ get_exposure_data(long_data, exp_start = NA_real_, exp_end = NA_real_)
 \item{exp_start}{A numeric. Start of the exposure period. Can be
 used to restrict the timeframe on which the index
 should be calculated. In this case the data.frame
-needs column \code{Event_age}.}
+needs column \code{Event_age}.
+In case it is a vector has to have the length of
+the number of rows in \code{long_data}.}
 
 \item{exp_end}{A numeric. End of the exposure period.
-Can be
-used to restrict the timeframe on which the index
+Can be used to restrict the timeframe on which the index
 should be calculated. In this case the data.frame
-needs column \code{Event_age}.}
+needs column \code{Event_age}.
+In case it is a vector has to have the length of
+the number of rows in \code{long_data}.}
 }
 \description{
 Subsets the data.frame to only include the entries from individuals

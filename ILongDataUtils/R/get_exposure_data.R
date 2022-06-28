@@ -13,12 +13,15 @@
 #' @param exp_start A numeric. Start of the exposure period. Can be 
 #'                  used to restrict the timeframe on which the index 
 #'                  should be calculated. In this case the data.frame
-#'                  needs column `Event_age`.
+#'                  needs column `Event_age`. 
+#'                  In case it is a vector has to have the length of
+#'                  the number of rows in `long_data`.
 #' @param exp_end A numeric. End of the exposure period.
-#'                   Can be 
-#'                  used to restrict the timeframe on which the index 
+#'                  Can be used to restrict the timeframe on which the index 
 #'                  should be calculated. In this case the data.frame
 #'                  needs column `Event_age`.
+#'                  In case it is a vector has to have the length of
+#'                  the number of rows in `long_data`.
 #' 
 #' @export
 #' 
