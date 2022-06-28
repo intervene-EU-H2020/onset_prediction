@@ -16,6 +16,21 @@ test_that("get_exposure_data throws correct error", {
                                 exp_end=30))
 })
 
+test_that("get_exposure_data with different exp ends works", {
+  set.seed(1823)
+  sample_data <- create_test_df_multi_icd_ver(n_icd10=5) 
+  exp_ends <- c(41, 40, 41, 79, 60)
+  # No error
+  expect_ids <- c("KT0000004", "KT0000005")
+  expect_codes <- c("M960", "O678")
+  res <- get_exposure_data(sample_data, exp_end=exp_ends)
+  expect_equal(res$primary_ICD, expect_codes)
+  expect_equal(res$ID, expect_ids)
+  # Expect no error
+  expect_error(get_exposure_data(sample_data, exp_start=exp_ends, exp_end=exp_ends),
+               regexp=NA)
+})
+
 test_that("get_exposure_data works", {
   set.seed(9123)
   sample_data <- create_test_df_multi_icd_ver(n_icd10=5, 

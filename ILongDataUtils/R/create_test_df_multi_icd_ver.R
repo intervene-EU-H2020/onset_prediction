@@ -23,7 +23,7 @@
 #' 
 #' @author Kira E. Detrois
 create_test_df_multi_icd_ver <- function(n_icd10=50,
-                                         n_icd9=20,
+                                         n_icd9=0,
                                          icd10_indv=c("KT0000001", "KT0000002", "KT0000004", "KT0000005","KT0000006"), 
                                          icd9_indv=c("KT0000005", "KT0000007", "KT0000002", "KT0000008", "KT0000009")) { 
     samples_icd10 <- create_test_df(icd10_indv, n_icd10, "ICD10_2011")
