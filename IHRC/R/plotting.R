@@ -1,6 +1,8 @@
 #' Creates a plot of the score distribution
 #' 
-#'  
+#' @inheritParams add_risk_group_col
+#' @inheritParams calc_studies_hrs
+#' 
 #' @return The ggplot object.
 #' 
 #' @import ggplot2
@@ -37,21 +39,24 @@ plot_score_distr <- function(score_data,
 #' Plots a jittered scatter plot of the cases and controls scores
 #' eligible under the current study setup.
 #' 
+#' @inheritParams add_risk_group_col
+#' @inheritParams calc_studies_hrs
+#' 
 #' @return A ggplot object
 #' 
 #' @import ggplot2
 #' @export 
 #' 
 #' @author Kira E. Detrois
-plot_endpt_score_distr <- function(pheno_score_data,
+plot_endpt_score_distr <- function(score_data,
                                    score_type,
                                    study,
                                    write_res,
                                    res_dir) {
-        pheno_score_data <- dplyr::mutate_at(pheno_score_data, 
-                                             study@endpt, 
-                                             as.factor)
-        plt <- ggplot(pheno_score_data, 
+        score_data <- dplyr::mutate_at(score_data, 
+                                       study@endpt, 
+                                       as.factor)
+        plt <- ggplot(score_data, 
                       aes(x=get(study@endpt),
                           y=SCORE, 
                           color=get(study@endpt))) + 

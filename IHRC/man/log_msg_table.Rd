@@ -6,11 +6,15 @@
 \usage{
 log_msg_table(score_group_tbl)
 }
+\arguments{
+\item{score_group_tbl}{A named character.
+The score cutoffs that should be written to the log.}
+}
 \value{
 A tibble with columns \code{GROUP}, \code{SCORE_CUT}
 }
 \description{
-Only used inside \code{write_log} function.
+Creates a string of the current study setup
 }
 \author{
 Kira E. Detrois

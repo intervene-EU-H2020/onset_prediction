@@ -2,16 +2,16 @@
 % Please edit documentation in R/utils_extract_res.R
 \name{extract_coxph_res}
 \alias{extract_coxph_res}
-\title{Extracts the relevant results from the cox-ph model}
+\title{Extracts the relevant results from the Cox-PH model}
 \usage{
-extract_coxph_res(coxph_res)
+extract_coxph_res(coxph_res_mdl)
 }
 \arguments{
-\item{coxph_res}{A coxph model.}
+\item{coxph_res_mdl}{A Cox-PH model.}
 }
 \value{
 A list(\code{beta}, \code{std_err}, \code{p_val}, \code{HR}, \code{CI}, \code{groups}).
 }
 \description{
-Extracts the relevant results from the cox-ph model
+Extracts the relevant results from the Cox-PH model
 }

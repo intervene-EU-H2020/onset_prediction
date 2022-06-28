@@ -6,6 +6,18 @@
 \usage{
 n_group_cases(elig_indv, groups, endpt)
 }
+\arguments{
+\item{elig_indv}{A tibble. The individuals which were eligble under
+the current study setup. Needs to at least contain
+the column defined in \code{endpt}.}
+
+\item{groups}{A character. The groups in the Cox-PH model.}
+
+\item{endpt}{A character. The current enpoint of interest.}
+}
 \description{
 Gets the number of cases
+}
+\author{
+Kira E. Detrois
 }

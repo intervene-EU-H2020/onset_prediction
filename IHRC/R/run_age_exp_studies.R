@@ -1,4 +1,9 @@
+#' Calcualtes HR from a Cox-PH model for each exposure age and endpoint
+#' 
 #' @inheritParams calc_studies_hrs
+#' @param score_ages_data A named vector of tibbles. 
+#'                        The score data for each indiviuals for different 
+#'                        exposure periods. 
 #' @param score_col_name A character. The name of the column with the 
 #'                                    scores.
 #' @param endpts A string. The column names of the endpoints of 
@@ -49,6 +54,16 @@ run_age_exp_studies <- function(pheno_data,
     }
 }
 
+#' Creates a vector of study objects for the differen endpoints
+#' 
+#' @inheritParams calc_studies_hrs
+#' @param exp_age An integer. Age at which exposure period starts 
+#'                            (in years).
+#' @inheritParams run_age_exp_studies
+#' 
+#' @export 
+#' 
+#' @author Kira E. Detrois
 create_endpts_study_objs <- function(endpts,
                                      exp_age=30,
                                      exp_len=10,

@@ -7,11 +7,19 @@
 run_coxph_ana(pheno_score_data, endpt, predictor = "SCORE_GROUP")
 }
 \arguments{
-\item{pheno_score_data}{A data.frame TODO.}
+\item{pheno_score_data}{A data.frame with at least columns \code{DATE_OF_BIRTH}
+and i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_AGE_DAYS}
+where the columns are the study endpoint and
+date, which will differ depending on the input
+variable \code{endpt}. And the column defined in \code{predictor}.}
 
-\item{endpt}{A string. The column name of the current endpoint of
-interest.}
+\item{endpt}{A character. The current enpoint of interest.}
+
+\item{predictor}{A character. The predictor for the survival analysis.}
 }
 \description{
 Fits the Cox model for a given endpoint and predictor
+}
+\author{
+Kira E. Detrois
 }

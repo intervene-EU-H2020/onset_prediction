@@ -4,7 +4,21 @@
 \alias{plot_endpt_score_distr}
 \title{Plots a jittered scatter}
 \usage{
-plot_endpt_score_distr(pheno_score_data, score_type, study, write_res, res_dir)
+plot_endpt_score_distr(score_data, score_type, study, write_res, res_dir)
+}
+\arguments{
+\item{score_data}{A data.frame with at least column \code{SCORE}.}
+
+\item{score_type}{A character. The name of the score used for the model,
+i.e. CCI, or PheRS.}
+
+\item{study}{An S4 class representing the study setup.}
+
+\item{write_res}{A boolean. Defines whether to save the results to
+files.}
+
+\item{res_dir}{A character. The directory to write the results and
+log to.}
 }
 \value{
 A ggplot object

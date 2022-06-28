@@ -2,10 +2,10 @@
 % Please edit documentation in R/run_coxph_ana.R
 \name{run_and_add_coxph_ana}
 \alias{run_and_add_coxph_ana}
-\title{Fits the Cox model and adds the results to the data.frame \code{coxph_res}}
+\title{Fits the Cox model and adds the results to the data.frame \code{coxph_res_tib}}
 \usage{
 run_and_add_coxph_ana(
-  coxph_res,
+  coxph_res_tib,
   pheno_score_data,
   score_type,
   endpt,
@@ -13,12 +13,25 @@ run_and_add_coxph_ana(
 )
 }
 \arguments{
-\item{predictor}{A character. The predictor for the survival.}
+\item{coxph_res_tib}{A tibble with the results for the current endpoints.}
+
+\item{pheno_score_data}{A data.frame with at least columns \code{DATE_OF_BIRTH}
+and i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_AGE_DAYS}
+where the columns are the study endpoint and
+date, which will differ depending on the input
+variable \code{endpt}. And the column defined in \code{predictor}.}
+
+\item{score_type}{A character. The name of the score used for the model,
+i.e. CCI, or PheRS.}
+
+\item{endpt}{A character. The current enpoint of interest.}
+
+\item{predictor}{A character. The predictor for the survival analysis.}
 }
 \value{
-A tibble the results data.fram \code{coxph_res} with added
+A tibble the results data.frame \code{coxph_res_tib} with added
 columns from the analysis run.
 }
 \description{
-Fits the Cox model and adds the results to the data.frame \code{coxph_res}
+Fits the Cox model and adds the results to the data.frame \code{coxph_res_tib}
 }

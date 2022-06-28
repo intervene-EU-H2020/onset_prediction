@@ -4,7 +4,20 @@
 \alias{join_dfs}
 \title{Joins the two data.frames}
 \usage{
-join_dfs(endpt_data, score_data)
+join_dfs(pheno_data, score_data)
+}
+\arguments{
+\item{pheno_data}{A data.frame with at least the columns:
+\code{ID}, \code{SEX}, \code{DATE_OF_BIRTH}, \code{ANCESTRY},
+\code{START_OF_FOLLOWUP}, \code{END_OF_FOLLOWUP},
+\code{DATE_OF_BIRTH}, and i.e. \code{J10_ASTHMA}, and
+\code{J10_ASTHMA_DATE} where the columns are the study
+endpoint and date, which will differ depending on
+the input variable \code{endpts}.}
+
+\item{score_data}{A data.frame. The score results for each individual.
+Should have at least column defined in
+\code{score_col_name} and column \code{ID}.}
 }
 \value{
 The joined data.frame

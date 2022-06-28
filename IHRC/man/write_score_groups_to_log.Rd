@@ -6,6 +6,18 @@
 \usage{
 write_score_groups_to_log(score_group_tbl, study, write_res, res_dir)
 }
+\arguments{
+\item{score_group_tbl}{A named character.
+The score cutoffs that should be written to the log.}
+
+\item{study}{An S4 class representing the study setup.}
+
+\item{write_res}{A boolean. Defines whether to save the results to
+files.}
+
+\item{res_dir}{A character. The directory to write the results and
+log to.}
+}
 \description{
 Write score cut-off values and groups to log
 }

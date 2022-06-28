@@ -4,7 +4,18 @@
 \alias{add_risk_group_col}
 \title{Adds a risk group column}
 \usage{
-add_risk_group_col(pheno_score_data, study, write_res = FALSE, res_dir = NA)
+add_risk_group_col(score_data, study, write_res = FALSE, res_dir = NA)
+}
+\arguments{
+\item{score_data}{A data.frame with at least column \code{SCORE}.}
+
+\item{study}{An S4 class representing the study setup.}
+
+\item{write_res}{A boolean. Defines whether to save the results to
+files.}
+
+\item{res_dir}{A character. The directory to write the results and
+log to.}
 }
 \value{
 The data.frame with the added risk group column

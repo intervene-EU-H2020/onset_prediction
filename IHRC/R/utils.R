@@ -24,16 +24,16 @@ preprocess_score_data <- function(score_data,
 #' Joins the two data.frames and removes any individuals without
 #' a score available.
 #' 
-#' @inheritParams calc_endpt_hrs
+#' @inheritParams calc_studies_hrs
 #' 
 #' @return The joined data.frame
 #' 
 #' @author Kira E. Detrois
-join_dfs <- function(endpt_data,
+join_dfs <- function(pheno_data,
                      score_data) {
-    pheno_score_data <- dplyr::left_join(endpt_data,
-                                  score_data,
-                                  by="ID")
+    pheno_score_data <- dplyr::left_join(pheno_data,
+                                         score_data,
+                                         by="ID")
     pheno_score_data <- dplyr::filter(pheno_score_data, !is.na(SCORE))
     return(pheno_score_data)
 }
@@ -50,9 +50,15 @@ get_CI <- function(ML, SE) {
 }
 
 #' Gets the number of cases
+#' 
+#' @inheritParams calc_studies_hrs
+#' @param groups A character. The groups in the Cox-PH model.
+#' @inheritParams add_coxph_row
+#' 
+#' @author Kira E. Detrois
 n_group_cases <- function(elig_indv, 
-                            groups,
-                            endpt) {
+                          groups,
+                          endpt) {
     if(!(all(groups == "all"))) {
         n_cases <- c()
         for(group in groups) {

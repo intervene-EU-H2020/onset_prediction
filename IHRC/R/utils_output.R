@@ -1,9 +1,13 @@
 #' Writes model results to a tab-delim file
 #'  
+#' @inheritParams add_coxph_row
+#' @inheritParams calc_studies_hrs
+#' @inheritParams add_risk_group_col
+#' 
 #' @export 
 #' 
 #' @author Kira E. Detrois
-write_res_file <- function(coxph_res,
+write_res_file <- function(coxph_res_tib,
                            study,
                            write_res,
                            res_dir) {
@@ -11,14 +15,17 @@ write_res_file <- function(coxph_res,
         Istudy::setEndpt(study, "study") # Cheating the system for the file name
         res_file_name <- paste0(Istudy::get_study_file_name(study), 
                                 "_coxph_res.tsv")
-        readr::write_delim(coxph_res, 
+        readr::write_delim(coxph_res_tib, 
                            paste0(res_dir, res_file_name), delim="\t")
     }
 }
 
 #' Write score cut-off values and groups to log
 #' 
-#'  
+#' @inheritParams check_has_mid_group
+#' @inheritParams add_risk_group_col
+#' @inheritParams calc_studies_hrs
+#' 
 #' @author Kira E. Detrois
 write_score_groups_to_log <- function(score_group_tbl,
                                       study,
@@ -36,7 +43,7 @@ write_score_groups_to_log <- function(score_group_tbl,
 
 #' Creates a string of the current study setup
 #' 
-#' Only used inside `write_log` function.
+#' @inheritParams check_has_mid_group
 #' 
 #' @return A tibble with columns `GROUP`, `SCORE_CUT`
 #' 
@@ -50,6 +57,8 @@ log_msg_table <- function(score_group_tbl) {
 
 
 #' Checks whether the log file already exists
+#' 
+#' @param file_path A character. The path to the file.
 #' 
 #' @return A boolean. Whether the file exists.
 #' 

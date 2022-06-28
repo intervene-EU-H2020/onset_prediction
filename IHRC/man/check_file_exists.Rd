@@ -6,6 +6,9 @@
 \usage{
 check_file_exists(file_path)
 }
+\arguments{
+\item{file_path}{A character. The path to the file.}
+}
 \value{
 A boolean. Whether the file exists.
 }

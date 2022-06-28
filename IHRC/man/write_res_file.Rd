@@ -4,7 +4,18 @@
 \alias{write_res_file}
 \title{Writes model results to a tab-delim file}
 \usage{
-write_res_file(coxph_res, study, write_res, res_dir)
+write_res_file(coxph_res_tib, study, write_res, res_dir)
+}
+\arguments{
+\item{coxph_res_tib}{A tibble with the results for the current endpoints.}
+
+\item{study}{An S4 class representing the study setup.}
+
+\item{write_res}{A boolean. Defines whether to save the results to
+files.}
+
+\item{res_dir}{A character. The directory to write the results and
+log to.}
 }
 \description{
 Writes model results to a tab-delim file

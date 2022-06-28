@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_studies_hrs.R
 \name{calc_studies_hrs}
 \alias{calc_studies_hrs}
-\title{Calcualtes HR from a cox-ph model for each endpoint}
+\title{Calcualtes HR from a Cox-PH model for each endpoint}
 \usage{
 calc_studies_hrs(
   pheno_data,
@@ -24,8 +24,10 @@ endpoint and date, which will differ depending on
 the input variable \code{endpts}.}
 
 \item{score_data}{A data.frame. The score results for each individual.
-Should have at least columns \code{SCORE}
-and \code{ID}.}
+Should have at least column defined in
+\code{score_col_name} and column \code{ID}.}
+
+\item{score_col_name}{A character. The name of}
 
 \item{score_type}{A character. The name of the score used for the model,
 i.e. CCI, or PheRS.}
@@ -39,7 +41,7 @@ files.}
 log to.}
 }
 \description{
-Calcualtes HR from a cox-ph model for each endpoint
+Calcualtes HR from a Cox-PH model for each endpoint
 }
 \author{
 Kira E. Detrois

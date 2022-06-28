@@ -1,4 +1,4 @@
-#' Calcualtes HR from a cox-ph model for each endpoint
+#' Calcualtes HR from a Cox-PH model for each endpoint
 #' 
 #' @param pheno_data A data.frame with at least the columns: 
 #'                   `ID`, `SEX`, `DATE_OF_BIRTH`, `ANCESTRY`, 
@@ -8,8 +8,9 @@
 #'                   endpoint and date, which will differ depending on 
 #'                   the input variable `endpts`.
 #' @param score_data A data.frame. The score results for each individual.
-#'                                 Should have at least columns `SCORE`
-#'                                  and `ID`.
+#'                                 Should have at least column defined in
+#'                                 `score_col_name` and column `ID`.
+#' @param score_col_name A character. The name of 
 #' @param score_type A character. The name of the score used for the model,
 #'                                i.e. CCI, or PheRS.
 #' @param studies A vector of S4 classes representing the study setups.
@@ -31,7 +32,7 @@ calc_studies_hrs <- function(pheno_data,
     score_data <- preprocess_score_data(score_data, 
                                         score_col_name)
 
-    coxph_res <- create_empty_coxph_res_tib()       
+    coxph_res_tib <- create_empty_coxph_res_tib()       
     for(study in studies) {
         plt <- plot_score_distr(score_data, score_type, study, write_res, res_dir)
         elig_indv <- Istudy::get_study_elig_indv(pheno_data,
@@ -51,12 +52,12 @@ calc_studies_hrs <- function(pheno_data,
                                                    study,
                                                    write_res,
                                                    res_dir)
-            coxph_res <- run_and_add_coxph_ana(coxph_res,
+            coxph_res_tib <- run_and_add_coxph_ana(coxph_res_tib,
                                                pheno_score_data,
                                                "CCI",
                                                study@endpt,
                                                "SCORE_GROUP")
-            coxph_res <- run_and_add_coxph_ana(coxph_res,
+            coxph_res_tib <- run_and_add_coxph_ana(coxph_res_tib,
                                                pheno_score_data,
                                                "CCI",
                                                study@endpt,
@@ -65,11 +66,11 @@ calc_studies_hrs <- function(pheno_data,
             message(paste0("Not enough cases for endpoint: ", study@endpt, " No of cases: ", Istudy::get_n_cases(elig_indv, study@endpt)))
         }
     }
-    write_res_file(coxph_res,
+    write_res_file(coxph_res_tib,
                    study,
                    write_res,
                    res_dir)
 
-    return(coxph_res)
+    return(coxph_res_tib)
 }
 
