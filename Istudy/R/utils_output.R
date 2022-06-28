@@ -76,7 +76,7 @@ write_res_file <- function(elig_indv,
         get_n_cases(elig_indv, study@endpt) > 0) {
         res_file_name <- paste0(get_study_file_name(study), 
                                 "_elig_indv.tsv")
-        readr::write_delim(study@elig_indv, 
+        readr::write_delim(elig_indv, 
                            paste0(res_dir, res_file_name),
                            delim="\t")
     }
@@ -115,7 +115,7 @@ write_log_file <- function(elig_indv,
         n_cases <- get_n_cases(elig_indv, study@endpt)
         n_cntrls <- get_n_cntrls(elig_indv, study@endpt)
 
-        readr::write_file(log_msg_string(study), 
+        readr::write_file(log_msg_string(elig_indv, study), 
                           paste0(res_dir, 
                                  get_study_file_name(study), 
                                  "_log.txt"))
@@ -129,6 +129,8 @@ write_log_file <- function(elig_indv,
 #' @inheritParams write_res_files
 #' 
 #' @return A boolean. Whether to write the results to the `res_dir`.
+#' 
+#' @export 
 #' 
 #' @author Kira E. Detrois
 check_res_dir <- function(write_res,
