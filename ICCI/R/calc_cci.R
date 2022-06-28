@@ -32,7 +32,7 @@
 calc_cci <- function(long_data,
                      exp_start=NA,
                      exp_end=NA) {
-    long_data <- preprocess_long_data(long_data)
+    long_data <- preprocess_long_data(long_data, exp_start, exp_end)
     group_long_data <- ILongDataUtils::group_long_data_by_icd_ver(long_data)
 
     # For adding up different ICD-version scores
