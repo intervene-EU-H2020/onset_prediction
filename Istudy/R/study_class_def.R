@@ -82,7 +82,7 @@ setGeneric(name="setEndpt",
 #' 
 #' @export 
 setMethod(f="setEndpt",
-          signature="Agent",
+          signature="study",
           definition=function(theObject,endpt) {
                               theObject@endpt <- endpt
                               methods::validObject(theObject)
