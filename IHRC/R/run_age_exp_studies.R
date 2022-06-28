@@ -1,5 +1,26 @@
+#' @inheritParams calc_studies_hrs
+#' @param score_col_name A character. The name of the column with the 
+#'                                    scores.
+#' @param endpts A string. The column names of the endpoints of 
+#'                        interest.
+#' @param exp_ages An integer. Age at which exposure period starts 
+#'                            (in years).
+#' @param exp_len An integer. Length of the exposure period
+#'                               (in years).
+#' @param wash_len An integer. Length of the washout period
+#'                                (in years).
+#' @param obs_len An integer. Length of the prediction period
+#'                               (in years).
+#' @param downsample_fctr A numeric. Defines how many controls there
+#'                                   should be for every case.
+#'                                   Default is NA, which means no
+#'                                   downsampling is performed.
+#' 
+#' @export 
+#' 
+#' @author Kira E. Detrois
 run_age_exp_studies <- function(pheno_data, 
-                                score_data,
+                                score_ages_data,
                                 score_col_name,
                                 score_type,
                                 endpts,
@@ -7,25 +28,42 @@ run_age_exp_studies <- function(pheno_data,
                                 exp_len=10,
                                 wash_len=2,
                                 obs_len=8,
-                                downsample_fctr=NA,
+                                downsample_fctr=NA_real_,
                                 write_res=FALSE,
                                 res_dir=NA) {
-    score_data <- preprocess_score_data(score_data, 
-                                        score_col_name)
-    
-    plt <- plot_score_distr(as.list(environment()))
     
     for(exp_age in exp_ages) {
-        calc_endpt_hrs(pheno_data, 
-                       score_data,
-                       score_type,
-                       endpts,
-                       exp_age,
-                       exp_len,
-                       wash_len,
-                       obs_len,
-                       downsample_fctr,
-                       write_res,
-                       res_dir)
+        studies <- create_endpts_study_objs(endpts, 
+                                            exp_age,
+                                            exp_len,
+                                            wash_len,
+                                            obs_len,
+                                            downsample_fctr)
+        calc_studies_hrs(pheno_data, 
+                         score_ages_data[[exp_age]],
+                         score_col_name,
+                         score_type,
+                         studies,
+                         write_res,
+                         res_dir)
     }
+}
+
+create_endpts_study_objs <- function(endpts,
+                                     exp_age=30,
+                                     exp_len=10,
+                                     wash_len=2,
+                                     obs_len=8,
+                                     downsample_fctr=NA_real_) {
+    studies <- list()
+    for(endpt in endpts) {
+        studies[[endpt]] <- methods::new("study",
+                                         endpt=endpt,
+                                         exp_age=exp_age,
+                                         exp_len=exp_len,
+                                         wash_len=wash_len,
+                                         obs_len=obs_len,
+                                         downsample_fctr=downsample_fctr)
+    }
+    return(studies)
 }

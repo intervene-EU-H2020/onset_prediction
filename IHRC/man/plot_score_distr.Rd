@@ -4,12 +4,7 @@
 \alias{plot_score_distr}
 \title{Creates a plot of the score distribution}
 \usage{
-plot_score_distr(envir)
-}
-\arguments{
-\item{envir}{A list with at least entries \code{write_res},
-\code{score_data}, \code{score_type}, \code{exp_age}, and \code{exp_len},
-and \code{res_dir}.}
+plot_score_distr(score_data, score_type, study, write_res, res_dir)
 }
 \value{
 The ggplot object.

@@ -4,10 +4,7 @@
 \alias{write_score_groups_to_log}
 \title{Write score cut-off values and groups to log}
 \usage{
-write_score_groups_to_log(envir)
-}
-\arguments{
-\item{envir}{A list with at least entry \code{write_res} and \code{res_dir},}
+write_score_groups_to_log(score_group_tbl, study, write_res, res_dir)
 }
 \description{
 Write score cut-off values and groups to log

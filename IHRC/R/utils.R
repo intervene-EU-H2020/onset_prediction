@@ -50,35 +50,35 @@ get_CI <- function(ML, SE) {
 }
 
 #' Gets the number of cases
-n_group_cases <- function(elig_endpt_indv, 
+n_group_cases <- function(elig_indv, 
                             groups,
                             endpt) {
     if(!(all(groups == "all"))) {
         n_cases <- c()
         for(group in groups) {
-            group_data <- dplyr::filter(elig_endpt_indv, SCORE_GROUP == group)
+            group_data <- dplyr::filter(elig_indv, SCORE_GROUP == group)
             n_cases <- c(n_cases, 
-                        Istudysetup::get_n_cases(group_data, endpt))
+                        Istudy::get_n_cases(group_data, endpt))
         }
     } else {
-        n_cases <- Istudysetup::get_n_cases(elig_endpt_indv,
+        n_cases <- Istudy::get_n_cases(elig_indv,
                                             endpt)
     }
     return(n_cases)
 }
 
-get_group_ctrls <- function(elig_endpt_indv, 
+get_group_ctrls <- function(elig_indv, 
                             groups,
                             endpt) {
     if(!(all(groups == "all"))) {
         n_ctrls <- c()
         for(group in groups) {
-            group_data <- dplyr::filter(elig_endpt_indv, SCORE_GROUP == group)
+            group_data <- dplyr::filter(elig_indv, SCORE_GROUP == group)
             n_ctrls <- c(n_ctrls, 
-                        Istudysetup::get_n_ctrls(group_data, endpt))
+                        Istudy::get_n_cntrls(group_data, endpt))
         }
     } else {
-        n_ctrls <- Istudysetup::get_n_ctrls(elig_endpt_indv,
+        n_ctrls <- Istudy::get_n_cntrls(elig_indv,
                                             endpt)
     }
     return(n_ctrls)

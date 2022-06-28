@@ -4,10 +4,7 @@
 \alias{log_msg_table}
 \title{Creates a string of the current study setup}
 \usage{
-log_msg_table(envir)
-}
-\arguments{
-\item{envir}{A list with at least entry \code{pheno_score_data}.}
+log_msg_table(score_group_tbl)
 }
 \value{
 A tibble with columns \code{GROUP}, \code{SCORE_CUT}

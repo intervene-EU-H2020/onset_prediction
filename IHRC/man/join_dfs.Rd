@@ -6,10 +6,6 @@
 \usage{
 join_dfs(endpt_data, score_data)
 }
-\arguments{
-\item{score_data}{A data.frame with the score results for each individuals.
-Should have at least column defined in \code{score_col_name}.}
-}
 \value{
 The joined data.frame
 }

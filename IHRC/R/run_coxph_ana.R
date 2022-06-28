@@ -21,21 +21,22 @@ run_coxph_ana <- function(pheno_score_data,
 
 #' Fits the Cox model and adds the results to the data.frame `coxph_res`
 #' 
-#' @param envir A list with at least entries `coxph_res`, 
-#'              `score_type`, `endpt`, and `pheno_score_data`.
 #' @param predictor A character. The predictor for the survival.
 #' 
 #' @return A tibble the results data.fram `coxph_res` with added 
 #'         columns from the analysis run. 
-run_and_add_coxph_ana <- function(envir,
+run_and_add_coxph_ana <- function(coxph_res,
+                                  pheno_score_data,
+                                  score_type,
+                                  endpt,
                                   predictor) {
-    curnt_coxph_res <- run_coxph_ana(envir$pheno_score_data, 
-                                     envir$endpt,
+    curnt_coxph_res <- run_coxph_ana(pheno_score_data, 
+                                     endpt,
                                      predictor)
-    envir$coxph_res <- add_coxph_row(envir$coxph_res,
-                                     curnt_coxph_res,
-                                     envir$score_type,
-                                     envir$endpt,
-                                     envir$pheno_score_data)
-    return(envir$coxph_res)
+    coxph_res <- add_coxph_row(coxph_res,
+                               curnt_coxph_res,
+                               score_type,
+                               endpt,
+                               pheno_score_data)
+    return(coxph_res)
 }

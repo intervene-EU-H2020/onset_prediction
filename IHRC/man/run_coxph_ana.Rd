@@ -2,16 +2,16 @@
 % Please edit documentation in R/run_coxph_ana.R
 \name{run_coxph_ana}
 \alias{run_coxph_ana}
-\title{Fits the cox-ph model for the current endpoint}
+\title{Fits the Cox model for a given endpoint and predictor}
 \usage{
-run_coxph_ana(data, endpt, predictor = "SCORE_GROUP")
+run_coxph_ana(pheno_score_data, endpt, predictor = "SCORE_GROUP")
 }
 \arguments{
-\item{data}{TODO}
+\item{pheno_score_data}{A data.frame TODO.}
 
 \item{endpt}{A string. The column name of the current endpoint of
 interest.}
 }
 \description{
-Fits the cox-ph model for the current endpoint
+Fits the Cox model for a given endpoint and predictor
 }

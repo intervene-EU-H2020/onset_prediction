@@ -17,7 +17,7 @@ Imports:
     assertthat,
     dplyr,
     ggplot2,
-    Istudysetup,
+    Istudy,
     readr,
     survival,
     tibble

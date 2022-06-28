@@ -4,7 +4,7 @@
 \alias{n_group_cases}
 \title{Gets the number of cases}
 \usage{
-n_group_cases(elig_endpt_indv, groups, endpt)
+n_group_cases(elig_indv, groups, endpt)
 }
 \description{
 Gets the number of cases

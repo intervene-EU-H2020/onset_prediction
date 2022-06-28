@@ -1,21 +1,29 @@
+get_cci_score_age_data <- function(icd_data,
+                                   exp_ages=c(20,30,40,50),
+                                   exp_len=10) {
+   score_age_data <- c()
+   for(exp_age in exp_ages) {
+      score_age_data[[exp_age]] <- ICCI::calc_cci(icd_data, exp_start=exp_age, exp_end=exp_age+exp_len)
+   }
+   return(score_age_data)
+}
+
 test_that("calc_endpt_hrs works", {
 
   if (requireNamespace("ICCI", quietly = TRUE)) {
       set.seed(919923)
       library("ICCI")
 
-      pheno_data <- Istudysetup::create_test_df(100000)
+      pheno_data <- Istudy::create_test_df(100000)
       icd_data <- ILongDataUtils::create_test_df_multi_icd_ver(n_icd10=500000, 
-                                                    icd10_indv=pheno_data$ID)
-
-      score_data <- ICCI::calc_cci(icd_data,
-                                   exp_start=30,
-                                   exp_end=40)
+                                                               icd10_indv=pheno_data$ID)
+      exp_ages <- c(20,30,40,50,60)
+      score_age_data <- get_cci_score_age_data(icd_data, exp_ages, exp_len=10)
       run_age_exp_studies(pheno_data, 
-                          score_data,
+                          score_age_data,
                           score_col_name="CCI_score", 
                           score_type="CCI",
-                          exp_ages=c(20,30,40,50,60),
+                          exp_ages=exp_ages,
                           exp_len=10,
                           wash_len=2,
                           obs_len=8,
@@ -31,3 +39,5 @@ test_that("calc_endpt_hrs works", {
       message("Could not run tests, because ICCI is not available.")
    }
 })
+
+

@@ -4,7 +4,7 @@
 \alias{add_risk_group_col}
 \title{Adds a risk group column}
 \usage{
-add_risk_group_col(pheno_score_data)
+add_risk_group_col(pheno_score_data, study, write_res = FALSE, res_dir = NA)
 }
 \value{
 The data.frame with the added risk group column
@@ -12,7 +12,7 @@ The data.frame with the added risk group column
 \description{
 The risk groups are quantiles based on the score distribution
 of all individuals in the data. They are given as left-open
-intervals I.e. first risk group could be an interval 0\% <= x < 60\%
+intervals i.e. first risk group could be an interval 0\% <= x < 60\%
 and would be called \verb{Group 60\%}, the second risk group could then
 go from i.e. 60\% <= x <= 80\%  and would be indicated as \verb{Group 80\%}
 etc.

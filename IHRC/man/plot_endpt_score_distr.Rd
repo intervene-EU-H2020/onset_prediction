@@ -4,12 +4,7 @@
 \alias{plot_endpt_score_distr}
 \title{Plots a jittered scatter}
 \usage{
-plot_endpt_score_distr(envir)
-}
-\arguments{
-\item{envir}{A list with at least entries \code{write_res},
-\code{pheno_data}, \code{endpt}, \code{score_type}, and \code{exp_age},
-and \code{exp_len}, \code{wash_len}, \code{obs_len}, and \code{res_dir}.}
+plot_endpt_score_distr(pheno_score_data, score_type, study, write_res, res_dir)
 }
 \value{
 A ggplot object
