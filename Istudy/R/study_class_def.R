@@ -66,3 +66,26 @@ test_endpt_input_correct <- function(msg, endpt) {
      
     return(msg)
 }
+
+#' Sets `endpt` of the S4 study object to a new value
+#' 
+#' @param theObject The S4 study object.
+#' @param endpt A character. The new endpoint.
+setGeneric(name="setEndpt",
+           def=function(theObject, endpt) { standardGeneric("setEndpt") } 
+)
+
+#' Sets `endpt` of the S4 study object to a new value
+#' 
+#' @param theObject The S4 study object.
+#' @param endpt A character. The new endpoint.
+#' 
+#' @export 
+setMethod(f="setEndpt",
+          signature="Agent",
+          definition=function(theObject,endpt) {
+                              theObject@endpt <- endpt
+                              methods::validObject(theObject)
+                              return(theObject)
+                      }
+)
