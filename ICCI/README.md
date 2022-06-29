@@ -14,7 +14,7 @@
  All packages are alread installed in the FinnGen Sandbox.
  
 - assertthat (For testing)
-- comorbidity (For calculating the CCI)
+- comorbidity (>= 1.0.0, For calculating the CCI)
 - dplyr (For data manipulation)
 - tibble (For better data.frames)
 
