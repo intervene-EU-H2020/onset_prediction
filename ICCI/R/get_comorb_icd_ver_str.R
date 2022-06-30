@@ -19,6 +19,6 @@ get_comorb_icd_ver_str <- function(icd_version) {
     } else if (icd_version %in% c("9", "9CM")) {
         return("charlson_icd9_quan")
     } else {
-        message("Unknown ICD-version.", icd_version, "Ignoring data.")
+        message(paste0("Unknown ICD-version. ", icd_version, " Ignoring data."))
     }
 }
