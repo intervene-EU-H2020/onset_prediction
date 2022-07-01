@@ -4,11 +4,17 @@
 \alias{write_score_groups_to_log}
 \title{Write score cut-off values and groups to log}
 \usage{
-write_score_groups_to_log(score_group_tbl, study, write_res, res_dir)
+write_score_groups_to_log(
+  score_group_tbl,
+  score_type,
+  study,
+  write_res,
+  res_dir
+)
 }
 \arguments{
-\item{score_group_tbl}{A named character.
-The score cutoffs that should be written to the log.}
+\item{score_type}{A character. The name of the score used for the model,
+i.e. CCI, or PheRS.}
 
 \item{study}{An S4 class representing the study setup.}
 

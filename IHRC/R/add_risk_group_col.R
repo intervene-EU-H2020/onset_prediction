@@ -16,12 +16,14 @@
 #' 
 #' @author Kira E. Detrois
 add_risk_group_col <- function(score_data,
+                               score_type,
                                study,
                                write_res=FALSE,
                                res_dir=NA) {
-    quantiles <- c(0,0.01,0.05,0.1,0.2,0.4,0.6,0.8,0.9,0.95,0.99,1)
-    score_group_tbl <- get_unique_score_groups(score_data, quantiles)
-    if(check_has_mid_group(score_group_tbl)) {
+                                
+    if(score_type != "CCI") {
+        quantiles <- c(0,0.01,0.05,0.1,0.2,0.4,0.6,0.8,0.9,0.95,0.99,1)
+        score_group_tbl <- get_score_groups(score_data, quantiles)
         indv_score_groups <- get_indvs_score_groups(score_data, score_group_tbl)
     } else {
         score_group_tbl <- c("low"="<=1", "high"= ">1")
@@ -31,27 +33,11 @@ add_risk_group_col <- function(score_data,
                                      SCORE_GROUP=indv_score_groups)
 
     write_score_groups_to_log(score_group_tbl,
+                              score_type,
                               study,
                               write_res,
                               res_dir)
     return(score_data)
-}
-
-#' Checks whether there is a 40-60% group in the score groups
-#' 
-#' @param score_group_tbl A named character. 
-#'                        The score cutoffs that should be written to the log.
-#' 
-#' @return A bollean. Indicates whether the group exists.
-#' 
-#' @author Kira E. Detrois
-check_has_mid_group <- function(score_group_tbl) {
-    if("60%" %in% names(score_group_tbl) &
-        "40%" %in% names(score_group_tbl)) {
-            return(TRUE)
-    } else {
-        return(FALSE)
-    }
 }
 
 #' 
@@ -85,24 +71,10 @@ get_group_labs <- function(score_groups) {
 
 get_two_level_groups <- function(score_data) {
     indv_score_groups <- factor(ifelse(score_data$SCORE <= 1,
-                                       "low",
-                                       "high"),
-                                levels=c("low", "high"))
+                                       "<=1",
+                                       ">1"),
+                                levels=c("<=1", ">1"))
     return(indv_score_groups)
-}
-
-#' Gets the percentage of each group character as a numeric value
-#' 
-#' @inheritParams relevel_to_mid_group
-#' 
-#' @return  A numeric. The unique risk groups as a numeric vector.
-#' 
-#' @author Kira E. Detrois
-get_groups_numeric <- function(indv_score_groups) {
-    names_split <- strsplit(levels(indv_score_groups), split=" ")
-    unlist(lapply(names_split, function(str) {
-                        as.numeric(sub("(.+)%$", "\\1", str[2]))
-                  }))
 }
 
 #' Get's the score cutoff values 
@@ -121,40 +93,4 @@ get_score_groups <- function(score_data,
     stats::quantile(score_data$SCORE, 
                     probs=quantiles,
                     na.rm=TRUE)
-}
-
-#' Get's the score cutoff values with empty quantiles removed
-#' 
-#' @inheritParams get_score_groups
-#' 
-#' @return A named numeric vector with the quantiles as names 
-#'          and score-cutoffs as values.
-#' 
-#' @export 
-#' 
-#' @author Kira E. Detrois
-get_unique_score_groups <- function(score_data,
-                                    quantiles) {
-    score_group_tbl <- get_score_groups(score_data, quantiles)
-    score_group_tbl_slim <- slim_score_groups(score_group_tbl)
-}
-
-slim_score_groups <- function(score_group_tbl) {
-    score_group_tbl_slim = c()
-    prev_quant <- min(score_group_tbl)
-    prev_name <- names(score_group_tbl)[1]
-    score_group_tbl_slim[[prev_name]] <- prev_quant
-
-    for(idx in seq(2, length(score_group_tbl))) {
-        curnt_name <- names(score_group_tbl)[idx]
-        if(prev_quant != score_group_tbl[[curnt_name]] ) {
-            score_group_tbl_slim[[curnt_name]] <- score_group_tbl[[curnt_name]]
-            prev_quant <- score_group_tbl[[curnt_name]]
-            prev_name <- curnt_name
-        } else if(idx == length(score_group_tbl)) {
-            score_group_tbl_slim <- score_group_tbl_slim[which(names(score_group_tbl_slim) != prev_name)]
-            score_group_tbl_slim[[curnt_name]] <- score_group_tbl[[curnt_name]]
-        } 
-    }
-    return(unlist(score_group_tbl_slim))
 }

@@ -7,7 +7,6 @@
 calc_studies_hrs(
   pheno_data,
   score_data,
-  score_col_name,
   score_type,
   studies,
   write_res = FALSE,
@@ -17,17 +16,12 @@ calc_studies_hrs(
 \arguments{
 \item{pheno_data}{A data.frame with at least the columns:
 \code{ID}, \code{SEX}, \code{DATE_OF_BIRTH}, \code{ANCESTRY},
-\code{START_OF_FOLLOWUP}, \code{END_OF_FOLLOWUP},
 \code{DATE_OF_BIRTH}, and i.e. \code{J10_ASTHMA}, and
 \code{J10_ASTHMA_DATE} where the columns are the study
 endpoint and date, which will differ depending on
 the input variable \code{endpts}.}
 
-\item{score_data}{A data.frame. The score results for each individual.
-Should have at least column defined in
-\code{score_col_name} and column \code{ID}.}
-
-\item{score_col_name}{A character. The name of}
+\item{score_data}{A data.frame. The scores for each individual.}
 
 \item{score_type}{A character. The name of the score used for the model,
 i.e. CCI, or PheRS.}

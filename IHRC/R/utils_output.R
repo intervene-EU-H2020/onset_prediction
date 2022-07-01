@@ -8,6 +8,7 @@
 #' 
 #' @author Kira E. Detrois
 write_res_file <- function(coxph_res_tib,
+                           score_type,
                            study,
                            write_res,
                            res_dir) {
@@ -18,9 +19,11 @@ write_res_file <- function(coxph_res_tib,
                 dir.create(coxph_res_dir)
         }
         study <- Istudy::setEndpt(study, "study") # Cheating the system for the file name
-        res_file_name <- paste0(Istudy::get_study_file_name(study), "_coxph_res.tsv")
+        res_file_name <- paste0(Istudy::get_study_file_name(study), "_", score_type, "_coxph.tsv")
+        file_path <- paste0(coxph_res_dir, res_file_name)
         readr::write_delim(coxph_res_tib, 
-                           file=paste0(coxph_res_dir, res_file_name), delim="\t")
+                           file=file_path, 
+                           delim="\t")
     }}
 
 #' Write score cut-off values and groups to log
@@ -31,6 +34,7 @@ write_res_file <- function(coxph_res_tib,
 #' 
 #' @author Kira E. Detrois
 write_score_groups_to_log <- function(score_group_tbl,
+                                      score_type,
                                       study,
                                       write_res,
                                       res_dir) {
@@ -39,7 +43,7 @@ write_score_groups_to_log <- function(score_group_tbl,
         if(!dir.exists(log_res_dir)) {
             dir.create(log_res_dir)
         } 
-        file_path <- paste0(log_res_dir, Istudy::get_study_file_name(study), "_score_log.txt")
+        file_path <- paste0(log_res_dir, Istudy::get_study_file_name(study), "_", score_type, "_cut_log.txt")
         readr::write_delim(log_msg_table(score_group_tbl), 
                            append=check_file_exists(file_path),
                            col_names=TRUE,

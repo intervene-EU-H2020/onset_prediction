@@ -20,8 +20,6 @@ Imports:
     Istudy,
     lubridate,
     methods,
-    pROC,
     readr,
     survival,
-    survminer,
     tibble

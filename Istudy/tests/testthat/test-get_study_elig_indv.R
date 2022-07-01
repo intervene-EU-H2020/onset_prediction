@@ -3,12 +3,12 @@ test_that("get_study_elig_indv works", {
   test_data <- create_test_df(25)
 
   # Removed because of early diagnosis
-  test_data[test_data$ID == "FG000001",]$J10_ASTHMA = 1 
-  test_data[test_data$ID == "FG000001",]$J10_ASTHMA_DATE = as.Date("1930/01/01")
+  test_data[test_data$ID == "KT000001",]$J10_ASTHMA = 1 
+  test_data[test_data$ID == "KT000001",]$J10_ASTHMA_DATE = as.Date("1930/01/01")
 
   # REMOVE missing date case works
-  test_data[test_data$ID == "FG0000016",]$J10_ASTHMA = 1 
-  test_data[test_data$ID == "FG0000016",]$J10_ASTHMA_DATE = NA
+  test_data[test_data$ID == "KT0000016",]$J10_ASTHMA = 1 
+  test_data[test_data$ID == "KT0000016",]$J10_ASTHMA_DATE = NA
 
   study <- methods::new("study", 
                         endpt="J10_ASTHMA",
@@ -18,9 +18,9 @@ test_that("get_study_elig_indv works", {
                         obs_len=8)
 
   res = suppressMessages(get_study_elig_indv(test_data, study))
-  expected_res_ids = c("FG000004", "FG000005", "FG000006", "FG000007", "FG000009", "FG0000010",
-                       "FG0000012", "FG0000013", "FG0000014", "FG0000015", "FG0000017", 
-                       "FG0000018", "FG0000019", "FG0000022", "FG0000023", "FG0000025")
+  expected_res_ids = c("KT000004", "KT000005", "KT000006", "KT000007", "KT000009", "KT0000010",
+                       "KT0000012", "KT0000013", "KT0000014", "KT0000015", "KT0000017", 
+                       "KT0000018", "KT0000019", "KT0000022", "KT0000023", "KT0000025")
 
   expect_equal(res$ID, expected_res_ids)
 })
@@ -30,11 +30,11 @@ test_that("get_study_elig_indv adj case control works", {
   test_data <- create_test_df(25)
   # Case control adjustment tests
   # Control because of late diagnosis
-  test_data[test_data$ID == "FG0000022",]$J10_ASTHMA = 1 
-  test_data[test_data$ID == "FG0000022",]$J10_ASTHMA_DATE = as.Date("2021/01/01")
+  test_data[test_data$ID == "KT0000022",]$J10_ASTHMA = 1 
+  test_data[test_data$ID == "KT0000022",]$J10_ASTHMA_DATE = as.Date("2021/01/01")
   # Case because of correct diagnosis time frame
-  test_data[test_data$ID == "FG000007",]$J10_ASTHMA_DATE = as.Date("1983/01/01")
-  test_data[test_data$ID == "FG0000013","J10_ASTHMA_DATE"] = as.Date("1956/01/01")
+  test_data[test_data$ID == "KT000007",]$J10_ASTHMA_DATE = as.Date("1983/01/01")
+  test_data[test_data$ID == "KT0000013","J10_ASTHMA_DATE"] = as.Date("1956/01/01")
 
   study <- methods::new("study", 
                         endpt="J10_ASTHMA",
@@ -54,11 +54,11 @@ test_that("get_study_elig_indv downsampling works", {
   test_data <- create_test_df(25)
   # Case control adjustment tests
   # Control because of late diagnosis
-  test_data[test_data$ID == "FG0000022",]$J10_ASTHMA = 1 
-  test_data[test_data$ID == "FG0000022",]$J10_ASTHMA_DATE = as.Date("2021/01/01")
+  test_data[test_data$ID == "KT0000022",]$J10_ASTHMA = 1 
+  test_data[test_data$ID == "KT0000022",]$J10_ASTHMA_DATE = as.Date("2021/01/01")
   # Case because of correct diagnosis time frame
-  test_data[test_data$ID == "FG000007",]$J10_ASTHMA_DATE = as.Date("1983/01/01")
-  test_data[test_data$ID == "FG0000013","J10_ASTHMA_DATE"] = as.Date("1956/01/01")
+  test_data[test_data$ID == "KT000007",]$J10_ASTHMA_DATE = as.Date("1983/01/01")
+  test_data[test_data$ID == "KT0000013","J10_ASTHMA_DATE"] = as.Date("1956/01/01")
 
 
   study <- methods::new("study", 
@@ -69,8 +69,8 @@ test_that("get_study_elig_indv downsampling works", {
                         obs_len=8,
                         downsample_fctr=4)
   res = suppressMessages(get_study_elig_indv(test_data, study))
-  expected_res_ids = c("FG000004", "FG000005", "FG000007", "FG000009", 
-                       "FG0000012", "FG0000013", "FG0000014", "FG0000017", "FG0000023", "FG0000025")
+  expected_res_ids = c("KT000004", "KT000005", "KT000007", "KT000009", 
+                       "KT0000012", "KT0000013", "KT0000014", "KT0000017", "KT0000023", "KT0000025")
 
   expect_equal(res$ID, expected_res_ids)
 })

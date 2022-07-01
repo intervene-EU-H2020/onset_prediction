@@ -27,7 +27,6 @@ test_that("calc_studies_hrs works", {
 
     run_age_exp_studies(pheno_data, 
                         score_ages_data,
-                        score_col_name="PRS", 
                         score_type="PRS",
                         exp_ages=exp_ages,
                         exp_len=10,

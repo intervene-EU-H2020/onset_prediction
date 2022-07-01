@@ -4,10 +4,19 @@
 \alias{add_risk_group_col}
 \title{Adds a risk group column}
 \usage{
-add_risk_group_col(score_data, study, write_res = FALSE, res_dir = NA)
+add_risk_group_col(
+  score_data,
+  score_type,
+  study,
+  write_res = FALSE,
+  res_dir = NA
+)
 }
 \arguments{
 \item{score_data}{A data.frame with at least column \code{SCORE}.}
+
+\item{score_type}{A character. The name of the score used for the model,
+i.e. CCI, or PheRS.}
 
 \item{study}{An S4 class representing the study setup.}
 

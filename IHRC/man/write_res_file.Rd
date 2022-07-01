@@ -4,10 +4,13 @@
 \alias{write_res_file}
 \title{Writes model results to a tab-delim file}
 \usage{
-write_res_file(coxph_res_tib, study, write_res, res_dir)
+write_res_file(coxph_res_tib, score_type, study, write_res, res_dir)
 }
 \arguments{
 \item{coxph_res_tib}{A tibble with the results for the current endpoints.}
+
+\item{score_type}{A character. The name of the score used for the model,
+i.e. CCI, or PheRS.}
 
 \item{study}{An S4 class representing the study setup.}
 

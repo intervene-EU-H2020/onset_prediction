@@ -1,28 +1,3 @@
-#' Preprocesses the score data for the analysis
-#' 
-#' Checks that `score_col_name` is contained in the data and renames the column
-#' to `SCORE`.
-#' 
-#' @param score_data A data.frame with the score results for each individuals.
-#'                   Should have at least column defined in `score_col_name`.
-#' @param score_col_name A character. The name of the column with the scores.
-#' 
-#' @return The data.frame with the score column renamed to `SCORE`.
-#' 
-#' @export
-#' 
-#' @author Kira E. Detrois
-preprocess_score_data <- function(score_data, 
-                                  score_col_name,
-                                  score_type="CCI") {
-    if(score_type == "CCI") {
-        assertthat::assert_that(score_col_name %in% colnames(score_data),
-                                msg=paste0("The score_col_name ", score_col_name, " you gave is not a known column in the score_data data.frame. Have column names: ", paste0(colnames(score_data), collapse=", ")))
-        score_data <- dplyr::rename(score_data, "SCORE"={{ score_col_name }})
-    }
-    return(score_data)
-}
-
 #' Joins the two data.frames 
 #' 
 #' Joins the two data.frames and removes any individuals without

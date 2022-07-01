@@ -1,16 +1,12 @@
 #' Calcualtes HR from a Cox-PH model for each endpoint
 #' 
 #' @param pheno_data A data.frame with at least the columns: 
-#'                   `ID`, `SEX`, `DATE_OF_BIRTH`, `ANCESTRY`, 
-#'                   `START_OF_FOLLOWUP`, `END_OF_FOLLOWUP`, 
+#'                   `ID`, `SEX`, `DATE_OF_BIRTH`, `ANCESTRY`,
 #'                   `DATE_OF_BIRTH`, and i.e. `J10_ASTHMA`, and
 #'                   `J10_ASTHMA_DATE` where the columns are the study 
 #'                   endpoint and date, which will differ depending on 
 #'                   the input variable `endpts`.
-#' @param score_data A data.frame. The score results for each individual.
-#'                                 Should have at least column defined in
-#'                                 `score_col_name` and column `ID`.
-#' @param score_col_name A character. The name of 
+#' @param score_data A data.frame. The scores for each individual.
 #' @param score_type A character. The name of the score used for the model,
 #'                                i.e. CCI, or PheRS.
 #' @param studies A vector of S4 classes representing the study setups.
@@ -24,14 +20,12 @@
 #' @author Kira E. Detrois
 calc_studies_hrs <- function(pheno_data, 
                              score_data,
-                             score_col_name,
                              score_type,
                              studies,
+                             covs=c("SEX", "YEAR_OF_BIRTH"),
                              write_res=FALSE,
                              res_dir=NA) {
-    score_data <- preprocess_score_data(score_data, 
-                                        score_col_name,
-                                        score_type)
+
     coxph_res_tib <- create_empty_coxph_res_tib()       
     for(study in studies) {
         plt <- plot_score_distr(score_data, 
@@ -39,7 +33,7 @@ calc_studies_hrs <- function(pheno_data,
                                 study, 
                                 write_res, 
                                 res_dir)
-                                
+
         elig_indv <- Istudy::get_study_elig_indv(pheno_data,
                                                  study,
                                                  write_res,
@@ -56,14 +50,13 @@ calc_studies_hrs <- function(pheno_data,
                                           write_res,
                                           res_dir)
             pheno_score_data <- add_risk_group_col(pheno_score_data,
+                                                   score_type,
                                                    study,
                                                    write_res,
                                                    res_dir)
-            pheno_score_data$BIRTH_YEAR <- lubridate::year(pheno_score_data$DATE_OF_BIRTH)
             coxph_mdl <- run_coxph_ana(pheno_score_data,
                                        study@endpt,
-                                       predictor="SCORE_GROUP")
-
+                                       covs)
             coxph_res_tib <- add_coxph_row(coxph_res_tib,
                                            coxph_mdl,
                                            score_type,
@@ -74,6 +67,7 @@ calc_studies_hrs <- function(pheno_data,
         }
     }
     write_res_file(coxph_res_tib,
+                   score_type,
                    study,
                    write_res,
                    res_dir)

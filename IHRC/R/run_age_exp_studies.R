@@ -4,8 +4,6 @@
 #' @param score_ages_data A named vector of tibbles. 
 #'                        The score data for each indiviuals for different 
 #'                        exposure periods. 
-#' @param score_col_name A character. The name of the column with the 
-#'                                    scores.
 #' @param endpts A string. The column names of the endpoints of 
 #'                         interest.
 #' @param exp_ages An integer. Age at which exposure period starts 
@@ -26,7 +24,6 @@
 #' @author Kira E. Detrois
 run_age_exp_studies <- function(pheno_data, 
                                 score_ages_data,
-                                score_col_name,
                                 score_type,
                                 endpts,
                                 exp_ages=c(20,30,40),
@@ -34,6 +31,7 @@ run_age_exp_studies <- function(pheno_data,
                                 wash_len=2,
                                 obs_len=8,
                                 downsample_fctr=NA_real_,
+                                covs=c("SEX", "YEAR_OF_BIRTH"),
                                 write_res=FALSE,
                                 res_dir=NA) {
     for(exp_age in exp_ages) {
@@ -45,7 +43,6 @@ run_age_exp_studies <- function(pheno_data,
                                             downsample_fctr)
         calc_studies_hrs(pheno_data, 
                          score_ages_data[[exp_age]],
-                         score_col_name,
                          score_type,
                          studies,
                          write_res,

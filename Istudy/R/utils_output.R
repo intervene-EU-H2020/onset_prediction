@@ -14,10 +14,12 @@
 create_return_tib <- function(pheno_data,
                               endpt) {
     check_cols_exist(pheno_data, endpt, "create_return_tib")
+    pheno_data$YEAR_OF_BIRTH <- lubridate::year(pheno_data$DATE_OF_BIRTH)
     elig_data <- dplyr::select(pheno_data, 
                                ID, 
                                SEX, 
                                DATE_OF_BIRTH, 
+                               YEAR_OF_BIRTH,
                                ANCESTRY, 
                                # Otherwise dplyr will throw error. 
                                # test_endpt_input_correct already checks that
