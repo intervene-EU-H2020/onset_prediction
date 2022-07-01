@@ -7,21 +7,23 @@
 add_coxph_row(coxph_res_tib, coxph_mdl, score_type, endpt, elig_indv)
 }
 \arguments{
-\item{coxph_res_tib}{A tibble with the results for the current endpoints.}
+\item{coxph_res_tib}{A tibble with the results for previous endpoints.}
+
+\item{coxph_mdl}{A Cox-PH model.}
 
 \item{score_type}{A character. The name of the score used for the model,
 i.e. CCI, or PheRS.}
 
-\item{endpt}{A character. The current enpoint of interest.}
+\item{endpt}{A string. The column name of the current endpoint of
+interest.}
 
 \item{elig_indv}{A tibble. The individuals which were eligble under
 the current study setup. Needs to at least contain
 the column defined in \code{endpt}.}
-
-\item{all_coxph_res}{A tibble. The results for the previous endpoints.}
 }
 \value{
-A tibble. TODO
+A tibble. The updated \code{coxph_res_tib} with the added results for
+the current endpoint.
 }
 \description{
 Adds a row to the results tibble

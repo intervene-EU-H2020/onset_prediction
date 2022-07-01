@@ -32,6 +32,7 @@ run_age_exp_studies <- function(pheno_data,
                                 obs_len=8,
                                 downsample_fctr=NA_real_,
                                 covs=c("SEX", "YEAR_OF_BIRTH"),
+                                bin_cut=NA_integer_,
                                 write_res=FALSE,
                                 res_dir=NA) {
     for(exp_age in exp_ages) {
@@ -46,6 +47,8 @@ run_age_exp_studies <- function(pheno_data,
                          score_type,
                          studies,
                          covs,
+                         bin_cut,
+
                          write_res,
                          res_dir)
     }

@@ -19,16 +19,17 @@ create_empty_coxph_res_tib <- function() {
 }
 #' Adds a row to the results tibble
 #' 
-#' @param all_coxph_res A tibble. The results for the previous endpoints.
-#' @param coxph_res_tib A tibble with the results for the current endpoints.
-#' @param score_type A character. The name of the score used for the model,
-#'                      i.e. CCI, or PheRS.
-#' @param endpt A character. The current enpoint of interest.
+#' @param coxph_res_tib A tibble with the results for previous endpoints.
+#' @param coxph_mdl A Cox-PH model. 
+#' @inheritParams extract_coxph_res
+#' @inheritParams calc_studies_hrs
+#' @inheritParams run_coxph_ana
 #' @param elig_indv A tibble. The individuals which were eligble under
 #'                        the current study setup. Needs to at least contain
 #'                        the column defined in `endpt`.
 #' 
-#' @return A tibble. TODO
+#' @return A tibble. The updated `coxph_res_tib` with the added results for
+#'          the current endpoint.
 #'                        
 #' @author Kira E. Detrois 
 add_coxph_row <- function(coxph_res_tib,
@@ -39,7 +40,7 @@ add_coxph_row <- function(coxph_res_tib,
 
     if(!is.null(coxph_mdl)) {
         coxph_res_list <- extract_coxph_res(coxph_mdl)
-
+        print("after extract")
         n_cases <- n_group_cases(elig_indv, 
                                  coxph_res_list$groups,
                                  endpt)
@@ -65,9 +66,11 @@ add_coxph_row <- function(coxph_res_tib,
 
 #' Extracts the relevant results from the Cox-PH model
 #' 
-#' @param coxph_mdl A Cox-PH model. 
-#'
+#' @inheritParams add_coxph_row
+#' 
 #' @return A list(`beta`, `std_err`, `p_val`, `HR`, `CI`, `groups`).
+#' 
+#' @author Kira E. Detrois
 extract_coxph_res <- function(coxph_mdl) {
     betas <- summary(coxph_mdl)$coefficients[,"coef"]
     betas <- betas[grep("SCORE", names(betas))]

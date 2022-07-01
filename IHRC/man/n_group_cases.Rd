@@ -13,7 +13,8 @@ the column defined in \code{endpt}.}
 
 \item{groups}{A character. The groups in the Cox-PH model.}
 
-\item{endpt}{A character. The current enpoint of interest.}
+\item{endpt}{A string. The column name of the current endpoint of
+interest.}
 }
 \description{
 Gets the number of cases

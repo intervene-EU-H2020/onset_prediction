@@ -15,3 +15,6 @@ A list(\code{beta}, \code{std_err}, \code{p_val}, \code{HR}, \code{CI}, \code{gr
 \description{
 Extracts the relevant results from the Cox-PH model
 }
+\author{
+Kira E. Detrois
+}

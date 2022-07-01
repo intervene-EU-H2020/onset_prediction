@@ -7,7 +7,9 @@
 plot_score_distr(score_data, score_type, study, write_res, res_dir)
 }
 \arguments{
-\item{score_data}{A data.frame with at least column \code{SCORE}.}
+\item{score_data}{A data.frame. Needs at least column \code{SCORE} if
+\code{score_type = CCI}, or i.e. \code{J10_ASTHMA_PRS} for
+\code{score_type = PRS} depending on the chosen \code{endpts}.}
 
 \item{score_type}{A character. The name of the score used for the model,
 i.e. CCI, or PheRS.}

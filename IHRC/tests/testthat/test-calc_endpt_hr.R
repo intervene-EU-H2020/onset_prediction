@@ -31,6 +31,7 @@ test_that("calc_studies_hrs works", {
                                    "COVHOSP"),
                           downsample_fctr=4,
                           covs=c("SEX", "YEAR_OF_BIRTH"),
+                          bin_cut=1,
                           write_res=TRUE,
                           res_dir="/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/")
 

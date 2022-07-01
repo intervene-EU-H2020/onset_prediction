@@ -76,9 +76,7 @@ plot_endpt_score_distr <- function(score_data,
                                    study,
                                    write_res,
                                    res_dir) {
-        score_data <- dplyr::mutate_at(score_data, 
-                                       study@endpt, 
-                                       as.factor)
+        score_data <- dplyr::mutate_at(score_data, study@endpt, as.factor)
 
         if(score_type == "CCI") {
             plt <- ggplot(score_data, 
@@ -93,8 +91,8 @@ plot_endpt_score_distr <- function(score_data,
                         y=paste0(score_type, " Score")) +
                     theme_minimal() +
                     theme(text=element_text(size=21))
-        } else {
-            plt <- ggplot(score_data, 
+    } else {
+        plt <- ggplot(score_data, 
                       aes(x=get(study@endpt),
                           y=SCORE, 
                           fill=get(study@endpt))) + 
@@ -106,7 +104,7 @@ plot_endpt_score_distr <- function(score_data,
                         y=paste0(score_type, " Score")) +
                     theme_minimal() +
                     theme(text=element_text(size=21))
-        }
+    }
 
     if(write_res) {
         if(Istudy::check_res_dir(write_res, res_dir)) {
@@ -119,10 +117,8 @@ plot_endpt_score_distr <- function(score_data,
                                 "_", 
                                 score_type, 
                                 "_score.png")
-
             ggsave(file_path, plt, device="png", bg="white")
         }
     }
-
     return(plt)
 }

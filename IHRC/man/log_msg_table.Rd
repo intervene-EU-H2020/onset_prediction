@@ -6,6 +6,10 @@
 \usage{
 log_msg_table(score_group_tbl)
 }
+\arguments{
+\item{score_group_tbl}{A named numeric. The risk score cuts for the
+different quantiles.}
+}
 \value{
 A tibble with columns \code{GROUP}, \code{SCORE_CUT}
 }

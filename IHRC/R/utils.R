@@ -4,6 +4,7 @@
 #' a score available.
 #' 
 #' @inheritParams calc_studies_hrs
+#' @inheritParams run_coxph_ana
 #' 
 #' @return The joined data.frame
 #' 

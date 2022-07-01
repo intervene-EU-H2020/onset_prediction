@@ -13,6 +13,9 @@ write_score_groups_to_log(
 )
 }
 \arguments{
+\item{score_group_tbl}{A named numeric. The risk score cuts for the
+different quantiles.}
+
 \item{score_type}{A character. The name of the score used for the model,
 i.e. CCI, or PheRS.}
 

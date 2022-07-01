@@ -1,15 +1,21 @@
 #' Calcualtes HR from a Cox-PH model for each endpoint
 #' 
 #' @param pheno_data A data.frame with at least the columns: 
-#'                   `ID`, `SEX`, `DATE_OF_BIRTH`, `ANCESTRY`,
-#'                   `DATE_OF_BIRTH`, and i.e. `J10_ASTHMA`, and
-#'                   `J10_ASTHMA_DATE` where the columns are the study 
-#'                   endpoint and date, which will differ depending on 
-#'                   the input variable `endpts`.
-#' @param score_data A data.frame. The scores for each individual.
+#'                   `ID`, the columns specified in `covs` and 
+#'                   i.e. `J10_ASTHMA`, and `J10_ASTHMA_DATE` where the 
+#'                   columns are the study endpoint and date, which will 
+#'                   differ depending on the input variable `endpts`.
+#' @param score_data A data.frame. Needs at least column `SCORE` if 
+#'                      `score_type = CCI`, or i.e. `J10_ASTHMA_PRS` for 
+#'                      `score_type = PRS` depending on the chosen `endpts`.
 #' @param score_type A character. The name of the score used for the model,
 #'                                i.e. CCI, or PheRS.
 #' @param studies A vector of S4 classes representing the study setups.
+#' @param covs A character. The column names of the covariates to add to
+#'              the predictor of the Cox-PH model.
+#' @param bin_cut A numeric. The binary cutoff value for classifying high
+#'                  and low score individuals. Currently only in use if
+#'                  the `score_type` is `CCI`.
 #' @param write_res A boolean. Defines whether to save the results to 
 #'                             files.
 #' @param res_dir A character. The directory to write the results and
@@ -23,6 +29,7 @@ calc_studies_hrs <- function(pheno_data,
                              score_type,
                              studies,
                              covs=c("SEX", "YEAR_OF_BIRTH"),
+                             bin_cut=NA_integer_,
                              write_res=FALSE,
                              res_dir=NA) {
 
@@ -52,11 +59,13 @@ calc_studies_hrs <- function(pheno_data,
             pheno_score_data <- add_risk_group_col(pheno_score_data,
                                                    score_type,
                                                    study,
+                                                   bin_cut,
                                                    write_res,
                                                    res_dir)
             coxph_mdl <- run_coxph_ana(pheno_score_data,
                                        study@endpt,
                                        covs)
+                            
             coxph_res_tib <- add_coxph_row(coxph_res_tib,
                                            coxph_mdl,
                                            score_type,
@@ -69,6 +78,7 @@ calc_studies_hrs <- function(pheno_data,
     write_res_file(coxph_res_tib,
                    score_type,
                    study,
+                   bin_cut,
                    write_res,
                    res_dir)
 

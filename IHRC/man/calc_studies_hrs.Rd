@@ -9,24 +9,34 @@ calc_studies_hrs(
   score_data,
   score_type,
   studies,
+  covs = c("SEX", "YEAR_OF_BIRTH"),
+  bin_cut = NA_integer_,
   write_res = FALSE,
   res_dir = NA
 )
 }
 \arguments{
 \item{pheno_data}{A data.frame with at least the columns:
-\code{ID}, \code{SEX}, \code{DATE_OF_BIRTH}, \code{ANCESTRY},
-\code{DATE_OF_BIRTH}, and i.e. \code{J10_ASTHMA}, and
-\code{J10_ASTHMA_DATE} where the columns are the study
-endpoint and date, which will differ depending on
-the input variable \code{endpts}.}
+\code{ID}, the columns specified in \code{covs} and
+i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_DATE} where the
+columns are the study endpoint and date, which will
+differ depending on the input variable \code{endpts}.}
 
-\item{score_data}{A data.frame. The scores for each individual.}
+\item{score_data}{A data.frame. Needs at least column \code{SCORE} if
+\code{score_type = CCI}, or i.e. \code{J10_ASTHMA_PRS} for
+\code{score_type = PRS} depending on the chosen \code{endpts}.}
 
 \item{score_type}{A character. The name of the score used for the model,
 i.e. CCI, or PheRS.}
 
 \item{studies}{A vector of S4 classes representing the study setups.}
+
+\item{covs}{A character. The column names of the covariates to add to
+the predictor of the Cox-PH model.}
+
+\item{bin_cut}{A numeric. The binary cutoff value for classifying high
+and low score individuals. Currently only in use if
+the \code{score_type} is \code{CCI}.}
 
 \item{write_res}{A boolean. Defines whether to save the results to
 files.}

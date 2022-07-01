@@ -14,11 +14,9 @@ Suggests:
     ICCI
 Config/testthat/edition: 3
 Imports: 
-    assertthat,
     dplyr,
     ggplot2,
     Istudy,
-    lubridate,
     methods,
     readr,
     survival,

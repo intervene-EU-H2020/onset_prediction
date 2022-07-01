@@ -14,17 +14,18 @@ run_age_exp_studies(
   wash_len = 2,
   obs_len = 8,
   downsample_fctr = NA_real_,
+  covs = c("SEX", "YEAR_OF_BIRTH"),
+  bin_cut = NA_integer_,
   write_res = FALSE,
   res_dir = NA
 )
 }
 \arguments{
 \item{pheno_data}{A data.frame with at least the columns:
-\code{ID}, \code{SEX}, \code{DATE_OF_BIRTH}, \code{ANCESTRY},
-\code{DATE_OF_BIRTH}, and i.e. \code{J10_ASTHMA}, and
-\code{J10_ASTHMA_DATE} where the columns are the study
-endpoint and date, which will differ depending on
-the input variable \code{endpts}.}
+\code{ID}, the columns specified in \code{covs} and
+i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_DATE} where the
+columns are the study endpoint and date, which will
+differ depending on the input variable \code{endpts}.}
 
 \item{score_ages_data}{A named vector of tibbles.
 The score data for each indiviuals for different
@@ -52,6 +53,13 @@ interest.}
 should be for every case.
 Default is NA, which means no
 downsampling is performed.}
+
+\item{covs}{A character. The column names of the covariates to add to
+the predictor of the Cox-PH model.}
+
+\item{bin_cut}{A numeric. The binary cutoff value for classifying high
+and low score individuals. Currently only in use if
+the \code{score_type} is \code{CCI}.}
 
 \item{write_res}{A boolean. Defines whether to save the results to
 files.}
