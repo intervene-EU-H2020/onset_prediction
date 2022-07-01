@@ -27,7 +27,8 @@ create_return_tib <- function(pheno_data,
                                # a vector
                                dplyr::all_of(endpt), 
                                paste0(endpt, "_AGE_DAYS"),
-                               paste0(endpt, "_DATE"))
+                               paste0(endpt, "_DATE"),
+                               dplyr::starts_with("PC"))
 }
 
 #' Creates a file name for the current study setup

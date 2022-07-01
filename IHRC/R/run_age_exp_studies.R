@@ -45,6 +45,7 @@ run_age_exp_studies <- function(pheno_data,
                          score_ages_data[[exp_age]],
                          score_type,
                          studies,
+                         covs,
                          write_res,
                          res_dir)
     }

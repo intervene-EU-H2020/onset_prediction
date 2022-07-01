@@ -18,6 +18,7 @@ test_that("get_study_elig_indv works", {
                         obs_len=8)
 
   res = suppressMessages(get_study_elig_indv(test_data, study))
+  print(res)
   expected_res_ids = c("KT000004", "KT000005", "KT000006", "KT000007", "KT000009", "KT0000010",
                        "KT0000012", "KT0000013", "KT0000014", "KT0000015", "KT0000017", 
                        "KT0000018", "KT0000019", "KT0000022", "KT0000023", "KT0000025")

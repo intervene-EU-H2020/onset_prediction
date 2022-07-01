@@ -30,6 +30,7 @@ test_that("calc_studies_hrs works", {
                                    "C3_BREAST", 
                                    "COVHOSP"),
                           downsample_fctr=4,
+                          covs=c("SEX", "YEAR_OF_BIRTH"),
                           write_res=TRUE,
                           res_dir="/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/")
 

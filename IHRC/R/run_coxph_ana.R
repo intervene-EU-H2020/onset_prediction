@@ -5,7 +5,6 @@
 #'                         where the columns are the study endpoint and 
 #'                         date, which will differ depending on the input 
 #'                         variable `endpt`. And the column defined in `predictor`.
-#' @param predictor A character. The predictor for the survival analysis.
 #' @inheritParams add_coxph_row
 #' 
 #' @export 
@@ -19,7 +18,7 @@ run_coxph_ana <- function(pheno_score_data,
     pred_string <- get_pred_string(covs)
     surv_mdl <- stats::as.formula(paste0(
                         "survival::Surv(", endpt, "_AGE_DAYS, ",  endpt, ") ~ ",  pred_string))
-    if(predictor == "SCORE" | length(unique(pheno_score_data$SCORE_GROUP)) >= 2) {
+    if(length(unique(pheno_score_data$SCORE_GROUP)) >= 2) {
         coxph_mdl <- survival::coxph(surv_mdl,
                                      data=pheno_score_data)
         return(coxph_mdl)
@@ -31,11 +30,13 @@ run_coxph_ana <- function(pheno_score_data,
 make_covs_fctrs <- function(pheno_score_data,
                             covs) {
     for(cov in covs) {
-        pheno_score_data[cov,] <- as.factor(pheno_score_data[cov,])
+        if(is.character(pheno_score_data[cov,])) {
+            pheno_score_data[cov,] <- as.factor(pheno_score_data[cov,])
+        }
     }
     return(pheno_score_data)
 }
 
 get_pred_string <- function(covs) {
-    paste0("SCORE_GROUP", paste0(covs, collapse=" + "))
+    paste0("SCORE_GROUP + ", paste0(covs, collapse=" + "))
 }
