@@ -7,15 +7,15 @@
 #' @param score_col_name A character. The name of the column with the 
 #'                                    scores.
 #' @param endpts A string. The column names of the endpoints of 
-#'                        interest.
+#'                         interest.
 #' @param exp_ages An integer. Age at which exposure period starts 
 #'                            (in years).
 #' @param exp_len An integer. Length of the exposure period
-#'                               (in years).
+#'                            (in years).
 #' @param wash_len An integer. Length of the washout period
-#'                                (in years).
+#'                             (in years).
 #' @param obs_len An integer. Length of the prediction period
-#'                               (in years).
+#'                            (in years).
 #' @param downsample_fctr A numeric. Defines how many controls there
 #'                                   should be for every case.
 #'                                   Default is NA, which means no
@@ -36,7 +36,6 @@ run_age_exp_studies <- function(pheno_data,
                                 downsample_fctr=NA_real_,
                                 write_res=FALSE,
                                 res_dir=NA) {
-    
     for(exp_age in exp_ages) {
         studies <- create_endpts_study_objs(endpts, 
                                             exp_age,
@@ -54,7 +53,7 @@ run_age_exp_studies <- function(pheno_data,
     }
 }
 
-#' Creates a vector of study objects for the differen endpoints
+#' Creates a vector of study objects for the different endpoints
 #' 
 #' @inheritParams calc_studies_hrs
 #' @param exp_age An integer. Age at which exposure period starts 

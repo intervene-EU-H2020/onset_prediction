@@ -4,7 +4,7 @@
 \alias{preprocess_score_data}
 \title{Preprocesses the score data for the analysis}
 \usage{
-preprocess_score_data(score_data, score_col_name)
+preprocess_score_data(score_data, score_col_name, score_type = "CCI")
 }
 \arguments{
 \item{score_data}{A data.frame with the score results for each individuals.

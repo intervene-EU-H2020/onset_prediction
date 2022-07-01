@@ -12,13 +12,16 @@ write_res_file <- function(coxph_res_tib,
                            write_res,
                            res_dir) {
     if(Istudy::check_res_dir(write_res, res_dir)) {
-        Istudy::setEndpt(study, "study") # Cheating the system for the file name
-        res_file_name <- paste0(Istudy::get_study_file_name(study), 
-                                "_coxph_res.tsv")
+        coxph_res_dir <- paste0(res_dir, "coxph_res/")
+
+        if(!dir.exists(coxph_res_dir)) {
+                dir.create(coxph_res_dir)
+        }
+        study <- Istudy::setEndpt(study, "study") # Cheating the system for the file name
+        res_file_name <- paste0(Istudy::get_study_file_name(study), "_coxph_res.tsv")
         readr::write_delim(coxph_res_tib, 
-                           paste0(res_dir, res_file_name), delim="\t")
-    }
-}
+                           file=paste0(coxph_res_dir, res_file_name), delim="\t")
+    }}
 
 #' Write score cut-off values and groups to log
 #' 
@@ -32,7 +35,11 @@ write_score_groups_to_log <- function(score_group_tbl,
                                       write_res,
                                       res_dir) {
     if(Istudy::check_res_dir(write_res, res_dir)) {
-        file_path <- paste0(res_dir, Istudy::get_study_file_name(study), "_log.txt")
+        log_res_dir <- paste0(res_dir, "log/")
+        if(!dir.exists(log_res_dir)) {
+            dir.create(log_res_dir)
+        } 
+        file_path <- paste0(log_res_dir, Istudy::get_study_file_name(study), "_score_log.txt")
         readr::write_delim(log_msg_table(score_group_tbl), 
                            append=check_file_exists(file_path),
                            col_names=TRUE,

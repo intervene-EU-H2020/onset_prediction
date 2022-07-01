@@ -13,10 +13,14 @@
 #' 
 #' @author Kira E. Detrois
 preprocess_score_data <- function(score_data, 
-                                  score_col_name) {
-    assertthat::assert_that(score_col_name %in% colnames(score_data),
-                            msg=paste0("The score_col_name ", score_col_name, " you gave is not a known column in the score_data data.frame. Have column names: ", paste0(colnames(score_data), collapse=", ")))
-    dplyr::rename(score_data, "SCORE"={{ score_col_name }})
+                                  score_col_name,
+                                  score_type="CCI") {
+    if(score_type == "CCI") {
+        assertthat::assert_that(score_col_name %in% colnames(score_data),
+                                msg=paste0("The score_col_name ", score_col_name, " you gave is not a known column in the score_data data.frame. Have column names: ", paste0(colnames(score_data), collapse=", ")))
+        score_data <- dplyr::rename(score_data, "SCORE"={{ score_col_name }})
+    }
+    return(score_data)
 }
 
 #' Joins the two data.frames 
@@ -30,7 +34,10 @@ preprocess_score_data <- function(score_data,
 #' 
 #' @author Kira E. Detrois
 join_dfs <- function(pheno_data,
-                     score_data) {
+                     score_data,
+                     score_type="CCI",
+                     endpt=NA_character_) {
+    score_data <- get_and_filter_endpt_scores(score_data, score_type, endpt)
     pheno_score_data <- dplyr::left_join(pheno_data,
                                          score_data,
                                          by="ID")
@@ -59,16 +66,16 @@ get_CI <- function(ML, SE) {
 n_group_cases <- function(elig_indv, 
                           groups,
                           endpt) {
-    if(!(all(groups == "all"))) {
+    if(!(all(groups == "no groups"))) {
         n_cases <- c()
         for(group in groups) {
             group_data <- dplyr::filter(elig_indv, SCORE_GROUP == group)
             n_cases <- c(n_cases, 
-                        Istudy::get_n_cases(group_data, endpt))
+                         Istudy::get_n_cases(group_data, endpt))
         }
     } else {
         n_cases <- Istudy::get_n_cases(elig_indv,
-                                            endpt)
+                                      endpt)
     }
     return(n_cases)
 }
@@ -76,7 +83,7 @@ n_group_cases <- function(elig_indv,
 get_group_ctrls <- function(elig_indv, 
                             groups,
                             endpt) {
-    if(!(all(groups == "all"))) {
+    if(!(all(groups == "no groups"))) {
         n_ctrls <- c()
         for(group in groups) {
             group_data <- dplyr::filter(elig_indv, SCORE_GROUP == group)
@@ -88,4 +95,19 @@ get_group_ctrls <- function(elig_indv,
                                             endpt)
     }
     return(n_ctrls)
+}
+
+#' @importFrom dplyr %>% 
+get_and_filter_endpt_scores <- function(score_data,
+                                        score_type,
+                                        endpt) {
+    if(score_type == "PRS") {
+        prs_col_name <- paste0(endpt, "_PRS")
+        score_data <- dplyr::select(score_data, 
+                                    ID, 
+                                    {{ prs_col_name }}) %>% 
+                        dplyr::rename("SCORE" = {{ prs_col_name }})
+    }
+    score_data <- dplyr::filter(score_data, 
+                                !is.na("SCORE"))
 }

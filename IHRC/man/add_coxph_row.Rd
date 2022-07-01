@@ -4,11 +4,9 @@
 \alias{add_coxph_row}
 \title{Adds a row to the results tibble}
 \usage{
-add_coxph_row(all_coxph_res, coxph_res_tib, score_type, endpt, elig_indv)
+add_coxph_row(coxph_res_tib, coxph_mdl, score_type, endpt, elig_indv)
 }
 \arguments{
-\item{all_coxph_res}{A tibble. The results for the previous endpoints.}
-
 \item{coxph_res_tib}{A tibble with the results for the current endpoints.}
 
 \item{score_type}{A character. The name of the score used for the model,
@@ -19,6 +17,8 @@ i.e. CCI, or PheRS.}
 \item{elig_indv}{A tibble. The individuals which were eligble under
 the current study setup. Needs to at least contain
 the column defined in \code{endpt}.}
+
+\item{all_coxph_res}{A tibble. The results for the previous endpoints.}
 }
 \value{
 A tibble. TODO

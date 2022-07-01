@@ -13,16 +13,19 @@
 #' @author Kira E. Detrois
 run_coxph_ana <- function(pheno_score_data,
                           endpt,
-                          predictor="SCORE_GROUP") {
-    coxph_formula <- stats::as.formula(paste0(
-                        "survival::Surv(", endpt, "_AGE_DAYS,) ~ ",  predictor))
-    if(length(unique(pheno_score_data$SCORE_GROUP)) >= 2) {
-        coxph_res_mdl <- survival::coxph(coxph_formula,
-                                         data=pheno_score_data)
-        coxph_res_mdl <- extract_coxph_res(coxph_res_mdl)
-        return(coxph_res_mdl)
+                          predictor="SCORE_GROUP",
+                          write_res=FALSE) {
+    pheno_score_data$SEX <- as.factor(pheno_score_data$SEX)
+    #print(pheno_score_data$BIRTH_YEAR)
+    #print(pheno_score_data$SEX)
+    surv_mdl <- stats::as.formula(paste0(
+                        "survival::Surv(", endpt, "_AGE_DAYS, ",  endpt, ") ~ ",  predictor, " + BIRTH_YEAR + SEX"))
+    if(predictor == "SCORE" | length(unique(pheno_score_data$SCORE_GROUP)) >= 2) {
+        coxph_mdl <- survival::coxph(surv_mdl,
+                                    data=pheno_score_data)
+        return(coxph_mdl)
     } else {
-        return(list())
+        return(NULL)
     }
 }
 
@@ -37,10 +40,12 @@ run_and_add_coxph_ana <- function(coxph_res_tib,
                                   pheno_score_data,
                                   score_type,
                                   endpt,
-                                  predictor) {
+                                  predictor,
+                                  write_res=FALSE) {
     curnt_coxph_res <- run_coxph_ana(pheno_score_data, 
                                      endpt,
-                                     predictor)
+                                     predictor,
+                                     write_res)
     coxph_res_tib <- add_coxph_row(coxph_res_tib,
                                    curnt_coxph_res,
                                    score_type,

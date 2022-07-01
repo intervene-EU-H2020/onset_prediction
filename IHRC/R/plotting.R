@@ -14,22 +14,37 @@ plot_score_distr <- function(score_data,
                              study,
                              write_res,
                              res_dir) {
-    score_data <- dplyr::filter(score_data, 
-                                !is.na("SCORE"))
+    score_data <- get_and_filter_endpt_scores(score_data,
+                                              score_type,
+                                              study@endpt)
+
+    plot_descr <- paste0(study@exp_age, " to ", study@exp_age+study@exp_len)
+    if(score_type == "CCI") {
+        xlim =c(0, 15)
+    } else {
+        xlim=c(-1,1)
+    }
     plt <- ggplot(score_data, aes(x=get("SCORE"))) + 
                     geom_histogram(alpha=.8, fill="#214a2a", binwidth = 1.0)  +
                     labs(title=paste0(score_type, " Score Histogram"),
-                        subtitle=paste0("All ", nrow(score_data), " Individuals"),
+                        subtitle=paste0("All ",  nrow(score_data), " Eligible Individuals ", plot_descr),
                         x=score_type,
                         y="Count") +
+                    coord_cartesian(xlim=xlim) +
                     theme_minimal() + 
                     theme(text=element_text(size=21))
 
     if(write_res) {
-        Istudy::check_res_dir(write_res, res_dir)
-        plot_descr <- paste0(study@exp_age, "_to_", study@exp_age+study@exp_len)
-        ggsave(paste0(res_dir, score_type, "_score_distr_", plot_descr, ".png"),
-               plot=plt, device="png", bg="white")
+        if(Istudy::check_res_dir(write_res, res_dir)) {
+            plot_res_dir <- paste0(res_dir, "plots/")
+            if(!dir.exists(plot_res_dir)) {
+                dir.create(plot_res_dir)
+            }
+            plot_descr <- paste0(study@exp_age, "_to_", study@exp_age+study@exp_len)
+
+            ggsave(paste0(plot_res_dir, score_type, "_score_distr_", plot_descr, ".png"),
+                plot=plt, device="png", bg="white")
+        }
     }
     return(plt)
 }
@@ -69,14 +84,19 @@ plot_endpt_score_distr <- function(score_data,
                     theme_minimal() +
                     theme(text=element_text(size=21))
     if(write_res) {
-        Istudy::check_res_dir(write_res, res_dir)
-        file_path <- paste0(res_dir,
-                            Istudy::get_study_file_name(study), 
-                            "_", 
-                            score_type, 
-                            "_score.png")
+        if(Istudy::check_res_dir(write_res, res_dir)) {
+            plot_res_dir <- paste0(res_dir, "plots/endpts/")
+            if(!dir.exists(plot_res_dir)) {
+                dir.create(plot_res_dir)
+            }
+            file_path <- paste0(plot_res_dir,
+                                Istudy::get_study_file_name(study), 
+                                "_", 
+                                score_type, 
+                                "_score.png")
 
-        ggsave(file_path, plt, device="png", bg="white")
+            ggsave(file_path, plt, device="png", bg="white")
+        }
     }
 
     return(plt)

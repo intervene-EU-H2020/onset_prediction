@@ -31,53 +31,56 @@ create_empty_coxph_res_tib <- function() {
 #' @return A tibble. TODO
 #'                        
 #' @author Kira E. Detrois 
-add_coxph_row <- function(all_coxph_res,
-                          coxph_res_tib,
+add_coxph_row <- function(coxph_res_tib,
+                          coxph_mdl,
                           score_type,
                           endpt,
                           elig_indv) {
-    if(!is.null(names(coxph_res_tib))) {
+
+    if(!is.null(coxph_mdl)) {
+        coxph_res_list <- extract_coxph_res(coxph_mdl)
+
         n_cases <- n_group_cases(elig_indv, 
-                                 coxph_res_tib$groups,
+                                 coxph_res_list$groups,
                                  endpt)
         n_ctrls <- get_group_ctrls(elig_indv, 
-                                   coxph_res_tib$groups,
+                                   coxph_res_list$groups,
                                    endpt)
-
-        all_coxph_res <- tibble::add_row(all_coxph_res, 
+        coxph_res_tib <- tibble::add_row(coxph_res_tib, 
                                          Endpoint=endpt,
                                          Score=score_type,
-                                         Group=coxph_res_tib$groups,
+                                         Group=coxph_res_list$groups,
                                          N_controls=n_ctrls,
                                          N_cases=n_cases,
-                                         beta=coxph_res_tib$beta,
-                                         std_errs=coxph_res_tib$std_err,
-                                         p_val=coxph_res_tib$p_val,
-                                         HR=coxph_res_tib$HR,
-                                         CI_neg=coxph_res_tib$CI$neg,
-                                         CI_pos=coxph_res_tib$CI$pos
+                                         beta=coxph_res_list$beta,
+                                         std_errs=coxph_res_list$std_err,
+                                         p_val=coxph_res_list$p_val,
+                                         HR=coxph_res_list$HR,
+                                         CI_neg=coxph_res_list$CI$neg,
+                                         CI_pos=coxph_res_list$CI$pos
                           )
     } 
-    return(all_coxph_res)
+    return(coxph_res_tib)
 }
 
 #' Extracts the relevant results from the Cox-PH model
 #' 
-#' @param coxph_res_mdl A Cox-PH model. 
+#' @param coxph_mdl A Cox-PH model. 
 #'
 #' @return A list(`beta`, `std_err`, `p_val`, `HR`, `CI`, `groups`).
-extract_coxph_res <- function(coxph_res_mdl) {
-    betas <- summary(coxph_res_mdl)$coefficients[,"coef"]
-    std_errs <- summary(coxph_res_mdl)$coefficients[,"se(coef)"]
-    pvals <- summary(coxph_res_mdl)$coefficients[,"Pr(>|z|)"]
+extract_coxph_res <- function(coxph_mdl) {
+    betas <- summary(coxph_mdl)$coefficients[,"coef"]
+    betas <- betas[grep("SCORE", names(betas))]
+    std_errs <- summary(coxph_mdl)$coefficients[,"se(coef)"]
+    std_errs <- std_errs[grep("SCORE", names(std_errs))]
+    pvals <- summary(coxph_mdl)$coefficients[,"Pr(>|z|)"]
+    pvals <- pvals[grep("SCORE", names(pvals))]
     OR <- exp(betas)
     CI <- get_CI(betas, std_errs)
-
-    if("SCORE_GROUP" %in% names(coxph_res_mdl$xlevels)) {
-        groups <- coxph_res_mdl$xlevels$SCORE_GROUP[2:length(coxph_res_mdl$xlevels$SCORE_GROUP)]
+    if("SCORE_GROUP" %in% names(coxph_mdl$xlevels)) {
+        groups <- coxph_mdl$xlevels$SCORE_GROUP[2:length(coxph_mdl$xlevels$SCORE_GROUP)]
     } else {
-        groups <- "all"
+        groups <- "no groups"
     }
-
     return(list(beta=betas, std_err=std_errs, p_val=pvals, HR=OR, CI=CI, groups=groups))
 }

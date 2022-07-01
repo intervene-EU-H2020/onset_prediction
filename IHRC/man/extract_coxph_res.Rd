@@ -4,10 +4,10 @@
 \alias{extract_coxph_res}
 \title{Extracts the relevant results from the Cox-PH model}
 \usage{
-extract_coxph_res(coxph_res_mdl)
+extract_coxph_res(coxph_mdl)
 }
 \arguments{
-\item{coxph_res_mdl}{A Cox-PH model.}
+\item{coxph_mdl}{A Cox-PH model.}
 }
 \value{
 A list(\code{beta}, \code{std_err}, \code{p_val}, \code{HR}, \code{CI}, \code{groups}).

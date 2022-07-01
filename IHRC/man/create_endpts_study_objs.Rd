@@ -2,7 +2,7 @@
 % Please edit documentation in R/run_age_exp_studies.R
 \name{create_endpts_study_objs}
 \alias{create_endpts_study_objs}
-\title{Creates a vector of study objects for the differen endpoints}
+\title{Creates a vector of study objects for the different endpoints}
 \usage{
 create_endpts_study_objs(
   endpts,
@@ -35,7 +35,7 @@ Default is NA, which means no
 downsampling is performed.}
 }
 \description{
-Creates a vector of study objects for the differen endpoints
+Creates a vector of study objects for the different endpoints
 }
 \author{
 Kira E. Detrois

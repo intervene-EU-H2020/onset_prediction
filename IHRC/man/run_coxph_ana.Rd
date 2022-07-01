@@ -4,7 +4,12 @@
 \alias{run_coxph_ana}
 \title{Fits the Cox model for a given endpoint and predictor}
 \usage{
-run_coxph_ana(pheno_score_data, endpt, predictor = "SCORE_GROUP")
+run_coxph_ana(
+  pheno_score_data,
+  endpt,
+  predictor = "SCORE_GROUP",
+  write_res = FALSE
+)
 }
 \arguments{
 \item{pheno_score_data}{A data.frame with at least columns \code{DATE_OF_BIRTH}

@@ -24,11 +24,11 @@ add_risk_group_col <- function(score_data,
     if(check_has_mid_group(score_group_tbl)) {
         indv_score_groups <- get_indvs_score_groups(score_data, score_group_tbl)
     } else {
-        score_group_tbl <- c("low"="<=2", "high"= ">2")
+        score_group_tbl <- c("low"="<=1", "high"= ">1")
         indv_score_groups <- get_two_level_groups(score_data)
     }
     score_data <- tibble::add_column(score_data, 
-                                    SCORE_GROUP=indv_score_groups)
+                                     SCORE_GROUP=indv_score_groups)
 
     write_score_groups_to_log(score_group_tbl,
                               study,
@@ -68,6 +68,7 @@ get_indvs_score_groups <- function(score_data,
                              include.lowest=TRUE, # Include last break
                              right=FALSE) # left-open intervals
     indv_score_groups <- droplevels(indv_score_groups)
+
     indv_score_groups <- stats::relevel(indv_score_groups, ref="[Group 40% - Group 60%)")
 
     return(indv_score_groups)
@@ -83,7 +84,7 @@ get_group_labs <- function(score_groups) {
 }
 
 get_two_level_groups <- function(score_data) {
-    indv_score_groups <- factor(ifelse(score_data$SCORE <= 2,
+    indv_score_groups <- factor(ifelse(score_data$SCORE <= 1,
                                        "low",
                                        "high"),
                                 levels=c("low", "high"))

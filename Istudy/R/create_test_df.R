@@ -150,7 +150,7 @@ draw_sex_samples <- function(n_indv) {
 
 create_indv_ids <- function(n_indv) {
     id_nums <- seq(n_indv)
-    paste0("FG00000", id_nums)
+    paste0("KT00000", id_nums)
 }
 
 #' Gets the follow-up period

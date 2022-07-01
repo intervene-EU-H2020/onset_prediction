@@ -9,7 +9,8 @@ run_and_add_coxph_ana(
   pheno_score_data,
   score_type,
   endpt,
-  predictor
+  predictor,
+  write_res = FALSE
 )
 }
 \arguments{

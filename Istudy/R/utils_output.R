@@ -74,11 +74,15 @@ write_res_file <- function(elig_indv,
  
     if(check_res_dir(write_res, res_dir) & 
         get_n_cases(elig_indv, study@endpt) > 0) {
-        res_file_name <- paste0(get_study_file_name(study), 
-                                "_elig_indv.tsv")
-        readr::write_delim(elig_indv, 
-                           paste0(res_dir, res_file_name),
-                           delim="\t")
+            elig_res_dir <- paste0(res_dir, "elig_indv/")
+            if(!dir.exists(elig_res_dir)) {
+                dir.create(elig_res_dir)
+            }
+            res_file_name <- paste0(get_study_file_name(study), 
+                                    "_elig_indv.tsv")
+            readr::write_delim(elig_indv, 
+                            paste0(elig_res_dir, res_file_name),
+                            delim="\t")
     }
 }
 
@@ -112,11 +116,15 @@ write_log_file <- function(elig_indv,
                            write_res,
                            res_dir) {
     if(check_res_dir(write_res, res_dir)) {
+        log_res_dir <- paste0(res_dir, "log/")
+        if(!dir.exists(log_res_dir)) {
+            dir.create(log_res_dir)
+        }
         n_cases <- get_n_cases(elig_indv, study@endpt)
         n_cntrls <- get_n_cntrls(elig_indv, study@endpt)
 
         readr::write_file(log_msg_string(elig_indv, study), 
-                          paste0(res_dir, 
+                          paste0(log_res_dir, 
                                  get_study_file_name(study), 
                                  "_log.txt"))
     }

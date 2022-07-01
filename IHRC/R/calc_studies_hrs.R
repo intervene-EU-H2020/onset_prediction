@@ -30,11 +30,16 @@ calc_studies_hrs <- function(pheno_data,
                              write_res=FALSE,
                              res_dir=NA) {
     score_data <- preprocess_score_data(score_data, 
-                                        score_col_name)
-
+                                        score_col_name,
+                                        score_type)
     coxph_res_tib <- create_empty_coxph_res_tib()       
     for(study in studies) {
-        plt <- plot_score_distr(score_data, score_type, study, write_res, res_dir)
+        plt <- plot_score_distr(score_data, 
+                                score_type, 
+                                study, 
+                                write_res, 
+                                res_dir)
+                                
         elig_indv <- Istudy::get_study_elig_indv(pheno_data,
                                                  study,
                                                  write_res,
@@ -42,7 +47,9 @@ calc_studies_hrs <- function(pheno_data,
 
         if(Istudy::get_n_cases(elig_indv, study@endpt) > 100) {
             pheno_score_data <- join_dfs(elig_indv, 
-                                         score_data)
+                                         score_data,
+                                         score_type,
+                                         study@endpt)
             plt <- plot_endpt_score_distr(pheno_score_data,
                                           score_type,
                                           study,
@@ -52,16 +59,16 @@ calc_studies_hrs <- function(pheno_data,
                                                    study,
                                                    write_res,
                                                    res_dir)
-            coxph_res_tib <- run_and_add_coxph_ana(coxph_res_tib,
-                                               pheno_score_data,
-                                               "CCI",
-                                               study@endpt,
-                                               "SCORE_GROUP")
-            coxph_res_tib <- run_and_add_coxph_ana(coxph_res_tib,
-                                               pheno_score_data,
-                                               "CCI",
-                                               study@endpt,
-                                               "SCORE")
+            pheno_score_data$BIRTH_YEAR <- lubridate::year(pheno_score_data$DATE_OF_BIRTH)
+            coxph_mdl <- run_coxph_ana(pheno_score_data,
+                                       study@endpt,
+                                       predictor="SCORE_GROUP")
+
+            coxph_res_tib <- add_coxph_row(coxph_res_tib,
+                                           coxph_mdl,
+                                           score_type,
+                                           study@endpt,
+                                           pheno_score_data)
         } else {
             message(paste0("Not enough cases for endpoint: ", study@endpt, " No of cases: ", Istudy::get_n_cases(elig_indv, study@endpt)))
         }
@@ -73,4 +80,3 @@ calc_studies_hrs <- function(pheno_data,
 
     return(coxph_res_tib)
 }
-

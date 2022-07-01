@@ -4,7 +4,7 @@
 \alias{join_dfs}
 \title{Joins the two data.frames}
 \usage{
-join_dfs(pheno_data, score_data)
+join_dfs(pheno_data, score_data, score_type = "CCI", endpt = NA_character_)
 }
 \arguments{
 \item{pheno_data}{A data.frame with at least the columns:
@@ -18,6 +18,9 @@ the input variable \code{endpts}.}
 \item{score_data}{A data.frame. The score results for each individual.
 Should have at least column defined in
 \code{score_col_name} and column \code{ID}.}
+
+\item{score_type}{A character. The name of the score used for the model,
+i.e. CCI, or PheRS.}
 }
 \value{
 The joined data.frame
