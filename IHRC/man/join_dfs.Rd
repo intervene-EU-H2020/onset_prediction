@@ -9,18 +9,18 @@ join_dfs(pheno_data, score_data, score_type = "CCI", endpt = NA_character_)
 \arguments{
 \item{pheno_data}{A data.frame with at least the columns:
 \code{ID}, the columns specified in \code{covs} and
-i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_DATE} where the
-columns are the study endpoint and date, which will
-differ depending on the input variable \code{endpts}.}
+i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_AGE_DAYS} where
+the columns are the study endpoint and date, which
+will differ depending on the chosen \code{endpts}.}
 
-\item{score_data}{A data.frame. Needs at least column \code{SCORE} if
-\code{score_type = CCI}, or i.e. \code{J10_ASTHMA_PRS} for
-\code{score_type = PRS} depending on the chosen \code{endpts}.}
+\item{score_data}{A data.frame. If \code{score_type = CCI} needs at least
+column \code{SCORE}. If \code{score_type = PRS} columns of
+form\code{J10_ASTHMA_PRS} depending on the chosen \code{endpts}.}
 
 \item{score_type}{A character. The name of the score used for the model,
 i.e. CCI, or PheRS.}
 
-\item{endpt}{A string. The column name of the current endpoint of
+\item{endpt}{A character. The column name of the current endpoint of
 interest.}
 }
 \value{

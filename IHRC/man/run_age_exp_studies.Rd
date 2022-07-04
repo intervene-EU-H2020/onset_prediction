@@ -8,14 +8,14 @@ run_age_exp_studies(
   pheno_data,
   score_ages_data,
   score_type,
-  endpts,
+  bin_cut = 1,
+  endpts = c("J10_ASTHMA"),
   exp_ages = c(20, 30, 40),
   exp_len = 10,
   wash_len = 2,
   obs_len = 8,
   downsample_fctr = NA_real_,
   covs = c("SEX", "YEAR_OF_BIRTH"),
-  bin_cut = 1,
   write_res = FALSE,
   res_dir = NA
 )
@@ -23,9 +23,9 @@ run_age_exp_studies(
 \arguments{
 \item{pheno_data}{A data.frame with at least the columns:
 \code{ID}, the columns specified in \code{covs} and
-i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_DATE} where the
-columns are the study endpoint and date, which will
-differ depending on the input variable \code{endpts}.}
+i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_AGE_DAYS} where
+the columns are the study endpoint and date, which
+will differ depending on the chosen \code{endpts}.}
 
 \item{score_ages_data}{A named vector of tibbles.
 The score data for each indiviuals for different
@@ -33,6 +33,10 @@ exposure periods.}
 
 \item{score_type}{A character. The name of the score used for the model,
 i.e. CCI, or PheRS.}
+
+\item{bin_cut}{A numeric. The binary cutoff value for classifying high
+and low score individuals. Currently only in use if
+the \code{score_type == CCI}.}
 
 \item{endpts}{A string. The column names of the endpoints of
 interest.}
@@ -54,12 +58,8 @@ should be for every case.
 Default is NA, which means no
 downsampling is performed.}
 
-\item{covs}{A character. The column names of the covariates to add to
-the predictor of the Cox-PH model.}
-
-\item{bin_cut}{A numeric. The binary cutoff value for classifying high
-and low score individuals. Currently only in use if
-the \code{score_type} is \code{CCI}.}
+\item{covs}{A vector of characters. The column names of the covariates
+to add to the predictor of the Cox-PH model.}
 
 \item{write_res}{A boolean. Defines whether to save the results to
 files.}
@@ -68,7 +68,7 @@ files.}
 log to.}
 }
 \description{
-Calcualtes HR from a Cox-PH model for each exposure age and endpoint
+For more details see \link{calc_studies_hrs} function documentation.
 }
 \author{
 Kira E. Detrois

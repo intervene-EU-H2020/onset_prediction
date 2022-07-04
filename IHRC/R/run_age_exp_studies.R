@@ -1,5 +1,7 @@
 #' Calcualtes HR from a Cox-PH model for each exposure age and endpoint
 #' 
+#' For more details see \link{calc_studies_hrs} function documentation.
+#' 
 #' @inheritParams calc_studies_hrs
 #' @param score_ages_data A named vector of tibbles. 
 #'                        The score data for each indiviuals for different 
@@ -25,14 +27,14 @@
 run_age_exp_studies <- function(pheno_data, 
                                 score_ages_data,
                                 score_type,
-                                endpts,
+                                bin_cut=1,
+                                endpts=c("J10_ASTHMA"),
                                 exp_ages=c(20,30,40),
                                 exp_len=10,
                                 wash_len=2,
                                 obs_len=8,
                                 downsample_fctr=NA_real_,
                                 covs=c("SEX", "YEAR_OF_BIRTH"),
-                                bin_cut=1,
                                 write_res=FALSE,
                                 res_dir=NA) {
     for(exp_age in exp_ages) {
@@ -45,13 +47,20 @@ run_age_exp_studies <- function(pheno_data,
         calc_studies_hrs(pheno_data, 
                          score_ages_data[[exp_age]],
                          score_type,
+                         bin_cut,
                          studies,
                          covs,
-                         bin_cut,
-
                          write_res,
                          res_dir)
     }
+    read_and_plot_age_hrs(res_dir,
+                          score_type,
+                          bin_cut,
+                          exp_len,
+                          wash_len,
+                          obs_len,
+                          covs,
+                          write_res) 
 }
 
 #' Creates a vector of study objects for the different endpoints

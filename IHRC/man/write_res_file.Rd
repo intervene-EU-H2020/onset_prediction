@@ -4,7 +4,7 @@
 \alias{write_res_file}
 \title{Writes model results to a tab-delim file}
 \usage{
-write_res_file(coxph_res_tib, score_type, study, bin_cut, write_res, res_dir)
+write_res_file(coxph_res_tib, score_type, bin_cut, study, write_res, res_dir)
 }
 \arguments{
 \item{coxph_res_tib}{A tibble with the results for previous endpoints.}
@@ -12,11 +12,11 @@ write_res_file(coxph_res_tib, score_type, study, bin_cut, write_res, res_dir)
 \item{score_type}{A character. The name of the score used for the model,
 i.e. CCI, or PheRS.}
 
-\item{study}{An S4 class representing the study setup.}
-
 \item{bin_cut}{A numeric. The binary cutoff value for classifying high
 and low score individuals. Currently only in use if
-the \code{score_type} is \code{CCI}.}
+the \code{score_type == CCI}.}
+
+\item{study}{An S4 class representing the study setup.}
 
 \item{write_res}{A boolean. Defines whether to save the results to
 files.}

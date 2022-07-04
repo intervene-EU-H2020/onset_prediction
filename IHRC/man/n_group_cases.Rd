@@ -8,12 +8,12 @@ n_group_cases(elig_indv, groups, endpt)
 }
 \arguments{
 \item{elig_indv}{A tibble. The individuals which were eligble under
-the current study setup. Needs to at least contain
-the column defined in \code{endpt}.}
+the current study setup. Needs to at least
+contain the column defined in \code{endpt}.}
 
 \item{groups}{A character. The groups in the Cox-PH model.}
 
-\item{endpt}{A string. The column name of the current endpoint of
+\item{endpt}{A character. The column name of the current endpoint of
 interest.}
 }
 \description{

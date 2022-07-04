@@ -16,11 +16,12 @@
 #       pheno_data <- Istudy::create_test_df(100000)
 #       icd_data <- ILongDataUtils::create_test_df_multi_icd_ver(n_icd10=50000, 
 #                                                                icd10_indv=pheno_data$ID)
-#       exp_ages <- c(20,30)
+#       exp_ages <- c(20,30,40,50,60)
 #       score_age_data <- get_cci_score_age_data(icd_data, exp_ages, exp_len=10)
-#       run_age_exp_studies(pheno_data, 
+#       expect_error(run_age_exp_studies(pheno_data, 
 #                           score_age_data,
 #                           score_type="CCI",
+#                           bin_cut=1,
 #                           exp_ages=exp_ages,
 #                           exp_len=10,
 #                           wash_len=2,
@@ -31,9 +32,8 @@
 #                                    "COVHOSP"),
 #                           downsample_fctr=4,
 #                           covs=c("SEX", "YEAR_OF_BIRTH"),
-#                           bin_cut=1,
 #                           write_res=TRUE,
-#                           res_dir="/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/")
+#                           res_dir="/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/"), regexp=NA)
 
 #    } else {
 #       message("Could not run tests, because ICCI is not available.")

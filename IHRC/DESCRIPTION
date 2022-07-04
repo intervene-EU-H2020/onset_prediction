@@ -1,10 +1,10 @@
 Package: IHRC
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Fits a Cox-proportional hazards model for specific study setups and risk scores.
+Version: 1.0.0
 Authors@R: 
     person("Kira E.", "Detrois", , "kira.detrois@helsinki.fi", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-7193-624X"))
-Description: What the package does (one paragraph).
+Description: The goal of this package is to fit a Cox-proportional hazards model to longitudinal data given different study setups. For creating a study setups see package `Istudy`. Runs the analyis based on risk groups. For `PRS` these are based on the quantiles, where the 40-60% group is the reference group. For `CCI` compares two groups based on a cutoff defined in `bin_cut`.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -19,5 +19,6 @@ Imports:
     Istudy,
     methods,
     readr,
+    stringr,
     survival,
     tibble

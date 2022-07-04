@@ -2,14 +2,15 @@
 % Please edit documentation in R/add_risk_group_col.R
 \name{get_two_level_groups}
 \alias{get_two_level_groups}
-\title{Gets the risk score groups for each individual based on a single cutoff}
+\title{Gets the risk score groups for each individual based on a single
+cutoff}
 \usage{
 get_two_level_groups(score_data, cutoff)
 }
 \arguments{
-\item{score_data}{A data.frame. Needs at least column \code{SCORE} if
-\code{score_type = CCI}, or i.e. \code{J10_ASTHMA_PRS} for
-\code{score_type = PRS} depending on the chosen \code{endpts}.}
+\item{score_data}{A data.frame. If \code{score_type = CCI} needs at least
+column \code{SCORE}. If \code{score_type = PRS} columns of
+form\code{J10_ASTHMA_PRS} depending on the chosen \code{endpts}.}
 
 \item{cutoff}{A numeric. The score cutoff value.}
 }
@@ -17,7 +18,8 @@ get_two_level_groups(score_data, cutoff)
 A character. The group names.
 }
 \description{
-Gets the risk score groups for each individual based on a single cutoff
+Gets the risk score groups for each individual based on a single
+cutoff
 }
 \author{
 Kira E. Detrois

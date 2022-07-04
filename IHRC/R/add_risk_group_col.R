@@ -20,12 +20,16 @@
 #' @author Kira E. Detrois
 add_risk_group_col <- function(score_data,
                                score_type,
-                               study,
                                bin_cut=1,
+                               study,
                                write_res=FALSE,
                                res_dir=NA_character_) {
     if(score_type != "CCI") {
-        indv_score_groups <- get_indvs_score_groups(score_data)
+        quantiles <- c(0,0.01,0.05,0.1,0.2,0.4,0.6,0.8,0.9,0.95,0.99,1)
+        score_group_tbl <- get_score_group_tbl(score_data, 
+                                               quantiles)
+        indv_score_groups <- get_indvs_score_groups(score_data,
+                                                    score_group_tbl)
         write_score_groups_to_log(score_group_tbl,
                                   score_type,
                                   study,
@@ -44,14 +48,13 @@ add_risk_group_col <- function(score_data,
 #' table
 #' 
 #' @inheritParams add_risk_group_col
+#' @inheritParams get_group_labs
 #' 
 #' @return A factor. The risk score group for each individual.
 #' 
 #' @author Kira E. Detrois
-get_indvs_score_groups <- function(score_data) {
-    quantiles <- c(0,0.01,0.05,0.1,0.2,0.4,0.6,0.8,0.9,0.95,0.99,1)
-    score_group_tbl <- get_score_group_tbl(score_data, 
-                                           quantiles)
+get_indvs_score_groups <- function(score_data,
+                                   score_group_tbl) {
     # Risk group left-open intervals for each individual
     indv_score_groups <- cut(score_data$SCORE,
                              breaks=score_group_tbl,

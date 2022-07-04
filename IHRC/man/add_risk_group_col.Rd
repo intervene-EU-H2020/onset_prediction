@@ -7,8 +7,8 @@
 add_risk_group_col(
   score_data,
   score_type,
-  study,
   bin_cut = 1,
+  study,
   write_res = FALSE,
   res_dir = NA_character_
 )
@@ -19,11 +19,11 @@ add_risk_group_col(
 \item{score_type}{A character. The name of the score used for the model,
 i.e. CCI, or PheRS.}
 
-\item{study}{An S4 class representing the study setup.}
-
 \item{bin_cut}{A numeric. The binary cutoff value for classifying high
 and low score individuals. Currently only in use if
-the \code{score_type} is \code{CCI}.}
+the \code{score_type == CCI}.}
+
+\item{study}{An S4 class representing the study setup.}
 
 \item{write_res}{A boolean. Defines whether to save the results to
 files.}
@@ -35,12 +35,17 @@ log to.}
 The data.frame with the added risk group column
 }
 \description{
-The risk groups are quantiles based on the score distribution
-of all individuals in the data. They are given as left-open
-intervals i.e. first risk group could be an interval 0\% <= x < 60\%
-and would be called \verb{Group 60\%}, the second risk group could then
-go from i.e. 60\% <= x <= 80\%  and would be indicated as \verb{Group 80\%}
-etc.
+For CCI gets two risk groups based on the cutoff value \code{bin_cut}.
+The groups are then \verb{<= bin_cut} and \verb{>bin_cut}.
+}
+\details{
+For PRS bases the risk grouping on the quantiles
+\code{c(0,0.01,0.05,0.1,0.2,0.4,0.6,0.8,0.9,0.95,0.99,1)} for the score
+distribution of all individuals in the data.
+The resulting intervals are left-open, except the first one which
+is both right- and left-open. I.e. the first risk group is an
+interval 0\% <= x <= 1\% and the second risk group is then the interval
+1\% < x <= 5\% etc.
 }
 \author{
 Kira E. Detrois

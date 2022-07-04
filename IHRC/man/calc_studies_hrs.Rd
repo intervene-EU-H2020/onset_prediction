@@ -8,9 +8,9 @@ calc_studies_hrs(
   pheno_data,
   score_data,
   score_type,
+  bin_cut = 1,
   studies,
   covs = c("SEX", "YEAR_OF_BIRTH"),
-  bin_cut = 1,
   write_res = FALSE,
   res_dir = NA
 )
@@ -18,25 +18,25 @@ calc_studies_hrs(
 \arguments{
 \item{pheno_data}{A data.frame with at least the columns:
 \code{ID}, the columns specified in \code{covs} and
-i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_DATE} where the
-columns are the study endpoint and date, which will
-differ depending on the input variable \code{endpts}.}
+i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_AGE_DAYS} where
+the columns are the study endpoint and date, which
+will differ depending on the chosen \code{endpts}.}
 
-\item{score_data}{A data.frame. Needs at least column \code{SCORE} if
-\code{score_type = CCI}, or i.e. \code{J10_ASTHMA_PRS} for
-\code{score_type = PRS} depending on the chosen \code{endpts}.}
+\item{score_data}{A data.frame. If \code{score_type = CCI} needs at least
+column \code{SCORE}. If \code{score_type = PRS} columns of
+form\code{J10_ASTHMA_PRS} depending on the chosen \code{endpts}.}
 
 \item{score_type}{A character. The name of the score used for the model,
 i.e. CCI, or PheRS.}
 
-\item{studies}{A vector of S4 classes representing the study setups.}
-
-\item{covs}{A character. The column names of the covariates to add to
-the predictor of the Cox-PH model.}
-
 \item{bin_cut}{A numeric. The binary cutoff value for classifying high
 and low score individuals. Currently only in use if
-the \code{score_type} is \code{CCI}.}
+the \code{score_type == CCI}.}
+
+\item{studies}{A vector of S4 classes representing the study setups.}
+
+\item{covs}{A vector of characters. The column names of the covariates
+to add to the predictor of the Cox-PH model.}
 
 \item{write_res}{A boolean. Defines whether to save the results to
 files.}
@@ -44,8 +44,26 @@ files.}
 \item{res_dir}{A character. The directory to write the results and
 log to.}
 }
+\value{
+A tibble with columns \code{Endpoint}, \code{Score}, \code{Group},
+\code{N_controls}, \code{N_cases}, \code{beta}, \code{std_errs}, \code{p_val}, \code{HR},
+\code{CI_pos}, \code{CI_neg}. The Cox-PH analysis results for all
+selected endpoints.
+}
 \description{
-Calcualtes HR from a Cox-PH model for each endpoint
+Fits a Cox-proportional hazards model for the different studies.
+}
+\details{
+Selects individuals from the data that are eligible given each of the
+studies. For more details see package \code{Istudy} and function
+\link[Istudy]{get_study_elig_indv}. Runs the analyis based on risk
+groups. For \code{PRS} these are based on the quantiles, where the 40-60\%
+group is the reference group. For \code{CCI} compares two groups based on a
+cutoff defined in \code{bin_cut}.
+
+For i.e. endpoint \code{J10_ASTHMA} and \code{covs = c("SEX", "YEAR_OF_BIRTH")}
+the model would be
+\code{Surv(J10_ASTHMA_AGE_DAYS, J10_ASTHMA) ~ SCORE_GROUP + SEX + YEAR_OF_BIRTH}.
 }
 \author{
 Kira E. Detrois

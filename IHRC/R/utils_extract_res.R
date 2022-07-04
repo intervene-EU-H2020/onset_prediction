@@ -25,14 +25,14 @@ create_empty_coxph_res_tib <- function() {
 #' @inheritParams calc_studies_hrs
 #' @inheritParams run_coxph_ana
 #' @param elig_indv A tibble. The individuals which were eligble under
-#'                        the current study setup. Needs to at least contain
-#'                        the column defined in `endpt`.
+#'                        the current study setup. Needs to at least 
+#'                        contain the column defined in `endpt`.
 #' 
 #' @return A tibble. The updated `coxph_res_tib` with the added results for
 #'          the current endpoint.
 #'                        
 #' @author Kira E. Detrois 
-add_coxph_row <- function(coxph_res_tib,
+add_coxph_res_row <- function(coxph_res_tib,
                           coxph_mdl,
                           score_type,
                           endpt,
@@ -40,7 +40,6 @@ add_coxph_row <- function(coxph_res_tib,
 
     if(!is.null(coxph_mdl)) {
         coxph_res_list <- extract_coxph_res(coxph_mdl)
-        print("after extract")
         n_cases <- n_group_cases(elig_indv, 
                                  coxph_res_list$groups,
                                  endpt)
@@ -66,7 +65,7 @@ add_coxph_row <- function(coxph_res_tib,
 
 #' Extracts the relevant results from the Cox-PH model
 #' 
-#' @inheritParams add_coxph_row
+#' @inheritParams add_coxph_res_row
 #' 
 #' @return A list(`beta`, `std_err`, `p_val`, `HR`, `CI`, `groups`).
 #' 

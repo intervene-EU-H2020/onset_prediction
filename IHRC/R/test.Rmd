@@ -1,34 +1,7 @@
 ```{r}
-#' Creates the labels for each risk score group
-#' 
-#' @param score_group_tbl A named numeric. The risk score cuts for the 
-#'                          different quantiles.
-#' 
-#' @return A character. The group names.
-#' 
-#' @author Kira E. Detrois
-get_group_labs <- function(score_group_tbl) {
-    down_group <- paste("Group", 
-                        names(score_group_tbl[1:length(score_group_tbl)-1]))
-    down_group[1] <- paste0("[", down_group)
-    down_group[2:length(down_group)] <- paste0("(", down_group[2:length(down_group)])
-    up_group <-  paste("Group", 
-                        names(score_group_tbl[2:length(score_group_tbl)]))
-    up_group <- paste0(up_group, "]")
-    group_labs <- paste0(down_group, " - " , up_group)
-}
+library(stringr)
 
-test_tbl <- c(0, 0.25, 2.3, 4.9, 5)
-names(test_tbl) <- c(0, 0.1, 0.5, 0.9, 1)
-test_data <- c(0, 0.1, 0.4, 2.3, 4.9, 4.9, 5, 5, 5, 0.25)
 
-cut(test_data, 
-    breaks=test_tbl, 
-    labels=get_group_labs(test_tbl),
-    include.lowest=TRUE)
-
-cut(test_data, 
-    breaks=test_tbl, 
-    labels=names(test_tbl[1:4]),
-    include.lowest=TRUE)
+covs <- c("SEX", "YEAR_OF_BIRTH", "PC3") 
+get_pretty_covs_string(covs)
 ```
