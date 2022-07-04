@@ -1,7 +1,0 @@
-```{r}
-library(stringr)
-
-
-covs <- c("SEX", "YEAR_OF_BIRTH", "PC3") 
-get_pretty_covs_string(covs)
-```
