@@ -13,12 +13,12 @@
 #' @export 
 #' 
 #' @author Kira E. Detrois
-preprocess_long_data <- function(long_data,
+preprocess_icd_data <- function(icd_data,
                                  exp_start=NA,
                                  exp_end=NA) {
-    long_data <- ILongDataUtils::get_exposure_data(long_data, 
+    icd_data <- ILongDataUtils::get_exposure_data(icd_data, 
                                                    exp_start, 
                                                    exp_end)
-    long_data <- add_num_id_col(long_data)
-    return(long_data)
+    icd_data <- add_num_id_col(icd_data)
+    return(icd_data)
 }

@@ -11,7 +11,7 @@
 #' 
 #' @param cci_scores A data.frame with at least column `ID_num`, 
 #'                   and ideally column `score`.
-#' @param long_data A data.frame with at least columns `ID_num` and 
+#' @param icd_data A data.frame with at least columns `ID_num` and 
 #'                  `ID`.
 #' 
 #' @return A data.frame with an added column with the original IDs 
@@ -21,8 +21,8 @@
 #' 
 #' @author Kira E. Detrois
 add_back_orig_ids <- function(cci_scores, 
-                              long_data) {
+                              icd_data) {
     ILongDataUtils::add_map_col(cci_scores,
-                        dplyr::select(long_data, ID, ID_num),
+                        dplyr::select(icd_data, ID, ID_num),
                         "ID_num")
 }

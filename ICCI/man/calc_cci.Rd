@@ -4,22 +4,25 @@
 \alias{calc_cci}
 \title{Calculates the Charlson Comorbidity Index based on ICD-codes}
 \usage{
-calc_cci(long_data, exp_start = NA, exp_end = NA)
+calc_cci(icd_data, exp_start = NA, exp_end = NA)
 }
 \arguments{
-\item{long_data}{A data.frame with at least columns \code{ID}, and
+\item{icd_data}{A data.frame with at least columns \code{ID}, and
 \code{PRIMARY_ICD}.}
 
 \item{exp_start}{A numeric. Start of the exposure period. Can be
 used to restrict the timeframe on which the index
 should be calculated. In this case the data.frame
-needs column \code{Event_age}.}
+needs column \code{Event_age}.
+In case it is a vector has to have the length of
+the number of rows in \code{icd_data}.}
 
 \item{exp_end}{A numeric. End of the exposure period.
-Can be
-used to restrict the timeframe on which the index
+Can be used to restrict the timeframe on which the index
 should be calculated. In this case the data.frame
-needs column \code{Event_age}.}
+needs column \code{Event_age}.
+In case it is a vector has to have the length of
+the number of rows in \code{icd_data}.}
 }
 \value{
 A tibble with columns \code{ID} and \code{score}.

@@ -5,10 +5,10 @@
 \title{Calculates the Charlson Comorbidity Index for a specific
 ICD-version}
 \usage{
-calc_icd_ver_spec_ccis(long_data, icd_version)
+calc_icd_ver_spec_ccis(icd_data, icd_version)
 }
 \arguments{
-\item{long_data}{A data.frame with at least columns \code{ID}, and
+\item{icd_data}{A data.frame with at least columns \code{ID}, and
 \code{PRIMARY_ICD}.}
 
 \item{icd_version}{The ICD-version in INTERVENE format.

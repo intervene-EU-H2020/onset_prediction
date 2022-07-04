@@ -4,10 +4,10 @@
 \alias{add_num_id_col}
 \title{Adds a column with numeric IDs}
 \usage{
-add_num_id_col(long_data)
+add_num_id_col(icd_data)
 }
 \arguments{
-\item{long_data}{A data.frame with at least column \code{ID}.}
+\item{icd_data}{A data.frame with at least column \code{ID}.}
 }
 \value{
 A data.frame with at least columns \code{ID}, and \code{ID_num}.
@@ -17,9 +17,9 @@ Adds a new column to the data.frame with numeric IDs which is
 called \code{ID_num}.
 }
 \examples{
-long_data <- tibble::tibble(ID = c("KT011", "KT002", "KT011"), 
+icd_data <- tibble::tibble(ID = c("KT011", "KT002", "KT011"), 
                             something = c("t1", "t2", "t3"))
-add_num_id_col(long_data)
+add_num_id_col(icd_data)
 
 }
 \author{

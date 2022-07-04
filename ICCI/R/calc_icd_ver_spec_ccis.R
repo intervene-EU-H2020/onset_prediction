@@ -22,10 +22,10 @@
 #' @export
 #' 
 #' @author Kira E. Detrois
-calc_icd_ver_spec_ccis <- function(long_data,
+calc_icd_ver_spec_ccis <- function(icd_data,
                                    icd_version) {
-    test_icd_ver_correct(long_data)
-    comorb_tbl <- comorbidity::comorbidity(long_data,
+    test_icd_ver_correct(icd_data)
+    comorb_tbl <- comorbidity::comorbidity(icd_data,
                                            "ID_num",
                                            "primary_ICD",
                                            map=get_comorb_icd_ver_str(icd_version),
@@ -33,12 +33,12 @@ calc_icd_ver_spec_ccis <- function(long_data,
     cci_scores <- comorbidity::score(comorb_tbl,
                                      weights = "charlson",
                                      assign0 = FALSE)
-    cci_scores <- map_cci_scores_to_num_ids(cci_scores, long_data$ID_num)
+    cci_scores <- map_cci_scores_to_num_ids(cci_scores, icd_data$ID_num)
 
     return(cci_scores)
 }
 
-test_icd_ver_correct <- function(long_data) {
-    n_icd_versions <- length(unique(long_data$ICD_version)) 
+test_icd_ver_correct <- function(icd_data) {
+    n_icd_versions <- length(unique(icd_data$ICD_version)) 
     assertthat::assert_that(n_icd_versions == 1)            
 }

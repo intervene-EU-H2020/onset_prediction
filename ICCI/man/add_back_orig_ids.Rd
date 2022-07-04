@@ -4,13 +4,13 @@
 \alias{add_back_orig_ids}
 \title{Add column with original IDs}
 \usage{
-add_back_orig_ids(cci_scores, long_data)
+add_back_orig_ids(cci_scores, icd_data)
 }
 \arguments{
 \item{cci_scores}{A data.frame with at least column \code{ID_num},
 and ideally column \code{score}.}
 
-\item{long_data}{A data.frame with at least columns \code{ID_num} and
+\item{icd_data}{A data.frame with at least columns \code{ID_num} and
 \code{ID}.}
 }
 \value{
