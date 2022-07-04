@@ -1,5 +1,9 @@
 #' Downsamples the number of controls in the data
 #' 
+#' Given the same number of cases and the same indices
+#' will always sample the same individuals. This allows 
+#' reproducibility of the study selection.
+#' 
 #' @inheritParams get_n_cases
 #' @inheritParams get_study_elig_indv
 #' 
@@ -16,6 +20,7 @@ downsample_cntrls <- function(pheno_data,
 
     cntrl_idxs <- which(pheno_data[[study@endpt]] == 0)
     case_idxs <- which(pheno_data[[study@endpt]] == 1)
+    set.seed(1923)
     cntrl_idxs_down <- sample(cntrl_idxs, size=n_cntrls, replace=FALSE)
 
     select_idxs <- sort(c(cntrl_idxs_down, case_idxs))

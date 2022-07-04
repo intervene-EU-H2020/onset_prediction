@@ -5,9 +5,6 @@ test_that("filter_ancestry works", {
                               ancs="EUR")
   expect_ids <- c("KT000002", "KT000004")
   expect_equal(expect_ids, res_data$ID)
-    print(test_data %>% dplyr::select(ID, ANCESTRY), n=10)
-    print(res_data %>% dplyr::select(ID, ANCESTRY), n=10)
-
 })
 
 test_that("filter_ancestry works", {
