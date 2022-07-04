@@ -17,7 +17,7 @@
 #'         }
 #' @importFrom dplyr %>%
 #' @export
-group_long_data_by_icd_ver <- function(long_data) {
+group_icd_data_by_ver <- function(long_data) {
     groups <- long_data %>%
                 dplyr::group_by(ICD_version, .drop=FALSE)
     group_keys <-  groups %>%
