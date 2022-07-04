@@ -15,7 +15,9 @@ downsample_cntrls(pheno_data, study)
 The downsampled data.frame.
 }
 \description{
-Downsamples the number of controls in the data
+Given the same number of cases and the same indices
+will always sample the same individuals. This allows
+reproducibility of the study selection.
 }
 \author{
 Kira E. Detrois
