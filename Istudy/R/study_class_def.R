@@ -9,6 +9,7 @@
 #'                                   should be for every case.
 #'                                   Default is NA, which means no
 #'                                   downsampling is performed.
+#' @slot ancs A character (vector). The ancestries to consider.
 #' @importFrom methods new
 #' @export
 #' 

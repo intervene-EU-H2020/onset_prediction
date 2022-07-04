@@ -25,6 +25,8 @@ An S4 class representing the study setup
 should be for every case.
 Default is NA, which means no
 downsampling is performed.}
+
+\item{\code{ancs}}{A character (vector). The ancestries to consider.}
 }}
 
 \author{
