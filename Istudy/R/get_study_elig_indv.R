@@ -65,8 +65,3 @@ get_study_elig_indv <- function(pheno_data,
     return(elig_indv)
 }
 
-filter_ancestry <- function(pheno_data,
-                            ancs="EUR") {
-    dplyr::filter(pheno_data, 
-                  ANCESTRY %in% ancs)
-}
