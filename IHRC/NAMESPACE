@@ -2,7 +2,7 @@
 
 export(calc_studies_hrs)
 export(create_endpts_study_objs)
-export(get_score_groups)
+export(get_score_group_tbl)
 export(plot_endpt_score_distr)
 export(plot_score_distr)
 export(run_age_exp_studies)

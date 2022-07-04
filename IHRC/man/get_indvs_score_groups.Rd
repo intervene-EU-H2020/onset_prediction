@@ -5,15 +5,10 @@
 \title{Gets the risk score groups for each individual based on a score cutoff
 table}
 \usage{
-get_indvs_score_groups(score_data, score_group_tbl)
+get_indvs_score_groups(score_data)
 }
 \arguments{
-\item{score_data}{A data.frame. Needs at least column \code{SCORE} if
-\code{score_type = CCI}, or i.e. \code{J10_ASTHMA_PRS} for
-\code{score_type = PRS} depending on the chosen \code{endpts}.}
-
-\item{score_group_tbl}{A named numeric. The risk score cuts for the
-different quantiles.}
+\item{score_data}{A data.frame with at least column \code{SCORE}.}
 }
 \value{
 A factor. The risk score group for each individual.

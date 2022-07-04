@@ -8,15 +8,13 @@ add_risk_group_col(
   score_data,
   score_type,
   study,
-  bin_cut = NA_integer_,
+  bin_cut = 1,
   write_res = FALSE,
   res_dir = NA_character_
 )
 }
 \arguments{
-\item{score_data}{A data.frame. Needs at least column \code{SCORE} if
-\code{score_type = CCI}, or i.e. \code{J10_ASTHMA_PRS} for
-\code{score_type = PRS} depending on the chosen \code{endpts}.}
+\item{score_data}{A data.frame with at least column \code{SCORE}.}
 
 \item{score_type}{A character. The name of the score used for the model,
 i.e. CCI, or PheRS.}

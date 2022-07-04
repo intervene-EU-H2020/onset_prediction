@@ -29,7 +29,7 @@ calc_studies_hrs <- function(pheno_data,
                              score_type,
                              studies,
                              covs=c("SEX", "YEAR_OF_BIRTH"),
-                             bin_cut=NA_integer_,
+                             bin_cut=1,
                              write_res=FALSE,
                              res_dir=NA) {
 

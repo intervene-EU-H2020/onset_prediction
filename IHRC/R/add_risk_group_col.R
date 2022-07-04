@@ -1,4 +1,3 @@
-
 #' Adds a risk group column
 #' 
 #' The risk groups are quantiles based on the score distribution
@@ -8,6 +7,7 @@
 #' go from i.e. 60% <= x <= 80%  and would be indicated as `Group 80%`
 #' etc. 
 #' 
+#' @param score_data A data.frame with at least column `SCORE`.
 #' @param study An S4 class representing the study setup.
 #' @inheritParams calc_studies_hrs
 #' 
@@ -17,25 +17,48 @@
 add_risk_group_col <- function(score_data,
                                score_type,
                                study,
-                               bin_cut=NA_integer_,
+                               bin_cut=1,
                                write_res=FALSE,
                                res_dir=NA_character_) {
     if(score_type != "CCI") {
-        quantiles <- c(0,0.01,0.05,0.1,0.2,0.4,0.6,0.8,0.9,0.95,0.99,1)
-        score_group_tbl <- get_score_groups(score_data, quantiles)
-        indv_score_groups <- get_indvs_score_groups(score_data, score_group_tbl)
+        indv_score_groups <- get_indvs_score_groups(score_data)
         write_score_groups_to_log(score_group_tbl,
                                   score_type,
                                   study,
                                   write_res,
                                   res_dir)
     } else {
-        indv_score_groups <- get_two_level_groups(score_data, cutoff=bin_cut)
+        indv_score_groups <- get_two_level_groups(score_data, 
+                                                  bin_cut)
     }
     score_data <- tibble::add_column(score_data, 
                                      SCORE_GROUP=indv_score_groups)
     return(score_data)
 }
+
+#' Gets the risk score groups for each individual based on a score cutoff
+#' table
+#' 
+#' @inheritParams add_risk_group_col
+#' 
+#' @return A factor. The risk score group for each individual.
+#' 
+#' @author Kira E. Detrois
+get_indvs_score_groups <- function(score_data) {
+    quantiles <- c(0,0.01,0.05,0.1,0.2,0.4,0.6,0.8,0.9,0.95,0.99,1)
+    score_group_tbl <- get_score_group_tbl(score_data, 
+                                           quantiles)
+    # Risk group left-open intervals for each individual
+    indv_score_groups <- cut(score_data$SCORE,
+                             breaks=score_group_tbl,
+                             labels=get_group_labs(score_group_tbl),
+                             include.lowest=TRUE, # Include Group 0%
+                             right=FALSE) # left-open intervals
+    indv_score_groups <- stats::relevel(indv_score_groups, ref="(Group 40% - Group 60%]")
+
+    return(indv_score_groups)
+}
+
 
 #' Get's the score cutoff values 
 #' 
@@ -48,34 +71,11 @@ add_risk_group_col <- function(score_data,
 #' @export 
 #' 
 #' @author Kira E. Detrois
-get_score_groups <- function(score_data, 
-                             quantiles) {
+get_score_group_tbl <- function(score_data, 
+                                quantiles) {
     stats::quantile(score_data$SCORE, 
                     probs=quantiles,
                     na.rm=TRUE)
-}
-
-#' Gets the risk score groups for each individual based on a score cutoff
-#' table
-#' 
-#' @inheritParams add_risk_group_col
-#' @inheritParams get_group_labs
-#' 
-#' @return A factor. The risk score group for each individual.
-#' 
-#' @author Kira E. Detrois
-get_indvs_score_groups <- function(score_data, 
-                                   score_group_tbl) {
-
-    # Risk group left-open intervals for each individual
-    indv_score_groups <- cut(score_data$SCORE,
-                             breaks=score_group_tbl,
-                             labels=get_group_labs(score_group_tbl),
-                             include.lowest=TRUE, # Include last break
-                             right=FALSE) # left-open intervals
-    indv_score_groups <- stats::relevel(indv_score_groups, ref="[Group 40% - Group 60%)")
-
-    return(indv_score_groups)
 }
 
 #' Creates the labels for each risk score group
@@ -89,11 +89,11 @@ get_indvs_score_groups <- function(score_data,
 get_group_labs <- function(score_group_tbl) {
     down_group <- paste("Group", 
                         names(score_group_tbl[1:length(score_group_tbl)-1]))
-    down_group <- paste0("[", down_group)
+    down_group[1] <- paste0("[", down_group[1])
+    down_group[2:length(down_group)] <- paste0("(", down_group[2:length(down_group)])
     up_group <-  paste("Group", 
                         names(score_group_tbl[2:length(score_group_tbl)]))
-    up_group[length(up_group)] <- paste0(up_group[length(up_group)], "]")
-    up_group[1:(length(up_group)-1)] <- paste0(up_group[1:(length(up_group)-1)], ")")
+    up_group <- paste0(up_group, "]")
     group_labs <- paste0(down_group, " - " , up_group)
 }
 

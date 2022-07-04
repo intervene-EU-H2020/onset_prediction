@@ -15,7 +15,7 @@ run_age_exp_studies(
   obs_len = 8,
   downsample_fctr = NA_real_,
   covs = c("SEX", "YEAR_OF_BIRTH"),
-  bin_cut = NA_integer_,
+  bin_cut = 1,
   write_res = FALSE,
   res_dir = NA
 )
