@@ -34,6 +34,7 @@ run_age_exp_studies <- function(pheno_data,
                                 wash_len=2,
                                 obs_len=8,
                                 downsample_fctr=NA_real_,
+                                ancs="EUR",
                                 covs=c("SEX", "YEAR_OF_BIRTH"),
                                 write_res=FALSE,
                                 res_dir=NA) {
@@ -89,7 +90,7 @@ create_endpts_study_objs <- function(endpts,
                                          wash_len=wash_len,
                                          obs_len=obs_len,
                                          downsample_fctr=downsample_fctr,
-                                         ancs=c("EUR"))
+                                         ancs=ancs)
     }
     return(studies)
 }
