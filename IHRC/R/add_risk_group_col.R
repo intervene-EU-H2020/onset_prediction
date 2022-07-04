@@ -1,11 +1,15 @@
 #' Adds a risk group column
 #' 
-#' The risk groups are quantiles based on the score distribution
-#' of all individuals in the data. They are given as left-open
-#' intervals i.e. first risk group could be an interval 0% <= x < 60%
-#' and would be called `Group 60%`, the second risk group could then 
-#' go from i.e. 60% <= x <= 80%  and would be indicated as `Group 80%`
-#' etc. 
+#' For CCI gets two risk groups based on the cutoff value `bin_cut`.
+#' The groups are then `<= bin_cut` and `>bin_cut`.
+#' 
+#' For PRS bases the risk grouping on the quantiles 
+#' `c(0,0.01,0.05,0.1,0.2,0.4,0.6,0.8,0.9,0.95,0.99,1)` for the score
+#' distribution of all individuals in the data. 
+#' The resulting intervals are left-open, except the first one which
+#' is both right- and left-open. I.e. the first risk group is an 
+#' interval 0% <= x <= 1% and the second risk group is then the interval
+#' 1% < x <= 5% etc. 
 #' 
 #' @param score_data A data.frame with at least column `SCORE`.
 #' @param study An S4 class representing the study setup.
@@ -97,7 +101,8 @@ get_group_labs <- function(score_group_tbl) {
     group_labs <- paste0(down_group, " - " , up_group)
 }
 
-#' Gets the risk score groups for each individual based on a single cutoff
+#' Gets the risk score groups for each individual based on a single 
+#' cutoff
 #' 
 #' @inheritParams calc_studies_hrs 
 #' @param cutoff A numeric. The score cutoff value.
