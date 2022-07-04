@@ -58,9 +58,15 @@ get_study_elig_indv <- function(pheno_data,
     }
 
     pheno_data <- add_diag_time_cols(pheno_data, study)
+    pheno_data <- filter_ancestry(pheno_data, study@ancs)
     elig_indv <- create_return_tib(pheno_data, study@endpt)
     write_res_files(elig_indv, study, write_res, res_dir)
 
     return(elig_indv)
 }
 
+filter_ancestry <- function(pheno_data,
+                            ancs="EUR") {
+    dplyr::filter(pheno_data, 
+                  ANCESTRY %in% ancs)
+}

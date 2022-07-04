@@ -14,7 +14,7 @@ create_test_df <- function(n_indv=10) {
     sf_samples <- draw_sf_samples(n_indv, bd_samples)
     ef_samples <- draw_ef_samples(n_indv, sf_samples)
 
-    anc_samples <- draw_anc_samples(n_indv)
+    anc_samples <- draw_anc_samples(n_indv) 
     breast_cancer_samples <- draw_sex_spec_cases(n_indv, sex_samples, "female", 0.07, sf_samples)
     t2d_samples <- draw_cases(n_indv, 0.15, 0.03, sf_samples)
     prost_cancer_samples <- draw_sex_spec_cases(n_indv, sex_samples, "male", 0.08, sf_samples)

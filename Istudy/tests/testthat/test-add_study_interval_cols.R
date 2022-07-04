@@ -13,7 +13,7 @@ test_that("add_study_interval_cols works for tibbles", {
                 exp_age=10,
                 exp_len=10,
                 wash_len=2,
-                obs_len=8)
+                obs_len=8, ancs="EUR")
   res_df = add_study_interval_cols(test_df, study)
   expect_equal(res_df$ENDPT_FREE, expected_df$ENDPT_FREE)
   expect_equal(res_df$STUDY_TIME, expected_df$STUDY_TIME)
@@ -31,7 +31,7 @@ test_that("add_study_interval_cols works equally for data.frames", {
                 exp_age=10,
                 exp_len=10,
                 wash_len=2,
-                obs_len=8)
+                obs_len=8, ancs="EUR")
   res_df = add_study_interval_cols(test_df, study)
   expect_equal(res_df$ENDPT_FREE, expected_df$ENDPT_FREE)
   expect_equal(res_df$STUDY_TIME, expected_df$STUDY_TIME)

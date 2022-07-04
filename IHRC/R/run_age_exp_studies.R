@@ -78,7 +78,8 @@ create_endpts_study_objs <- function(endpts,
                                      exp_len=10,
                                      wash_len=2,
                                      obs_len=8,
-                                     downsample_fctr=NA_real_) {
+                                     downsample_fctr=NA_real_,
+                                     ancs=c("EUR")) {
     studies <- list()
     for(endpt in endpts) {
         studies[[endpt]] <- methods::new("study",
@@ -87,7 +88,8 @@ create_endpts_study_objs <- function(endpts,
                                          exp_len=exp_len,
                                          wash_len=wash_len,
                                          obs_len=obs_len,
-                                         downsample_fctr=downsample_fctr)
+                                         downsample_fctr=downsample_fctr,
+                                         ancs=c("EUR"))
     }
     return(studies)
 }
