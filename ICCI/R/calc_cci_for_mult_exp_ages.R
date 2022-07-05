@@ -16,12 +16,13 @@
 calc_cci_for_mult_exp_ages <- function(icd_data,
                                        exp_ages=c(20,30,40,50),
                                        exp_len=10) {
-   score_age_data <- c()
+   score_age_data <- list()
    for(exp_age in exp_ages) {
-      score_age_data[[exp_age]] <- ICCI::calc_cci(icd_data, 
-                                                  exp_start=exp_age, 
-                                                  exp_end=exp_age+exp_len) %>% 
-                                    dplyr::rename(SCORE=CCI_score)
+      score_age_data[[as.character(exp_age)]] <- ICCI::calc_cci(icd_data, 
+                                                   exp_start=exp_age, 
+                                                   exp_end=exp_age+exp_len) %>% 
+                        dplyr::rename(SCORE=CCI_score)
    }
+
    return(score_age_data)
 }

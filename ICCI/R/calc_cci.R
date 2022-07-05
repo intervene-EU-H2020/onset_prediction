@@ -36,7 +36,7 @@ calc_cci <- function(icd_data,
                      exp_start=NA,
                      exp_end=NA) {
     icd_data <- preprocess_icd_data(icd_data, exp_start, exp_end)
-    group_icd_data <- ILongDataUtils::group_icd_data_by_icd_ver(icd_data)
+    group_icd_data <- ILongDataUtils::group_icd_data_by_ver(icd_data)
 
     # For adding up different ICD-version scores
     all_cci_scores <- tibble::tibble()
