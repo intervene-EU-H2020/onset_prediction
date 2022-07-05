@@ -59,12 +59,10 @@ calc_studies_hrs <- function(pheno_data,
                                 study, 
                                 write_res, 
                                 res_dir)
-
         elig_indv <- Istudy::get_study_elig_indv(pheno_data,
                                                  study,
                                                  write_res,
                                                  res_dir)
-
         if(Istudy::get_n_cases(elig_indv, study@endpt) > 100) {
             pheno_score_data <- join_dfs(elig_indv, 
                                          score_data,

@@ -1,12 +1,4 @@
-# get_cci_score_age_data <- function(icd_data,
-#                                    exp_ages=c(20,30,40,50),
-#                                    exp_len=10) {
-#    score_age_data <- c()
-#    for(exp_age in exp_ages) {
-#       score_age_data[[exp_age]] <- ICCI::calc_cci(icd_data, exp_start=exp_age, exp_end=exp_age+exp_len) %>% dplyr::rename(SCORE=CCI_score)
-#    }
-#    return(score_age_data)
-# }
+
 
 # test_that("calc_studies_hrs works", {
 #   if (requireNamespace("ICCI", quietly = TRUE)) {

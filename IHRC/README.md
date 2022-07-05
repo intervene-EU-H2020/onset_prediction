@@ -22,37 +22,26 @@ For the input file format of the phenotypic data see: [INTERVENE Phenotype File 
 ### Example for CCI analysis
 ```{r example}
 library(IHRC)
+library(ICCI)
 
 icd_file_path <- "/path/to/icd/file_with_name"
 icd_data <- readr::read_delim(icd_file_path, delim="\t", col_types=c("cdccc"))
 pheno_data <- readr::read_delim(pheno_file_path, delim="\t", col_types=list(SEX="f", DATE_OF_BIRTH="D", ANCESTRY="f", SMOKING="i"))
 
-get_cci_score_age_data <- function(icd_data,
-                                   exp_ages=c(20,30,40,50,60),
-                                   exp_len=10) {
-    score_age_data <- c()
-    for(exp_age in exp_ages) {
-        score_age_data[[exp_age]] <- ICCI::cacl_cci(icd_data,
-                                                    exp_start=exp_age,
-                                                    exp_ed=exp_age+10) %>%
-                                        dplyr::rename(SCORE=CCI_score)
-    }
-    return(score_age_data)
-}
-
-phenocols <- c("C3_CANCER", "J10_ASTHMA", "G6_EPLEPSY", "F5_DEPRESSIO")
-exp_ages <- c(20,30,40,50)
-score_age_data <- get_cci_score_age_data(icd_data, exp_ages, 10)
+exp_ages <- c(20,30,40,50,60)
+exp_len <- 10
+score_age_data <- ICCI::calc_cci_for_mult_exp_ages(icd_data, exp_ages, exp_len)
 
 IHRC::run_age_exp_studies(pheno_data,
                           score_age_data,
                           score_type="CCI",
                           endpts=phenocols,
                           exp_ages=exp_ages,
-                          exp_len=10,
+                          exp_len=exp_len,
                           wash_len=2,
                           obs_len=8,
                           downsample_fctr=4,
+                          ancs="EUR",
                           covs=c("SEX", "YEAR_OF_BIRTH"),
                           write_res=TRUE,
                           res_dir="/path/to/results/folder/")
@@ -71,21 +60,17 @@ prs_files_dir <- "/path/to/prs/files"
 icd_data <- readr::read_delim(icd_file_path, delim="\t", col_types=c("cdccc"))
 pheno_data <- readr::read_delim(pheno_file_path, delim="\t", col_types=list(SEX="f", DATE_OF_BIRTH="D", ANCESTRY="f", SMOKING="i"))
 exp_ages <- c(20,30,40,50)
+exp_len <- 10
 
-score_age_data <- c()
-for(exp_age in exp_ages) {
-    score_age_data[[exp_age]] <- ICCI::cacl_cci(icd_data,
-                                                exp_start=exp_age,
-                                                exp_ed=exp_age+10) %>%
-                                    dplyr::rename(SCORE=CCI_score)
-}
-
+score_age_data <- ICCI::calc_cci_for_mult_exp_ages(icd_data,
+                                                   exp_ages,
+                                                   exp_len=10)
 IHRC::run_age_exp_studies(pheno_data,
                           score_age_data,
                           score_type="CCI",
                           endpts=phenocols,
                           exp_ages=exp_ages,
-                          exp_len=10,
+                          exp_len=exp_len,
                           wash_len=2,
                           obs_len=8,
                           downsample_fctr=4,

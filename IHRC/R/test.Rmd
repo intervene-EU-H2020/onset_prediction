@@ -1,0 +1,39 @@
+```{r}
+library(ICCI)
+library(IHRC)
+library(dplyr)
+
+pheno_data <- Istudy::create_test_df(100000)
+icd_data <- ILongDataUtils::create_test_df_multi_icd_ver(n_icd10=50000, 
+                                                         icd10_indv=pheno_data$ID)
+score_data <- ICCI::calc_cci(icd_data, exp_start=20, exp_end=30) %>% 
+                dplyr::rename(SCORE=CCI_score)
+study <- methods::new("study",
+                      endpt="J10_ASTHMA",
+                      exp_age=20,
+                      exp_len=10,
+                      wash_len=2,
+                      obs_len=2,
+                      ancs=unique(pheno_data$ANCESTRY))
+elig_indv <- Istudy::get_study_elig_indv(pheno_data,
+                                         study)
+pheno_score_data <- IHRC::join_dfs(elig_indv, score_data, score_type="CCI", endpt="J10_ASTHMA")
+```
+
+```{r}
+train_idxs <- sample(seq_len(nrow(pheno_score_data)), 
+                     nrow(pheno_score_data)*0.5,
+                     replace=FALSE)
+train_data <- pheno_score_data[train_idxs,]
+test_data <- pheno_score_data[-train_idxs,]
+```
+
+```{r}
+covs <- c("SEX", "YEAR_OF_BIRHT")
+IHRC
+```
+
+```{r}
+library(gmodels)
+gmodels::ci(3.4, 0.1)
+```

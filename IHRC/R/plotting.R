@@ -40,8 +40,6 @@ plot_score_distr <- function(score_data,
                     theme(text=element_text(size=21))
     }
 
-
-
     file_path <- check_and_get_file_path(score_type,
                                          study,
                                          write_res,
@@ -53,7 +51,6 @@ plot_score_distr <- function(score_data,
                device="png", 
                bg="white")
     }
-    
     return(plt)
 }
 

@@ -1,22 +1,3 @@
-
-#' Creates an empty tibble for the results
-#' 
-#' @return An empty tibble with all relevant columns for the final results.
-#' 
-#' @author Kira E. Detrois 
-create_empty_coxph_res_tib <- function() {
-    tibble::tibble(Endpoint=character(),
-                   Score=character(),
-                   Group=character(),
-                   N_controls=numeric(),
-                   N_cases=numeric(),
-                   beta=numeric(),
-                   std_errs=numeric(),
-                   p_val=numeric(),
-                   HR=numeric(),
-                   CI_pos=numeric(),
-                   CI_neg=numeric())
-}
 #' Adds a row to the results tibble
 #' 
 #' @param coxph_res_tib A tibble with the results for previous endpoints.
@@ -40,10 +21,10 @@ add_coxph_res_row <- function(coxph_res_tib,
 
     if(!is.null(coxph_mdl)) {
         coxph_res_list <- extract_coxph_res(coxph_mdl)
-        n_cases <- n_group_cases(elig_indv, 
+        n_cases <- get_n_group_cases(elig_indv, 
                                  coxph_res_list$groups,
                                  endpt)
-        n_ctrls <- get_group_ctrls(elig_indv, 
+        n_ctrls <- get_n_group_cntrls(elig_indv, 
                                    coxph_res_list$groups,
                                    endpt)
         coxph_res_tib <- tibble::add_row(coxph_res_tib, 
@@ -61,28 +42,4 @@ add_coxph_res_row <- function(coxph_res_tib,
                           )
     } 
     return(coxph_res_tib)
-}
-
-#' Extracts the relevant results from the Cox-PH model
-#' 
-#' @inheritParams add_coxph_res_row
-#' 
-#' @return A list(`beta`, `std_err`, `p_val`, `HR`, `CI`, `groups`).
-#' 
-#' @author Kira E. Detrois
-extract_coxph_res <- function(coxph_mdl) {
-    betas <- summary(coxph_mdl)$coefficients[,"coef"]
-    betas <- betas[grep("SCORE", names(betas))]
-    std_errs <- summary(coxph_mdl)$coefficients[,"se(coef)"]
-    std_errs <- std_errs[grep("SCORE", names(std_errs))]
-    pvals <- summary(coxph_mdl)$coefficients[,"Pr(>|z|)"]
-    pvals <- pvals[grep("SCORE", names(pvals))]
-    OR <- exp(betas)
-    CI <- get_CI(betas, std_errs)
-    if("SCORE_GROUP" %in% names(coxph_mdl$xlevels)) {
-        groups <- coxph_mdl$xlevels$SCORE_GROUP[2:length(coxph_mdl$xlevels$SCORE_GROUP)]
-    } else {
-        groups <- "no groups"
-    }
-    return(list(beta=betas, std_err=std_errs, p_val=pvals, HR=OR, CI=CI, groups=groups))
 }

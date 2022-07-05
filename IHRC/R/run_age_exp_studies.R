@@ -8,9 +8,9 @@
 #'                        exposure periods. 
 #' @param endpts A string. The column names of the endpoints of 
 #'                         interest.
-#' @param exp_ages An integer. Age at which exposure period starts 
-#'                            (in years).
-#' @param exp_len An integer. Length of the exposure period
+#' @param exp_ages An integer (vector). Ages at which exposure period 
+#'                  starts (in years).
+#' @param exp_len An integer. Length of the exposure period ^
 #'                            (in years).
 #' @param wash_len An integer. Length of the washout period
 #'                             (in years).
@@ -45,8 +45,13 @@ run_age_exp_studies <- function(pheno_data,
                                             wash_len,
                                             obs_len,
                                             downsample_fctr)
+        if(score_type == "CCI") {
+            curnt_score_data <- score_ages_data[[as.character(exp_age)]]
+        } else {
+            curnt_score_data <- score_ages_data
+        }
         calc_studies_hrs(pheno_data, 
-                         score_ages_data[[exp_age]],
+                         curnt_score_data,
                          score_type,
                          bin_cut,
                          studies,
@@ -64,33 +69,3 @@ run_age_exp_studies <- function(pheno_data,
                           write_res) 
 }
 
-#' Creates a vector of study objects for the different endpoints
-#' 
-#' @inheritParams calc_studies_hrs
-#' @param exp_age An integer. Age at which exposure period starts 
-#'                            (in years).
-#' @inheritParams run_age_exp_studies
-#' 
-#' @export 
-#' 
-#' @author Kira E. Detrois
-create_endpts_study_objs <- function(endpts,
-                                     exp_age=30,
-                                     exp_len=10,
-                                     wash_len=2,
-                                     obs_len=8,
-                                     downsample_fctr=NA_real_,
-                                     ancs=c("EUR")) {
-    studies <- list()
-    for(endpt in endpts) {
-        studies[[endpt]] <- methods::new("study",
-                                         endpt=endpt,
-                                         exp_age=exp_age,
-                                         exp_len=exp_len,
-                                         wash_len=wash_len,
-                                         obs_len=obs_len,
-                                         downsample_fctr=downsample_fctr,
-                                         ancs=ancs)
-    }
-    return(studies)
-}

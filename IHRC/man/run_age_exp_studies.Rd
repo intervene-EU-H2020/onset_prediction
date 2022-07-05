@@ -15,6 +15,7 @@ run_age_exp_studies(
   wash_len = 2,
   obs_len = 8,
   downsample_fctr = NA_real_,
+  ancs = "EUR",
   covs = c("SEX", "YEAR_OF_BIRTH"),
   write_res = FALSE,
   res_dir = NA
@@ -41,10 +42,10 @@ the \code{score_type == CCI}.}
 \item{endpts}{A string. The column names of the endpoints of
 interest.}
 
-\item{exp_ages}{An integer. Age at which exposure period starts
-(in years).}
+\item{exp_ages}{An integer (vector). Ages at which exposure period
+starts (in years).}
 
-\item{exp_len}{An integer. Length of the exposure period
+\item{exp_len}{An integer. Length of the exposure period ^
 (in years).}
 
 \item{wash_len}{An integer. Length of the washout period

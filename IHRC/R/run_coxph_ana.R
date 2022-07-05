@@ -59,6 +59,8 @@ make_covs_fctrs <- function(pheno_score_data,
 #' 
 #' @inheritParams run_coxph_ana
 #' 
+#' @export 
+#' 
 #' @return A character. The formula string for the Cox-PH model.
 get_surv_model_formula <- function(endpt,
                                    covs) {

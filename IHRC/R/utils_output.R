@@ -151,7 +151,7 @@ get_coxph_res_file_name <- function(study,
 
 #' Write score cut-off values and groups to log
 #' 
-#'@inheritParams get_group_labs
+#'@inheritParams get_risk_group_labs
 #' @inheritParams add_risk_group_col
 #' @inheritParams calc_studies_hrs
 #' 
@@ -176,7 +176,7 @@ write_score_groups_to_log <- function(score_group_tbl,
 
 #' Creates a string of the current study setup
 #' 
-#' @inheritParams get_group_labs
+#' @inheritParams get_risk_group_labs
 #' 
 #' @return A tibble with columns `GROUP`, `SCORE_CUT`
 #' 

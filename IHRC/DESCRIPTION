@@ -10,12 +10,12 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.0
 Suggests: 
-    testthat (>= 3.0.0),
-    ICCI
+    testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Imports: 
     dplyr,
     ggplot2,
+    ICCI (>= 1.1.0),
     Istudy,
     methods,
     readr,

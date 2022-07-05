@@ -11,14 +11,14 @@ test_that("add_risk_group_col works", {
     expect_equal(pheno_score_data$SCORE_GROUP, expect_res)
 })
 
-test_that("get_group_labs works", {
+test_that("get_risk_group_labs works", {
     set.seed(191)
 
     test_tbl <- c(0, 0.25, 2.3, 4.9, 5)
     names(test_tbl) <- c(0, 0.1, 0.5, 0.9, 1)
 
     expect_res <- c("[Group 0 - Group 0.1]", "(Group 0.1 - Group 0.5]", "(Group 0.5 - Group 0.9]", "(Group 0.9 - Group 1]")
-    group_labels <- get_group_labs(test_tbl)
+    group_labels <- get_risk_group_labs(test_tbl)
     expect_equal(group_labels, expect_res)
 })
 
