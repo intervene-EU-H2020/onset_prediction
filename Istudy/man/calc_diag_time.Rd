@@ -16,9 +16,9 @@ variable \code{endpt}.}
 \item{study}{An S4 class representing the study setup.}
 }
 \value{
-A list(\code{age_days}, \code{age_date}).
+A list(\code{exact_age_yrs}, \code{age_date}).
 \itemize{
-\item \code{age_days}: The age at onset in days
+\item \code{exact_age_yrs}: The age at onset in days
 \item \code{age_date}: The date of onset
 }
 }

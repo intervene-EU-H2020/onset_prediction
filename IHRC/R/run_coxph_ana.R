@@ -25,7 +25,7 @@ run_coxph_ana <- function(pheno_score_data,
                           endpt,
                           covs) {
     pheno_score_data <- make_covs_fctrs(pheno_score_data, covs)
-    surv_mdl <- get_surv_model_formula(endpt, covs)
+    surv_mdl <- get_coxph_formula(endpt, covs)
 
     if(length(unique(pheno_score_data$SCORE_GROUP)) >= 2) {
         coxph_mdl <- survival::coxph(surv_mdl,
@@ -62,11 +62,11 @@ make_covs_fctrs <- function(pheno_score_data,
 #' @export 
 #' 
 #' @return A character. The formula string for the Cox-PH model.
-get_surv_model_formula <- function(endpt,
+get_coxph_formula <- function(endpt,
                                    covs) {
     pred_string <- get_pred_string(covs)
     stats::as.formula(paste0(
-                        "survival::Surv(", endpt, "_AGE_DAYS, ",  endpt, ") ~ ",  pred_string))
+                        "survival::Surv(", endpt, "_AGE, ",  endpt, ") ~ ",  pred_string))
 }
 
 #' Creates the predictor string for the Cox-PH model

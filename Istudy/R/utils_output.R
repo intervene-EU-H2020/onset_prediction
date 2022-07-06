@@ -26,7 +26,7 @@ create_return_tib <- function(pheno_data,
                                # this is only a single string and not
                                # a vector
                                dplyr::all_of(endpt), 
-                               paste0(endpt, "_AGE_DAYS"),
+                               paste0(endpt, "_AGE"),
                                paste0(endpt, "_DATE"),
                                dplyr::starts_with("PC"))
 }

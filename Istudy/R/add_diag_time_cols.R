@@ -12,7 +12,7 @@
 #' @inheritParams get_study_elig_indv
 #' 
 #' @return The data.frame with for example for endpoint `J10_ASTHMA`, 
-#'              added column `J10_ASTHMA_AGE_DAYS`, and changed column
+#'              added column `J10_ASTHMA_exact_age_yrs`, and changed column
 #'              `J10_ASTHMA_DATE` with the end of the study as the
 #'              date for controls.
 #' 
@@ -22,7 +22,7 @@
 add_diag_time_cols <- function(pheno_data, 
                                study) {
     onset_time <- calc_diag_time(pheno_data, study)
-    pheno_data[,paste0(study@endpt, "_AGE_DAYS")] <- onset_time$age_days
+    pheno_data[,paste0(study@endpt, "_AGE")] <- onset_time$exact_age_yrs
     pheno_data[,paste0(study@endpt, "_DATE")] <- onset_time$onset_date
 
     return(pheno_data)
@@ -36,9 +36,9 @@ add_diag_time_cols <- function(pheno_data,
 #'  
 #' @inheritParams add_diag_time_cols
 #' 
-#' @return A list(`age_days`, `age_date`).
+#' @return A list(`exact_age_yrs`, `age_date`).
 #'         \itemize{
-#'          \item `age_days`: The age at onset in days
+#'          \item `exact_age_yrs`: The age at onset in days
 #'          \item `age_date`: The date of onset
 #'         } 
 #' 
@@ -55,11 +55,8 @@ calc_diag_time <- function(pheno_data,
     endpt_date <- dplyr::pull(pheno_data, get(paste0(study@endpt, "_DATE")))
     study_end <- calc_end_of_study(pheno_data$DATE_OF_BIRTH,
                                    study)
-    endpt_date[is.na(endpt_date)] <- study_end[is.na(endpt_date)]
+    endpt_date[pheno_data[,study@endpt] == 0] <- study_end[pheno_data[,study@endpt] == 0]
     endpt_date <- as.Date(endpt_date, origin="1970/01/01")
-    age_at_onset <- lubridate::time_length(difftime(endpt_date, 
-                                                    pheno_data$DATE_OF_BIRTH,
-                                                    'years'))
-
-    return(list(age_days=age_at_onset, onset_date=endpt_date))
+    age_at_onset <- lubridate::time_length(pheno_data$DATE_OF_BIRTH %--% endpt_date, "years")
+    return(list(exact_age_yrs=age_at_onset, onset_date=endpt_date))
 }

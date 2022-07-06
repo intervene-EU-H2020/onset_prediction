@@ -17,7 +17,7 @@ variable \code{endpt}.}
 }
 \value{
 The data.frame with for example for endpoint \code{J10_ASTHMA},
-added column \code{J10_ASTHMA_AGE_DAYS}, and changed column
+added column \code{J10_ASTHMA_exact_age_yrs}, and changed column
 \code{J10_ASTHMA_DATE} with the end of the study as the
 date for controls.
 }
