@@ -72,6 +72,22 @@ test_that("get_study_elig_indv works also with other endpoints", {
               regexp=NA)
 })
 
+
+test_that("get_study_elig_indv unkown cols works", {
+  set.seed(9231)
+  test_data <- create_test_df(25)
+  test_data$ANCESTRY <- rep("EUR", 25)
+
+  study <- methods::new("study", 
+                        endpt="F5_DEPRESSIO",
+                        exp_age=30,
+                        exp_len=10,
+                        wash_len=2,
+                        obs_len=8, 
+                        ancs="EUR")
+ expect_error(suppressMessages(get_study_elig_indv(test_data, study)))
+})
+
 # test_that("get_study_elig_indv log messages work", {
 #   set.seed(9231)
 #   test_data <- create_test_df(500)
