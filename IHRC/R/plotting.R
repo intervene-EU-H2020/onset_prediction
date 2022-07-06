@@ -18,9 +18,9 @@ plot_score_distr <- function(score_data,
                                               score_type,
                                               study@endpt)
 
-    plot_descr <- paste0(study@exp_age, " to ", study@exp_age+study@exp_len)
     if(score_type == "CCI") {
-        plt <- ggplot(score_data, aes(x=get("SCORE"))) + 
+        plot_descr <- paste0(study@exp_age, " to ", study@exp_age+study@exp_len)
+        plt <- suppressMessages(ggplot(score_data, aes(x=get("SCORE"))) + 
                     geom_histogram(alpha=.8, fill="#214a2a", binwidth = 1.0)  +
                     labs(title=paste0(score_type, " Score Histogram"),
                          subtitle=paste0(nrow(score_data), "  Individuals ", plot_descr),
@@ -28,12 +28,12 @@ plot_score_distr <- function(score_data,
                          y="Count") +
                     coord_cartesian(xlim=c(0,15)) +
                     theme_minimal() + 
-                    theme(text=element_text(size=21))
+                    theme(text=element_text(size=21)))
     } else {
         plt <- ggplot(score_data, aes(x=get("SCORE"))) + 
                     geom_histogram(alpha=.8, fill="#214a2a")  +
                     labs(title=paste0(score_type, " Score Histogram"),
-                        subtitle=paste0(nrow(score_data), " Individuals ", plot_descr),
+                        subtitle=paste0(nrow(score_data), " Individuals "),
                         x=score_type,
                         y="Count") +
                     theme_minimal() + 
@@ -47,6 +47,8 @@ plot_score_distr <- function(score_data,
                                          res_type="distr")
     if(!is.na(file_path)) {
         ggsave(file_path,
+               width=7,
+               height=7,
                plot=plt, 
                device="png", 
                bg="white")
@@ -110,6 +112,8 @@ plot_endpt_score_distr <- function(score_data,
                                          res_type="endpt")
     if(!is.na(file_path)) {
         ggsave(file_path,
+               width=7,
+               height=7,
                plot=plt, 
                device="png", 
                bg="white")
@@ -143,7 +147,7 @@ read_and_plot_age_hrs <- function(res_dir,
                                                  bin_cut,
                                                  covs),
                      x="Age",
-                     y="HR") +
+                     y="Hazard Ratio (95% CI)") +
                 geom_point() + 
                 geom_errorbar(aes(ymin=CI_neg, ymax=CI_pos), width=.1) +
                 geom_hline(yintercept=1.0) + 
@@ -166,9 +170,11 @@ read_and_plot_age_hrs <- function(res_dir,
                                             res_type="HRs")
         if(!is.na(file_path)) {
             ggsave(file_path,
-                plot=plt, 
-                device="png", 
-                bg="white")
+                   width=7,
+                   height=7,
+                   plot=plt, 
+                   device="png", 
+                   bg="white")
         }
     }
 }
@@ -215,8 +221,8 @@ read_coxph_res_file <- function(res_dir,
     res_files <- list.files(coxph_res_dir, full.names=TRUE)
     for(res_file in res_files) {
         curnt_age <- sub("(.+/)(study_)([0-9]+)(_.+)+$", "\\3", res_file)
-        curnt_coxph_res <- readr::read_delim(res_file, 
-                                             delim="\t")
+        curnt_coxph_res <- suppressMessages(readr::read_delim(res_file, 
+                                             delim="\t"))
         curnt_coxph_res <- tibble::add_column(curnt_coxph_res, 
                                               Age=curnt_age)
         coxph_res <- dplyr::bind_rows(coxph_res, curnt_coxph_res)
