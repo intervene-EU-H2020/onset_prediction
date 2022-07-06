@@ -6,6 +6,8 @@
 #' 
 #' @return A character. The group names.
 #' 
+#' @export 
+#' 
 #' @author Kira E. Detrois
 get_two_level_groups <- function(score_data,
                                  cutoff) {

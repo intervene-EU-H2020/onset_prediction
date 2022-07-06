@@ -4,6 +4,8 @@
 #' @param groups A character. The groups in the Cox-PH model.
 #' @inheritParams add_coxph_res_row
 #' 
+#' @export 
+#' 
 #' @author Kira E. Detrois
 get_n_group_cases <- function(elig_indv, 
                               groups,
@@ -28,6 +30,8 @@ get_n_group_cases <- function(elig_indv,
 #' @inheritParams calc_studies_hrs
 #' @param groups A character. The groups in the Cox-PH model.
 #' @inheritParams add_coxph_res_row
+#' 
+#' @export 
 #' 
 #' @author Kira E. Detrois
 get_n_group_cntrls <- function(elig_indv, 

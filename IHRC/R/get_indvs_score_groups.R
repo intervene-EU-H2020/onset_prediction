@@ -6,6 +6,8 @@
 #' 
 #' @return A factor. The risk score group for each individual.
 #' 
+#' @export 
+#' 
 #' @author Kira E. Detrois
 get_indvs_score_groups <- function(score_data,
                                    score_group_tbl) {

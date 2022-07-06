@@ -5,6 +5,8 @@
 #' 
 #' @return A character. The group names.
 #' 
+#' @export 
+#' 
 #' @author Kira E. Detrois
 get_risk_group_labs <- function(score_group_tbl) {
     down_group <- paste("Group", 

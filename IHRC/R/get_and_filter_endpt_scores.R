@@ -1,3 +1,5 @@
+#' @export 
+#' 
 #' @importFrom dplyr %>% 
 get_and_filter_endpt_scores <- function(score_data,
                                         score_type,

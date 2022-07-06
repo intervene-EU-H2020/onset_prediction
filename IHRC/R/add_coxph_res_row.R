@@ -22,8 +22,8 @@ add_coxph_res_row <- function(coxph_res_tib,
     if(!is.null(coxph_mdl)) {
         coxph_res_list <- extract_coxph_res(coxph_mdl)
         n_cases <- get_n_group_cases(elig_indv, 
-                                 coxph_res_list$groups,
-                                 endpt)
+                                     coxph_res_list$groups,
+                                     endpt)
         n_ctrls <- get_n_group_cntrls(elig_indv, 
                                    coxph_res_list$groups,
                                    endpt)

@@ -33,6 +33,8 @@ write_res_file <- function(coxph_res_tib,
 #' 
 #' @return A character. The file name.
 #' 
+#' @export
+#' 
 #' @author Kira E. Detrois
 check_and_get_file_path <- function(score_type,
                                     study,
@@ -82,11 +84,16 @@ check_and_get_file_path <- function(score_type,
 #' 
 #' @return A character. The file name.
 #' 
+#' @export 
+#' 
 #' @author Kira E. Detrois
 get_score_distr_file_name <- function(study,
                                       score_type) {
-    plot_descr <- paste0(study@exp_age, "_to_", study@exp_age+study@exp_len)
-    paste0(score_type, "_score_distr_", plot_descr, ".png")
+    plot_descr <- ""
+    if(score_type == "CCI") {
+        plot_descr <- paste0("_", study@exp_age, "_to_", study@exp_age+study@exp_len)
+    }
+    paste0(score_type, "_score_distr", plot_descr, ".png")
 }
 
 #' Creats the file name for the HR plots
@@ -94,6 +101,8 @@ get_score_distr_file_name <- function(study,
 #' @inheritParams add_risk_group_col
 #' 
 #' @return A character. The file name.
+#' 
+#' @export 
 #' 
 #' @author Kira E. Detrois
 get_hr_file_name <- function(study,
@@ -112,6 +121,8 @@ get_hr_file_name <- function(study,
 #' 
 #' @return A character. The file name.
 #' 
+#' @export 
+#' 
 #' @author Kira E. Detrois
 get_score_cut_file_name <- function(study,
                                     score_type) {
@@ -124,6 +135,8 @@ get_score_cut_file_name <- function(study,
 #' 
 #' @return A character. The file name.
 #' 
+#' @export 
+#' 
 #' @author Kira E. Detrois
 get_endpt_score_file_name <- function(study,
                                       score_type) {
@@ -135,6 +148,8 @@ get_endpt_score_file_name <- function(study,
 #' @inheritParams add_risk_group_col
 #' 
 #' @return A character. The file name.
+#' 
+#' @export 
 #' 
 #' @author Kira E. Detrois
 get_coxph_res_file_name <- function(study,
@@ -154,6 +169,8 @@ get_coxph_res_file_name <- function(study,
 #'@inheritParams get_risk_group_labs
 #' @inheritParams add_risk_group_col
 #' @inheritParams calc_studies_hrs
+#' 
+#' @export 
 #' 
 #' @author Kira E. Detrois
 write_score_groups_to_log <- function(score_group_tbl,
@@ -179,6 +196,8 @@ write_score_groups_to_log <- function(score_group_tbl,
 #' @inheritParams get_risk_group_labs
 #' 
 #' @return A tibble with columns `GROUP`, `SCORE_CUT`
+#' 
+#' @export 
 #' 
 #' @author Kira E. Detrois
 log_msg_table <- function(score_group_tbl) {

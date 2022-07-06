@@ -4,6 +4,8 @@
 #' 
 #' @return A list(`beta`, `std_err`, `p_val`, `HR`, `CI`, `groups`).
 #' 
+#' @export 
+#' 
 #' @author Kira E. Detrois
 extract_coxph_res <- function(coxph_mdl) {
     betas <- summary(coxph_mdl)$coefficients[,"coef"]

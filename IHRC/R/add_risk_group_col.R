@@ -16,6 +16,7 @@
 #' @inheritParams calc_studies_hrs
 #' 
 #' @return The data.frame with the added risk group column
+#' @export 
 #' 
 #' @author Kira E. Detrois
 add_risk_group_col <- function(score_data,

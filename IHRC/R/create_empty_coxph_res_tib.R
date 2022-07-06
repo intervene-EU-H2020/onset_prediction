@@ -2,6 +2,8 @@
 #' 
 #' @return An empty tibble with all relevant columns for the final results.
 #' 
+#' @export 
+#' 
 #' @author Kira E. Detrois 
 create_empty_coxph_res_tib <- function() {
     tibble::tibble(Endpoint=character(),
