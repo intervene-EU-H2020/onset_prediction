@@ -1,9 +1,9 @@
 #' Creates a vector of study objects for the different endpoints
 #' 
-#' @inheritParams calc_studies_hrs
+#' @inheritParams calc_endpt_studies_hrs
 #' @param exp_age An integer. Age at which exposure period starts 
 #'                            (in years).
-#' @inheritParams run_age_exp_studies
+#' @inheritParams run_age_exp_endpt_studies
 #' 
 #' @export 
 #' 
@@ -15,9 +15,9 @@ create_endpts_study_objs <- function(endpts,
                                      obs_len=8,
                                      downsample_fctr=NA_real_,
                                      ancs=c("EUR")) {
-    studies <- list()
+    endpt_studies <- list()
     for(endpt in endpts) {
-        studies[[endpt]] <- methods::new("study",
+        endpt_studies[[endpt]] <- methods::new("study",
                                          endpt=endpt,
                                          exp_age=exp_age,
                                          exp_len=exp_len,
@@ -26,5 +26,5 @@ create_endpts_study_objs <- function(endpts,
                                          downsample_fctr=downsample_fctr,
                                          ancs=ancs)
     }
-    return(studies)
+    return(endpt_studies)
 }

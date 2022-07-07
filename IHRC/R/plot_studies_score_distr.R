@@ -1,4 +1,5 @@
-#' Calcualtes HR from a Cox-PH model for each endpoint
+ 
+ #' Calcualtes HR from a Cox-PH model for each endpoint
 #' 
 #' Fits a Cox-proportional hazards model for the different endpt_studies. 
 #' 
@@ -43,33 +44,31 @@
 #' @export 
 #' 
 #' @author Kira E. Detrois
-calc_endpt_studies_hrs <- function(pheno_data, 
-                             score_data,
-                             score_type,
-                             endpt_studies,
-                             covs=c("SEX", "YEAR_OF_BIRTH"),
-                             bin_cut=1,
-                             write_res=FALSE,
-                             res_dir=NA) {
-
-    endpt_hrs_tib <- create_empty_endpt_hrs_tib()   
-
-    for(study in endpt_studies) {
-        coxph <- get_study_coxph_mdl(pheno_data,
+plot_studies_score_distr <- function(pheno_data, 
                                      score_data,
                                      score_type,
-                                     study,
-                                     covs,
-                                     pred_score="SCORE_GROUP",
-                                     bin_cut,
-                                     write_res,
-                                     res_dir)
-        endpt_hrs_tib <- add_coxph_res_row(endpt_hrs_tib,
-                                           coxph$mdl,
-                                           score_type,
-                                           study,
-                                           coxph$data)
-    }
+                                     endpt_studies,
+                                     write_res=FALSE,
+                                     res_dir=NA) {
 
-    return(endpt_hrs_tib)
+    for(study in endpt_studies) {
+        plot_score_distr(score_data=score_data, 
+                         score_type=score_type, 
+                         study=study, 
+                         write_res=write_res, 
+                         res_dir=res_dir)
+        pheno_score_data <- get_elig_pheno_score_data(
+                                pheno_data=pheno_data,
+                                score_data=score_data,
+                                score_type=score_type,
+                                study=study,
+                                write_res=write_res,
+                                res_dir=res_dir)
+        plot_endpt_score_distr(score_data=pheno_score_data,
+                               score_type=score_type,
+                               study=study,
+                               write_res=write_res,
+                               res_dir=res_dir)
+
+    }
 }

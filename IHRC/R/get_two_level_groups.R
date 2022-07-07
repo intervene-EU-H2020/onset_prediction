@@ -1,7 +1,7 @@
 #' Gets the risk score groups for each individual based on a single 
 #' cutoff
 #' 
-#' @inheritParams calc_studies_hrs 
+#' @inheritParams calc_endpt_studies_hrs 
 #' @param cutoff A numeric. The score cutoff value.
 #' 
 #' @return A character. The group names.

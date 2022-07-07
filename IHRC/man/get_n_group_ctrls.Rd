@@ -5,17 +5,10 @@
 \title{Gets the number of controls of a score group for a given
 endpoint}
 \usage{
-get_n_group_cntrls(elig_indv, groups, endpt)
+get_n_group_cntrls(pheno_score_data, groups, endpt)
 }
 \arguments{
-\item{elig_indv}{A tibble. The individuals which were eligble under
-the current study setup. Needs to at least
-contain the column defined in \code{endpt}.}
-
 \item{groups}{A character. The groups in the Cox-PH model.}
-
-\item{endpt}{A character. The column name of the current endpoint of
-interest.}
 }
 \description{
 Gets the number of controls of a score group for a given

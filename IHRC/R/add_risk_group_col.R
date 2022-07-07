@@ -13,7 +13,7 @@
 #' 
 #' @param score_data A data.frame with at least column `SCORE`.
 #' @param study An S4 class representing the study setup.
-#' @inheritParams calc_studies_hrs
+#' @inheritParams calc_endpt_studies_hrs
 #' 
 #' @return The data.frame with the added risk group column
 #' @export 
@@ -21,8 +21,8 @@
 #' @author Kira E. Detrois
 add_risk_group_col <- function(score_data,
                                score_type,
-                               bin_cut=1,
                                study,
+                               bin_cut=1,
                                write_res=FALSE,
                                res_dir=NA_character_) {
     if(score_type != "CCI") {

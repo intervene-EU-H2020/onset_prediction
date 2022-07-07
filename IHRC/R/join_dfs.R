@@ -3,8 +3,8 @@
 #' Joins the two data.frames and removes any individuals without
 #' a score available.
 #' 
-#' @inheritParams calc_studies_hrs
-#' @inheritParams run_coxph_ana
+#' @inheritParams calc_endpt_studies_hrs
+#' @inheritParams get_coxph_mdl
 #' 
 #' @return The joined data.frame
 #' 
@@ -15,7 +15,9 @@ join_dfs <- function(pheno_data,
                      score_data,
                      score_type="CCI",
                      endpt=NA_character_) {
-    score_data <- get_and_filter_endpt_scores(score_data, score_type, endpt)
+    score_data <- get_and_filter_endpt_scores(score_data, 
+                                              score_type, 
+                                              endpt)
     pheno_score_data <- dplyr::left_join(pheno_data,
                                          score_data,
                                          by="ID")

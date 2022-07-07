@@ -1,29 +1,29 @@
 #' Writes model results to a tab-delim file
 #'  
 #' @inheritParams add_coxph_res_row
-#' @inheritParams calc_studies_hrs
+#' @inheritParams calc_endpt_studies_hrs
 #' @inheritParams add_risk_group_col
 #' 
 #' @export 
 #' 
 #' @author Kira E. Detrois
-write_res_file <- function(coxph_res_tib,
-                           score_type,
-                           bin_cut,
-                           study,
-                           write_res,
-                           res_dir) {
+write_hr_res_file <- function(endpt_hrs_tib,
+                              score_type,
+                              endpt_studies,
+                              bin_cut,
+                              write_res,
+                              res_dir) {
     file_path <- check_and_get_file_path(score_type,
-                                         study,
+                                         endpt_studies[[1]],
                                          write_res,
                                          res_dir,
                                          res_type="coxph",
                                          bin_cut=bin_cut)
-        if(!is.na(file_path)) {
-            readr::write_delim(coxph_res_tib, 
-                               file=file_path, 
-                               delim="\t")
-        }
+    if(!is.na(file_path)) {
+        readr::write_delim(endpt_hrs_tib, 
+                           file=file_path, 
+                           delim="\t")
+    }
 }
 
 #' Creats the file directory and name for the different results
@@ -53,6 +53,7 @@ check_and_get_file_path <- function(score_type,
             res_type == "coxph" ~ "coxph_res/",
             res_type == "log" ~ "log/",
             res_type == "HRs" ~ "plots/HRs/", 
+            res_type == "surv" ~ "plots/surv/"
         )
         res_dir <- paste0(res_dir, type_dir)
         # Make the folder if it doesn't exist yet
@@ -69,7 +70,9 @@ check_and_get_file_path <- function(score_type,
                                                           score_type),
              res_type == "HRs" ~ get_hr_file_name(study,
                                                   score_type,
-                                                  bin_cut)
+                                                  bin_cut),
+             res_type == "surv" ~ get_surv_file_name(study, 
+                                                     score_type)
             )
             file_path <- paste0(res_dir, file_name)
             return(file_path)
@@ -143,6 +146,21 @@ get_endpt_score_file_name <- function(study,
     paste0(Istudy::get_study_file_name(study), "_", score_type, "_score.png")
 }
 
+#' Creats the file name for endpoint specific score distribution plot
+#' 
+#' @inheritParams add_risk_group_col
+#' 
+#' @return A character. The file name.
+#' 
+#' @export 
+#' 
+#' @author Kira E. Detrois
+get_surv_file_name <- function(study,
+                               score_type) {
+    paste0(Istudy::get_study_file_name(study), "_", score_type, "_surv.png")
+}
+
+
 #' Creats the file name for Cox-PH model results file
 #' 
 #' @inheritParams add_risk_group_col
@@ -155,8 +173,7 @@ get_endpt_score_file_name <- function(study,
 get_coxph_res_file_name <- function(study,
                               score_type,
                               bin_cut) {
-    study <- Istudy::setEndpt(study, "study") # Cheating the system for the file name
-    file_name <- paste0(Istudy::get_study_file_name(study), "_", score_type)
+    file_name <- paste0("study_", study@exp_len, "_", study@wash_len, "_", study@obs_len, "_", score_type)
     if(score_type != "CCI") {
         file_name <- paste0(file_name, "_coxph.tsv")
     } else {
@@ -168,7 +185,7 @@ get_coxph_res_file_name <- function(study,
 #' 
 #'@inheritParams get_risk_group_labs
 #' @inheritParams add_risk_group_col
-#' @inheritParams calc_studies_hrs
+#' @inheritParams calc_endpt_studies_hrs
 #' 
 #' @export 
 #' 
