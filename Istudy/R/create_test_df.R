@@ -20,8 +20,8 @@ create_test_df <- function(n_indv=10) {
     prost_cancer_samples <- draw_sex_spec_cases(n_indv, sex_samples, "male", 0.08, sf_samples)
 
     asthma_samples <- draw_cases(n_indv, 0.16, 0.33, sf_samples)
-    vte_samples <- draw_cases(n_indv, 0.05, 0, sf_samples)
-    cov_samples <- draw_cases(n_indv, 0.001, 0.12, sf_samples)
+    vte_samples <- draw_cases(n_indv, 0.4, 0, sf_samples)
+    cov_samples <- draw_cases(n_indv, 0.34, 0.12, sf_samples)
     pheno_data <- tibble::tibble(
         ID=ids,
         SEX=sex_samples,
