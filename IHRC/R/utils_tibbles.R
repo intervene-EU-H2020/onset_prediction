@@ -111,17 +111,18 @@ add_cidx_res_row <- function(c_idxs_tib,
                              c_idx_res,
                              endpt) {
     if(!is.null(c_idx_res)) {
-        c_idx_tib <- tibble::add_row(c_idxs_tib,
-                                     ENDPOINT=endpt,
-                                     C_INDEX=c_idx_res["C Index"],
-                                     DXY=c_idx_res["Dxy"],
-                                     SD=c_idx_res["S.D."],
-                                     N=c_idx_res["n"],
-                                     MISSING=c_idx_res["missing"],
-                                     UNCESORED=c_idx_res["uncensored"],
-                                     RELEVANT_PAIRS=c_idx_res["Relevant Pairs"],
-                                     CONCORDANT=c_idx_res["Concordant"],
-                                     UNCERTAIN=c_idx_res["Uncertain"])
+        c_idxs_tib <- tibble::add_row(
+                            c_idxs_tib,
+                            ENDPOINT=endpt,
+                            C_INDEX=c_idx_res["C Index"],
+                            DXY=c_idx_res["Dxy"],
+                            SD=c_idx_res["S.D."],
+                            N=c_idx_res["n"],
+                            MISSING=c_idx_res["missing"],
+                            UNCESORED=c_idx_res["uncensored"],
+                            RELEVANT_PAIRS=c_idx_res["Relevant Pairs"],
+                            CONCORDANT=c_idx_res ["Concordant"],
+                            UNCERTAIN=c_idx_res["Uncertain"])
     }
-    return(c_idx_tib)
+    return(c_idxs_tib)
 }

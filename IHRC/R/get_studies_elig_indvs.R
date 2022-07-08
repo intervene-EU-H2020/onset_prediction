@@ -15,7 +15,11 @@ get_elig_pheno_score_data <- function(pheno_data,
                                      endpt=study@endpt)
         return(pheno_score_data)
     } else {
-        message(paste0("Not enough cases for endpoint: ", study@endpt, " No of cases: ", Istudy::get_n_cases(elig_indv, study@endpt)))
+        write_lack_cases_log(elig_indv=elig_indv, 
+                             score_type=score_type, 
+                             study=study, 
+                             write_res=write_res, 
+                             res_dir=res_dir)
         return(NULL)
     }
 }
