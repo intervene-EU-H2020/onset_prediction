@@ -12,12 +12,13 @@
 get_indvs_score_groups <- function(score_data,
                                    score_group_tbl) {
     # Risk group left-open intervals for each individual
-    indv_score_groups <- cut(score_data$SCORE,
+    indv_score_groups <- cut(x=score_data$SCORE,
                              breaks=score_group_tbl,
                              labels=get_risk_group_labs(score_group_tbl),
                              include.lowest=TRUE, # Include Group 0%
                              right=FALSE) # left-open intervals
-    indv_score_groups <- stats::relevel(indv_score_groups, ref="(Group 40% - Group 60%]")
+    indv_score_groups <- stats::relevel(x=indv_score_groups, 
+                                        ref="(Group 40% - Group 60%]")
 
     return(indv_score_groups)
 }

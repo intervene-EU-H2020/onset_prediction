@@ -4,7 +4,7 @@ get_elig_pheno_score_data <- function(pheno_data,
                                       study,
                                       min_indvs=5,
                                       write_res=FALSE,
-                                      res_dir=NA) {
+                                      res_dir=NULL) {
     elig_indv <- Istudy::get_study_elig_indv(pheno_data=pheno_data,
                                              study=study,
                                              write_res=write_res,
@@ -29,7 +29,7 @@ get_study_coxph_mdl <- function(pheno_data,
                                 pred_score,
                                 bin_cut=1,
                                 write_res=FALSE,
-                                res_dir=NA) {
+                                res_dir=NULL) {
     pheno_score_data <- get_elig_pheno_score_data(pheno_data=pheno_data,
                                                   score_data=score_data,
                                                   score_type=score_type,

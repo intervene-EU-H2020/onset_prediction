@@ -24,18 +24,18 @@ add_risk_group_col <- function(score_data,
                                study,
                                bin_cut=1,
                                write_res=FALSE,
-                               res_dir=NA_character_) {
+                               res_dir=NULL) {
     if(score_type != "CCI") {
         quantiles <- c(0,0.01,0.05,0.1,0.2,0.4,0.6,0.8,0.9,0.95,0.99,1)
         score_group_tbl <- get_score_group_tbl(score_data, 
                                                quantiles)
         indv_score_groups <- get_indvs_score_groups(score_data,
                                                     score_group_tbl)
-        write_score_groups_to_log(score_group_tbl,
-                                  score_type,
-                                  study,
-                                  write_res,
-                                  res_dir)
+        write_score_groups_to_log(score_group_tbl=score_group_tbl,
+                                  score_type=score_type,
+                                  study=study,
+                                  write_res=write_res,
+                                  res_dir=res_dir)
     } else {
         indv_score_groups <- get_two_level_groups(score_data, 
                                                   bin_cut)

@@ -1,5 +1,5 @@
-create_prs_test <- function(n_indv=25, indv_ids=NA_character_) {
-    if(all(is.na(indv_ids)))
+create_prs_test <- function(n_indv=25, indv_ids=NULL) {
+    if(is.null(indv_ids))
         indv_ids <- paste0("KT00000", seq(n_indv))
     tibble::tibble(ID=indv_ids,
                    J10_ASTHMA_PRS=rnorm(n_indv, 0, 0.01), 
@@ -29,6 +29,7 @@ test_that("calc_endpt_studies_hrs for prs works", {
                               downsample_fctr=4,
                               ancs="EUR",
                               covs=c("SEX", "YEAR_OF_BIRTH"),
+                              min_indvs=5,
                               write_res=TRUE,
                               res_dir="/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/")
 

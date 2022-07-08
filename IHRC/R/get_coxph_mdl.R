@@ -36,8 +36,8 @@ get_coxph_mdl <- function(pheno_score_data,
         }
     }
     if(build_mdl) {
-        coxph_mdl <- survival::coxph(coxph_formula, 
-                                     pheno_score_data,
+        coxph_mdl <- survival::coxph(formula=coxph_formula, 
+                                     data=pheno_score_data,
                                      # Larger fit object but no need to
                                      # other functions to reconstruct
                                      # which fails in this setup

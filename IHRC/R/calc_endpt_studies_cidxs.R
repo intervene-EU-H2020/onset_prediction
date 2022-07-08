@@ -48,8 +48,9 @@ calc_endpt_studies_cidxs <- function(pheno_data,
                                      score_type,
                                      endpt_studies,
                                      covs=c("SEX", "YEAR_OF_BIRTH"),
+                                     bin_cut=1,
                                      write_res=FALSE,
-                                     res_dir=NA) {
+                                     res_dir=NULL) {
     c_idxs_tib <- get_empty_cidx_tib()
     for(study in endpt_studies) {
         coxph <- get_study_coxph_mdl(pheno_data=pheno_data,
@@ -60,12 +61,15 @@ calc_endpt_studies_cidxs <- function(pheno_data,
                                      pred_score="SCORE",
                                      write_res=write_res,
                                      res_dir=res_dir)
-        c_idx_res <- get_cidx(coxph_mdl=coxph$mdl, 
-                              pheno_score_data=coxph$data, 
-                              endpt=study@endpt)
+        c_idx_res <- get_cidx(coxph$mdl, 
+                              coxph$data, 
+                              study@endpt)
         c_idxs_tib <- add_cidx_res_row(c_idxs_tib=c_idxs_tib, 
                                        c_idx_res=c_idx_res, 
-                                       endpt=study@endpt)
+                                       study=study,
+                                       score_type=score_type,
+                                       covs=covs,
+                                       bin_cut=bin_cut)
     }
     return(c_idxs_tib)
 }

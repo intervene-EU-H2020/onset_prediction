@@ -11,7 +11,7 @@
 #' @author Kira E. Detrois
 get_score_group_tbl <- function(score_data, 
                                 quantiles) {
-    stats::quantile(score_data$SCORE, 
+    stats::quantile(x=score_data$SCORE, 
                     probs=quantiles,
                     na.rm=TRUE)
 }

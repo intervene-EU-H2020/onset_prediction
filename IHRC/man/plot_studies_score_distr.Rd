@@ -10,7 +10,7 @@ plot_studies_score_distr(
   score_type,
   endpt_studies,
   write_res = FALSE,
-  res_dir = NA
+  res_dir = NULL
 )
 }
 \arguments{

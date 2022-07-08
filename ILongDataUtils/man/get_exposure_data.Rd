@@ -4,7 +4,7 @@
 \alias{get_exposure_data}
 \title{Gets individuals matching exposure window}
 \usage{
-get_exposure_data(long_data, exp_start = NA_real_, exp_end = NA_real_)
+get_exposure_data(long_data, exp_start = NULL, exp_end = NULL)
 }
 \arguments{
 \item{long_data}{A data.frame with at least columns \code{ID}, and

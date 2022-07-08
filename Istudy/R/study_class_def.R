@@ -23,11 +23,11 @@ study <- methods::setClass("study",
                                         downsample_fctr="numeric",
                                         ancs="character"),
                             prototype=list(endpt=NA_character_,
-                                        exp_age=NA_integer_,
-                                        exp_len=NA_integer_,
-                                        wash_len=NA_integer_,
-                                        obs_len=NA_integer_,
-                                        downsample_fctr=NA_integer_,
+                                        exp_age=NA_real_,
+                                        exp_len=NA_real_,
+                                        wash_len=NA_real_,
+                                        obs_len=NA_real_,
+                                        downsample_fctr=NA_real_,
                                         ancs=NA_character_))
 
 setValidity("study", function(object) {

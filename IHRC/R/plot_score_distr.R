@@ -20,7 +20,7 @@ plot_score_distr <- function(score_data,
 
     if(score_type == "CCI") {
         plot_descr <- paste0(study@exp_age, " to ", study@exp_age+study@exp_len)
-        plt <- suppressMessages(ggplot(score_data, aes(x=get("SCORE"))) + 
+        plt <- ggplot(score_data, aes(x=get("SCORE"))) + 
                     geom_histogram(alpha=.8, fill="#214a2a", binwidth = 1.0)  +
                     labs(title=paste0(score_type, " Score Histogram"),
                          subtitle=paste0(nrow(score_data), "  Individuals ", plot_descr),
@@ -28,10 +28,10 @@ plot_score_distr <- function(score_data,
                          y="Count") +
                     coord_cartesian(xlim=c(0,15)) +
                     theme_minimal() + 
-                    theme(text=element_text(size=21)))
+                    theme(text=element_text(size=21))
     } else {
         plt <- suppressMessages(ggplot(score_data, aes(x=get("SCORE"))) + 
-                    geom_histogram(alpha=.8, fill="#214a2a")  +
+                    geom_histogram(alpha=.8, fill="#214a2a", bins=30)  +
                     labs(title=paste0(score_type, " Score Histogram"),
                         subtitle=paste0(nrow(score_data), " Individuals "),
                         x=score_type,
@@ -40,12 +40,12 @@ plot_score_distr <- function(score_data,
                     theme(text=element_text(size=21)))
     }
 
-    file_path <- check_and_get_file_path(score_type,
-                                         study,
-                                         write_res,
-                                         res_dir,
+    file_path <- check_and_get_file_path(score_type=score_type,
+                                         study=study,
+                                         write_res=write_res,
+                                         res_dir=res_dir,
                                          res_type="distr")
-    if(!is.na(file_path)) {
+    if(!is.null(file_path)) {
         ggsave(file_path,
                width=7,
                height=7,
@@ -107,12 +107,12 @@ plot_endpt_score_distr <- function(score_data,
                     theme(text=element_text(size=21))
     }
 
-    file_path <- check_and_get_file_path(score_type,
-                                         study,
-                                         write_res,
-                                         res_dir,
+    file_path <- check_and_get_file_path(score_type=score_type,
+                                         study=study,
+                                         write_res=write_res,
+                                         res_dir=res_dir,
                                          res_type="endpt")
-    if(!is.na(file_path)) {
+    if(!is.null(file_path)) {
         ggsave(file_path,
                width=7,
                height=7,

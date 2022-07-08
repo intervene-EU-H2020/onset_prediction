@@ -4,11 +4,18 @@
 \alias{add_cidx_res_row}
 \title{Adds a row to the C-index results tibble}
 \usage{
-add_cidx_res_row(c_idxs_tib, c_idx_res, endpt)
+add_cidx_res_row(c_idxs_tib, c_idx_res, study, score_type, covs, bin_cut)
 }
 \arguments{
-\item{endpt}{A character. The column name of the current endpoint of
-interest.}
+\item{score_type}{A character. The name of the score used for the model,
+i.e. CCI, or PheRS.}
+
+\item{covs}{A vector of characters. The column names of the covariates
+to add to the predictor of the Cox-PH model.}
+
+\item{bin_cut}{A numeric. The binary cutoff value for classifying high
+and low score individuals. Currently only in use if
+the \code{score_type == CCI}.}
 
 \item{endpt_hrs_tib}{A tibble with the results for previous endpts.}
 

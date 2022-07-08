@@ -43,7 +43,7 @@
 get_study_elig_indv <- function(pheno_data,
                                 study,
                                 write_res=FALSE,
-                                res_dir=NA_character_) {
+                                res_dir=NULL) {
 
     check_cols_exist(pheno_data, study@endpt, "get_study_elig_indv")
     pheno_data <- add_study_interval_cols(pheno_data, study)

@@ -49,26 +49,28 @@ calc_endpt_studies_hrs <- function(pheno_data,
                              endpt_studies,
                              covs=c("SEX", "YEAR_OF_BIRTH"),
                              bin_cut=1,
+                             min_indvs=5,
                              write_res=FALSE,
-                             res_dir=NA) {
+                             res_dir=NULL) {
 
     endpt_hrs_tib <- create_empty_endpt_hrs_tib()   
 
     for(study in endpt_studies) {
-        coxph <- get_study_coxph_mdl(pheno_data,
-                                     score_data,
-                                     score_type,
-                                     study,
-                                     covs,
+        coxph <- get_study_coxph_mdl(pheno_data=pheno_data,
+                                     score_data=score_data,
+                                     score_type=score_type,
+                                     study=study,
+                                     covs=covs,
                                      pred_score="SCORE_GROUP",
-                                     bin_cut,
-                                     write_res,
-                                     res_dir)
-        endpt_hrs_tib <- add_coxph_res_row(endpt_hrs_tib,
-                                           coxph$mdl,
-                                           score_type,
-                                           study,
-                                           coxph$data)
+                                     bin_cut=bin_cut,
+                                     write_res=write_res,
+                                     res_dir=res_dir)
+        endpt_hrs_tib <- add_coxph_res_row(endpt_hrs_tib=endpt_hrs_tib,
+                                           coxph_mdl=coxph$mdl,
+                                           score_type=score_type,
+                                           study=study,
+                                           elig_indv=coxph$data,
+                                           min_indvs=min_indvs)
     }
 
     return(endpt_hrs_tib)

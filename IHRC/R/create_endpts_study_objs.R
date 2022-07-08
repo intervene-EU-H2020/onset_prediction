@@ -13,7 +13,7 @@ create_endpts_study_objs <- function(endpts,
                                      exp_len=10,
                                      wash_len=2,
                                      obs_len=8,
-                                     downsample_fctr=NA_real_,
+                                     downsample_fctr=NULL,
                                      ancs=c("EUR")) {
     endpt_studies <- list()
     for(endpt in endpts) {

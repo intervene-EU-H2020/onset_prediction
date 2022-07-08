@@ -9,19 +9,19 @@ get_comp_group <- function(score_type,
     return(comp_group)
 }
 
-get_plot_caption <- function(score_type,
-                             plot_type,
-                             covs,
-                             bin_cut=NA_integer_) {
+get_surv_descr <- function(score_type,
+                           surv_type,
+                           covs,
+                           bin_cut=NULL) {
     plot_caption <- ""
-    if(score_type == "CCI" & plot_type == "HR") {
+    if(score_type == "CCI" & surv_type == "HR") {
         plot_caption <- paste0("CCI >", bin_cut, " vs. <=", bin_cut)
 
-    } else if(score_type == "PRS" & plot_type == "HR") {
+    } else if(score_type == "PRS" & surv_type == "HR") {
         plot_caption <- "Top 1% vs. 40-60%"
     }
     plot_caption <- paste0(plot_caption, "   Surv ~ ", score_type)
-    if(plot_type == "HR") {
+    if(surv_type == "HR") {
         plot_caption <- paste0(plot_caption, " Risk Group")
     }
     plot_caption <- paste0(plot_caption, " + ", get_pretty_covs_string(covs))

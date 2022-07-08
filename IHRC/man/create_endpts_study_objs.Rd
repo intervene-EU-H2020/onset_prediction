@@ -10,7 +10,7 @@ create_endpts_study_objs(
   exp_len = 10,
   wash_len = 2,
   obs_len = 8,
-  downsample_fctr = NA_real_,
+  downsample_fctr = NULL,
   ancs = c("EUR")
 )
 }

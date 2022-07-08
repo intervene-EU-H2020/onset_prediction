@@ -32,13 +32,15 @@ run_age_exp_endpt_studies <- function(pheno_data,
                                 exp_len=10,
                                 wash_len=2,
                                 obs_len=8,
-                                downsample_fctr=NA_real_,
+                                downsample_fctr=NULL,
                                 ancs="EUR",
                                 covs=c("SEX", "YEAR_OF_BIRTH"),
                                 bin_cut=1,
+                                min_indvs=5,
                                 write_res=FALSE,
-                                res_dir=NA) {
+                                res_dir=NULL) {
     all_age_hrs_tib <- tibble::tibble()
+    all_age_cidxs_tib <- tibble::tibble()
     for(exp_age in exp_ages) {
         endpt_studies <- create_endpts_study_objs(
                                 endpts=endpts, 
@@ -67,18 +69,30 @@ run_age_exp_endpt_studies <- function(pheno_data,
                                   endpt_studies=endpt_studies,
                                   covs=covs,
                                   bin_cut=bin_cut,
+                                  min_indvs=min_indvs,
                                   write_res=write_res,
                                   res_dir=res_dir)
         all_age_hrs_tib <- dplyr::bind_rows(all_age_hrs_tib, 
                                             endpt_hrs_tib)
+        c_idxs_tib <- calc_endpt_studies_cidxs(
+                                    pheno_data=pheno_data,
+                                    score_data=curnt_score_data,
+                                    score_type=score_type,
+                                    endpt_studies=endpt_studies,
+                                    covs=covs,
+                                    bin_cut=bin_cut,
+                                    write_res=write_res,
+                                    res_dir=res_dir)
+        all_age_cidxs_tib <- dplyr::bind_rows(all_age_cidxs_tib,
+                                              c_idxs_tib)
     }
-    write_hr_res_file(endpt_hrs_tib=all_age_hrs_tib,
-                      score_type=score_type,
-                      endpt_studies=endpt_studies,
-                      bin_cut=bin_cut,
-                      write_res=write_res,
-                      res_dir=res_dir)
-
+    write_res_files(endpt_hrs_tib=all_age_hrs_tib,
+                    endpt_cidx_tib=all_age_cidxs_tib,
+                    score_type=score_type,
+                    endpt_studies=endpt_studies,
+                    bin_cut=bin_cut,
+                    write_res=write_res,
+                    res_dir=res_dir)
     plot_age_hrs(coxph_hr_res=all_age_hrs_tib,
                  score_type=score_type,
                  exp_len=exp_len,

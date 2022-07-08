@@ -14,11 +14,11 @@
 #' 
 #' @author Kira E. Detrois
 preprocess_icd_data <- function(icd_data,
-                                 exp_start=NA,
-                                 exp_end=NA) {
+                                 exp_start=NULL,
+                                 exp_end=NULL) {
     icd_data <- ILongDataUtils::get_exposure_data(icd_data, 
-                                                   exp_start, 
-                                                   exp_end)
+                                                  exp_start, 
+                                                  exp_end)
     icd_data <- add_num_id_col(icd_data)
     return(icd_data)
 }

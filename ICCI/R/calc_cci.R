@@ -33,8 +33,8 @@
 #' 
 #' @author Kira E. Detrois
 calc_cci <- function(icd_data,
-                     exp_start=NA,
-                     exp_end=NA) {
+                     exp_start=NULL,
+                     exp_end=NULL) {
     icd_data <- preprocess_icd_data(icd_data, exp_start, exp_end)
     group_icd_data <- ILongDataUtils::group_icd_data_by_ver(icd_data)
 

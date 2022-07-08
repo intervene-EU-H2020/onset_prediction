@@ -9,9 +9,9 @@ make_covs_fctrs <- function(pheno_score_data,
                             covs) {
     for(cov in covs) {
         if(is.character(pheno_score_data[,cov])) {
-            pheno_score_data <- dplyr::mutate_at(pheno_score_data, 
-                                                 cov, 
-                                                 as.factor)
+            pheno_score_data <- dplyr::mutate_at(.tbl=pheno_score_data, 
+                                                 .vars=cov, 
+                                                 .funs=as.factor)
         }
     }
     return(pheno_score_data)

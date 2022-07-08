@@ -22,6 +22,7 @@ test_that("plot_surv works", {
                                        score_type="CCI",
                                        endpt_studies=endpt_studies,
                                        covs=c("SEX", "YEAR_OF_BIRTH"),
+                                       bin_cut=1,
                                        write_res=TRUE,
                                        res_dir="/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/")
   }

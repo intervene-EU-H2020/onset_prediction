@@ -42,11 +42,11 @@ calc_endpt_hrs <- function(pheno_data,
                           exp_len=10,
                           wash_len=2,
                           obs_len=8,
-                          downsample_fctr=NA,
+                          downsample_fctr=NULL
                           write_coxph_res=FALSE,
                           write_study_res=FALSE,
-                          write_study_log=NA,
-                          res_dir=NA) {
+                          write_study_log=NULL
+                          res_dir=NULL) {
 
     score_data <- preprocess_score_data(score_data, 
                                         score_col_name)
@@ -104,7 +104,7 @@ plot_score_distr <- function(score_data,
                              plot_dir="",
                              plot_descr="") {
     score_data <- dplyr::filter(score_data, 
-                                !is.na(get(score_col_name)))
+                                !is.null(get(score_col_name)))
 
     plt <- ggplot(score_data, aes(x=get(score_col_name))) + 
                 geom_histogram(alpha=.8, fill="#214a2a", binwidth = 1.0)  +

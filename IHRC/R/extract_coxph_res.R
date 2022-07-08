@@ -21,7 +21,7 @@ extract_coxph_res <- function(coxph_mdl) {
     } else {
         groups <- "no groups"
     }
-    return(list(beta=betas, std_err=std_errs, p_val=pvals, HR=OR, CI=CI, groups=groups))
+    return(list(beta=betas, std_err=std_errs, p_val=pvals, HR=OR, CI_neg=CI$neg, CI_pos=CI$pos, groups=groups))
 }
 
 #' 95% confidence interval given the ML estimator and SE

@@ -32,11 +32,11 @@ test_that("calc_cci with exposure window", {
   sample_data <- ILongDataUtils::create_test_df_multi_icd_ver(n_icd10 = 100)
   # Adding a test code in ICD-9 for patient 2
   sample_data <- tibble::add_row(sample_data,
-                                  ID = "KT0000002",
-                                  Event_age = 74,
-                                  primary_ICD = "2000",
-                                  secondary_ICD = NA,
-                                  ICD_version = "9")
+                                 ID = "KT0000002",
+                                 Event_age = 74,
+                                 primary_ICD = "2000",
+                                 secondary_ICD = NA,
+                                 ICD_version = "9")
 
   writeLines("This is the current test")
   cci_scores <- calc_cci(sample_data)

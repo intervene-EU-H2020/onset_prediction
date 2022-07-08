@@ -9,7 +9,9 @@ test_that("calc_endpt_studies_hrs works", {
       icd_data <- ILongDataUtils::create_test_df_multi_icd_ver(n_icd10=50000, 
                                                                icd10_indv=pheno_data$ID)
       exp_ages <- c(20,30,40,50,60)
-      score_age_data <- ICCI::calc_cci_for_mult_exp_ages(icd_data, exp_ages, exp_len=10)
+      score_age_data <- ICCI::calc_cci_for_mult_exp_ages(icd_data, 
+                                                         exp_ages, 
+                                                         exp_len=10)
       expect_error(run_age_exp_endpt_studies(pheno_data, 
                           score_age_data,
                           score_type="CCI",

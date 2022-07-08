@@ -58,11 +58,6 @@ write_res_files <- function(elig_indv,
                       res_dir) {
     write_res_file(elig_indv, study, write_res, res_dir)
     write_log_file(elig_indv, study, write_res, res_dir)
-
-    if(get_n_cases(elig_indv, study@endpt) == 0) {
-        message("Message: Careful there are no cases eligible under the current study setup.")
-        message(log_msg_string(elig_indv, study))
-    }
 }
 
 #' Writes results to a tab-delim file
@@ -123,8 +118,6 @@ write_log_file <- function(elig_indv,
         if(!dir.exists(log_res_dir)) {
             dir.create(log_res_dir)
         }
-        n_cases <- get_n_cases(elig_indv, study@endpt)
-        n_cntrls <- get_n_cntrls(elig_indv, study@endpt)
 
         readr::write_file(log_msg_string(elig_indv, study), 
                           paste0(log_res_dir, 
@@ -147,7 +140,7 @@ write_log_file <- function(elig_indv,
 check_res_dir <- function(write_res,
                           res_dir) { 
    if(write_res) {
-        if(is.na(res_dir)) {
+        if(is.null(res_dir)) {
             message("Variable write_res was set to TRUE but res_dir was not provided. Cannot write results to file.")
             return(FALSE)
         } else {

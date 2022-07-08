@@ -7,10 +7,10 @@
 add_risk_group_col(
   score_data,
   score_type,
-  bin_cut = 1,
   study,
+  bin_cut = 1,
   write_res = FALSE,
-  res_dir = NA_character_
+  res_dir = NULL
 )
 }
 \arguments{
@@ -19,11 +19,11 @@ add_risk_group_col(
 \item{score_type}{A character. The name of the score used for the model,
 i.e. CCI, or PheRS.}
 
+\item{study}{An S4 class representing the study setup.}
+
 \item{bin_cut}{A numeric. The binary cutoff value for classifying high
 and low score individuals. Currently only in use if
 the \code{score_type == CCI}.}
-
-\item{study}{An S4 class representing the study setup.}
 
 \item{write_res}{A boolean. Defines whether to save the results to
 files.}

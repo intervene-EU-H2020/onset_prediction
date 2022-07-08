@@ -10,7 +10,7 @@ add_coxph_res_row(
   score_type,
   study,
   elig_indv,
-  min_cases = 5
+  min_indvs = 5
 )
 }
 \arguments{

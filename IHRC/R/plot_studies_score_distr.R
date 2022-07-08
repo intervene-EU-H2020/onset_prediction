@@ -49,7 +49,7 @@ plot_studies_score_distr <- function(pheno_data,
                                      score_type,
                                      endpt_studies,
                                      write_res=FALSE,
-                                     res_dir=NA) {
+                                     res_dir=NULL) {
 
     for(study in endpt_studies) {
         plot_score_distr(score_data=score_data, 

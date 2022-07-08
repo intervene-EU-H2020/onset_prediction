@@ -8,17 +8,18 @@ run_age_exp_endpt_studies(
   pheno_data,
   score_ages_data,
   score_type,
-  bin_cut = 1,
   endpts = c("J10_ASTHMA"),
   exp_ages = c(20, 30, 40),
   exp_len = 10,
   wash_len = 2,
   obs_len = 8,
-  downsample_fctr = NA_real_,
+  downsample_fctr = NULL,
   ancs = "EUR",
   covs = c("SEX", "YEAR_OF_BIRTH"),
+  bin_cut = 1,
+  min_indvs = 5,
   write_res = FALSE,
-  res_dir = NA
+  res_dir = NULL
 )
 }
 \arguments{
@@ -34,10 +35,6 @@ exposure periods.}
 
 \item{score_type}{A character. The name of the score used for the model,
 i.e. CCI, or PheRS.}
-
-\item{bin_cut}{A numeric. The binary cutoff value for classifying high
-and low score individuals. Currently only in use if
-the \code{score_type == CCI}.}
 
 \item{endpts}{A string. The column names of the endpoints of
 interest.}
@@ -61,6 +58,10 @@ downsampling is performed.}
 
 \item{covs}{A vector of characters. The column names of the covariates
 to add to the predictor of the Cox-PH model.}
+
+\item{bin_cut}{A numeric. The binary cutoff value for classifying high
+and low score individuals. Currently only in use if
+the \code{score_type == CCI}.}
 
 \item{write_res}{A boolean. Defines whether to save the results to
 files.}
