@@ -51,8 +51,7 @@ check_and_get_file_path <- function(score_type,
             res_type == "endpt" ~ "plots/endpts/",
             res_type == "distr" ~ "plots/",
             res_type == "coxph" ~ "coxph_res/",
-            res_type == "log cut" ~ "log/",
-            res_type == "log lack" ~ "log/",
+            res_type == "log" ~ "log/",
             res_type == "HRs" ~ "plots/HRs/", 
             res_type == "surv" ~ "plots/surv/"
         )
@@ -67,8 +66,6 @@ check_and_get_file_path <- function(score_type,
              res_type == "coxph" ~ get_coxph_res_file_name(study, 
                                                            score_type,
                                                            bin_cut),
-             res_type == "log lack" ~ get_log_lack_file_name(study,
-                                                             score_type),
              res_type == "log" ~  get_score_cut_file_name(study,
                                                           score_type),
              res_type == "HRs" ~ get_hr_file_name(study,
@@ -133,19 +130,6 @@ get_hr_file_name <- function(study,
 get_score_cut_file_name <- function(study,
                                     score_type) {
     paste0(Istudy::get_study_file_name(study), "_", score_type, "_cut_log.txt")
-}
-#' Creats the file name for the score cut log file
-#' 
-#' @inheritParams add_risk_group_col
-#' 
-#' @return A character. The file name.
-#' 
-#' @export 
-#' 
-#' @author Kira E. Detrois
-get_log_lack_file_name <- function(study,
-                                    score_type) {
-    paste0(study@exp_age, "_", study@exp_len, "_", study@wash_len, "_", study@obs_len, "_", score_type, "_lack_log.txt")
 }
 
 #' Creats the file name for endpoint specific score distribution plot
@@ -221,26 +205,6 @@ write_score_groups_to_log <- function(score_group_tbl,
                            file=file_path, 
                            delim=" ",
                            col_names=TRUE)
-    }
-}
-
-write_lack_cases_log <- function(elig_indv,
-                                 score_type,
-                                 study,
-                                 write_res,
-                                 res_dir) {
-    msg <- paste0("Not enough cases for study endpoint: ", study@endpt, "\nNo of cases: ", Istudy::get_n_cases(elig_indv, study@endpt), "\nNo of controls: ", Istudy::get_n_cntrls(elig_indv, study@endpt), "\n")
-    
-    file_path <- check_and_get_file_path(score_type,
-                                         study,
-                                         write_res,
-                                         res_dir,
-                                         res_type="log lack")
-   
-    if(!is.na(file_path)) {
-        readr::write_file(msg, 
-                          file=file_path,
-                          append=file.exists(file_path))
     }
 }
 
