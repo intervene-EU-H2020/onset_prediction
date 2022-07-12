@@ -42,19 +42,17 @@ add_diag_time_cols <- function(pheno_data,
 #'          \item `age_date`: The date of onset
 #'         } 
 #' 
-#' @importFrom lubridate %m+%
 #' @export
 #' 
 #' @author Kira E. Detrois
 calc_diag_time <- function(pheno_data, 
                             study) {
     check_cols_exist(pheno_data, 
-                     c(study@endpt, paste0(study@endpt, "_DATE"), "DATE_OF_BIRTH"),
+                     c(study@endpt, paste0(study@endpt, "_DATE"), "DATE_OF_BIRTH", "EXP_LEN"),
                      "calc_diag_time")  
 
     endpt_date <- dplyr::pull(pheno_data, get(paste0(study@endpt, "_DATE")))
-    study_end <- calc_end_of_study(pheno_data$DATE_OF_BIRTH,
-                                   study)
+    study_end <- calc_end_of_study(pheno_data, study)
     endpt_date[pheno_data[,study@endpt] == 0] <- study_end[pheno_data[,study@endpt] == 0]
     endpt_date <- as.Date(endpt_date, origin="1970/01/01")
     age_at_onset <- lubridate::time_length(pheno_data$DATE_OF_BIRTH %--% endpt_date, "years")

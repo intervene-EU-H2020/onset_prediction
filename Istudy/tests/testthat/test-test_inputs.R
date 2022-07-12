@@ -38,7 +38,7 @@ test_that("test_length_vars_are_integers works", {
                             exp_age=30.3,
                             exp_len=10,
                             wash_len=2,
-                            obs_len=8, ancs="EUR"))
+                            obs_len=8, ancs="EUR"), regexp=NA)
 
   expect_error(methods::new("study",
                                    endpt="J10_ASTHMA",

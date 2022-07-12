@@ -10,7 +10,7 @@
 check_cols_exist <- function(pheno_data,
                              cols,
                              func_name) {
-    error_msg <- paste0("Error in ", func_name, " missing columns ", cols[!(cols %in% colnames(pheno_data))], " in the pheno_data data.frame.\nHave columns:\n", colnames(pheno_data))
+    error_msg <- paste0("Error in ", func_name, " missing columns ", cols[!(cols %in% colnames(pheno_data))], " in the pheno_data data.frame.\nHave columns:\n", paste(colnames(pheno_data), collapse=" "))
     assertthat::assert_that(all(cols %in% colnames(pheno_data)), 
                             msg=error_msg)
 }

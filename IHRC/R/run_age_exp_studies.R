@@ -25,20 +25,20 @@
 #' 
 #' @author Kira E. Detrois
 run_age_exp_endpt_studies <- function(pheno_data, 
-                                score_ages_data,
-                                score_type,
-                                endpts=c("J10_ASTHMA"),
-                                exp_ages=c(20,30,40),
-                                exp_len=10,
-                                wash_len=2,
-                                obs_len=8,
-                                downsample_fctr=NULL,
-                                ancs="EUR",
-                                covs=c("SEX", "YEAR_OF_BIRTH"),
-                                bin_cut=1,
-                                min_indvs=5,
-                                write_res=FALSE,
-                                res_dir=NULL) {
+                                      score_ages_data,
+                                      score_type,
+                                      endpts=c("J10_ASTHMA"),
+                                      exp_ages=c(20,30,40),
+                                      exp_len=10,
+                                      wash_len=2,
+                                      obs_len=8,
+                                      downsample_fctr=NULL,
+                                      ancs=NA_character_,
+                                      covs=c("SEX", "YEAR_OF_BIRTH"),
+                                      bin_cut=1,
+                                      min_indvs=5,
+                                      write_res=FALSE,
+                                      res_dir=NULL) {
     all_age_hrs_tib <- tibble::tibble()
     all_age_cidxs_tib <- tibble::tibble()
     for(exp_age in exp_ages) {

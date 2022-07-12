@@ -23,5 +23,5 @@
 calc_exp_start_date <- function(bds, 
                                 exp_age) {
     test_date_var_correct(bds, "bds")
-    bds %m+% lubridate::years(exp_age)
+    bds + lubridate::years(exp_age)
 }

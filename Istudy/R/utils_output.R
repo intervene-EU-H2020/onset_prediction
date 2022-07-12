@@ -28,7 +28,8 @@ create_return_tib <- function(pheno_data,
                                dplyr::all_of(endpt), 
                                paste0(endpt, "_AGE"),
                                paste0(endpt, "_DATE"),
-                               dplyr::starts_with("PC"))
+                               dplyr::starts_with("PC"),
+                               EXP_LEN)
 }
 
 #' Creates a file name for the current study setup
@@ -39,8 +40,12 @@ create_return_tib <- function(pheno_data,
 #' 
 #' @author Kira E. Detrois
 get_study_file_name <- function(study) {
-    paste0(study@endpt, "_", study@exp_age, "_", study@exp_len, "_", study@wash_len, "_", study@obs_len)
-}
+    if(length(study@exp_age) == 1) {
+        paste0(study@endpt, "_", study@exp_age, "_", study@exp_len, "_", study@wash_len, "_", study@obs_len)
+    } else {
+        paste0(study@wash_len, "_", study@obs_len)
+    }
+}   
 
 #' Writes results and log file
 #' 

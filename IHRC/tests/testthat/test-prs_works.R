@@ -27,7 +27,7 @@ test_that("calc_endpt_studies_hrs for prs works", {
                                        "C3_BREAST", 
                                        "COVHOSP"),
                               downsample_fctr=4,
-                              ancs="EUR",
+                              ancs=NA_character_,
                               covs=c("SEX", "YEAR_OF_BIRTH"),
                               min_indvs=5,
                               write_res=TRUE,

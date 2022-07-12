@@ -34,7 +34,6 @@
 #'         where the last two columns are the study endpoint and date, 
 #'         which will differ depending on the input variable `endpt`.
 #' 
-#' @importFrom lubridate %m+%
 #' @importFrom lubridate %--%
 #' @importFrom lubridate %within%
 #' @export
@@ -42,11 +41,13 @@
 #' @author Kira E. Detrois
 get_study_elig_indv <- function(pheno_data,
                                 study,
+                                max_age=90,
                                 write_res=FALSE,
                                 res_dir=NULL) {
 
     check_cols_exist(pheno_data, study@endpt, "get_study_elig_indv")
     pheno_data <- add_study_interval_cols(pheno_data, study)
+    pheno_data <- filter_too_old_and_young(pheno_data, max_age)
     pheno_data <- filter_missing_endpt_data(pheno_data, study@endpt)
     pheno_data <- filter_early_endpt(pheno_data, study@endpt)
     pheno_data <- adj_case_cntrl_status(pheno_data, study@endpt)

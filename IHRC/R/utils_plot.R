@@ -64,5 +64,9 @@ read_coxph_res_file <- function(res_dir,
 
 #' @export 
 get_study_subtitle <- function(study) {
-    paste0("Age: ", study@exp_age, " Exp: ", study@exp_len, " Wash: ", study@wash_len, " Obs: ", study@obs_len, " Years")
-}
+    study_sub <- ""
+    if(length(study@exp_len) == 1) {
+        study_sub <- paste0("Age: ", study@exp_age, " Exp: ", study@exp_len, " Wash: ", study@wash_len, " Obs: ", study@obs_len, " Years")
+    } 
+    return(study_sub)
+}   

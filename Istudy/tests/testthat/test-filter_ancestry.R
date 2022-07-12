@@ -4,7 +4,7 @@ test_that("filter_ancestry works", {
   res_data <- filter_ancestry(test_data, 
                               ancs="EUR")
   expect_ids <- c("KT000002", "KT000004")
-  expect_equal(expect_ids, res_data$ID)
+  expect_equal(res_data$ID, expect_ids)
 })
 
 test_that("filter_ancestry works", {

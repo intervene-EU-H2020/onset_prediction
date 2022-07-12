@@ -4,7 +4,13 @@
 \alias{get_study_elig_indv}
 \title{Gets the individuals which are eligble given the study setup}
 \usage{
-get_study_elig_indv(pheno_data, study, write_res = FALSE, res_dir = NULL)
+get_study_elig_indv(
+  pheno_data,
+  study,
+  max_age = 90,
+  write_res = FALSE,
+  res_dir = NULL
+)
 }
 \arguments{
 \item{pheno_data}{A data.frame with at least the columns:

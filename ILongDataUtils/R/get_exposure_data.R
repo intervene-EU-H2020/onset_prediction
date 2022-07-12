@@ -43,7 +43,7 @@ get_exposure_data <- function(long_data,
         } else if(is.null(exp_start)) {
             exp_start[is.na(exp_start)] = 0
         }
-
+    
         long_data <- dplyr::filter(long_data, 
                                    Event_age >= exp_start & 
                                     Event_age <= exp_end)

@@ -14,7 +14,7 @@ run_age_exp_endpt_studies(
   wash_len = 2,
   obs_len = 8,
   downsample_fctr = NULL,
-  ancs = "EUR",
+  ancs = NA_character_,
   covs = c("SEX", "YEAR_OF_BIRTH"),
   bin_cut = 1,
   min_indvs = 5,

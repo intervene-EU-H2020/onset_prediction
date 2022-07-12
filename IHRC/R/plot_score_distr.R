@@ -19,11 +19,16 @@ plot_score_distr <- function(score_data,
                                               study@endpt)
 
     if(score_type == "CCI") {
-        plot_descr <- paste0(study@exp_age, " to ", study@exp_age+study@exp_len)
+        if(length(study@exp_len) == 1) {
+            plot_descr <- paste0(study@exp_age, " to ", study@exp_age+study@exp_len)
+        }
+        else {
+            plot_descr <- ""
+        }
         plt <- ggplot(score_data, aes(x=get("SCORE"))) + 
-                    geom_histogram(alpha=.8, fill="#214a2a", binwidth = 1.0)  +
+                    geom_histogram(fill="#405e46", binwidth = 1.0)  +
                     labs(title=paste0(score_type, " Score Histogram"),
-                         subtitle=paste0(nrow(score_data), "  Individuals ", plot_descr),
+                         subtitle=paste0(nrow(score_data), " Individuals ", plot_descr),
                          x=score_type,
                          y="Count") +
                     coord_cartesian(xlim=c(0,15)) +
@@ -31,7 +36,7 @@ plot_score_distr <- function(score_data,
                     theme(text=element_text(size=21))
     } else {
         plt <- suppressMessages(ggplot(score_data, aes(x=get("SCORE"))) + 
-                    geom_histogram(alpha=.8, fill="#214a2a", bins=30)  +
+                    geom_histogram(fill="#405e46", bins=30)  +
                     labs(title=paste0(score_type, " Score Histogram"),
                         subtitle=paste0(nrow(score_data), " Individuals "),
                         x=score_type,

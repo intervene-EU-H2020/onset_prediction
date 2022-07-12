@@ -11,7 +11,6 @@
 #' 
 #' @return A lubdridate interval. The endpoint free intervals.
 #' 
-#' @importFrom lubridate %m+%
 #' @importFrom lubridate %--%
 #' @export
 #' 
@@ -27,8 +26,13 @@ calc_endpt_free_time <- function(bds,
     test_date_var_correct(bds, "bds")
 
     exp_start_date <- calc_exp_start_date(bds, study@exp_age)
-    endpt_free_end <- exp_start_date %m+% lubridate::years(study@exp_len + study@wash_len)
+
+    if(length(study@exp_len) == 1) {
+        endpt_free_end <- exp_start_date + lubridate::years(study@exp_len + study@wash_len)
+    } else {
+        endpt_free_end <- as.Date(exp_start_date + lubridate::dyears(study@exp_len) + lubridate::years(study@wash_len), "%Y%m%d")
+    }
     endpt_free_time <- bds %--% endpt_free_end
-    
+
     return(endpt_free_time)
 }

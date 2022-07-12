@@ -46,15 +46,15 @@ setValidity("study", function(object) {
 })
 
 test_integer_correct <- function(msg, var, var_name, not_na=FALSE) {
-    if(!is.na(var)) {
-        if (length(var) != 1) {
-            msg <- paste0(msg, "@", var_name, " needs to be a single integer not a vector of integers.\n")
-        }
-        if(!(as.integer(var) == var)) {
-            msg <- paste0(msg, "@", var_name, " needs to be an integer. Instead got: ", var, "\n")
-        }
+    if(!all(is.na(var))) {
+        #if (length(var) != 1) {
+        #    msg <- paste0(msg, "@", var_name, " needs to be a single integer not a vector of integers.\n")
+        #} else 
+        #if(!(all(as.integer(var) == var))) {
+        #   msg <- paste0(msg, "@", var_name, " needs to be an integer. Instead got: ", paste0(var, collapse=" "), "\n")
+        #}
     }
-    if(is.na(var) & not_na) {
+    if(all(is.na(var)) & not_na) {
         msg <- paste0(msg, var_name, " needs to be provided for a valid study setup.")
     }
     return(msg)
