@@ -32,12 +32,12 @@ get_exposure_data <- function(long_data,
     
     if(!is.null(exp_start) | !is.null(exp_end)) {
         assertthat::assert_that("Event_age" %in% colnames(long_data))
-        # Replacing any NAs with values outside human life-spans
-        if(all(is.na(exp_end))) {
+        # Replacing any missing with values outside human life-spans
+        if(is.null(exp_end)) {
             exp_end = 200 # Change this in case super humans exist
         } else if(any(is.na(exp_end))) {
             exp_end[is.na(exp_end)] = 200 # Change this in case super humans exist
-        }
+        } 
         if(is.null(exp_start)) {
             exp_start = 0
         } else if(is.null(exp_start)) {
