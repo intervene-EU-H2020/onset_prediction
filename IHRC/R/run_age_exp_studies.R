@@ -60,6 +60,7 @@ run_age_exp_endpt_studies <- function(pheno_data,
                                  score_data=curnt_score_data,
                                  score_type=score_type,
                                  endpt_studies=endpt_studies,
+                                 min_indvs=min_indvs,
                                  write_res=write_res,
                                  res_dir=res_dir)
         endpt_hrs_tib <- calc_endpt_studies_hrs(
@@ -90,6 +91,7 @@ run_age_exp_endpt_studies <- function(pheno_data,
                     endpt_cidx_tib=all_age_cidxs_tib,
                     score_type=score_type,
                     endpt_studies=endpt_studies,
+                    covs=covs,
                     bin_cut=bin_cut,
                     write_res=write_res,
                     res_dir=res_dir)

@@ -45,7 +45,8 @@ plot_age_hrs <- function(coxph_hr_res,
                                                 study,
                                                 write_res,
                                                 res_dir,
-                                                res_type="HRs")
+                                                res_type="HRs",
+                                                covs)
             if(!is.null(file_path)) {
                 ggsave(file_path,
                     width=7,

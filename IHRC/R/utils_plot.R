@@ -33,8 +33,11 @@ get_surv_descr <- function(score_type,
 #' @inheritParams calc_endpt_studies_hrs
 #' 
 #' @export 
-get_pretty_covs_string <- function(covs) {
-    covs <- stringr::str_replace_all(covs, "_", " ")
+get_pretty_covs_string <- function(covs,
+                                   file_name=FALSE) {
+    if(!file_name) {
+        covs <- stringr::str_replace_all(covs, "_", " ")
+    }
     n_pcs <- sum(stringr::str_count(covs, "PC"))
     covs <- stringr::str_to_title(covs)
     if(n_pcs > 1) {
@@ -43,7 +46,13 @@ get_pretty_covs_string <- function(covs) {
     } else {
         covs[stringr::str_detect(covs, "Pc")] <- stringr::str_to_upper(covs[stringr::str_detect(covs, "Pc")])
     }
-    return(stringr::str_flatten(covs, collapse=" + "))
+    if(!file_name) {
+        pretty_string <- stringr::str_flatten(covs, collapse=" + ")
+    } else {
+        covs <- stringr::str_to_lower(covs)
+        pretty_string <- stringr::str_flatten(covs, collapse="_")
+    }
+    return(pretty_string)
 }
 
 read_coxph_res_file <- function(res_dir,

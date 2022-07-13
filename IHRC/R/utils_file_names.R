@@ -94,6 +94,6 @@ get_coxph_res_file_name <- function(study,
     if(score_type != "CCI") {
         file_name <- paste0(file_name, "_coxph.tsv")
     } else {
-        file_name <- paste0(file_name, "g", bin_cut, "_coxph.tsv")
+        file_name <- paste0(file_name, "_cut", bin_cut, "_coxph.tsv")
     }
 }

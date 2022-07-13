@@ -78,10 +78,14 @@ plot_score_distr <- function(score_data,
 plot_endpt_score_distr <- function(score_data,
                                    score_type,
                                    study,
+                                   min_indvs=5,
                                    write_res,
                                    res_dir) {
-    if(is.null(score_data)) 
+    if(is.null(score_data) | 
+        Istudy::get_n_cases(score_data, study@endpt) < min_indvs | 
+        Istudy::get_n_cntrls(score_data, study@endpt) < min_indvs) {
         return(NULL)
+    }
     score_data <- dplyr::mutate_at(score_data, study@endpt, as.factor)
 
     if(score_type == "CCI") {

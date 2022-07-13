@@ -11,19 +11,24 @@ check_and_get_file_path <- function(score_type,
                                     write_res,
                                     res_dir,
                                     res_type,
+                                    covs=NULL,
                                     bin_cut=1) {
-
     if(write_res) {
-        # Score results specific folder
-        res_dir <- paste0(res_dir, score_type, "/")
+        dir_name <- ""
+        if(!is.null(covs)) {
+            dir_name <- paste0(get_pretty_covs_string(covs, file_name=TRUE), "/")
+        } else if(res_type %in% c("HRs", "coxph", "surv")) {
+            message("Could not make correct directory because covariates not given")
+        }
+
         # Results type specific folder
         type_dir <- dplyr::case_when(
-            res_type == "endpt" ~ "plots/endpts/",
-            res_type == "distr" ~ "plots/",
-            res_type == "coxph" ~ "",
+            res_type == "endpt" ~ "score_distr/endpts/",
+            res_type == "distr" ~ "score_distr/",
+            res_type == "coxph" ~ dir_name,
             res_type == "log" ~ "log/",
-            res_type == "HRs" ~ "plots/HRs/", 
-            res_type == "surv" ~ "plots/surv/"
+            res_type == "HRs" ~ paste0(dir_name, "HRs/"), 
+            res_type == "surv" ~ paste0(dir_name, "surv/"),
         )
         res_dir <- paste0(res_dir, type_dir)
         # Make the folder if it doesn't exist yet

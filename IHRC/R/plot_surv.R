@@ -28,7 +28,8 @@ create_ggsurvplot <- function(coxph_mdl,
                                          study=study,
                                          write_res=write_res,
                                          res_dir=res_dir,
-                                         res_type="surv")
+                                         res_type="surv",
+                                         covs=covs)
     if(!is.null(file_path)) {
         ggsave(file_path,
                width=7,

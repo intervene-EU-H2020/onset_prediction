@@ -48,6 +48,7 @@ plot_studies_score_distr <- function(pheno_data,
                                      score_data,
                                      score_type,
                                      endpt_studies,
+                                     min_indvs=5,
                                      write_res=FALSE,
                                      res_dir=NULL) {
 
@@ -67,6 +68,7 @@ plot_studies_score_distr <- function(pheno_data,
         plot_endpt_score_distr(score_data=pheno_score_data,
                                score_type=score_type,
                                study=study,
+                               min_indvs=min_indvs,
                                write_res=write_res,
                                res_dir=res_dir)
 
