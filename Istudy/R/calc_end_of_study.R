@@ -9,6 +9,7 @@
 #' 
 #' @return A lubdridate interval. The total study time interval.
 #' 
+#' @importFrom lubridate %m+%
 #' @export
 #' 
 #' @examples 
@@ -26,8 +27,8 @@ calc_end_of_study <- function(pheno_data,
 
     exp_start_date <- calc_exp_start_date(pheno_data$DATE_OF_BIRTH, study@exp_age)
     if(length(study@exp_len) == 1) {
-        end_time <- exp_start_date + lubridate::years(study@exp_len + study@wash_len + study@obs_len)
-    } else {
+        end_time <- exp_start_date %m+% lubridate::years(study@exp_len + study@wash_len + study@obs_len)
+    } else { # Different exposure lengths for each individual
         end_time <- exp_start_date + lubridate::dyears(pheno_data$EXP_LEN) + lubridate::years(study@wash_len + study@obs_len)
         # Removing unecessary extra hms information
         end_time <- as.Date(end_time, "%Y%m%d")

@@ -11,10 +11,9 @@ create_prs_test <- function(n_indv=25, indv_ids=NULL) {
 test_that("calc_endpt_studies_hrs for prs works", {
     set.seed(919923)
 
-    pheno_data <- Istudy::create_test_df(10000)
+    pheno_data <- Istudy::create_test_df(100000)
     test_data <- create_prs_test(length(pheno_data$ID), pheno_data$ID)
-    exp_ages <- c(20, 30, 40)
-
+    exp_ages <- c(20,30,40)
     run_age_exp_endpt_studies(pheno_data, 
                               test_data,
                               score_type="PRS",
