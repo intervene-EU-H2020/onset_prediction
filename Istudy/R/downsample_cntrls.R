@@ -20,10 +20,12 @@ downsample_cntrls <- function(pheno_data,
 
     cntrl_idxs <- which(pheno_data[[study@endpt]] == 0)
     case_idxs <- which(pheno_data[[study@endpt]] == 1)
-    set.seed(1923)
-    cntrl_idxs_down <- sample(cntrl_idxs, size=n_cntrls, replace=FALSE)
 
-    select_idxs <- sort(c(cntrl_idxs_down, case_idxs))
-
-    return(pheno_data[select_idxs,])
-}
+    set.seed(1923) # Making control selection reproducible
+    if(length(cntrl_idxs) > n_cntrls) {
+        cntrl_idxs_down <- sample(cntrl_idxs, size=n_cntrls, replace=FALSE)
+        select_idxs <- sort(c(cntrl_idxs_down, case_idxs))
+        pheno_data <- pheno_data[select_idxs,]
+    }
+    return(pheno_data)
+}   
