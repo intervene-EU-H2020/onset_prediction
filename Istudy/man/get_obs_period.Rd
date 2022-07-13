@@ -4,7 +4,7 @@
 \alias{get_obs_period}
 \title{Calculates the age in the observation period}
 \usage{
-get_obs_period(study)
+get_obs_period(study, obs_end = NULL)
 }
 \arguments{
 \item{study}{An S4 class representing the study setup.}

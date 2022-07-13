@@ -3,12 +3,13 @@ get_backward_study <- function(pheno_data,
                                endpt="I9_VTE",
                                wash_len=2,
                                obs_len=8,
+                               obs_end=NULL,
                                downsample_fctr=NA_real_,
                                ancs=NA_character_) {
     study <- methods::new("study",
                           endpt=endpt,
                           exp_age=0,
-                          exp_len=get_indv_exp_len(pheno_data, wash_len, obs_len),
+                          exp_len=get_indv_exp_len(pheno_data, wash_len, obs_len, obs_end),
                           wash_len=wash_len,
                           obs_len=obs_len,
                           downsample_fctr=downsample_fctr,
@@ -18,11 +19,14 @@ get_backward_study <- function(pheno_data,
 
 #' @importFrom lubridate %m-%
 get_indv_exp_len <- function(pheno_data,
-                             wash_len,
-                             obs_len) {
-    max_date <- get_max_date(pheno_data)
+                             wash_len=2,
+                             obs_len=8,
+                             obs_end=NULL) {
+    if(is.null(obs_end)) {
+        obs_end <- get_max_date(pheno_data)
+    }
 
-    start_obs <- lubridate::add_with_rollback(max_date, -lubridate::years(wash_len + obs_len), preserve_hms = FALSE)
+    start_obs <- obs_end %m-% lubridate::years(wash_len + obs_len)
     exp_dur <- lubridate::as.duration(pheno_data$DATE_OF_BIRTH %--% start_obs)
     indv_exp_len <- lubridate::time_length(exp_dur, "years")
     
