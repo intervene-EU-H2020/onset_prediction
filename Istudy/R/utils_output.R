@@ -35,15 +35,17 @@ create_return_tib <- function(pheno_data,
 #' Creates a file name for the current study setup
 #' 
 #' @inheritParams add_study_interval_cols
+#' @inheritParams get_backward_study
 #' 
 #' @export 
 #' 
 #' @author Kira E. Detrois
-get_study_file_name <- function(study) {
-    if(length(study@exp_age) == 1) {
-        paste0(study@endpt, "_", study@exp_age, "_", study@exp_len, "_", study@wash_len, "_", study@obs_len)
+get_study_file_name <- function(study,
+                                obs_end=NULL) {
+    if(is.null(obs_end)) {
+        paste0(study@endpt, "_a", study@exp_age, "_e", study@exp_len, "_w", study@wash_len, "_o", study@obs_len)
     } else {
-        paste0(study@wash_len, "_", study@obs_len)
+        paste0(study@endpt, "_", obs_end, "_o", study@obs_len, "_w", study@wash_len)
     }
 }   
 

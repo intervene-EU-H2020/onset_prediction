@@ -1,10 +1,10 @@
 Package: Istudy
 Title: INTERVENE - Study Setup
-Version: 2.1.0
+Version: 3.0.0
 Authors@R: 
     person("Kira E.", "Detrois", , "kira.detrois@helsinki.fi", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-7193-624X"))
-Description: The goal of this package is to select individuals from the data that are eligible given a certain study setup. A study setup consists of an exposure, a washout, and an observation period. Eligible individuals cannot have the selected endpoint of interest inside the endpoint free period. The endpoint free period ranges from birth until the observation period begins.
+Description: The goal of this package is to select individuals from the data that are eligible given a certain study setup. A study setup consists of an exposure, a washout, and an observation period. Eligible individuals cannot have the selected endpoint of interest inside the endpoint free period. The endpoint free period ranges from birth until the observation period begins. There are two types of study setups. The first one considers individuals of a certain age and a set exposure, washout, and observation periods calcualted onwards from this age. The second one considers all individuals at a set time point. The observation and washout period are calcualted backwards from this time point. The exposure period will be different for each individual depending on their birth date. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
