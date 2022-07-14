@@ -1,15 +1,13 @@
-#' Filters out early endpoint
+#' Filters out individuals with early endpoints
 #' 
 #' Filters out individuals where the endpoint occured before the 
-#' prediction period began.
+#' observation period begins.
 #' 
 #' The endpoint free interval is the period from birth until the 
-#' prediction period begins. Thus, the interval also contains the 
-#' exposure and washout period. See function 
-#' \code{\link{calc_endpt_free_time}}.
+#' observation period begins. Thus, the contains the exposure and 
+#' washout period. See function \code{\link{calc_endpt_free_time}}.
 #' 
-#' For the input data format see: 
-#' \href{https://docs.google.com/document/d/1GbZszpPeyf-hyb0V_YDx828YbM7woh8OBJhvzkEwo2g/edit}{INTERVENE Phenotype File Definition}. To create the endpoint free interval, use either the
+#' To create the endpoint free intervals, use either the
 #' function \code{\link{calc_endpt_free_time}} directly or 
 #' \code{\link{add_study_interval_cols}}.
 #' 
@@ -41,7 +39,6 @@ filter_early_endpt <- function(pheno_data,
                      c(endpt_date_str, "ENDPT_FREE"),
                      "filter_early_endpt")
 
-    # Endpoint happens after Endpoint free interval
     dplyr::filter(pheno_data, 
                   !(get(endpt_date_str) %within% ENDPT_FREE) | 
                   is.na(get(endpt_date_str))) # If no endpoint date then NA 

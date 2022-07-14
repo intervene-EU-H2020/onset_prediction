@@ -2,14 +2,15 @@
 #' 
 #' Calculates the endpoint free interval for each individual. The 
 #' endpoint free interval is the period from birth until the 
-#' prediction period begins. Thus, the interval also contains the 
+#' observation period begins. Thus, the interval contains the 
 #' exposure and washout period.
 #' 
 #' Creates lubridate \code{\link[lubridate]{interval}}s.
 #' 
 #' @inheritParams calc_end_of_study
+#' @param bds A Date (vector). The birth days of the individuals.
 #' 
-#' @return A lubdridate interval. The endpoint free intervals.
+#' @return A lubdridate interval (vector). The endpoint free intervals.
 #' 
 #' @importFrom lubridate %--%
 #' @importFrom lubridate %m+%

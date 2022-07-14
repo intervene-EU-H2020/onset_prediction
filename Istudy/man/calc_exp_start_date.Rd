@@ -2,22 +2,22 @@
 % Please edit documentation in R/calc_exp_start_date.R
 \name{calc_exp_start_date}
 \alias{calc_exp_start_date}
-\title{Calculates start of exposure period}
+\title{Calculates start of the exposure period}
 \usage{
 calc_exp_start_date(bds, exp_age)
 }
 \arguments{
-\item{bds}{A Date. The birth days of the individuals.}
+\item{bds}{A Date (vector). The birth days of the individuals.}
 
 \item{exp_age}{An integer. Age at which exposure period starts
 (in years)}
 }
 \value{
-A Date. The dates of the start of the exposure period
+A Date (vector). The start dates of the exposure period
 for each individual.
 }
 \description{
-Calculates the date of the start of the exposure period for each
+Calculates the start date of the exposure period for each
 individual.
 }
 \examples{

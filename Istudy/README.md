@@ -3,11 +3,16 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of this package is to select individuals from the data that are eligible given a certain study setup. A study setup consists of an exposure, a washout, and an observation period. Eligible individuals cannot have the selected endpoint of interest inside the endpoint free period. The endpoint free period ranges from birth until the observation period begins.
+The goal of this package is to select individuals from the data that are eligible given a certain study setup. A study setup consists of an exposure, a washout, and an observation period. Eligible individuals cannot have the selected endpoint of interest inside the endpoint free period. The endpoint free period ranges from birth until the observation period begins. There are two types of study setups. 
 
-![Study Setup](https://github.com/intervene-EU-H2020/onset_prediction/blob/main/Istudy/man/Stuy_setup_schema.png)
+The first one considers individuals of a certain age and a set exposure, washout, and observation periods calcualted onwards from this age. 
 
-For the input file format see: [INTERVENE Phenotype File Definition](https://docs.google.com/document/d/1GbZszpPeyf-hyb0V_YDx828YbM7woh8OBJhvzkEwo2g/edit). Additionally, the important column names the date needs to have are inidicated in each function documentation.
+![Study Setup](https://github.com/intervene-EU-H2020/onset_prediction/blob/main/Istudy/man/Study_setup_schema.png)
+
+The second one considers all individuals at a set time point. The observation and washout period are calcualted backwards from this time point. The exposure period will be different for each individual depending on their birth date. 
+![Study Setup Backwards](https://github.com/intervene-EU-H2020/onset_prediction/blob/main/Istudy/man/Study_Setup_Back_Schema.png)
+
+The important column names for the input data are indicated in each function documentation.
 
 ### R package Dependencies
  All packages are alread installed in the FinnGen Sandbox.

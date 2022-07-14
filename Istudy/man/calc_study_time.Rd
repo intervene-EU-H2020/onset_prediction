@@ -2,28 +2,23 @@
 % Please edit documentation in R/calc_study_time.R
 \name{calc_study_time}
 \alias{calc_study_time}
-\title{Calculates total study time interval}
+\title{Calculates the total study time interval}
 \usage{
 calc_study_time(pheno_data, study)
 }
 \arguments{
-\item{pheno_data}{A data.frame with at least the columns:
-\code{ID}, \code{SEX}, \code{DATE_OF_BIRTH}, \code{ANCESTRY},
-\code{START_OF_FOLLOWUP}, \code{END_OF_FOLLOWUP},
-\code{DATE_OF_BIRTH}, and i.e. \code{J10_ASTHMA}, and
-\code{J10_ASTHMA_DATE} where the columns are the study
-endpoint and date, which will differ depending on
-the input variable \code{endpt}.}
+\item{pheno_data}{A data.frame with at least columns \code{DATE_OF_BIRTH},
+and \code{EXP_LEN}.}
 
 \item{study}{An S4 class representing the study setup.}
 }
 \value{
-A lubdridate interval. The total study time interval.
+A lubdridate interval (vector). The total study time intervals.
 }
 \description{
 Calculates the total study time for each individual. The study time
 is the time from the begining of the exposure period to the end
-of the prediction period.
+of the observation period.
 }
 \details{
 Creates lubridate \code{\link[lubridate]{interval}}s.

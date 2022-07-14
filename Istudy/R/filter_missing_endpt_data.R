@@ -1,13 +1,10 @@
-#' Filters out missing information in the endpoint
+#' Filters out missing information on the endpoint
 #' 
 #' Filters out individuals with missing information about the 
-#' endpoint of interest, defined with variable `endpt`.
-#' The missing information can either be no recorded endpoint 
+#' endpoint of interest, defined by variable `endpt`.
+#' Missing information is defined by either no recorded endpoint 
 #' (endpt: NA), or for cases no recorded date of endpoint (endpt: 1, 
 #' endpt_date: NA).
-#' 
-#' For the input data format see: 
-#' \href{https://docs.google.com/document/d/1GbZszpPeyf-hyb0V_YDx828YbM7woh8OBJhvzkEwo2g/edit}{INTERVENE Phenotype File Definition}.
 #' 
 #' @param pheno_data A data.frame with at least the columns:
 #'                   i.e. `J10_ASTHMA`, and `J10_ASTHMA_DATE` where 
@@ -16,7 +13,8 @@
 #'                  `endpt`.
 #' @inheritParams adj_case_cntrl_status
 #'                  
-#' @return The filtered data.frame without any missing information about the endpoint of interest.
+#' @return The filtered data.frame without any missing information 
+#'          on the endpoint of interest.
 #' 
 #' @export
 #' 

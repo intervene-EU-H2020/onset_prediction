@@ -1,9 +1,9 @@
 #' Gets only the individuals from the specified ancestries
 #' 
 #' @inheritParams get_study_elig_indv
-#' @param ancs A character (vector). The ancestry to select
+#' @param ancs A character (vector). The ancestries to select.
 #' 
-#' @return A tibble the filtered data.frame
+#' @return The filtered data.frame.
 #' 
 #' @author Kira E. Detrois
 filter_ancestry <- function(pheno_data,

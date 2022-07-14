@@ -2,9 +2,9 @@
 % Please edit documentation in R/get_obs_period.R
 \name{get_obs_period}
 \alias{get_obs_period}
-\title{Calculates the age in the observation period}
+\title{Calculates the age at the start and end the observation period}
 \usage{
-get_obs_period(study, obs_end = NULL)
+get_obs_period(study)
 }
 \arguments{
 \item{study}{An S4 class representing the study setup.}
@@ -14,7 +14,7 @@ A list with the \code{start} and \code{end} age in the
 observation period
 }
 \description{
-Calculates the age in the observation period
+Calculates the age at the start and end the observation period
 }
 \author{
 Kira E. Detrois

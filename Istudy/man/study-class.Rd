@@ -17,6 +17,9 @@ An S4 class representing the study setup
 
 \item{\code{exp_len}}{An integer. Length of the exposure period (in years).}
 
+\item{\code{exp_ids}}{A character (vector). The IDs for the exposure lengths,
+if they differ between individuals.}
+
 \item{\code{wash_len}}{An integer. Length of the washout period (in years).}
 
 \item{\code{obs_len}}{An integer. Length of the observation period (in years).}

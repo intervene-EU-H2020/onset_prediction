@@ -4,10 +4,12 @@
 \alias{get_study_file_name}
 \title{Creates a file name for the current study setup}
 \usage{
-get_study_file_name(study)
+get_study_file_name(study, obs_end = NULL)
 }
 \arguments{
 \item{study}{An S4 class representing the study setup.}
+
+\item{obs_end}{A Date. The end of the observation period.}
 }
 \description{
 Creates a file name for the current study setup

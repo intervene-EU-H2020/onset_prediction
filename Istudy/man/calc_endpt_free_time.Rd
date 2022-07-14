@@ -7,17 +7,17 @@
 calc_endpt_free_time(bds, study)
 }
 \arguments{
-\item{bds}{A Date. The birth days of the individuals.}
+\item{bds}{A Date (vector). The birth days of the individuals.}
 
 \item{study}{An S4 class representing the study setup.}
 }
 \value{
-A lubdridate interval. The endpoint free intervals.
+A lubdridate interval (vector). The endpoint free intervals.
 }
 \description{
 Calculates the endpoint free interval for each individual. The
 endpoint free interval is the period from birth until the
-prediction period begins. Thus, the interval also contains the
+observation period begins. Thus, the interval contains the
 exposure and washout period.
 }
 \details{

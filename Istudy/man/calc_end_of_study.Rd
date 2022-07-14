@@ -7,17 +7,10 @@
 calc_end_of_study(pheno_data, study)
 }
 \arguments{
-\item{pheno_data}{A data.frame with at least the columns:
-\code{ID}, \code{SEX}, \code{DATE_OF_BIRTH}, \code{ANCESTRY},
-\code{START_OF_FOLLOWUP}, \code{END_OF_FOLLOWUP},
-\code{DATE_OF_BIRTH}, and i.e. \code{J10_ASTHMA}, and
-\code{J10_ASTHMA_DATE} where the columns are the study
-endpoint and date, which will differ depending on
-the input variable \code{endpt}.}
+\item{pheno_data}{A data.frame with at least columns \code{DATE_OF_BIRTH},
+and \code{EXP_LEN}.}
 
 \item{study}{An S4 class representing the study setup.}
-
-\item{bds}{A Date. The birth days of the individuals.}
 }
 \value{
 A lubdridate interval. The total study time interval.
@@ -25,7 +18,7 @@ A lubdridate interval. The total study time interval.
 \description{
 Calculates the end of the study time for each individual. The study time
 is the time from the begining of the exposure period to the end
-of the prediction period.
+of the observation period.
 }
 \examples{
 test_data <- Istudy::create_test_df(30)

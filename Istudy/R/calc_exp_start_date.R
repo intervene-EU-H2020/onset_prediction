@@ -1,13 +1,13 @@
-#' Calculates start of exposure period
+#' Calculates start of the exposure period
 #' 
-#' Calculates the date of the start of the exposure period for each 
+#' Calculates the start date of the exposure period for each 
 #' individual.
 #' 
-#' @inheritParams calc_end_of_study
+#' @inheritParams calc_endpt_free_time
 #' @param exp_age An integer. Age at which exposure period starts
 #'                   (in years)
 #' 
-#' @return A Date. The dates of the start of the exposure period 
+#' @return A Date (vector). The start dates of the exposure period 
 #'                 for each individual.
 #' 
 #' @importFrom lubridate %m+%

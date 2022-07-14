@@ -1,11 +1,16 @@
 #' Adds columns for the study setup
 #' 
-#' Adds the three columns, `FOLLOWUP`, `ENDPT_FREE`, and `STUDY_TIME`
-#' to the phenotype data.frame. Each column contains lubridate 
-#' \code{\link[lubridate]{interval}}s.
+#' Adds the three columns, `EXP_LEN`, `ENDPT_FREE`, and `STUDY_TIME`
+#' to the phenotype data.frame. Columns `ENDPT_FREE`, and `STUDY_TIME`
+#' each contain lubridate \code{\link[lubridate]{interval}}s.
 #' 
-#' For the input data format see: 
-#' \href{https://docs.google.com/document/d/1GbZszpPeyf-hyb0V_YDx828YbM7woh8OBJhvzkEwo2g/edit}{INTERVENE Phenotype File Definition}
+#' The column `EXP_LEN` is mainly needed for studies that consider
+#' variable exposure lengths for individuals selected at a given time point. 
+#' Here the exposure length will be the time from birth until the time point
+#' considered and should be provided in the S4 study object in slot `exp_len`
+#' in the same order as the individuals in the data.frame. A study setup like
+#' this can be created using the function \code{\link{get_backward_study}}.
+#' 
 #' 
 #' @param pheno_data A data.frame with at least the column `DATE_OF_BIRTH`.
 #' @inheritParams get_study_elig_indv
@@ -20,6 +25,8 @@
 #'          \item `STUDY_TIME`: lubdridate intervals which range from 
 #'                           the start of the exposure period to the 
 #'                           end of the prediction period.
+#'          \item `EXP_LEN`: Exact time length of the exposure period in
+#'                           years.
 #'          }
 #' 
 #' @export 

@@ -16,8 +16,8 @@ The downsampled data.frame.
 }
 \description{
 Given the same number of cases and the same indices
-will always sample the same individuals. This allows
-reproducibility of the study selection.
+will always sample the same individuals as controls.
+This allows reproducibility of the study selection.
 }
 \author{
 Kira E. Detrois

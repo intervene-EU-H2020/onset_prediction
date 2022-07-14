@@ -22,16 +22,22 @@ occurance for eligible study participants.
 \item \code{STUDY_TIME}: lubdridate intervals which range from
 the start of the exposure period to the
 end of the prediction period.
+\item \code{EXP_LEN}: Exact time length of the exposure period in
+years.
 }
 }
 \description{
-Adds the three columns, \code{FOLLOWUP}, \code{ENDPT_FREE}, and \code{STUDY_TIME}
-to the phenotype data.frame. Each column contains lubridate
-\code{\link[lubridate]{interval}}s.
+Adds the three columns, \code{EXP_LEN}, \code{ENDPT_FREE}, and \code{STUDY_TIME}
+to the phenotype data.frame. Columns \code{ENDPT_FREE}, and \code{STUDY_TIME}
+each contain lubridate \code{\link[lubridate]{interval}}s.
 }
 \details{
-For the input data format see:
-\href{https://docs.google.com/document/d/1GbZszpPeyf-hyb0V_YDx828YbM7woh8OBJhvzkEwo2g/edit}{INTERVENE Phenotype File Definition}
+The column \code{EXP_LEN} is mainly needed for studies that consider
+variable exposure lengths for individuals selected at a given time point.
+Here the exposure length will be the time from birth until the time point
+considered and should be provided in the S4 study object in slot \code{exp_len}
+in the same order as the individuals in the data.frame. A study setup like
+this can be created using the function \code{\link{get_backward_study}}.
 }
 \author{
 Kira E. Detrois

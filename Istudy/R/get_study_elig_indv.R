@@ -1,10 +1,25 @@
 #' Gets the individuals which are eligble given the study setup
 #' 
+#' There are two types of study setup:
+#' 
 #' \itemize{
-#'  \item The study setup consist of an exposure window, 
+#'  \item The first one considers individuals of a certain age 
+#'        and a set exposure, washout, and observation periods 
+#'        calcualted onwards from this age. It can simply be created
+#'        by creating a S4 study object.
+#'  \item The second one considers all individuals at a set time
+#'        point. The observation and washout period are calcualted 
+#'        backwards from this time point. The exposure period will be 
+#'        different for each individual depending on their birth date. 
+#'        This setup can be created, using the function 
+#'        \code{\link{get_backward_study}}.
+#' }
+#' 
+#' \itemize{
+#'  \item The study setup consists of an exposure window, 
 #'        a washout period, and a prediction period. See function 
 #'        \code{\link{calc_study_time}}.
-#'  \item Eligible individuals cannot have missing date in the
+#'  \item Eligible individuals cannot have missing data in the
 #'        column for the endpoint of interest. See function 
 #'        \code{\link{filter_missing_endpt_data}}.
 #'  \item Eligible individuals cannot have the
@@ -12,7 +27,8 @@
 #'        period. The endpoint free interval is the period from birth 
 #'        until the prediction period begins. See function
 #'        \code{\link{filter_early_endpt}}. 
-#'  
+#'  \item Individuals where the endpoint onset date is after the 
+#'        observation has ended are considered controls in this setup. 
 #' }
 #' 
 #' @param pheno_data A data.frame with at least the columns: 
@@ -22,6 +38,7 @@
 #'                   `J10_ASTHMA_DATE` where the columns are the study 
 #'                   endpoint and date, which will differ depending on 
 #'                   the input variable `endpt`.
+#' @inheritParams filter_too_old_and_young
 #' @param study An S4 class representing the study setup.
 #' @param write_res A boolean. Defines whether to write the results to
 #'                  a file or not. Default is FALSE.
@@ -34,8 +51,6 @@
 #'         where the last two columns are the study endpoint and date, 
 #'         which will differ depending on the input variable `endpt`.
 #' 
-#' @importFrom lubridate %--%
-#' @importFrom lubridate %within%
 #' @export
 #' 
 #' @author Kira E. Detrois
@@ -44,8 +59,8 @@ get_study_elig_indv <- function(pheno_data,
                                 max_age=90,
                                 write_res=FALSE,
                                 res_dir=NULL) {
-
     check_cols_exist(pheno_data, study@endpt, "get_study_elig_indv")
+
     pheno_data <- add_study_interval_cols(pheno_data, study)
     pheno_data <- filter_too_old_and_young(pheno_data, max_age)
     pheno_data <- filter_missing_endpt_data(pheno_data, study@endpt)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/filter_missing_endpt_data.R
 \name{filter_missing_endpt_data}
 \alias{filter_missing_endpt_data}
-\title{Filters out missing information in the endpoint}
+\title{Filters out missing information on the endpoint}
 \usage{
 filter_missing_endpt_data(pheno_data, endpt)
 }
@@ -13,22 +13,19 @@ the columns are the study endpoint and date,
 which will differ depending on the input variable
 \code{endpt}.}
 
-\item{endpt}{A string. The column name of the current endpoint of
+\item{endpt}{A character. The column name of the current endpoint of
 interest.}
 }
 \value{
-The filtered data.frame without any missing information about the endpoint of interest.
+The filtered data.frame without any missing information
+on the endpoint of interest.
 }
 \description{
 Filters out individuals with missing information about the
-endpoint of interest, defined with variable \code{endpt}.
-The missing information can either be no recorded endpoint
+endpoint of interest, defined by variable \code{endpt}.
+Missing information is defined by either no recorded endpoint
 (endpt: NA), or for cases no recorded date of endpoint (endpt: 1,
 endpt_date: NA).
-}
-\details{
-For the input data format see:
-\href{https://docs.google.com/document/d/1GbZszpPeyf-hyb0V_YDx828YbM7woh8OBJhvzkEwo2g/edit}{INTERVENE Phenotype File Definition}.
 }
 \examples{
 test_data <- create_test_df()

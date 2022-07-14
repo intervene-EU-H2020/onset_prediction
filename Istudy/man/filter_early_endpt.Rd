@@ -2,7 +2,7 @@
 % Please edit documentation in R/filter_early_endpt.R
 \name{filter_early_endpt}
 \alias{filter_early_endpt}
-\title{Filters out early endpoint}
+\title{Filters out individuals with early endpoints}
 \usage{
 filter_early_endpt(pheno_data, endpt)
 }
@@ -12,7 +12,7 @@ and i.e. \code{J10_ASTHMA_DATE} where the columns are the study
 endpoint and date, which will differ depending on the input
 variable \code{endpt}.}
 
-\item{endpt}{A string. The column name of the current endpoint of
+\item{endpt}{A character. The column name of the current endpoint of
 interest.}
 }
 \value{
@@ -21,16 +21,14 @@ endpoint occured before the prediction period.
 }
 \description{
 Filters out individuals where the endpoint occured before the
-prediction period began.
+observation period begins.
 }
 \details{
 The endpoint free interval is the period from birth until the
-prediction period begins. Thus, the interval also contains the
-exposure and washout period. See function
-\code{\link{calc_endpt_free_time}}.
+observation period begins. Thus, the contains the exposure and
+washout period. See function \code{\link{calc_endpt_free_time}}.
 
-For the input data format see:
-\href{https://docs.google.com/document/d/1GbZszpPeyf-hyb0V_YDx828YbM7woh8OBJhvzkEwo2g/edit}{INTERVENE Phenotype File Definition}. To create the endpoint free interval, use either the
+To create the endpoint free intervals, use either the
 function \code{\link{calc_endpt_free_time}} directly or
 \code{\link{add_study_interval_cols}}.
 }

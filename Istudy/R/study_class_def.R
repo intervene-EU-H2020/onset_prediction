@@ -3,6 +3,8 @@
 #' @slot endpt A character. The column name of the current endpoint of interest. 
 #' @slot exp_age An integer. Age at which exposure period starts (in years).
 #' @slot exp_len An integer. Length of the exposure period (in years).
+#' @slot exp_ids A character (vector). The IDs for the exposure lengths,
+#'                   if they differ between individuals.
 #' @slot wash_len An integer. Length of the washout period (in years).
 #' @slot obs_len  An integer. Length of the observation period (in years).
 #' @slot downsample_fctr An integer. Defines how many controls there
@@ -16,19 +18,21 @@
 #' @author Kira E. Detrois
 study <- methods::setClass("study", 
                             slots=list(endpt="character",
-                                        exp_age="numeric",
-                                        exp_len="numeric",
-                                        wash_len="numeric",
-                                        obs_len="numeric",
-                                        downsample_fctr="numeric",
-                                        ancs="character"),
+                                       exp_age="numeric",
+                                       exp_len="numeric",
+                                       exp_ids="character",
+                                       wash_len="numeric",
+                                       obs_len="numeric",
+                                       downsample_fctr="numeric",
+                                       ancs="character"),
                             prototype=list(endpt=NA_character_,
-                                        exp_age=NA_real_,
-                                        exp_len=NA_real_,
-                                        wash_len=NA_real_,
-                                        obs_len=NA_real_,
-                                        downsample_fctr=NA_real_,
-                                        ancs=NA_character_))
+                                           exp_age=NA_real_,
+                                           exp_len=NA_real_,
+                                           exp_ids=NA_character_,
+                                           wash_len=NA_real_,
+                                           obs_len=NA_real_,
+                                           downsample_fctr=NA_real_,
+                                           ancs=NA_character_))
 
 setValidity("study", function(object) {
     msg <- ""

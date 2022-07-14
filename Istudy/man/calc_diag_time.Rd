@@ -2,7 +2,7 @@
 % Please edit documentation in R/add_diag_time_cols.R
 \name{calc_diag_time}
 \alias{calc_diag_time}
-\title{Calculates the date of onset and the age in days}
+\title{Calculates the date and exact age in years of onset}
 \usage{
 calc_diag_time(pheno_data, study)
 }
@@ -24,8 +24,8 @@ A list(\code{exact_age_yrs}, \code{age_date}).
 }
 \description{
 Calculates the age at onset of the endpoint of interest.
-The date of onset is either the date of diagnosis for cases or the
-end of the study period for controls.
+For cases the date of onset is the date of diagnosis and for
+controls it is the end of the study period.
 }
 \author{
 Kira E. Detrois

@@ -2,7 +2,7 @@
 % Please edit documentation in R/add_diag_time_cols.R
 \name{add_diag_time_cols}
 \alias{add_diag_time_cols}
-\title{Adds columns for the date of onset and the age in days}
+\title{Adds columns for the date and exact age in years of onset}
 \usage{
 add_diag_time_cols(pheno_data, study)
 }
@@ -16,15 +16,15 @@ variable \code{endpt}.}
 \item{study}{An S4 class representing the study setup.}
 }
 \value{
-The data.frame with for example for endpoint \code{J10_ASTHMA},
-added column \code{J10_ASTHMA_exact_age_yrs}, and changed column
-\code{J10_ASTHMA_DATE} with the end of the study as the
-date for controls.
+The data.frame. For example for endpoint \code{J10_ASTHMA},
+the data.frame will have and added column \code{J10_ASTHMA_AGE},
+and for controls the column \code{J10_ASTHMA_DATE} now contains
+the study end date.
 }
 \description{
 Calculates the age at onset of the endpoint of interest.
-The date of onset is either the date of diagnosis for cases or the
-end of the study period for controls.
+For cases the date of onset is the date of diagnosis and for
+controls it is the end of the study period.
 }
 \author{
 Kira E. Detrois

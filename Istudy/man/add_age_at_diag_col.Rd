@@ -14,7 +14,7 @@ where the columns are the study endpoint and
 date, which will differ depending on the input
 variable \code{endpt}.}
 
-\item{endpt}{A string. The column name of the current endpoint of
+\item{endpt}{A character. The column name of the current endpoint of
 interest.}
 }
 \description{

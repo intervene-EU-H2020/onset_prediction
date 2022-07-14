@@ -1,8 +1,8 @@
 #' Downsamples the number of controls in the data
 #' 
 #' Given the same number of cases and the same indices
-#' will always sample the same individuals. This allows 
-#' reproducibility of the study selection.
+#' will always sample the same individuals as controls. 
+#' This allows reproducibility of the study selection.
 #' 
 #' @inheritParams get_n_cases
 #' @inheritParams get_study_elig_indv

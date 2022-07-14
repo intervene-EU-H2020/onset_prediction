@@ -15,10 +15,10 @@ filter_ancestry(pheno_data, ancs = "EUR")
 endpoint and date, which will differ depending on
 the input variable \code{endpt}.}
 
-\item{ancs}{A character (vector). The ancestry to select}
+\item{ancs}{A character (vector). The ancestries to select.}
 }
 \value{
-A tibble the filtered data.frame
+The filtered data.frame.
 }
 \description{
 Gets only the individuals from the specified ancestries

@@ -1,14 +1,14 @@
-#' Calculates total study time interval
+#' Calculates the total study time interval
 #' 
 #' Calculates the total study time for each individual. The study time
 #' is the time from the begining of the exposure period to the end 
-#' of the prediction period.
+#' of the observation period.
 #' 
 #' Creates lubridate \code{\link[lubridate]{interval}}s.
 #' 
 #' @inheritParams calc_end_of_study
 #' 
-#' @return A lubdridate interval. The total study time interval.
+#' @return A lubdridate interval (vector). The total study time intervals.
 #' 
 #' @importFrom lubridate %--%
 #' @export

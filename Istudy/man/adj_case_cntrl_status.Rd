@@ -13,12 +13,12 @@ where the columns are the study endpoint and
 date, which will differ depending on the input
 variable \code{endpt}.}
 
-\item{endpt}{A string. The column name of the current endpoint of
+\item{endpt}{A character. The column name of the current endpoint of
 interest.}
 }
 \description{
-Those individuals where the endpoint date is after the prediction
-period are considered cases in our setup.
+Those individuals where the endpoint onset date is after the
+observation has ended are considered controls in this setup.
 }
 \author{
 Kira E. Detrois

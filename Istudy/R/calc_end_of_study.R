@@ -2,9 +2,10 @@
 #' 
 #' Calculates the end of the study time for each individual. The study time
 #' is the time from the begining of the exposure period to the end 
-#' of the prediction period.
+#' of the observation period.
 #' 
-#' @param bds A Date. The birth days of the individuals.
+#' @param pheno_data A data.frame with at least columns `DATE_OF_BIRTH`,
+#'                      and `EXP_LEN`.
 #' @inheritParams get_study_elig_indv
 #' 
 #' @return A lubdridate interval. The total study time interval.
@@ -22,8 +23,8 @@
 #' @author Kira E. Detrois
 calc_end_of_study <- function(pheno_data,
                               study) {
-    test_date_var_correct(pheno_data$DATE_OF_BIRTH, "bds")
     check_cols_exist(pheno_data, c("DATE_OF_BIRTH", "EXP_LEN"), "calc_end_of_study")  
+    test_date_var_correct(pheno_data$DATE_OF_BIRTH, "bds")
 
     exp_start_date <- calc_exp_start_date(pheno_data$DATE_OF_BIRTH, study@exp_age)
     if(length(study@exp_len) == 1) {
