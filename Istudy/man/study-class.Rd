@@ -11,6 +11,8 @@ An S4 class representing the study setup
 \section{Slots}{
 
 \describe{
+\item{\code{study_type}}{A character. Can be either \code{forward} or \code{backward}.}
+
 \item{\code{endpt}}{A character. The column name of the current endpoint of interest.}
 
 \item{\code{exp_age}}{An integer. Age at which exposure period starts (in years).}
@@ -23,6 +25,8 @@ if they differ between individuals.}
 \item{\code{wash_len}}{An integer. Length of the washout period (in years).}
 
 \item{\code{obs_len}}{An integer. Length of the observation period (in years).}
+
+\item{\code{obs_end}}{A Date. The end of the observation period.}
 
 \item{\code{downsample_fctr}}{An integer. Defines how many controls there
 should be for every case.

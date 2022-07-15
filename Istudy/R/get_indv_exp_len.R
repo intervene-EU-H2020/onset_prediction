@@ -13,10 +13,7 @@ get_indv_exp_len <- function(pheno_data,
                              wash_len=2,
                              obs_len=8,
                              obs_end=NULL) {
-    if(is.null(obs_end)) {
-        obs_end <- get_max_date(pheno_data)
-    }
-
+    obs_end <- get_obs_end(pheno_data, obs_end)
     start_obs <- obs_end %m-% lubridate::years(wash_len + obs_len)
     exp_dur <- lubridate::as.duration(pheno_data$DATE_OF_BIRTH %--% start_obs)
     indv_exp_len <- lubridate::time_length(exp_dur, "years")
@@ -24,6 +21,13 @@ get_indv_exp_len <- function(pheno_data,
     return(indv_exp_len)
 }
 
+get_obs_end <- function(pheno_data, 
+                        obs_end=NULL) {
+    if(is.null(obs_end)) {
+        obs_end <- get_max_date(pheno_data)
+    }
+    return(obs_end)
+}
 
 #' Get's the most recent date across different `_DATE` columns
 #' 
