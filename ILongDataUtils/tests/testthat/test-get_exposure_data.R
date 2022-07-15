@@ -16,6 +16,18 @@ test_that("get_exposure_data throws correct error", {
                                 exp_end=30))
 })
 
+test_that("get_exposure_data tib exp_end works", {
+  set.seed(921)
+  sample_data <- create_test_df_multi_icd_ver(n_icd10 = 20) 
+  exp_end <- tibble::tibble(ID=c("KT0000002", "KT0000004"),
+                            EXP_END=c(50, 30))
+  expect_ids <- c(rep("KT0000002", 2), rep("KT0000004", 3))
+  expect_ages <- c(33.2, 11.6, 29, 12.2, 27.6)
+  res <- get_exposure_data(sample_data, exp_start=10, exp_end=exp_end)
+  expect_equal(res$ID, expect_ids)
+  expect_equal(res$Event_age, expect_ages)
+})
+
 test_that("get_exposure_data with different exp ends works", {
   set.seed(1823)
   sample_data <- create_test_df_multi_icd_ver(n_icd10=5) 

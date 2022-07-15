@@ -29,13 +29,12 @@
 get_exposure_data <- function(long_data,
                               exp_start=NULL,
                               exp_end=NULL) {
-    
     if(!is.null(exp_start) | !is.null(exp_end)) {
         assertthat::assert_that("Event_age" %in% colnames(long_data))
         # Replacing any missing with values outside human life-spans
         if(is.null(exp_end)) {
             exp_end = 200 # Change this in case super humans exist
-        } else if(any(is.na(exp_end))) {
+        } else if(!is.data.frame(exp_end) & any(is.na(exp_end))) {
             exp_end[is.na(exp_end)] = 200 # Change this in case super humans exist
         } 
         if(is.null(exp_start)) {
@@ -43,10 +42,16 @@ get_exposure_data <- function(long_data,
         } else if(is.null(exp_start)) {
             exp_start[is.na(exp_start)] = 0
         }
-    
-        long_data <- dplyr::filter(long_data, 
-                                   Event_age >= exp_start & 
-                                    Event_age <= exp_end)
+        if(!is.data.frame(exp_end)) {
+            long_data <- dplyr::filter(long_data, 
+                                       Event_age >= exp_start & 
+                                        Event_age <= exp_end)
+        } else {
+            long_exp_data <- dplyr::inner_join(exp_end, long_data, by="ID")
+            long_data <- dplyr::filter(long_exp_data, 
+                                        Event_age >= exp_start & 
+                                            Event_age <= EXP_END)
+        }
     } 
     return(long_data)               
 }
