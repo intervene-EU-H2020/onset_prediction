@@ -4,7 +4,7 @@
 \alias{preprocess_icd_data}
 \title{Preprocesses the longitudinal data}
 \usage{
-preprocess_icd_data(icd_data, exp_start = NA, exp_end = NA)
+preprocess_icd_data(icd_data, exp_start = NULL, exp_end = NULL)
 }
 \arguments{
 \item{icd_data}{A data.frame with at least columns \code{ID}, and

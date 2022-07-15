@@ -4,7 +4,7 @@
 \alias{calc_cci}
 \title{Calculates the Charlson Comorbidity Index based on ICD-codes}
 \usage{
-calc_cci(icd_data, exp_start = NA, exp_end = NA)
+calc_cci(icd_data, exp_start = NULL, exp_end = NULL)
 }
 \arguments{
 \item{icd_data}{A data.frame with at least columns \code{ID}, and

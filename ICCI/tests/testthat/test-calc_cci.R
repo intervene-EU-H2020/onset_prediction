@@ -38,30 +38,6 @@ test_that("calc_cci with exposure window", {
                                  secondary_ICD = NA,
                                  ICD_version = "9")
 
-  writeLines("This is the current test")
-  cci_scores <- calc_cci(sample_data)
-
-  cci_scores <- calc_cci(sample_data, exp_start = 20, exp_end = 60)
-  # First patient has CPD and nothing else -> score of 1
-  expect_equal(dplyr::filter(cci_scores, ID == "KT0000001")$CCI_score, 1)
-
-  # Second patient has hemiplegia (2) + ulcer (1) --> score of 3
-  expect_equal(dplyr::filter(cci_scores, ID == "KT0000002")$CCI_score, 3)
-})
-
-test_that("calc_cci with exposure window", {
-  set.seed(82312)
-  sample_data <- ILongDataUtils::create_test_df_multi_icd_ver(n_icd10 = 10)
-  print(sample_data)
-  # Adding a test code in ICD-9 for patient 2
-  sample_data <- tibble::add_row(sample_data,
-                                 ID = "KT0000002",
-                                 Event_age = 74,
-                                 primary_ICD = "2000",
-                                 secondary_ICD = NA,
-                                 ICD_version = "9")
-
-  writeLines("This is the current test")
   cci_scores <- calc_cci(sample_data)
 
   cci_scores <- calc_cci(sample_data, exp_start = 20, exp_end = 60)
