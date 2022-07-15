@@ -4,7 +4,7 @@
 \alias{get_score_cut_file_name}
 \title{Creats the file name for the score cut log file}
 \usage{
-get_score_cut_file_name(study, score_type)
+get_score_cut_file_name(study, score_type, obs_end = NULL)
 }
 \arguments{
 \item{study}{An S4 class representing the study setup.}

@@ -4,7 +4,15 @@
 \alias{plot_endpt_score_distr}
 \title{Plots a jittered scatter}
 \usage{
-plot_endpt_score_distr(score_data, score_type, study, write_res, res_dir)
+plot_endpt_score_distr(
+  score_data,
+  score_type,
+  study,
+  obs_end = NULL,
+  min_indvs = 5,
+  write_res,
+  res_dir
+)
 }
 \arguments{
 \item{score_data}{A data.frame with at least column \code{SCORE}.}

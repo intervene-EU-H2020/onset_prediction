@@ -12,7 +12,8 @@ check_and_get_file_path <- function(score_type,
                                     res_dir,
                                     res_type,
                                     covs=NULL,
-                                    bin_cut=1) {
+                                    bin_cut=1,
+                                    obs_end=NULL) {
     if(write_res) {
         dir_name <- ""
         if(!is.null(covs)) {
@@ -35,19 +36,25 @@ check_and_get_file_path <- function(score_type,
         if(Istudy::check_res_dir(write_res, res_dir)) {
             file_name <- dplyr::case_when(
              res_type == "endpt" ~ get_endpt_score_file_name(study,
-                                                             score_type),
+                                                             score_type,
+                                                             obs_end),
              res_type == "distr" ~ get_score_distr_file_name(study,
-                                                             score_type),
+                                                             score_type,
+                                                             obs_end),
              res_type == "coxph" ~ get_coxph_res_file_name(study, 
                                                            score_type,
-                                                           bin_cut),
+                                                           bin_cut,
+                                                           obs_end),
              res_type == "log" ~  get_score_cut_file_name(study,
-                                                          score_type),
+                                                          score_type,
+                                                          obs_end),
              res_type == "HRs" ~ get_hr_file_name(study,
                                                   score_type,
-                                                  bin_cut),
+                                                  bin_cut,
+                                                  obs_end),
              res_type == "surv" ~ get_surv_file_name(study, 
-                                                     score_type)
+                                                     score_type,
+                                                     obs_end)
             )
             file_path <- paste0(res_dir, file_name)
             return(file_path)

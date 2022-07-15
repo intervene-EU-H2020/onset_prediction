@@ -4,7 +4,14 @@
 \alias{plot_score_distr}
 \title{Creates a plot of the score distribution}
 \usage{
-plot_score_distr(score_data, score_type, study, write_res, res_dir)
+plot_score_distr(
+  score_data,
+  score_type,
+  study,
+  obs_end = NULL,
+  write_res = FALSE,
+  res_dir = NULL
+)
 }
 \arguments{
 \item{score_data}{A data.frame with at least column \code{SCORE}.}

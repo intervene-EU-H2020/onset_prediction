@@ -72,10 +72,14 @@ read_coxph_res_file <- function(res_dir,
 }
 
 #' @export 
-get_study_subtitle <- function(study) {
-    study_sub <- ""
-    if(length(study@exp_len) == 1) {
+#' @importFrom lubridate %m-%
+get_study_subtitle <- function(study,
+                               obs_end=NULL) {
+    if(is.null(obs_end)) {
         study_sub <- paste0("Age: ", study@exp_age, " Exp: ", study@exp_len, " Wash: ", study@wash_len, " Obs: ", study@obs_len, " Years")
-    } 
+    } else {
+        exp_end <- obs_end %m-% lubridate::years(study@wash_len + study@obs_len)
+        study_sub <- paste0("Exp from Birth until ", exp_end)
+    }
     return(study_sub)
 }   

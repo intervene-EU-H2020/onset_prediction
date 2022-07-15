@@ -23,6 +23,7 @@ add_risk_group_col <- function(score_data,
                                score_type,
                                study,
                                bin_cut=1,
+                               obs_end=NULL,
                                write_res=FALSE,
                                res_dir=NULL) {
     if(score_type != "CCI") {
@@ -34,6 +35,7 @@ add_risk_group_col <- function(score_data,
         write_score_groups_to_log(score_group_tbl=score_group_tbl,
                                   score_type=score_type,
                                   study=study,
+                                  obs_end=obs_end,
                                   write_res=write_res,
                                   res_dir=res_dir)
     } else {

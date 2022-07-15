@@ -18,13 +18,13 @@ create_endpts_study_objs <- function(endpts,
     endpt_studies <- list()
     for(endpt in endpts) {
         endpt_studies[[endpt]] <- methods::new("study",
-                                                endpt=endpt,
-                                                exp_age=exp_age,
-                                                exp_len=exp_len,
-                                                wash_len=wash_len,
-                                                obs_len=obs_len,
-                                                downsample_fctr=downsample_fctr,
-                                                ancs=ancs)
+                                               endpt=endpt,
+                                               exp_age=exp_age,
+                                               exp_len=exp_len,
+                                               wash_len=wash_len,
+                                               obs_len=obs_len,
+                                               downsample_fctr=downsample_fctr,
+                                               ancs=ancs)
     }
     return(endpt_studies)
 }

@@ -9,6 +9,7 @@ add_risk_group_col(
   score_type,
   study,
   bin_cut = 1,
+  obs_end = NULL,
   write_res = FALSE,
   res_dir = NULL
 )

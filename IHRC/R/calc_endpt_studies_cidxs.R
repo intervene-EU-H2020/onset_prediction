@@ -53,8 +53,13 @@ calc_endpt_studies_cidxs <- function(pheno_data,
                                      res_dir=NULL) {
     c_idxs_tib <- get_empty_cidx_tib()
     for(study in endpt_studies) {
-        coxph <- get_study_coxph_mdl(pheno_data=pheno_data,
-                                     score_data=score_data,
+        pheno_score_data <- get_elig_pheno_score_data(pheno_data=pheno_data,
+                                                      score_data=score_data,
+                                                      score_type=score_type,
+                                                      study=study,
+                                                      write_res=write_res,
+                                                      res_dir=res_dir)
+        coxph <- get_study_coxph_mdl(pheno_score_data=pheno_score_data,
                                      score_type=score_type,
                                      study=study,
                                      covs=covs,

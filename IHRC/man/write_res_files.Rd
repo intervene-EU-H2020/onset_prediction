@@ -8,10 +8,12 @@ write_res_files(
   endpt_hrs_tib,
   endpt_cidx_tib,
   score_type,
-  endpt_studies,
-  bin_cut,
-  write_res,
-  res_dir
+  study,
+  covs,
+  bin_cut = 1,
+  obs_end = NULL,
+  write_res = FALSE,
+  res_dir = NULL
 )
 }
 \arguments{
@@ -20,7 +22,10 @@ write_res_files(
 \item{score_type}{A character. The name of the score used for the model,
 i.e. CCI, or PheRS.}
 
-\item{endpt_studies}{A vector of S4 classes representing the study setups.}
+\item{study}{An S4 class representing the study setup.}
+
+\item{covs}{A vector of characters. The column names of the covariates
+to add to the predictor of the Cox-PH model.}
 
 \item{bin_cut}{A numeric. The binary cutoff value for classifying high
 and low score individuals. Currently only in use if

@@ -10,7 +10,9 @@ check_and_get_file_path(
   write_res,
   res_dir,
   res_type,
-  bin_cut = 1
+  covs = NULL,
+  bin_cut = 1,
+  obs_end = NULL
 )
 }
 \arguments{

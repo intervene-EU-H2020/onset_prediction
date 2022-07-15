@@ -4,7 +4,7 @@
 \alias{get_hr_file_name}
 \title{Creats the file name for the HR plots}
 \usage{
-get_hr_file_name(study, score_type, bin_cut = 1)
+get_hr_file_name(study, score_type, bin_cut = 1, obs_end = NULL)
 }
 \arguments{
 \item{study}{An S4 class representing the study setup.}

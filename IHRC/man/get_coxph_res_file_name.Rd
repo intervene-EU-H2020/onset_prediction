@@ -4,7 +4,7 @@
 \alias{get_coxph_res_file_name}
 \title{Creats the file name for Cox-PH model results file}
 \usage{
-get_coxph_res_file_name(study, score_type, bin_cut)
+get_coxph_res_file_name(study, score_type, bin_cut, obs_end = NULL)
 }
 \arguments{
 \item{study}{An S4 class representing the study setup.}

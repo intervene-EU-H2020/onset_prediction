@@ -4,7 +4,7 @@
 \alias{get_pretty_covs_string}
 \title{Turns vector of covariates into a string for plots}
 \usage{
-get_pretty_covs_string(covs)
+get_pretty_covs_string(covs, file_name = FALSE)
 }
 \arguments{
 \item{covs}{A vector of characters. The column names of the covariates

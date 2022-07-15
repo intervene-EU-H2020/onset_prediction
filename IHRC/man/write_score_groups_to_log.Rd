@@ -8,8 +8,9 @@ write_score_groups_to_log(
   score_group_tbl,
   score_type,
   study,
-  write_res,
-  res_dir
+  obs_end = NULL,
+  write_res = FALSE,
+  res_dir = NULL
 )
 }
 \arguments{

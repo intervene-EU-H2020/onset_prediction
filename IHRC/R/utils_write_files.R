@@ -10,18 +10,21 @@
 write_res_files <- function(endpt_hrs_tib,
                             endpt_cidx_tib,
                             score_type,
-                            endpt_studies,
+                            study,
                             covs,
-                            bin_cut,
-                            write_res,
-                            res_dir) {
+                            bin_cut=1,
+                            obs_end=NULL,
+                            write_res=FALSE,
+                            res_dir=NULL) {
     file_path_coxph <- check_and_get_file_path(score_type=score_type,
-                                               study=endpt_studies[[1]],
+                                               study=study,
                                                write_res=write_res,
                                                res_dir=res_dir,
                                                res_type="coxph",
                                                covs=covs,
-                                               bin_cut=bin_cut)
+                                               bin_cut=bin_cut,
+                                               obs_end=obs_end)
+    print(file_path_coxph)
     file_path_cidx <- stringr::str_replace(string=file_path_coxph,
                                            pattern="coxph",
                                            replacement="cidx")
@@ -47,12 +50,14 @@ write_res_files <- function(endpt_hrs_tib,
 write_score_groups_to_log <- function(score_group_tbl,
                                       score_type,
                                       study,
-                                      write_res,
-                                      res_dir) {
-    file_path <- check_and_get_file_path(score_type,
-                                         study,
-                                         write_res,
-                                         res_dir,
+                                      obs_end=NULL,
+                                      write_res=FALSE,
+                                      res_dir=NULL) {
+    file_path <- check_and_get_file_path(score_type=score_type,
+                                         study=study,
+                                         write_res=write_res,
+                                         obs_end=obs_end,
+                                         res_dir=res_dir,
                                          res_type="log")
     if(!is.null(file_path)) {
         readr::write_delim(log_msg_table(score_group_tbl), 

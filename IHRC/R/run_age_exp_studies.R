@@ -51,7 +51,7 @@ run_age_exp_endpt_studies <- function(pheno_data,
                                 downsample_fctr=downsample_fctr,
                                 ancs=ancs)
 
-        if(score_type == "CCI") {
+        if("CCI" %in% score_type) {
             curnt_score_data <- score_ages_data[[as.character(exp_age)]]
         } else { # The data is the same for all exposure ages
             curnt_score_data <- score_ages_data
@@ -90,7 +90,7 @@ run_age_exp_endpt_studies <- function(pheno_data,
     write_res_files(endpt_hrs_tib=all_age_hrs_tib,
                     endpt_cidx_tib=all_age_cidxs_tib,
                     score_type=score_type,
-                    endpt_studies=endpt_studies,
+                    study=endpt_studies[[1]],
                     covs=covs,
                     bin_cut=bin_cut,
                     write_res=write_res,

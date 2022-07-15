@@ -21,21 +21,16 @@ get_elig_pheno_score_data <- function(pheno_data,
     }
 }
 
-get_study_coxph_mdl <- function(pheno_data,
-                                score_data,
+get_study_coxph_mdl <- function(pheno_score_data,
                                 score_type,
                                 study,
                                 covs,
                                 pred_score,
                                 bin_cut=1,
+                                obs_end=NULL,
                                 write_res=FALSE,
                                 res_dir=NULL) {
-    pheno_score_data <- get_elig_pheno_score_data(pheno_data=pheno_data,
-                                                  score_data=score_data,
-                                                  score_type=score_type,
-                                                  study=study,
-                                                  write_res=write_res,
-                                                  res_dir=res_dir)
+
     if(!is.null(pheno_score_data)) {
         if(pred_score == "SCORE_GROUP") {
             pheno_score_data <- add_risk_group_col(
@@ -43,6 +38,7 @@ get_study_coxph_mdl <- function(pheno_data,
                                     score_type=score_type,
                                     study=study,
                                     bin_cut=bin_cut,
+                                    obs_end=obs_end,
                                     write_res=write_res,
                                     res_dir=res_dir)
         } 

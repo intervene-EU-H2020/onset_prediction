@@ -9,6 +9,7 @@ plot_studies_score_distr(
   score_data,
   score_type,
   endpt_studies,
+  min_indvs = 5,
   write_res = FALSE,
   res_dir = NULL
 )
