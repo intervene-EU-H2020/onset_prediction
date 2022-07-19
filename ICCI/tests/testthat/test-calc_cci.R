@@ -11,6 +11,7 @@ test_that("calc_cci with integer icd_version doesn't throw error", {
 test_that("calc_cci works", {
   set.seed(82312)
   sample_data <-ILongDataUtils::create_test_df_multi_icd_ver(n_icd10 = 100) 
+  
   # Adding a test code in ICD-9 for patient 2
   sample_data <- tibble::add_row(sample_data, 
                                   ID = "KT0000002", 
@@ -46,4 +47,13 @@ test_that("calc_cci with exposure window", {
 
   # Second patient has hemiplegia (2) + ulcer (1) --> score of 3
   expect_equal(dplyr::filter(cci_scores, ID == "KT0000002")$CCI_score, 3)
+})
+
+test_that("calc_cci missing indvs zero works", {
+  set.seed(82312)
+  sample_data <- ILongDataUtils::create_test_df_multi_icd_ver(n_icd10 = 5)
+  sample_data <- tibble::add_row(sample_data, ID="KT000001", Event_age=5, primary_ICD="XZY", ICD_version="10")
+
+  cci_scores <- calc_cci(sample_data, exp_start = 6)
+  expect_equal(dplyr::filter(cci_scores, ID=="KT000001")$CCI_score, 0)
 })

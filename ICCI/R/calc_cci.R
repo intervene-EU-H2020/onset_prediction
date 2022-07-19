@@ -35,8 +35,8 @@
 calc_cci <- function(icd_data,
                      exp_start=NULL,
                      exp_end=NULL) {
-    icd_data <- preprocess_icd_data(icd_data, exp_start, exp_end)
-    group_icd_data <- ILongDataUtils::group_icd_data_by_ver(icd_data)
+    process_icd_data <- preprocess_icd_data(icd_data, exp_start, exp_end)
+    group_icd_data <- ILongDataUtils::group_icd_data_by_ver(process_icd_data)
 
     # For adding up different ICD-version scores
     all_cci_scores <- tibble::tibble()
@@ -52,6 +52,7 @@ calc_cci <- function(icd_data,
     # entries.
     total_cci_scores <- add_up_cci_scores(all_cci_scores)
     total_cci_scores <- add_back_orig_ids(total_cci_scores, 
-                                          icd_data) 
-    return(dplyr::select(total_cci_scores, ID, CCI_score))
+                                          process_icd_data) 
+    full_scores <- add_back_missing_indvs(icd_data, total_cci_scores)
+    return(dplyr::select(full_scores, ID, CCI_score))
 }
