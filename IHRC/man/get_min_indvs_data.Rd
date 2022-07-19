@@ -3,18 +3,23 @@
 \name{get_min_indvs_data}
 \alias{get_min_indvs_data}
 \title{Get's the Cox-PH model results for runs where each group has at
-least 5 controls and cases in each group.}
+least 5 controls and cases in each group}
 \usage{
-get_min_indvs_data(elig_indv, coxph_mdl, study, min_indvs = 5)
+get_min_indvs_data(coxph_mdl, surv_ana)
 }
 \arguments{
-\item{elig_indv}{A tibble. The individuals which were eligble under
-the current study setup. Needs to at least
-contain the column defined in \code{endpt}.}
-
 \item{coxph_mdl}{A Cox-PH model.}
+
+\item{surv_ana}{An S4 class representing the current survival analysis
+setup.}
+}
+\value{
+A list. The filtered results.
 }
 \description{
 Get's the Cox-PH model results for runs where each group has at
-least 5 controls and cases in each group.
+least 5 controls and cases in each group
+}
+\author{
+Kira E. Detrois
 }

@@ -1,0 +1,30 @@
+#' Gets the score data for the survival analysis setup
+#' 
+#' Should be run before any analyis on the survival setup is run.
+#' 
+#' For `CCI` calculates the CCI score based on the ICD-data.
+#' Also, renames the score column to `SCORE` and filters out NAs.
+#' For the PRS data the score columsn have names in the
+#' form of `J10_ASTHMA_PRS`. The function renames the
+#' current PRS column of interest to `SCORE`. Then it
+#' filters out all NAs in the column. See function 
+#' \code{\link{get_and_filter_endpt_scores}}.
+#' 
+#' @inheritParams add_risk_group_col
+#' 
+#' @return The data.frame with the score data for all eligible individuals
+#'          under the study setup of the current survival analysis setup.
+#' 
+#' @author Kira E. Detrois
+get_curnt_score_data <- function(surv_ana) {
+    if(surv_ana@score_type == "CCI") {
+        curnt_score_data <- get_study_cci_scores(surv_ana@elig_indv,
+                                                 surv_ana@elig_score_data)  
+    } else {
+        curnt_score_data <- surv_ana@elig_score_data
+    }
+    curnt_score_data <- get_and_filter_endpt_scores(curnt_score_data,
+                                                    surv_ana@score_type,
+                                                    surv_ana@study@endpt)
+    return(curnt_score_data)
+}

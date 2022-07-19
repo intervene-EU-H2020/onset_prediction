@@ -28,6 +28,8 @@ extract_coxph_res <- function(coxph_mdl) {
 #' 
 #' @param ML maximum likelihood estimator of the parameter
 #' @param SE standard error of the ML estimator
+#' 
+#' @author Kira E. Detrois
 get_CI <- function(ML, SE) {
     CIneg <- exp(ML-1.96*SE)
     CIpos <- exp(ML+1.96*SE)

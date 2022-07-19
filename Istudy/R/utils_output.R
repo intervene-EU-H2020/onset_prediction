@@ -40,9 +40,8 @@ create_return_tib <- function(pheno_data,
 #' @export 
 #' 
 #' @author Kira E. Detrois
-get_study_file_name <- function(study,
-                                obs_end=NULL) {
-    if(is.null(obs_end)) {
+get_study_file_name <- function(study) {
+    if(study@obs_end == as.Date("3000/01/01")) {
         paste0(study@endpt, "_a", study@exp_age, "_e", study@exp_len, "_w", study@wash_len, "_o", study@obs_len)
     } else {
         paste0(study@endpt, "_", obs_end, "_o", study@obs_len, "_w", study@wash_len)
@@ -60,9 +59,9 @@ get_study_file_name <- function(study,
 #' 
 #' @author Kira E. Detrois
 write_res_files <- function(elig_indv,
-                      study,
-                      write_res,
-                      res_dir) {
+                            study,
+                            write_res,
+                            res_dir) {
     write_res_file(elig_indv, study, write_res, res_dir)
     write_log_file(elig_indv, study, write_res, res_dir)
 }

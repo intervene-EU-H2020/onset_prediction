@@ -2,20 +2,21 @@
 % Please edit documentation in R/utils_coxph.R
 \name{get_coxph_formula}
 \alias{get_coxph_formula}
-\title{Creates the forumla string for the Cox-PH model.}
+\title{Creates the forumla string for the Cox-PH model}
 \usage{
-get_coxph_formula(endpt, covs, pred_score = "SCORE_GROUP")
+get_coxph_formula(surv_ana, pred_score = "SCORE_GROUP")
 }
 \arguments{
-\item{endpt}{A character. The column name of the current endpoint of
-interest.}
+\item{surv_ana}{An S4 class representing the current survival analysis
+setup.}
 
-\item{covs}{A vector of characters. The column names of the covariates
-to add to the predictor of the Cox-PH model.}
+\item{pred_score}{A character. The score type to predict. For direct
+regression \code{SCORE}, and for regression on the
+risk group \code{SCORE_GROUP}.}
 }
 \value{
 A character. The formula string for the Cox-PH model.
 }
 \description{
-Creates the forumla string for the Cox-PH model.
+Creates the forumla string for the Cox-PH model
 }

@@ -7,14 +7,22 @@
 join_dfs(pheno_data, score_data, score_type = "CCI", endpt = NULL)
 }
 \arguments{
-\item{pheno_data}{A data.frame. Left of the join. Needs at least column
-\code{SCORE}.}
+\item{pheno_data}{A data.frame with at least the columns:
+\code{ID}, the columns specified in \code{covs} and
+i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_AGE_DAYS} where
+the columns are the study endpoint and date, which
+will differ depending on the chosen \code{endpts}.
+The phenotypic data on the individuals.}
 
-\item{score_data}{A data.frame. Left of the join. Needs at least column
-\code{SCORE}.}
+\item{score_data}{A data.frame with at least columns \code{SCORE}, or
+i.e. \code{J10_ASTHMA_PRS} for endpoint \code{J10_ASTHMA}
+and score type \code{PRS}.}
 
-\item{endpt}{A character. The column name of the current endpoint of
-interest.}
+\item{score_type}{A character. The score type. At the moment the two
+options are \code{CCI}, and \code{PRS}.}
+
+\item{endpt}{A character. The column name of the current endpoint
+of interest.}
 }
 \value{
 The joined data.frame

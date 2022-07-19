@@ -4,38 +4,15 @@
 \alias{write_res_files}
 \title{Writes model results to a tab-delim file}
 \usage{
-write_res_files(
-  endpt_hrs_tib,
-  endpt_cidx_tib,
-  score_type,
-  study,
-  covs,
-  bin_cut = 1,
-  obs_end = NULL,
-  write_res = FALSE,
-  res_dir = NULL
-)
+write_res_files(endpt_hrs_tib, endpt_c_idxs_tib, surv_ana)
 }
 \arguments{
 \item{endpt_hrs_tib}{A tibble with the results for previous endpts.}
 
-\item{score_type}{A character. The name of the score used for the model,
-i.e. CCI, or PheRS.}
+\item{endpt_c_idxs_tib}{A tibble with the results for previous endpts.}
 
-\item{study}{An S4 class representing the study setup.}
-
-\item{covs}{A vector of characters. The column names of the covariates
-to add to the predictor of the Cox-PH model.}
-
-\item{bin_cut}{A numeric. The binary cutoff value for classifying high
-and low score individuals. Currently only in use if
-the \code{score_type == CCI}.}
-
-\item{write_res}{A boolean. Defines whether to save the results to
-files.}
-
-\item{res_dir}{A character. The directory to write the results and
-log to.}
+\item{surv_ana}{An S4 class representing the current survival analysis
+setup.}
 }
 \description{
 Writes model results to a tab-delim file

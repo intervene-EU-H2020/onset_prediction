@@ -1,47 +1,47 @@
-#' Fits the Cox-PH model for a given endpoint and covariates
+#' Fits the Cox-PH model for a survival analysis setup
 #' 
 #' For i.e. `endpt = "J10_ASTHMA"` and `covs = c("SEX", "YEAR_OF_BIRTH")` 
 #' the model would be 
 #' `Surv(J10_ASTHMA_AGE_DAYS, J10_ASTHMA) ~ SCORE_GROUP + SEX +
 #' YEAR_OF_BIRTH`.
 #' 
-#' @param pheno_score_data A data.frame with at least the columns: 
-#'                        `SCORE_GROUP`, the columns specified in `covs` 
-#'                        and i.e. `J10_ASTHMA`, and `J10_ASTHMA_AGE_DAYS` 
-#'                        where the columns are the study endpoint and 
-#'                        date, which will differ depending on the input 
-#'                        variable `endpt`.
-#' @param endpt A character. The column name of the current endpoint of 
-#'                           interest.
-#' @inheritParams add_coxph_res_row
-#' @inheritParams calc_endpt_studies_hrs
+#' @inheritParams add_risk_group_col
+#' @param pred_score A character. The score type to predict. For direct
+#'                      regression `SCORE`, and for regression on the
+#'                      risk group `SCORE_GROUP`.
 #' 
 #' @return A Cox-PH model object or `NULL` if the model couldn't be fit.
 #' 
 #' @export 
 #' 
 #' @author Kira E. Detrois
-get_coxph_mdl <- function(pheno_score_data,
-                          endpt,
-                          covs,
+get_coxph_mdl <- function(surv_ana,
                           pred_score="SCORE_GROUP") {
-    pheno_score_data <- make_covs_fctrs(pheno_score_data, covs)
-    coxph_formula <- get_coxph_formula(endpt, covs, pred_score)
+    if(nrow(surv_ana@elig_score_data) > 0) {
+        surv_ana@elig_score_data <- make_covs_fctrs(
+                                        surv_ana@elig_score_data,
+                                        surv_ana@covs)
+        coxph_formula <- get_coxph_formula(surv_ana, pred_score)
 
-    build_mdl <- TRUE
-    if(pred_score == "SCORE_GROUP") {
-        Istudy::check_cols_exist(pheno_score_data, "SCORE_GROUP", "get_coxph_mdl")
-        if(length(unique(pheno_score_data$SCORE_GROUP)) < 2) {
-            build_mdl <- FALSE
+        build_mdl <- TRUE
+        if(pred_score == "SCORE_GROUP") {
+            Istudy::check_cols_exist(surv_ana@elig_score_data, 
+                                    "SCORE_GROUP", 
+                                    "get_coxph_mdl")
+            if(length(unique(surv_ana@elig_score_data$SCORE_GROUP)) < 2) {
+                build_mdl <- FALSE
+            }
         }
-    }
-    if(build_mdl) {
-        coxph_mdl <- survival::coxph(formula=coxph_formula, 
-                                     data=pheno_score_data,
-                                     # Larger fit object but no need to
-                                     # other functions to reconstruct
-                                     # which fails in this setup
-                                     model=TRUE)
+        if(build_mdl) {
+            coxph_mdl <- survival::coxph(formula=coxph_formula, 
+                                        data=surv_ana@elig_score_data,
+                                        # Larger fit object but no need to
+                                        # other functions to reconstruct
+                                        # which fails in this setup
+                                        model=TRUE)
+        } else {
+            return(NULL)
+        }
     } else {
         return(NULL)
     }

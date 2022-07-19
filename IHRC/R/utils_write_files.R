@@ -1,30 +1,17 @@
 #' Writes model results to a tab-delim file
 #'  
 #' @inheritParams add_coxph_res_row
-#' @inheritParams calc_endpt_studies_hrs
+#' @inheritParams add_cidx_res_row
 #' @inheritParams add_risk_group_col
 #' 
 #' @export 
 #' 
 #' @author Kira E. Detrois
 write_res_files <- function(endpt_hrs_tib,
-                            endpt_cidx_tib,
-                            score_type,
-                            study,
-                            covs,
-                            bin_cut=1,
-                            obs_end=NULL,
-                            write_res=FALSE,
-                            res_dir=NULL) {
-    file_path_coxph <- check_and_get_file_path(score_type=score_type,
-                                               study=study,
-                                               write_res=write_res,
-                                               res_dir=res_dir,
-                                               res_type="coxph",
-                                               covs=covs,
-                                               bin_cut=bin_cut,
-                                               obs_end=obs_end)
-    print(file_path_coxph)
+                            endpt_c_idxs_tib,
+                            surv_ana) {
+    file_path_coxph <- check_and_get_file_path(surv_ana,
+                                               res_type="coxph")
     file_path_cidx <- stringr::str_replace(string=file_path_coxph,
                                            pattern="coxph",
                                            replacement="cidx")
@@ -32,7 +19,7 @@ write_res_files <- function(endpt_hrs_tib,
         readr::write_delim(x=endpt_hrs_tib, 
                            file=file_path_coxph, 
                            delim="\t")
-        readr::write_delim(x=endpt_cidx_tib,
+        readr::write_delim(x=endpt_c_idxs_tib,
                            file=file_path_cidx,
                            delim="\t")
     }
@@ -40,24 +27,15 @@ write_res_files <- function(endpt_hrs_tib,
 
 #' Write score cut-off values and groups to log
 #' 
-#'@inheritParams get_risk_group_labs
+#' @inheritParams get_risk_group_labs
 #' @inheritParams add_risk_group_col
-#' @inheritParams calc_endpt_studies_hrs
 #' 
 #' @export 
 #' 
 #' @author Kira E. Detrois
 write_score_groups_to_log <- function(score_group_tbl,
-                                      score_type,
-                                      study,
-                                      obs_end=NULL,
-                                      write_res=FALSE,
-                                      res_dir=NULL) {
-    file_path <- check_and_get_file_path(score_type=score_type,
-                                         study=study,
-                                         write_res=write_res,
-                                         obs_end=obs_end,
-                                         res_dir=res_dir,
+                                      surv_ana) {
+    file_path <- check_and_get_file_path(surv_ana,
                                          res_type="log")
     if(!is.null(file_path)) {
         readr::write_delim(log_msg_table(score_group_tbl), 

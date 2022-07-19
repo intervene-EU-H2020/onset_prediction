@@ -4,21 +4,15 @@
 \alias{make_covs_fctrs}
 \title{Makes all character covariates a factor}
 \usage{
-make_covs_fctrs(pheno_score_data, covs)
+make_covs_fctrs(elig_score_data, covs)
 }
 \arguments{
-\item{pheno_score_data}{A data.frame with at least the columns:
-\code{SCORE_GROUP}, the columns specified in \code{covs}
-and i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_AGE_DAYS}
-where the columns are the study endpoint and
-date, which will differ depending on the input
-variable \code{endpt}.}
+\item{elig_score_data}{A data.frame with all eligible individuals under
+the chosen study setup and their scores. Needs at
+least the columns defines in \code{covs}.}
 
 \item{covs}{A vector of characters. The column names of the covariates
 to add to the predictor of the Cox-PH model.}
-}
-\value{
-The tibble with character covariate columns now factors.
 }
 \description{
 Makes all character covariates a factor

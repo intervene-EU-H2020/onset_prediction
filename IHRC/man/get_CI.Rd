@@ -14,3 +14,6 @@ get_CI(ML, SE)
 \description{
 95\% confidence interval given the ML estimator and SE
 }
+\author{
+Kira E. Detrois
+}

@@ -12,36 +12,27 @@
 #' 1% < x <= 5% etc. 
 #' 
 #' @param score_data A data.frame with at least column `SCORE`.
-#' @param study An S4 class representing the study setup.
-#' @inheritParams calc_endpt_studies_hrs
+#' @param surv_ana An S4 class representing the current survival analysis 
+#'                  setup.
 #' 
 #' @return The data.frame with the added risk group column
 #' @export 
 #' 
 #' @author Kira E. Detrois
 add_risk_group_col <- function(score_data,
-                               score_type,
-                               study,
-                               bin_cut=1,
-                               obs_end=NULL,
-                               write_res=FALSE,
-                               res_dir=NULL) {
-    if(score_type != "CCI") {
+                               surv_ana) {
+    if(surv_ana@score_type == "CCI") {
+        indv_score_groups <- get_two_level_groups(score_data, 
+                                                  surv_ana@bin_cut)
+    } else {
         quantiles <- c(0,0.01,0.05,0.1,0.2,0.4,0.6,0.8,0.9,0.95,0.99,1)
         score_group_tbl <- get_score_group_tbl(score_data, 
                                                quantiles)
         indv_score_groups <- get_indvs_score_groups(score_data,
                                                     score_group_tbl)
         write_score_groups_to_log(score_group_tbl=score_group_tbl,
-                                  score_type=score_type,
-                                  study=study,
-                                  obs_end=obs_end,
-                                  write_res=write_res,
-                                  res_dir=res_dir)
-    } else {
-        indv_score_groups <- get_two_level_groups(score_data, 
-                                                  bin_cut)
-    }
+                                  surv_ana)
+    } 
     score_data <- tibble::add_column(score_data, 
                                      SCORE_GROUP=indv_score_groups)
     return(score_data)

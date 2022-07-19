@@ -29,7 +29,7 @@ create_empty_endpt_hrs_tib <- function() {
 #' @export 
 #' 
 #' @author Kira E. Detrois 
-get_empty_cidx_tib <- function() {
+create_empty_cidx_tib <- function() {
     tibble::tibble(
         ENDPOINT = character(),
         EXP_AGE = numeric(),
@@ -50,12 +50,7 @@ get_empty_cidx_tib <- function() {
 #' 
 #' @param endpt_hrs_tib A tibble with the results for previous endpts.
 #' @param coxph_mdl A Cox-PH model. 
-#' @inheritParams extract_coxph_res
-#' @inheritParams calc_endpt_studies_hrs
-#' @inheritParams get_coxph_mdl
-#' @param elig_indv A tibble. The individuals which were eligble under
-#'                        the current study setup. Needs to at least 
-#'                        contain the column defined in `endpt`.
+#' @inheritParams add_risk_group_col
 #' 
 #' @return A tibble. The updated `endpt_hrs_tib` with the added results for
 #'          the current endpoint.
@@ -63,22 +58,16 @@ get_empty_cidx_tib <- function() {
 #' @author Kira E. Detrois 
 add_coxph_res_row <- function(endpt_hrs_tib,
                               coxph_mdl,
-                              score_type,
-                              study,
-                              elig_indv,
-                              min_indvs=5) {
+                              surv_ana) {
     if(!is.null(coxph_mdl)) {
-        coxph_res_list <- get_min_indvs_data(
-                                    elig_indv=elig_indv,
-                                    coxph_mdl=coxph_mdl,
-                                    study=study,
-                                    min_indvs=min_indvs)
+        coxph_res_list <- get_min_indvs_data(coxph_mdl=coxph_mdl,
+                                             surv_ana=surv_ana)
         if(!is.null(coxph_res_list)) {
             endpt_hrs_tib <- tibble::add_row(
                                          endpt_hrs_tib, 
-                                         ENDPOINT=study@endpt,
-                                         EXP_AGE=study@exp_age,
-                                         SCORE=score_type,
+                                         ENDPOINT=surv_ana@study@endpt,
+                                         EXP_AGE=surv_ana@study@exp_age,
+                                         SCORE=surv_ana@score_type,
                                          GROUP=coxph_res_list$groups,
                                          N_CONTROLS=coxph_res_list$n_cntrl,
                                          N_CASES=coxph_res_list$n_case,
@@ -95,26 +84,29 @@ add_coxph_res_row <- function(endpt_hrs_tib,
 }
 
 #' Get's the Cox-PH model results for runs where each group has at
-#' least 5 controls and cases in each group. 
+#' least 5 controls and cases in each group
 #' 
 #' @inheritParams add_coxph_res_row
-get_min_indvs_data <- function(elig_indv,
-                               coxph_mdl,
-                               study,
-                               min_indvs=5) {
+#' @inheritParams add_risk_group_col
+#' 
+#' @return A list. The filtered results.
+#' 
+#' @author Kira E. Detrois
+get_min_indvs_data <- function(coxph_mdl,
+                               surv_ana) {
     coxph_res_list <- extract_coxph_res(coxph_mdl)
-    n_cntrls_vec <- get_n_group_cntrls(elig_indv, 
-                                       levels(elig_indv$SCORE_GROUP),
-                                       study@endpt)
-    n_cases_vec <- get_n_group_cases(elig_indv, 
-                                     levels(elig_indv$SCORE_GROUP),
-                                     study@endpt)
-    ref_level = levels(elig_indv$SCORE_GROUP)[1]
+    n_cntrls_vec <- get_n_group_cntrls(surv_ana@elig_score_data, 
+                                       levels(surv_ana@elig_score_data$SCORE_GROUP),
+                                       surv_ana@study@endpt)
+    n_cases_vec <- get_n_group_cases(surv_ana@elig_score_data, 
+                                     levels(surv_ana@elig_score_data$SCORE_GROUP),
+                                     surv_ana@study@endpt)
+    ref_level = levels(surv_ana@elig_score_data$SCORE_GROUP)[1]
     
     # Reference group has enough cases and controls
 
-    if((n_cntrls_vec[1] > min_indvs) & 
-            (n_cases_vec[1] > min_indvs)) {
+    if((n_cntrls_vec[1] > surv_ana@min_indvs) & 
+            (n_cases_vec[1] > surv_ana@min_indvs)) {
         coxph_res_tib <- tibble::as_tibble(coxph_res_list)
         coxph_res_tib <- tibble::add_row(coxph_res_tib,
                                          .before=1,
@@ -129,8 +121,8 @@ get_min_indvs_data <- function(elig_indv,
                                             n_cntrl=n_cntrls_vec)
         coxph_res_tib <- tibble::add_column(coxph_res_tib,
                                             n_case=n_cases_vec)
-        coxph_res_tib <- coxph_res_tib[coxph_res_tib$n_cntrl > min_indvs &
-                                        coxph_res_tib$n_case > min_indvs,]
+        coxph_res_tib <- coxph_res_tib[coxph_res_tib$n_cntrl > surv_ana@min_indvs &
+                                        coxph_res_tib$n_case > surv_ana@min_indvs,]
         if(nrow(coxph_res_tib) < 2) {
             return(NULL)
         } else {
@@ -143,34 +135,24 @@ get_min_indvs_data <- function(elig_indv,
 
 #' Adds a row to the C-index results tibble
 #' 
-#' @param endpt_hrs_tib A tibble with the results for previous endpts.
-#' @param coxph_mdl A Cox-PH model. 
-#' @inheritParams extract_coxph_res
-#' @inheritParams calc_endpt_studies_hrs
-#' @inheritParams get_coxph_mdl
-#' @param elig_indv A tibble. The individuals which were eligble under
-#'                        the current study setup. Needs to at least 
-#'                        contain the column defined in `endpt`.
+#' @param endpt_c_idxs_tib A tibble with the results for previous endpts.
+#' @param c_idx_res A tibble with the new results to add.
+#' @inheritParams add_risk_group_col
 #' 
-#' @return A tibble. The updated `endpt_hrs_tib` with the added results for
+#' @return A tibble. The updated `endpt_c_idxs_tib` with the added results for
 #'          the current endpoint.
 #'                        
 #' @author Kira E. Detrois 
-add_cidx_res_row <- function(c_idxs_tib,
+add_cidx_res_row <- function(endpt_c_idxs_tib,
                              c_idx_res,
-                             study,
-                             score_type,
-                             covs,
-                             bin_cut) {
+                             surv_ana) {
     if(!is.null(c_idx_res)) {
-        surv_descr=get_surv_descr(score_type=score_type, 
-                                  surv_type="surv", 
-                                  covs=covs,
-                                  bin_cut=bin_cut)
-        c_idxs_tib <- tibble::add_row(
-                            c_idxs_tib,
-                            ENDPOINT=study@endpt,
-                            EXP_AGE=study@exp_age,
+        surv_descr=get_surv_descr(surv_ana,
+                                  surv_type="surv")
+        endpt_c_idxs_tib <- tibble::add_row(
+                            endpt_c_idxs_tib,
+                            ENDPOINT=surv_ana@study@endpt,
+                            EXP_AGE=surv_ana@study@exp_age,
                             SURV_MODEL=surv_descr,
                             C_INDEX=c_idx_res["C Index"],
                             DXY=c_idx_res["Dxy"],
@@ -182,5 +164,5 @@ add_cidx_res_row <- function(c_idxs_tib,
                             CONCORDANT=c_idx_res ["Concordant"],
                             UNCERTAIN=c_idx_res["Uncertain"])
     }
-    return(c_idxs_tib)
+    return(endpt_c_idxs_tib)
 }

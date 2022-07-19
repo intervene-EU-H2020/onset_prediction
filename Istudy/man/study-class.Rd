@@ -11,7 +11,17 @@ An S4 class representing the study setup
 \section{Slots}{
 
 \describe{
-\item{\code{study_type}}{A character. Can be either \code{forward} or \code{backward}.}
+\item{\code{study_type}}{A character. Can be either \code{forward} or \code{backward}.
+\code{forward} considers individuals of a certain age
+and a set exposure, washout, and observation periods
+calcualted onwards from this age. It can simply be created
+by creating a S4 study object.
+\code{backward} considers all individuals at a set time
+point. The observation and washout period are calcualted
+backwards from this time point. The exposure period will be
+different for each individual depending on their birth date.
+This setup can be created, using the function
+\code{\link{get_backward_study}}.}
 
 \item{\code{endpt}}{A character. The column name of the current endpoint of interest.}
 

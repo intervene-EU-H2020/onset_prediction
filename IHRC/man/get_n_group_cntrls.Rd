@@ -8,7 +8,14 @@ endpoint}
 get_n_group_cntrls(pheno_score_data, groups, endpt)
 }
 \arguments{
+\item{pheno_score_data}{A data.frame with at least columns
+SCORE_GROUP and the columns defined
+by the variabel \code{endpt}.}
+
 \item{groups}{A character. The groups in the Cox-PH model.}
+
+\item{endpt}{A character. The column name of the current endpoint
+of interest.}
 }
 \description{
 Gets the number of controls of a score group for a given

@@ -4,28 +4,13 @@
 \alias{plot_score_distr}
 \title{Creates a plot of the score distribution}
 \usage{
-plot_score_distr(
-  score_data,
-  score_type,
-  study,
-  obs_end = NULL,
-  write_res = FALSE,
-  res_dir = NULL
-)
+plot_score_distr(score_data, surv_ana)
 }
 \arguments{
 \item{score_data}{A data.frame with at least column \code{SCORE}.}
 
-\item{score_type}{A character. The name of the score used for the model,
-i.e. CCI, or PheRS.}
-
-\item{study}{An S4 class representing the study setup.}
-
-\item{write_res}{A boolean. Defines whether to save the results to
-files.}
-
-\item{res_dir}{A character. The directory to write the results and
-log to.}
+\item{surv_ana}{An S4 class representing the current survival analysis
+setup.}
 }
 \value{
 The ggplot object.

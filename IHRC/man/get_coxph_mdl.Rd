@@ -2,23 +2,17 @@
 % Please edit documentation in R/get_coxph_mdl.R
 \name{get_coxph_mdl}
 \alias{get_coxph_mdl}
-\title{Fits the Cox-PH model for a given endpoint and covariates}
+\title{Fits the Cox-PH model for a survival analysis setup}
 \usage{
-get_coxph_mdl(pheno_score_data, endpt, covs, pred_score = "SCORE_GROUP")
+get_coxph_mdl(surv_ana, pred_score = "SCORE_GROUP")
 }
 \arguments{
-\item{pheno_score_data}{A data.frame with at least the columns:
-\code{SCORE_GROUP}, the columns specified in \code{covs}
-and i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_AGE_DAYS}
-where the columns are the study endpoint and
-date, which will differ depending on the input
-variable \code{endpt}.}
+\item{surv_ana}{An S4 class representing the current survival analysis
+setup.}
 
-\item{endpt}{A character. The column name of the current endpoint of
-interest.}
-
-\item{covs}{A vector of characters. The column names of the covariates
-to add to the predictor of the Cox-PH model.}
+\item{pred_score}{A character. The score type to predict. For direct
+regression \code{SCORE}, and for regression on the
+risk group \code{SCORE_GROUP}.}
 }
 \value{
 A Cox-PH model object or \code{NULL} if the model couldn't be fit.

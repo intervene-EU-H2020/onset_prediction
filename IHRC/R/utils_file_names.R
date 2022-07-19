@@ -7,18 +7,16 @@
 #' @export 
 #' 
 #' @author Kira E. Detrois
-get_score_distr_file_name <- function(study,
-                                      score_type,
-                                      obs_end=NULL) {
+get_score_distr_file_name <- function(surv_ana) {
     plot_descr <- ""
-    if(score_type == "CCI") {
-        if(is.null(obs_end)) {
-            plot_descr <- paste0("_", study@exp_age, "_to_", study@exp_age+study@exp_len)
+    if(surv_ana@score_type == "CCI") {
+        if(surv_ana@study@obs_end == as.Date("3000/01/01")) {
+            plot_descr <- paste0("_", surv_ana@study@exp_age, "_to_", surv_ana@study@exp_age+surv_ana@study@exp_len)
         } else {
-            plot_descr <- paste0("_til_", obs_end)
+            plot_descr <- paste0("_until_", surv_ana@study@obs_end)
         }
     } 
-    paste0(score_type, "_score_distr", plot_descr, ".png")
+    paste0(surv_ana@score_type, "_score_distr", plot_descr, ".png")
 }
 
 #' Creats the file name for the HR plots
@@ -30,13 +28,10 @@ get_score_distr_file_name <- function(study,
 #' @export 
 #' 
 #' @author Kira E. Detrois
-get_hr_file_name <- function(study,
-                             score_type,
-                             bin_cut=1,
-                             obs_end=NULL) {
-    file_name <- paste0(Istudy::get_study_file_name(study, obs_end), "_", score_type)
-    if(score_type == "CCI") {
-        file_name <- paste0(file_name, "_cut", bin_cut)
+get_hr_file_name <- function(surv_ana) {
+    file_name <- paste0(Istudy::get_study_file_name(surv_ana@study), "_", surv_ana@score_type)
+    if(surv_ana@score_type == "CCI") {
+        file_name <- paste0(file_name, "_cut", surv_ana@bin_cut)
     } 
     paste0(file_name, "_HRs.png")
 }
@@ -50,10 +45,8 @@ get_hr_file_name <- function(study,
 #' @export 
 #' 
 #' @author Kira E. Detrois
-get_score_cut_file_name <- function(study,
-                                    score_type,
-                                    obs_end=NULL) {
-    paste0(Istudy::get_study_file_name(study, obs_end), "_", score_type, "_cut_log.txt")
+get_score_cut_file_name <- function(surv_ana) {
+    paste0(Istudy::get_study_file_name(surv_ana@study), "_", surv_ana@score_type, "_cut_log.txt")
 }
 
 #' Creats the file name for endpoint specific score distribution plot
@@ -65,10 +58,8 @@ get_score_cut_file_name <- function(study,
 #' @export 
 #' 
 #' @author Kira E. Detrois
-get_endpt_score_file_name <- function(study,
-                                      score_type,
-                                      obs_end=NULL) {
-    paste0(Istudy::get_study_file_name(study, obs_end), "_", score_type, "_score.png")
+get_endpt_score_file_name <- function(surv_ana) {
+    paste0(Istudy::get_study_file_name(surv_ana@study), "_",surv_ana@score_type, "_score.png")
 }
 
 #' Creats the file name for endpoint specific score distribution plot
@@ -80,10 +71,8 @@ get_endpt_score_file_name <- function(study,
 #' @export 
 #' 
 #' @author Kira E. Detrois
-get_surv_file_name <- function(study,
-                               score_type,
-                               obs_end=NULL) {
-    paste0(Istudy::get_study_file_name(study, obs_end), "_", score_type, "_surv.png")
+get_surv_file_name <- function(surv_ana) {
+    paste0(Istudy::get_study_file_name(surv_ana@study), "_", surv_ana@score_type, "_surv.png")
 }
 
 
@@ -96,18 +85,15 @@ get_surv_file_name <- function(study,
 #' @export 
 #' 
 #' @author Kira E. Detrois
-get_coxph_res_file_name <- function(study,
-                                    score_type,
-                                    bin_cut,
-                                    obs_end=NULL) {
-    if(is.null(obs_end)) {
-        file_name <- paste0("e", study@exp_len, "_w", study@wash_len, "_o", 
-        study@obs_len, "_", score_type)
+get_coxph_res_file_name <- function(surv_ana) {
+    if(surv_ana@study@obs_end == as.Date("3000/01/01")) {
+        file_name <- paste0("e", surv_ana@study@exp_len, "_w", surv_ana@study@wash_len, "_o", 
+        surv_ana@study@obs_len, "_", surv_ana@score_type)
     } else {
-        file_name <- paste0(obs_end, "_o", study@obs_len, "_w", study@wash_len)
+        file_name <- paste0(surv_ana@study@obs_end, "_o", surv_ana@study@obs_len, "_w", surv_ana@study@wash_len)
     }  
-    if(score_type == "CCI") {
-        file_name <- paste0(file_name, "_cut", bin_cut, "_coxph.tsv")
+    if(surv_ana@score_type == "CCI") {
+        file_name <- paste0(file_name, "_cut", surv_ana@bin_cut, "_coxph.tsv")
     } else {
         file_name <- paste0(file_name, "_coxph.tsv")
     }

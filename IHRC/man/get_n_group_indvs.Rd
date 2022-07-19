@@ -8,9 +8,18 @@ endpoint}
 get_n_group_indvs(pheno_score_data, groups, endpt, indv_type)
 }
 \arguments{
+\item{pheno_score_data}{A data.frame with at least columns
+SCORE_GROUP and the columns defined
+by the variabel \code{endpt}.}
+
 \item{groups}{A character. The groups in the Cox-PH model.}
 
-\item{indv_type}{A character. Can either be \code{cases} or \code{cntrls}.}
+\item{endpt}{A character. The column name of the current endpoint
+of interest.}
+
+\item{indv_type}{A character. Defines whether to get the cases
+or controls for each group. Has to be
+either \code{cntrls}, or \code{cases}.}
 }
 \description{
 Gets the number of cases or controls of a score group for a given

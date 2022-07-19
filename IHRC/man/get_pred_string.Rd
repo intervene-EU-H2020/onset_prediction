@@ -9,18 +9,17 @@ get_pred_string(covs, pred_score = "SCORE_GROUP")
 \arguments{
 \item{covs}{A vector of characters. The column names of the covariates
 to add to the predictor of the Cox-PH model.}
+
+\item{pred_score}{A character. The score type to predict. For direct
+regression \code{SCORE}, and for regression on the
+risk group \code{SCORE_GROUP}.}
 }
 \value{
-A character. The predictor string for the Cox-PH model.
-
 A character. The predictor string for the Cox-PH model.
 }
 \description{
 Creates the predictor string for the Cox-PH model
 }
 \author{
-Kira E. Detrois
-Creates the predictor string for the Cox-PH model
-
 Kira E. Detrois
 }

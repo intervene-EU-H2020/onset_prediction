@@ -4,26 +4,15 @@
 \alias{add_coxph_res_row}
 \title{Adds a row to the Cox-PH HR results tibble}
 \usage{
-add_coxph_res_row(
-  endpt_hrs_tib,
-  coxph_mdl,
-  score_type,
-  study,
-  elig_indv,
-  min_indvs = 5
-)
+add_coxph_res_row(endpt_hrs_tib, coxph_mdl, surv_ana)
 }
 \arguments{
 \item{endpt_hrs_tib}{A tibble with the results for previous endpts.}
 
 \item{coxph_mdl}{A Cox-PH model.}
 
-\item{score_type}{A character. The name of the score used for the model,
-i.e. CCI, or PheRS.}
-
-\item{elig_indv}{A tibble. The individuals which were eligble under
-the current study setup. Needs to at least
-contain the column defined in \code{endpt}.}
+\item{surv_ana}{An S4 class representing the current survival analysis
+setup.}
 }
 \value{
 A tibble. The updated \code{endpt_hrs_tib} with the added results for

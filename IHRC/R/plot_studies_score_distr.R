@@ -15,26 +15,7 @@
 #' `Surv(J10_ASTHMA_AGE_DAYS, J10_ASTHMA) ~ SCORE_GROUP + SEX +
 #' YEAR_OF_BIRTH`.
 #' 
-#' @param pheno_data A data.frame with at least the columns: 
-#'                   `ID`, the columns specified in `covs` and 
-#'                   i.e. `J10_ASTHMA`, and `J10_ASTHMA_AGE_DAYS` where 
-#'                   the columns are the study endpoint and date, which 
-#'                   will differ depending on the chosen `endpts`.
-#' @param score_data A data.frame. If `score_type = CCI` needs at least 
-#'                   column `SCORE`. If `score_type = PRS` columns of 
-#'                   form`J10_ASTHMA_PRS` depending on the chosen `endpts`.
-#' @param score_type A character. The name of the score used for the model,
-#'                                i.e. CCI, or PheRS.
-#' @param endpt_studies A vector of S4 classes representing the study setups.
-#' @param covs A vector of characters. The column names of the covariates 
-#'              to add to the predictor of the Cox-PH model.
-#' @param bin_cut A numeric. The binary cutoff value for classifying high
-#'                  and low score individuals. Currently only in use if
-#'                  the `score_type == CCI`.
-#' @param write_res A boolean. Defines whether to save the results to 
-#'                             files.
-#' @param res_dir A character. The directory to write the results and
-#'                             log to.
+#' @inheritParams add_risk_group_col
 #' 
 #' @return A tibble with columns `Endpoint`, `Score`, `Group`, 
 #'          `N_controls`, `N_cases`, `beta`, `std_errs`, `p_val`, `HR`, 
@@ -44,33 +25,11 @@
 #' @export 
 #' 
 #' @author Kira E. Detrois
-plot_studies_score_distr <- function(pheno_data, 
-                                     score_data,
-                                     score_type,
-                                     endpt_studies,
-                                     min_indvs=5,
-                                     write_res=FALSE,
-                                     res_dir=NULL) {
-
-    for(study in endpt_studies) {
-        plot_score_distr(score_data=score_data, 
-                         score_type=score_type, 
-                         study=study, 
-                         write_res=write_res, 
-                         res_dir=res_dir)
-        pheno_score_data <- get_elig_pheno_score_data(
-                                pheno_data=pheno_data,
-                                score_data=score_data,
-                                score_type=score_type,
-                                study=study,
-                                write_res=write_res,
-                                res_dir=res_dir)
-        plot_endpt_score_distr(score_data=pheno_score_data,
-                               score_type=score_type,
-                               study=study,
-                               min_indvs=min_indvs,
-                               write_res=write_res,
-                               res_dir=res_dir)
-
+plot_study_score_distr <- function(surv_ana) {
+    if(nrow(surv_ana@elig_score_data) > 0) {
+        plot_score_distr(score_data=surv_ana@elig_score_data, 
+                         surv_ana)
+        plot_endpt_score_distr(score_data=surv_ana@elig_score_data,
+                               surv_ana)
     }
 }

@@ -4,34 +4,13 @@
 \alias{check_and_get_file_path}
 \title{Creats the file directory and name for the different result types}
 \usage{
-check_and_get_file_path(
-  score_type,
-  study,
-  write_res,
-  res_dir,
-  res_type,
-  covs = NULL,
-  bin_cut = 1,
-  obs_end = NULL
-)
+check_and_get_file_path(surv_ana, res_type)
 }
 \arguments{
-\item{score_type}{A character. The name of the score used for the model,
-i.e. CCI, or PheRS.}
-
-\item{study}{An S4 class representing the study setup.}
-
-\item{write_res}{A boolean. Defines whether to save the results to
-files.}
-
-\item{res_dir}{A character. The directory to write the results and
-log to.}
+\item{surv_ana}{An S4 class representing the current survival analysis
+setup.}
 
 \item{res_type}{A character. The results type.}
-
-\item{bin_cut}{A numeric. The binary cutoff value for classifying high
-and low score individuals. Currently only in use if
-the \code{score_type == CCI}.}
 }
 \value{
 A character. The file name.

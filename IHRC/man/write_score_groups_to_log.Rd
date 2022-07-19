@@ -4,29 +4,14 @@
 \alias{write_score_groups_to_log}
 \title{Write score cut-off values and groups to log}
 \usage{
-write_score_groups_to_log(
-  score_group_tbl,
-  score_type,
-  study,
-  obs_end = NULL,
-  write_res = FALSE,
-  res_dir = NULL
-)
+write_score_groups_to_log(score_group_tbl, surv_ana)
 }
 \arguments{
 \item{score_group_tbl}{A named numeric. The risk score cuts for the
 different quantiles.}
 
-\item{score_type}{A character. The name of the score used for the model,
-i.e. CCI, or PheRS.}
-
-\item{study}{An S4 class representing the study setup.}
-
-\item{write_res}{A boolean. Defines whether to save the results to
-files.}
-
-\item{res_dir}{A character. The directory to write the results and
-log to.}
+\item{surv_ana}{An S4 class representing the current survival analysis
+setup.}
 }
 \description{
 Write score cut-off values and groups to log

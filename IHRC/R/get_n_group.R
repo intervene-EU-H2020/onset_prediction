@@ -1,8 +1,11 @@
 #' Gets the number of cases of a score group for a given endpoint
 #' 
-#' @inheritParams calc_endpt_studies_hrs
+#' @param pheno_score_data A data.frame with at least columns
+#'                          SCORE_GROUP and the columns defined
+#'                          by the variabel `endpt`.
 #' @param groups A character. The groups in the Cox-PH model.
-#' @inheritParams add_coxph_res_row
+#' @param endpt A character. The column name of the current endpoint 
+#'                              of interest.
 #' 
 #' @export 
 #' 
@@ -19,9 +22,7 @@ get_n_group_cases <- function(pheno_score_data,
 #' Gets the number of controls of a score group for a given 
 #' endpoint
 #' 
-#' @inheritParams calc_endpt_studies_hrs
-#' @param groups A character. The groups in the Cox-PH model.
-#' @inheritParams add_coxph_res_row
+#' @inheritParams get_n_group_cases
 #' 
 #' @export 
 #' 
@@ -38,12 +39,13 @@ get_n_group_cntrls <- function(pheno_score_data,
 #' Gets the number of cases or controls of a score group for a given
 #' endpoint
 #' 
-#' @inheritParams calc_endpt_studies_hrs
-#' @param groups A character. The groups in the Cox-PH model.
-#' @inheritParams add_coxph_res_row
-#' @param indv_type A character. Can either be `cases` or `cntrls`. 
-#' 
+#' @inheritParams get_n_group_cases
+#' @param indv_type A character. Defines whether to get the cases
+#'                      or controls for each group. Has to be
+#'                      either `cntrls`, or `cases`.
 #' @author Kira E. Detrois
+#' 
+#' @export 
 get_n_group_indvs <- function(pheno_score_data,
                               groups,
                               endpt,

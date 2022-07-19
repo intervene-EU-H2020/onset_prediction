@@ -1,7 +1,7 @@
 #' Creates a plot of the score distribution
 #' 
 #' @inheritParams add_risk_group_col
-#' @inheritParams calc_endpt_studies_hrs
+#' @inheritParams run_surv_studies
 #' 
 #' @return The ggplot object.
 #' 
@@ -10,27 +10,19 @@
 #' 
 #' @author Kira E. Detrois
 plot_score_distr <- function(score_data,
-                             score_type,
-                             study,
-                             obs_end=NULL,
-                             write_res=FALSE,
-                             res_dir=NULL) {
-    score_data <- get_and_filter_endpt_scores(score_data,
-                                              score_type,
-                                              study@endpt)
-
-    if(score_type == "CCI") {
-        if(is.null(obs_end)) {
-            plot_descr <- paste0(study@exp_age, " to ", study@exp_age+study@exp_len)
+                             surv_ana) {
+    if(surv_ana@score_type == "CCI") {
+        if(is.null(surv_ana@study@obs_end)) {
+            plot_descr <- paste0(surv_ana@study@exp_age, " to ", surv_ana@study@exp_age+surv_ana@study@exp_len)
         }
         else {
-            plot_descr <- paste0("unitl ", obs_end)
+            plot_descr <- paste0("until ", surv_ana@study@obs_end)
         }
         plt <- ggplot(score_data, aes(x=get("SCORE"))) + 
                     geom_histogram(fill="#405e46", binwidth = 1.0)  +
-                    labs(title=paste0(score_type, " Score Histogram"),
+                    labs(title=paste0(surv_ana@score_type, " Score Histogram"),
                          subtitle=paste0(nrow(score_data), " Individuals ", plot_descr),
-                         x=score_type,
+                         x=surv_ana@score_type,
                          y="Count") +
                     coord_cartesian(xlim=c(0,15)) +
                     theme_minimal() + 
@@ -38,19 +30,15 @@ plot_score_distr <- function(score_data,
     } else {
         plt <- suppressMessages(ggplot(score_data, aes(x=get("SCORE"))) + 
                     geom_histogram(fill="#405e46", bins=30)  +
-                    labs(title=paste0(score_type, " Score Histogram"),
+                    labs(title=paste0(surv_ana@score_type, " Score Histogram"),
                         subtitle=paste0(nrow(score_data), " Individuals "),
-                        x=score_type,
+                        x=surv_ana@score_type,
                         y="Count") +
                     theme_minimal() + 
                     theme(text=element_text(size=21)))
     }
 
-    file_path <- check_and_get_file_path(score_type=score_type,
-                                         study=study,
-                                         obs_end=obs_end,
-                                         write_res=write_res,
-                                         res_dir=res_dir,
+    file_path <- check_and_get_file_path(surv_ana,
                                          res_type="distr")
     if(!is.null(file_path)) {
         ggsave(file_path,
@@ -69,7 +57,7 @@ plot_score_distr <- function(score_data,
 #' eligible under the current study setup.
 #' 
 #' @inheritParams add_risk_group_col
-#' @inheritParams calc_endpt_studies_hrs
+#' @inheritParams run_surv_studies
 #' 
 #' @return A ggplot object
 #' 
@@ -78,38 +66,29 @@ plot_score_distr <- function(score_data,
 #' 
 #' @author Kira E. Detrois
 plot_endpt_score_distr <- function(score_data,
-                                   score_type,
-                                   study,
-                                   obs_end=NULL,
-                                   min_indvs=5,
-                                   write_res,
-                                   res_dir) {
-    if(is.null(score_data)) {
+                                   surv_ana) {
+    if(nrow(score_data) == 0) {
         return(NULL)
-    } else if(Istudy::get_n_cases(score_data, study@endpt) < min_indvs | 
-                Istudy::get_n_cntrls(score_data, study@endpt) < min_indvs) {
+    } else if(Istudy::get_n_cases(score_data, surv_ana@study@endpt) < surv_ana@min_indvs | 
+                Istudy::get_n_cntrls(score_data, surv_ana@study@endpt) < surv_ana@min_indvs) {
         return(NULL)
     }
-    score_data <- dplyr::mutate_at(score_data, study@endpt, as.factor)
+    score_data <- dplyr::mutate_at(score_data, surv_ana@study@endpt, as.factor)
 
     plt <- ggplot(score_data, 
-                      aes(x=get(study@endpt),
+                      aes(x=get(surv_ana@study@endpt),
                           y=SCORE, 
-                          fill=get(study@endpt))) + 
+                          fill=get(surv_ana@study@endpt))) + 
                     geom_boxplot(show.legend=FALSE) +
                     scale_x_discrete(labels=c("Controls", "Cases")) +
-                    labs(title=paste0(score_type, " Scores for ", study@endpt),
-                         subtitle=get_study_subtitle(study, obs_end),
+                    labs(title=paste0(surv_ana@score_type, " Scores for ", surv_ana@study@endpt),
+                         subtitle=get_study_subtitle(surv_ana@study),
                          x="",
-                         y=paste0(score_type, " Score")) +
+                         y=paste0(surv_ana@score_type, " Score")) +
                     theme_minimal() +
                     theme(text=element_text(size=21))
 
-    file_path <- check_and_get_file_path(score_type=score_type,
-                                         study=study,
-                                         obs_end=obs_end,
-                                         write_res=write_res,
-                                         res_dir=res_dir,
+    file_path <- check_and_get_file_path(surv_ana,
                                          res_type="endpt")
     print(file_path)
     if(!is.null(file_path)) {

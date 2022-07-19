@@ -14,23 +14,23 @@
 #     pheno_data <- Istudy::create_test_df(10000)
 #     test_data <- create_prs_test(length(pheno_data$ID), pheno_data$ID)
 #     exp_ages <- c(20,30,40)
-#     run_age_exp_endpt_studies(pheno_data, 
-#                               test_data,
-#                               score_type="PRS",
-#                               exp_ages=exp_ages,
-#                               exp_len=10,
-#                               wash_len=2,
-#                               obs_len=8,
-#                               endpts=c("J10_ASTHMA", 
-#                                        "I9_VTE",
-#                                        "C3_BREAST", 
-#                                        "COVHOSP"),
-#                               downsample_fctr=4,
-#                               ancs=NA_character_,
-#                               covs=c("SEX", "YEAR_OF_BIRTH"),
-#                               min_indvs=5,
-#                               write_res=TRUE,
-#                               res_dir="/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/")
+#     expect_error(run_surv_studies(pheno_data=pheno_data, 
+#                      score_data=test_data,
+#                      score_type="PRS",
+#                      exp_ages=exp_ages,
+#                      exp_len=10,
+#                      wash_len=2,
+#                      obs_len=8,
+#                      endpts=c("J10_ASTHMA", 
+#                               "I9_VTE",
+#                               "C3_BREAST", 
+#                               "COVHOSP"),
+#                      downsample_fctr=4,
+#                      ancs=NA_character_,
+#                      covs=c("SEX", "YEAR_OF_BIRTH"),
+#                      min_indvs=5,
+#                      write_res=TRUE,
+#                      res_dir="/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/"), regexp=NA)
 
 # })
 

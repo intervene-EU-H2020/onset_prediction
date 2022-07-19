@@ -9,29 +9,29 @@ get_comp_group <- function(score_type,
     return(comp_group)
 }
 
-get_surv_descr <- function(score_type,
-                           surv_type,
-                           covs,
-                           bin_cut=NULL) {
+get_surv_descr <- function(surv_ana,
+                           surv_type) {
     plot_caption <- ""
-    if(score_type == "CCI" & surv_type == "HR") {
-        plot_caption <- paste0("CCI >", bin_cut, " vs. <=", bin_cut)
+    if(surv_ana@score_type == "CCI" & surv_type == "HR") {
+        plot_caption <- paste0("CCI >", surv_ana@bin_cut, " vs. <=", surv_ana@bin_cut)
 
-    } else if(score_type == "PRS" & surv_type == "HR") {
+    } else if(surv_ana@score_type == "PRS" & surv_type == "HR") {
         plot_caption <- "Top 1% vs. 40-60%"
     }
-    plot_caption <- paste0(plot_caption, "   Surv ~ ", score_type)
+    plot_caption <- paste0(plot_caption, "   Surv ~ ", surv_ana@score_type)
     if(surv_type == "HR") {
         plot_caption <- paste0(plot_caption, " Risk Group")
     }
-    plot_caption <- paste0(plot_caption, " + ", get_pretty_covs_string(covs))
+    plot_caption <- paste0(plot_caption, " + ", get_pretty_covs_string(surv_ana@covs))
     return(plot_caption)
 }
 
 #' Turns vector of covariates into a string for plots
 #' 
-#' @inheritParams calc_endpt_studies_hrs
-#' 
+#' @inheritParams run_surv_studies
+#' @param file_name A boolean. Whether to create a file_name or
+#'                   a plot title.
+#'  
 #' @export 
 get_pretty_covs_string <- function(covs,
                                    file_name=FALSE) {
@@ -71,14 +71,21 @@ read_coxph_res_file <- function(res_dir,
     return(coxph_res)
 }
 
-#' @export 
+#' Creates a subtitle for a plot based on the current study setup
+#' 
+#' @param study An S4 class representing the study setup.
+#'  
+#' @return A character. The subtitle describing the study setup.
+#' 
 #' @importFrom lubridate %m-%
-get_study_subtitle <- function(study,
-                               obs_end=NULL) {
-    if(is.null(obs_end)) {
+#' @export 
+#' 
+#' @author Kira E. Detrois
+get_study_subtitle <- function(study) {
+    if(surv_ana@study@obs_end == as.Date("3000/01/01")) {
         study_sub <- paste0("Age: ", study@exp_age, " Exp: ", study@exp_len, " Wash: ", study@wash_len, " Obs: ", study@obs_len, " Years")
     } else {
-        exp_end <- obs_end %m-% lubridate::years(study@wash_len + study@obs_len)
+        exp_end <- surv_ana@study@obs_end %m-% lubridate::years(study@wash_len + study@obs_len)
         study_sub <- paste0("Exp from Birth until ", exp_end)
     }
     return(study_sub)

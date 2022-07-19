@@ -1,5 +1,16 @@
 #' An S4 class representing the study setup
 #' 
+#' @slot study_type A character. Can be either `forward` or `backward`. 
+#'              `forward` considers individuals of a certain age 
+#'              and a set exposure, washout, and observation periods 
+#'              calcualted onwards from this age. It can simply be created
+#'              by creating a S4 study object.
+#'              `backward` considers all individuals at a set time
+#'              point. The observation and washout period are calcualted 
+#'              backwards from this time point. The exposure period will be 
+#'              different for each individual depending on their birth date. 
+#'              This setup can be created, using the function 
+#'              \code{\link{get_backward_study}}.
 #' @slot endpt A character. The column name of the current endpoint of interest. 
 #' @slot exp_age An integer. Age at which exposure period starts (in years).
 #' @slot exp_len An integer. Length of the exposure period (in years).
@@ -7,6 +18,7 @@
 #'                   if they differ between individuals.
 #' @slot wash_len An integer. Length of the washout period (in years).
 #' @slot obs_len  An integer. Length of the observation period (in years).
+#' @slot obs_end A Date. The end of the observation period.
 #' @slot downsample_fctr An integer. Defines how many controls there
 #'                                   should be for every case.
 #'                                   Default is NA, which means no
@@ -17,27 +29,30 @@
 #' 
 #' @author Kira E. Detrois
 study <- methods::setClass("study", 
-                            slots=list(endpt="character",
+                            slots=list(study_type="character",
+                                       endpt="character",
                                        exp_age="numeric",
                                        exp_len="numeric",
                                        exp_ids="character",
                                        wash_len="numeric",
                                        obs_len="numeric",
+                                       obs_end="Date",
                                        downsample_fctr="numeric",
                                        ancs="character"),
-                            prototype=list(endpt=NA_character_,
-                                           exp_age=NA_real_,
-                                           exp_len=NA_real_,
+                            prototype=list(study_type="forward",
+                                           endpt=NA_character_,
+                                           exp_age=30,
+                                           exp_len=10,
                                            exp_ids=NA_character_,
-                                           wash_len=NA_real_,
-                                           obs_len=NA_real_,
+                                           wash_len=2,
+                                           obs_len=8,
+                                           obs_end=as.Date("3000/01/01"),
                                            downsample_fctr=NA_real_,
                                            ancs=NA_character_))
 
 setValidity("study", function(object) {
     msg <- ""
     msg <- test_integer_correct(msg, object@exp_age, "exp_age", TRUE)
-    msg <- test_integer_correct(msg, object@exp_len, "exp_len", TRUE)
     msg <- test_integer_correct(msg, object@wash_len, "wash_len", TRUE)
     msg <- test_integer_correct(msg, object@obs_len, "obs_len", TRUE)
     msg <- test_integer_correct(msg, object@downsample_fctr, "downsample_fctr")

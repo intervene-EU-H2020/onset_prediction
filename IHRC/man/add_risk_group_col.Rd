@@ -4,33 +4,13 @@
 \alias{add_risk_group_col}
 \title{Adds a risk group column}
 \usage{
-add_risk_group_col(
-  score_data,
-  score_type,
-  study,
-  bin_cut = 1,
-  obs_end = NULL,
-  write_res = FALSE,
-  res_dir = NULL
-)
+add_risk_group_col(score_data, surv_ana)
 }
 \arguments{
 \item{score_data}{A data.frame with at least column \code{SCORE}.}
 
-\item{score_type}{A character. The name of the score used for the model,
-i.e. CCI, or PheRS.}
-
-\item{study}{An S4 class representing the study setup.}
-
-\item{bin_cut}{A numeric. The binary cutoff value for classifying high
-and low score individuals. Currently only in use if
-the \code{score_type == CCI}.}
-
-\item{write_res}{A boolean. Defines whether to save the results to
-files.}
-
-\item{res_dir}{A character. The directory to write the results and
-log to.}
+\item{surv_ana}{An S4 class representing the current survival analysis
+setup.}
 }
 \value{
 The data.frame with the added risk group column

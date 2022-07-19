@@ -4,17 +4,11 @@
 \alias{get_coxph_res_file_name}
 \title{Creats the file name for Cox-PH model results file}
 \usage{
-get_coxph_res_file_name(study, score_type, bin_cut, obs_end = NULL)
+get_coxph_res_file_name(surv_ana)
 }
 \arguments{
-\item{study}{An S4 class representing the study setup.}
-
-\item{score_type}{A character. The name of the score used for the model,
-i.e. CCI, or PheRS.}
-
-\item{bin_cut}{A numeric. The binary cutoff value for classifying high
-and low score individuals. Currently only in use if
-the \code{score_type == CCI}.}
+\item{surv_ana}{An S4 class representing the current survival analysis
+setup.}
 }
 \value{
 A character. The file name.

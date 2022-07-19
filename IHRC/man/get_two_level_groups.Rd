@@ -8,9 +8,9 @@ cutoff}
 get_two_level_groups(score_data, cutoff)
 }
 \arguments{
-\item{score_data}{A data.frame. If \code{score_type = CCI} needs at least
-column \code{SCORE}. If \code{score_type = PRS} columns of
-form\code{J10_ASTHMA_PRS} depending on the chosen \code{endpts}.}
+\item{score_data}{A data.frame with at least columns \code{SCORE}, or
+i.e. \code{J10_ASTHMA_PRS} for endpoint \code{J10_ASTHMA}
+and score type \code{PRS}.}
 
 \item{cutoff}{A numeric. The score cutoff value.}
 }

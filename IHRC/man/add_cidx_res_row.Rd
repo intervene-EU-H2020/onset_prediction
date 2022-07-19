@@ -4,29 +4,18 @@
 \alias{add_cidx_res_row}
 \title{Adds a row to the C-index results tibble}
 \usage{
-add_cidx_res_row(c_idxs_tib, c_idx_res, study, score_type, covs, bin_cut)
+add_cidx_res_row(endpt_c_idxs_tib, c_idx_res, surv_ana)
 }
 \arguments{
-\item{score_type}{A character. The name of the score used for the model,
-i.e. CCI, or PheRS.}
+\item{endpt_c_idxs_tib}{A tibble with the results for previous endpts.}
 
-\item{covs}{A vector of characters. The column names of the covariates
-to add to the predictor of the Cox-PH model.}
+\item{c_idx_res}{A tibble with the new results to add.}
 
-\item{bin_cut}{A numeric. The binary cutoff value for classifying high
-and low score individuals. Currently only in use if
-the \code{score_type == CCI}.}
-
-\item{endpt_hrs_tib}{A tibble with the results for previous endpts.}
-
-\item{coxph_mdl}{A Cox-PH model.}
-
-\item{elig_indv}{A tibble. The individuals which were eligble under
-the current study setup. Needs to at least
-contain the column defined in \code{endpt}.}
+\item{surv_ana}{An S4 class representing the current survival analysis
+setup.}
 }
 \value{
-A tibble. The updated \code{endpt_hrs_tib} with the added results for
+A tibble. The updated \code{endpt_c_idxs_tib} with the added results for
 the current endpoint.
 }
 \description{

@@ -9,6 +9,9 @@ get_pretty_covs_string(covs, file_name = FALSE)
 \arguments{
 \item{covs}{A vector of characters. The column names of the covariates
 to add to the predictor of the Cox-PH model.}
+
+\item{file_name}{A boolean. Whether to create a file_name or
+a plot title.}
 }
 \description{
 Turns vector of covariates into a string for plots
