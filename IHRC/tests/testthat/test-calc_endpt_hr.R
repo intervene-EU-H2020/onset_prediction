@@ -33,15 +33,15 @@ test_that("calc_endpt_studies_hrs works", {
       expect_equal(pheno_data, pheno_data_true)
       print(pheno_data, n=10)
       print(pheno_data_true, n=10)
-      elig_true_vte <- readr::read_delim("/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/I9_VTE_a20_e10_w2_o8_elig_indv.tsv", delim="\t", show_col_types = FALSE)
+      elig_true_vte <- readr::read_delim("/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/true_results/I9_VTE_a20_e10_w2_o8_elig_indv.tsv", delim="\t", show_col_types = FALSE)
       elig_test <- readr::read_delim("/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/CCI_logs/elig_indv/I9_VTE_a20_e10_w2_o8_elig_indv.tsv", delim="\t", show_col_types = FALSE)
       expect_equal(elig_test$ID, elig_true_vte$ID)
 
-      elig_true_breast <- readr::read_delim("/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/C3_BREAST_a20_e10_w2_o8_elig_indv.tsv", delim="\t", show_col_types = FALSE)
+      elig_true_breast <- readr::read_delim("/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/true_results/C3_BREAST_a20_e10_w2_o8_elig_indv.tsv", delim="\t", show_col_types = FALSE)
       elig_test <- readr::read_delim("/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/CCI_logs/elig_indv/C3_BREAST_a20_e10_w2_o8_elig_indv.tsv", delim="\t", show_col_types = FALSE)
       expect_equal(elig_test$ID, elig_true_breast$ID)
 
-      elig_true_asth <- readr::read_delim("/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/J10_ASTHMA_a20_e10_w2_o8_elig_indv.tsv", delim="\t", show_col_types = FALSE)
+      elig_true_asth <- readr::read_delim("/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/true_results/J10_ASTHMA_a20_e10_w2_o8_elig_indv.tsv", delim="\t", show_col_types = FALSE)
       elig_test <- readr::read_delim("/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/CCI_logs/elig_indv/J10_ASTHMA_a20_e10_w2_o8_elig_indv.tsv", delim="\t", show_col_types = FALSE)
       expect_equal(elig_test$ID, elig_true_asth$ID)
    } else {
