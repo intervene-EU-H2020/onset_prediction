@@ -9,21 +9,23 @@
 check_and_get_file_path <- function(surv_ana,
                                     res_type) {
     if(surv_ana@write_res) {
-        dir_name <- ""
+        down_dir_name <- ifelse(!is.na(surv_ana@study@downsample_fctr), 
+                           paste0("down_", surv_ana@study@downsample_fctr, "/"), 
+                           "no_down/")
         if(!is.null(surv_ana@covs)) {
-            dir_name <- paste0(get_pretty_covs_string(surv_ana@covs, file_name=TRUE), "/")
+            covs_dir_name <- paste0(down_dir_name, get_pretty_covs_string(surv_ana@covs, file_name=TRUE), "/")
         } else if(res_type %in% c("HRs", "coxph", "surv")) {
             message("Could not make correct directory because covariates not given")
         }
 
         # Results type specific folder
         type_dir <- dplyr::case_when(
-            res_type == "endpt" ~ "score_distr/endpts/",
-            res_type == "distr" ~ "score_distr/",
-            res_type == "coxph" ~ dir_name,
-            res_type == "log" ~ "log/",
-            res_type == "HRs" ~ paste0(dir_name, "HRs/"), 
-            res_type == "surv" ~ paste0(dir_name, "surv/"),
+            res_type == "endpt" ~ paste0(down_dir_name, "score_distr/endpts/"),
+            res_type == "distr" ~ paste0(down_dir_name, "score_distr/"),
+            res_type == "coxph" ~ covs_dir_name,
+            res_type == "log" ~ "PRS_logs/score_cut/",
+            res_type == "HRs" ~ paste0(covs_dir_name, "HRs/"), 
+            res_type == "surv" ~ paste0(covs_dir_name, "surv/"),
         )
         curnt_res_dir <- paste0(surv_ana@res_dir, type_dir)
         # Make the folder if it doesn't exist yet

@@ -28,8 +28,8 @@
 plot_study_score_distr <- function(surv_ana) {
     if(nrow(surv_ana@elig_score_data) > 0) {
         plot_score_distr(score_data=surv_ana@elig_score_data, 
-                         surv_ana)
+                         surv_ana=surv_ana)
         plot_endpt_score_distr(score_data=surv_ana@elig_score_data,
-                               surv_ana)
+                               surv_ana=surv_ana)
     }
 }

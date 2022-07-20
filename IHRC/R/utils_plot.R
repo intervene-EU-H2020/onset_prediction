@@ -82,10 +82,10 @@ read_coxph_res_file <- function(res_dir,
 #' 
 #' @author Kira E. Detrois
 get_study_subtitle <- function(study) {
-    if(surv_ana@study@obs_end == as.Date("3000/01/01")) {
+    if(study@obs_end == as.Date("3000/01/01")) {
         study_sub <- paste0("Age: ", study@exp_age, " Exp: ", study@exp_len, " Wash: ", study@wash_len, " Obs: ", study@obs_len, " Years")
     } else {
-        exp_end <- surv_ana@study@obs_end %m-% lubridate::years(study@wash_len + study@obs_len)
+        exp_end <- study@obs_end %m-% lubridate::years(study@wash_len + study@obs_len)
         study_sub <- paste0("Exp from Birth until ", exp_end)
     }
     return(study_sub)

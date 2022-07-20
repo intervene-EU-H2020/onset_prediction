@@ -1,7 +1,5 @@
 #' Makes all character covariates a factor
-#' 
-#' @inheritParams add_risk_group_col
-#' 
+#'  
 #' @param elig_score_data A data.frame with all eligible individuals under 
 #'                  the chosen study setup and their scores. Needs at 
 #'                  least the columns defines in `covs`.
