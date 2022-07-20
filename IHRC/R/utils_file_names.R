@@ -10,7 +10,7 @@
 get_score_distr_file_name <- function(surv_ana) {
     plot_descr <- ""
     if(surv_ana@score_type == "CCI") {
-        if(surv_ana@study@obs_end == as.Date("3000/01/01")) {
+        if(surv_ana@study@study_type == "forward") {
             plot_descr <- paste0("_", surv_ana@study@exp_age, "_to_", surv_ana@study@exp_age+surv_ana@study@exp_len)
         } else {
             plot_descr <- paste0("_until_", surv_ana@study@obs_end)
@@ -29,7 +29,11 @@ get_score_distr_file_name <- function(surv_ana) {
 #' 
 #' @author Kira E. Detrois
 get_hr_file_name <- function(surv_ana) {
-    file_name <- paste0(Istudy::get_study_file_name(surv_ana@study), "_", surv_ana@score_type)
+    if(surv_ana@study@study_type == "forward") {
+        file_name <- paste0(surv_ana@study@endpt, "_e", surv_ana@study@exp_len, "_w", surv_ana@study@wash_len, "_o", surv_ana@study@obs_len, "_", surv_ana@score_type)
+    } else {
+        file_name <- paste0(surv_ana@study@obs_end, "_o", surv_ana@study@obs_len, "_w", surv_ana@study@wash_len)
+    }
     if(surv_ana@score_type == "CCI") {
         file_name <- paste0(file_name, "_cut", surv_ana@bin_cut)
     } 
@@ -46,7 +50,8 @@ get_hr_file_name <- function(surv_ana) {
 #' 
 #' @author Kira E. Detrois
 get_score_cut_file_name <- function(surv_ana) {
-    paste0(Istudy::get_study_file_name(surv_ana@study), "_", surv_ana@score_type, "_cut_log.txt")
+    file_name <- paste0(Istudy::get_study_file_name(surv_ana@study), "_", surv_ana@score_type, "_cut_log.txt")
+    return(file_name)
 }
 
 #' Creats the file name for endpoint specific score distribution plot

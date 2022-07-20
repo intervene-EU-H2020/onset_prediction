@@ -12,7 +12,7 @@
 plot_score_distr <- function(score_data,
                              surv_ana) {
     if(surv_ana@score_type == "CCI") {
-        if(is.null(surv_ana@study@obs_end)) {
+        if(surv_ana@study@study_type == "forward") {
             plot_descr <- paste0(surv_ana@study@exp_age, " to ", surv_ana@study@exp_age+surv_ana@study@exp_len)
         }
         else {
@@ -90,7 +90,6 @@ plot_endpt_score_distr <- function(score_data,
 
     file_path <- check_and_get_file_path(surv_ana,
                                          res_type="endpt")
-    print(file_path)
     if(!is.null(file_path)) {
         ggsave(file_path,
                width=7,

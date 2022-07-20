@@ -79,14 +79,16 @@ run_surv_studies <- function(pheno_data,
                              min_indvs=5,
                              write_res=FALSE,
                              res_dir=NULL) {
-
+    if(is.null(exp_ages)) {
+        exp_ages = 0
+    }
     all_age_hrs_tib <- tibble::tibble()
     all_age_cidxs_tib <- tibble::tibble()
-
-    for(exp_age in exp_ages) {
+    for(endpt in endpts) {
         endpt_hrs_tib <- create_empty_endpt_hrs_tib() 
         endpt_c_idxs_tib <- create_empty_cidx_tib()
-        for(endpt in endpts) {
+
+        for(exp_age in exp_ages) {
             study <- create_endpt_study_obj(pheno_data=pheno_data,
                                             study_type=study_type,
                                             endpt=endpt, 
@@ -115,19 +117,18 @@ run_surv_studies <- function(pheno_data,
                                        surv_ana=surv_ana)
             c_idx_res <- calc_endpt_study_cidx(surv_ana)
             endpt_c_idxs_tib <- add_cidx_res_row(endpt_c_idxs_tib=endpt_c_idxs_tib, 
-                                           c_idx_res=c_idx_res, 
-                                           surv_ana)
-    
-        }
-        all_age_hrs_tib <- dplyr::bind_rows(all_age_hrs_tib, 
+                                                 c_idx_res=c_idx_res, 
+                                                 surv_ana)
+            all_age_hrs_tib <- dplyr::bind_rows(all_age_hrs_tib, 
                                             endpt_hrs_tib)
-        all_age_cidxs_tib <- dplyr::bind_rows(all_age_cidxs_tib,
+            all_age_cidxs_tib <- dplyr::bind_rows(all_age_cidxs_tib,
                                               endpt_c_idxs_tib)
-        write_res_files(endpt_hrs_tib=all_age_hrs_tib,
-                        endpt_c_idxs_tib=all_age_cidxs_tib,
-                        surv_ana=surv_ana)
-        plot_age_hrs(all_age_hrs_tib, surv_ana) 
+        }
     }
+    write_res_files(endpt_hrs_tib=all_age_hrs_tib,
+                    endpt_c_idxs_tib=all_age_cidxs_tib,
+                    surv_ana=surv_ana)
+    plot_hrs(all_age_hrs_tib, surv_ana) 
 }
 
 

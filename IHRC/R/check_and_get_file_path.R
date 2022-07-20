@@ -23,7 +23,7 @@ check_and_get_file_path <- function(surv_ana,
             res_type == "endpt" ~ paste0(down_dir_name, "score_distr/endpts/"),
             res_type == "distr" ~ paste0(down_dir_name, "score_distr/"),
             res_type == "coxph" ~ covs_dir_name,
-            res_type == "log" ~ "PRS_logs/score_cut/",
+            res_type == "log" ~ paste0(down_dir_name, "PRS_logs/score_cut/"),
             res_type == "HRs" ~ paste0(covs_dir_name, "HRs/"), 
             res_type == "surv" ~ paste0(covs_dir_name, "surv/"),
         )
@@ -34,10 +34,11 @@ check_and_get_file_path <- function(surv_ana,
              res_type == "endpt" ~ get_endpt_score_file_name(surv_ana),
              res_type == "distr" ~ get_score_distr_file_name(surv_ana),
              res_type == "coxph" ~ get_coxph_res_file_name(surv_ana),
-             res_type == "log" ~  get_score_cut_file_name(surv_ana),
              res_type == "HRs" ~ get_hr_file_name(surv_ana),
-             res_type == "surv" ~ get_surv_file_name(surv_ana)
-            )
+             res_type == "surv" ~ get_surv_file_name(surv_ana),
+             res_type == "log" ~ get_score_cut_file_name(surv_ana))
+            if(length(file_name) > 1)
+                file_name <- unique(file_name)
             file_path <- paste0(curnt_res_dir, file_name)
             return(file_path)
         } 

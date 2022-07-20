@@ -10,7 +10,23 @@ get_comp_group <- function(score_type,
 }
 
 get_surv_descr <- function(surv_ana,
-                           surv_type) {
+                           surv_type,
+                           comp_descr=TRUE) {
+    if(comp_descr) {
+        plot_caption <- get_comp_caption(surv_ana, surv_type)
+    } else {
+        plot_caption <- ""
+    }
+    plot_caption <- paste0(plot_caption, "   Surv ~ ", surv_ana@score_type)
+    if(surv_type == "HR") {
+        plot_caption <- paste0(plot_caption, " Risk Group")
+    }
+    plot_caption <- paste0(plot_caption, " + ", get_pretty_covs_string(surv_ana@covs))
+    return(plot_caption)
+}
+
+get_comp_caption <- function(surv_ana,
+                             surv_type) {
     plot_caption <- ""
     if(surv_ana@score_type == "CCI" & surv_type == "HR") {
         plot_caption <- paste0("CCI >", surv_ana@bin_cut, " vs. <=", surv_ana@bin_cut)
@@ -18,11 +34,6 @@ get_surv_descr <- function(surv_ana,
     } else if(surv_ana@score_type == "PRS" & surv_type == "HR") {
         plot_caption <- "Top 1% vs. 40-60%"
     }
-    plot_caption <- paste0(plot_caption, "   Surv ~ ", surv_ana@score_type)
-    if(surv_type == "HR") {
-        plot_caption <- paste0(plot_caption, " Risk Group")
-    }
-    plot_caption <- paste0(plot_caption, " + ", get_pretty_covs_string(surv_ana@covs))
     return(plot_caption)
 }
 

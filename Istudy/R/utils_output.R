@@ -41,10 +41,10 @@ create_return_tib <- function(pheno_data,
 #' 
 #' @author Kira E. Detrois
 get_study_file_name <- function(study) {
-    if(study@obs_end == as.Date("3000/01/01")) {
+    if(study@study_type == "forward") {
         paste0(study@endpt, "_a", study@exp_age, "_e", study@exp_len, "_w", study@wash_len, "_o", study@obs_len)
     } else {
-        paste0(study@endpt, "_", obs_end, "_o", study@obs_len, "_w", study@wash_len)
+        paste0(study@endpt, "_", study@obs_end, "_o", study@obs_len, "_w", study@wash_len)
     }
 }   
 
@@ -85,8 +85,8 @@ write_res_file <- function(elig_indv,
             res_file_name <- paste0(get_study_file_name(study), 
                                     "_elig_indv.tsv")
             readr::write_delim(elig_indv, 
-                            paste0(elig_res_dir, res_file_name),
-                            delim="\t")
+                               paste0(elig_res_dir, res_file_name),
+                               delim="\t")
     }
 }
 
@@ -101,13 +101,23 @@ log_msg_string <- function(elig_indv,
                            study) {
     n_cases <- get_n_cases(elig_indv, study@endpt)
     n_cntrls <- get_n_cntrls(elig_indv, study@endpt)
-    paste0("Endpoint: ", study@endpt, "\n",
-           "No of cases: ", n_cases, "\n",
-           "No of ctrls: ", n_cntrls, "\n",   
-           "Age at exposure start:        ", study@exp_age, "\n",
-           "Length of exposure period:    ", study@exp_len, "\n", 
-           "Length of washout period:     ", study@wash_len, "\n",
-           "Length of observation period: ", study@obs_len, "\n")
+
+    if(study@study_type == "forward") {
+        paste0("Endpoint: ", study@endpt, "\n",
+               "No of cases: ", n_cases, "\n",
+               "No of ctrls: ", n_cntrls, "\n",   
+               "Age at exposure start:        ", study@exp_age, "\n",
+               "Length of exposure period:    ", study@exp_len, "\n", 
+               "Length of washout period:     ", study@wash_len, "\n",
+               "Length of observation period: ", study@obs_len, "\n")
+    } else {
+        paste0("Endpoint: ", study@endpt, "\n",
+               "No of cases: ", n_cases, "\n",
+               "No of ctrls: ", n_cntrls, "\n",   
+               "Length of washout period:     ", study@wash_len, "\n",
+               "Length of observation period: ", study@obs_len, "\n",
+               "End of observation:        ", study@obs_end, "\n")      
+    }
 }
 
 #' Writes study setup to a file
@@ -124,7 +134,6 @@ write_log_file <- function(elig_indv,
         if(!dir.exists(log_res_dir)) {
             dir.create(log_res_dir)
         }
-
         readr::write_file(log_msg_string(elig_indv, study), 
                           paste0(log_res_dir, 
                                  get_study_file_name(study), 

@@ -1,3 +1,42 @@
+plot_hrs <- function(coxph_hr_res,
+                     surv_ana) {
+    if(surv_ana@study@study_type == "forward") {
+        plt <- plot_age_hrs(coxph_hr_res, surv_ana)
+    } else {
+        plt <- plot_endpt_hrs(coxph_hr_res, surv_ana)
+    }
+    
+    file_path <- check_and_get_file_path(surv_ana, res_type="HRs")
+    if(!is.null(file_path) & !is.null(plt)) {
+        ggsave(file_path,
+               width=ifelse(surv_ana@study@study_type == "forward", 7, 10),
+               height=7,
+               plot=plt, 
+               device="png", 
+               bg="white")
+    }
+}
+
+plot_endpt_hrs <- function(coxph_hr_res,
+                           surv_ana) {
+    top_group <- dplyr::filter(coxph_hr_res, GROUP == get_comp_group(surv_ana@score_type, surv_ana@bin_cut))
+    plt <- ggplot2::ggplot(top_group,
+                    aes(y=ENDPOINT, x=HR)) +
+                    geom_point(show.legend = FALSE) +
+                    labs(title=paste0(surv_ana@score_type, " ", get_comp_caption(surv_ana, surv_type="HR")),
+                         subtitle=paste0("Obs: ", surv_ana@study@obs_len, " Years until ", surv_ana@study@obs_end, " Wash: ", surv_ana@study@wash_len, " Years"),
+                         caption=get_surv_descr(surv_ana,
+                                                surv_type="HR",
+                                                comp_descr=FALSE),
+                         x="Hazard Ratio (95%)",
+                         y="") +
+                    theme_minimal() +
+                    coord_cartesian(xlim=c(0, 7.1)) +
+                    geom_errorbar(aes(xmin=CI_NEG, xmax=CI_POS), width=0.2) +
+                    geom_vline(xintercept = 1.0)+
+                    theme(text=element_text(size=21))
+    return(plt)
+}
 
 plot_age_hrs <- function(coxph_hr_res,
                          surv_ana) {
@@ -24,18 +63,8 @@ plot_age_hrs <- function(coxph_hr_res,
                     theme_minimal() +
                     theme(text=element_text(size=21),
                           plot.caption=element_text(size=10, hjust=0))
-            # Hacking the system a bit by putting random age that won't be 
-            # used.
-            file_path <- check_and_get_file_path(surv_ana,
-                                                 res_type="HRs")
-            if(!is.null(file_path)) {
-                ggsave(file_path,
-                    width=7,
-                    height=7,
-                    plot=plt, 
-                    device="png", 
-                    bg="white")
-            }
+            return(plt)
         }
     }
+    return(NULL)
 }

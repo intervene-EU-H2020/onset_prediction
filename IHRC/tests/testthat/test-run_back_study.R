@@ -1,37 +1,5 @@
 
 
-# test_that("run_back_endpt_studies CCI works", {
-#   if (requireNamespace("ICCI", quietly = TRUE)) {
-#       set.seed(919923)
-#       library("ICCI")
-
-#       pheno_data <- Istudy::create_test_df(100000)
-#       icd_data <- ILongDataUtils::create_test_df_multi_icd_ver(n_icd10=50000, 
-#                                                                icd10_indv=pheno_data$ID)
-
-#       res <- run_back_endpt_studies(pheno_data=pheno_data, 
-#                      score_data=icd_data,
-#                      score_type="CCI",
-#                      endpts=c("J10_ASTHMA", "I9_VTE"),
-#                      wash_len=2,
-#                      obs_len=8,
-#                      obs_end=NULL,
-#                      downsample_fctr=4,
-#                      ancs=NA_character_,
-#                      covs=c("SEX", "YEAR_OF_BIRTH"),
-#                      bin_cut=1,
-#                      min_indvs=5,
-#                      write_res=TRUE,
-#                      res_dir="/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/")
-
-#       print(res$hrs)
-#       print(dplyr::select(res$cidxs, ENDPOINT, SURV_MODEL, C_INDEX, N))
-
-#    } else {
-#       message("Could not run tests, because ICCI is not available.")
-#    }
-# })
-
 create_prs_test <- function(n_indv=25, indv_ids=NULL) {
     if(is.null(indv_ids))
         indv_ids <- paste0("KT00000", seq(n_indv))

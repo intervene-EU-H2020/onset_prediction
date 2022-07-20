@@ -68,7 +68,7 @@ setMethod("initialize", "surv_ana", function(.Object, ...) {
                                         study=.Object@study,
                                         max_age=.Object@max_age,
                                         write_res=.Object@write_res,
-                                        res_dir=paste0(.Object@res_dir, .Object@score_type, "_logs/"))
+                                        res_dir=paste0(.Object@res_dir, "down_", .Object@study@downsample_fctr, "/", .Object@score_type, "_logs/"))
     .Object@elig_score_data <- get_elig_score_data(.Object)
     if(nrow(.Object@elig_score_data) > 0) {
         .Object@elig_score_data <- add_risk_group_col(
