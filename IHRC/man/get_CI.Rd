@@ -11,6 +11,9 @@ get_CI(ML, SE)
 
 \item{SE}{standard error of the ML estimator}
 }
+\value{
+\code{c(neg, pos)} the upper and lower bounds of the CI.
+}
 \description{
 95\% confidence interval given the ML estimator and SE
 }

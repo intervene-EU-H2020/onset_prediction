@@ -5,16 +5,6 @@ plot_hrs <- function(coxph_hr_res,
     } else {
         plt <- plot_endpt_hrs(coxph_hr_res, surv_ana)
     }
-    
-    file_path <- check_and_get_file_path(surv_ana, res_type="HRs")
-    if(!is.null(file_path) & !is.null(plt)) {
-        ggsave(file_path,
-               width=ifelse(surv_ana@study@study_type == "forward", 7, 10),
-               height=7,
-               plot=plt, 
-               device="png", 
-               bg="white")
-    }
 }
 
 plot_endpt_hrs <- function(coxph_hr_res,
@@ -35,7 +25,16 @@ plot_endpt_hrs <- function(coxph_hr_res,
                     geom_errorbar(aes(xmin=CI_NEG, xmax=CI_POS), width=0.2) +
                     geom_vline(xintercept = 1.0)+
                     theme(text=element_text(size=21))
-    return(plt)
+
+    file_path <- check_and_get_file_path(surv_ana, res_type="HRs")
+    if(!is.null(file_path) & !is.null(plt)) {
+        ggsave(file_path,
+               width=ifelse(surv_ana@study@study_type == "forward", 7, 10),
+               height=7,
+               plot=plt, 
+               device="png", 
+               bg="white")
+    }
 }
 
 plot_age_hrs <- function(coxph_hr_res,
@@ -63,7 +62,17 @@ plot_age_hrs <- function(coxph_hr_res,
                     theme_minimal() +
                     theme(text=element_text(size=21),
                           plot.caption=element_text(size=10, hjust=0))
-            return(plt)
+
+            surv_ana@study@endpt <- endpt
+            file_path <- check_and_get_file_path(surv_ana, res_type="HRs")
+            if(!is.null(file_path) & !is.null(plt)) {
+                ggsave(file_path,
+                    width=ifelse(surv_ana@study@study_type == "forward", 7, 10),
+                    height=7,
+                    plot=plt, 
+                    device="png", 
+                    bg="white")
+            }
         }
     }
     return(NULL)

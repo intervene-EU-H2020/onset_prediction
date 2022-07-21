@@ -33,12 +33,13 @@ get_coxph_mdl <- function(surv_ana,
             }
         }
         if(build_mdl) {
-            coxph_mdl <- survival::coxph(formula=coxph_formula, 
-                                        data=surv_ana@elig_score_data,
-                                        # Larger fit object but no need to
-                                        # other functions to reconstruct
-                                        # which fails in this setup
-                                        model=TRUE)
+            coxph_mdl <- suppressWarnings(
+                            survival::coxph(formula=coxph_formula, 
+                                            data=surv_ana@elig_score_data,
+                                            # Larger fit object but no need for
+                                            # other functions to reconstruct
+                                            # which fails in this setup
+                                            model=TRUE))
         } else {
             return(NULL)
         }

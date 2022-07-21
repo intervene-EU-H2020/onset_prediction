@@ -17,7 +17,7 @@ create_endpt_study_obj <- function(pheno_data,
                                    wash_len=2,
                                    obs_len=8,
                                    obs_end=NULL,
-                                   downsample_fctr=NULL,
+                                   downsample_fctr=NA_integer_,
                                    ancs=c("EAS")) {
 
     if(study_type == "forward") {
@@ -28,7 +28,7 @@ create_endpt_study_obj <- function(pheno_data,
                               exp_len=exp_len,
                               wash_len=wash_len,
                               obs_len=obs_len,
-                              downsample_fctr=ifelse(is.null(downsample_fctr), NA_integer_, downsample_fctr),
+                              downsample_fctr=downsample_fctr,
                               ancs=ancs)
     } else if(study_type == "backward") {
         study <- Istudy::get_backward_study(pheno_data=pheno_data,

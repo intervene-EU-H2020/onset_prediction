@@ -3,11 +3,11 @@ test_that("calc_endpt_studies_hrs works", {
       set.seed(919923)
       library("ICCI")
 
-      pheno_data <- Istudy::create_test_df(1000)
+      pheno_data <- readr::read_delim("/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/true_results/pheno_data.tsv", delim="\t", show_col_types = FALSE)
       icd_data <- ILongDataUtils::create_test_df_multi_icd_ver(
                                                 n_icd10=5000, 
                                                 icd10_indv=pheno_data$ID)
-      exp_ages <- c(20,30,40)
+      exp_ages <- c(20, 30, 40)
       expect_error(run_surv_studies(
                          pheno_data=pheno_data, 
                          score_data=icd_data,
@@ -28,8 +28,7 @@ test_that("calc_endpt_studies_hrs works", {
                          write_res=TRUE,
                          res_dir="/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/"), regexp=NA)
                          
-      pheno_data_true <- readr::read_delim("/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/true_results/pheno_data.tsv", delim="\t")
-      expect_equal(pheno_data, pheno_data_true)
+
 
       elig_true_vte <- readr::read_delim("/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/true_results/I9_VTE_a20_e10_w2_o8_elig_indv.tsv", delim="\t", show_col_types = FALSE)
       elig_test <- readr::read_delim("/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/down_4/CCI_logs/elig_indv/I9_VTE_a20_e10_w2_o8_elig_indv.tsv", delim="\t", show_col_types = FALSE)
@@ -56,7 +55,7 @@ test_that("calc_endpt_studies_hrs works", {
       icd_data <- ILongDataUtils::create_test_df_multi_icd_ver(
                                                 n_icd10=50000, 
                                                 icd10_indv=pheno_data$ID)
-      exp_ages <- c(20,30,40,50,60)
+      exp_ages <- c(20,30,40)
       expect_error(run_surv_studies(
                          pheno_data=pheno_data, 
                          score_data=icd_data,
@@ -70,7 +69,6 @@ test_that("calc_endpt_studies_hrs works", {
                          exp_len=10,
                          wash_len=2,
                          obs_len=8,
-                         downsample_fctr=4,
                          ancs=NA_character_,
                          covs=c("SEX", "YEAR_OF_BIRTH"),
                          bin_cut=1,

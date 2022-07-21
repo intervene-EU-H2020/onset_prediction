@@ -71,7 +71,7 @@ run_surv_studies <- function(pheno_data,
                              wash_len=2,
                              obs_len=8,
                              obs_end=NULL,
-                             downsample_fctr=NULL,
+                             downsample_fctr=NA_integer_,
                              ancs=NA_character_,
                              max_age=90,
                              covs=c("SEX", "YEAR_OF_BIRTH"),
@@ -110,19 +110,19 @@ run_surv_studies <- function(pheno_data,
                                      bin_cut=bin_cut,
                                      write_res=write_res,
                                      res_dir=res_dir)
-            plot_study_score_distr(surv_ana)
             coxph_mdl <- calc_endpt_study_hr(surv_ana)
             endpt_hrs_tib <- add_coxph_res_row(endpt_hrs_tib=endpt_hrs_tib,
-                                       coxph_mdl=coxph_mdl,
-                                       surv_ana=surv_ana)
+                                               coxph_mdl=coxph_mdl,
+                                               surv_ana=surv_ana)
             c_idx_res <- calc_endpt_study_cidx(surv_ana)
-            endpt_c_idxs_tib <- add_cidx_res_row(endpt_c_idxs_tib=endpt_c_idxs_tib, 
-                                                 c_idx_res=c_idx_res, 
-                                                 surv_ana)
+            endpt_c_idxs_tib <- add_cidx_res_row(
+                                    endpt_c_idxs_tib=endpt_c_idxs_tib, 
+                                    c_idx_res=c_idx_res, 
+                                    surv_ana=surv_ana)
             all_age_hrs_tib <- dplyr::bind_rows(all_age_hrs_tib, 
-                                            endpt_hrs_tib)
+                                                endpt_hrs_tib)
             all_age_cidxs_tib <- dplyr::bind_rows(all_age_cidxs_tib,
-                                              endpt_c_idxs_tib)
+                                                  endpt_c_idxs_tib)
         }
     }
     write_res_files(endpt_hrs_tib=all_age_hrs_tib,

@@ -35,14 +35,9 @@ create_empty_cidx_tib <- function() {
         EXP_AGE = numeric(),
         SURV_MODEL = character(),
         C_INDEX = numeric(),
-        DXY = numeric(),
-        SD = numeric(),
-        N = numeric(),
-        MISSING = numeric(),
-        UNCESORED = numeric(),
-        RELEVANT_PAIRS = numeric(),
-        CONCORDANT = numeric(),
-        UNCERTAIN = numeric()
+        CI_NEG = numeric(),
+        CI_POS = numeric(),
+        C_INDEX_HMISC = numeric()
     )
 }
 
@@ -146,23 +141,20 @@ get_min_indvs_data <- function(coxph_mdl,
 add_cidx_res_row <- function(endpt_c_idxs_tib,
                              c_idx_res,
                              surv_ana) {
+
     if(!is.null(c_idx_res)) {
         surv_descr=get_surv_descr(surv_ana,
-                                  surv_type="surv")
+                                  surv_type="surv")  
+        c_idx_ci <- get_CI(c_idx_res$summary[[1]], c_idx_res$summary[[2]])
         endpt_c_idxs_tib <- tibble::add_row(
                             endpt_c_idxs_tib,
                             ENDPOINT=surv_ana@study@endpt,
                             EXP_AGE=surv_ana@study@exp_age,
                             SURV_MODEL=surv_descr,
-                            C_INDEX=c_idx_res["C Index"],
-                            DXY=c_idx_res["Dxy"],
-                            SD=c_idx_res["S.D."],
-                            N=c_idx_res["n"],
-                            MISSING=c_idx_res["missing"],
-                            UNCESORED=c_idx_res["uncensored"],
-                            RELEVANT_PAIRS=c_idx_res["Relevant Pairs"],
-                            CONCORDANT=c_idx_res ["Concordant"],
-                            UNCERTAIN=c_idx_res["Uncertain"])
+                            C_INDEX=c_idx_res$summary[[1]],
+                            CI_NEG=c_idx_ci[[1]],
+                            CI_POS=c_idx_ci[[2]],
+                            C_INDEX_HMISC=c_idx_res$Hmisc["C Index"])
     }
     return(endpt_c_idxs_tib)
 }

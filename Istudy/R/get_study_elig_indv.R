@@ -66,9 +66,7 @@ get_study_elig_indv <- function(pheno_data,
     pheno_data <- filter_missing_endpt_data(pheno_data, study@endpt)
     pheno_data <- filter_early_endpt(pheno_data, study@endpt)
     pheno_data <- adj_case_cntrl_status(pheno_data, study@endpt)
-    if(!is.na(study@downsample_fctr)) {
-        pheno_data <- downsample_cntrls(pheno_data, study)
-    }
+    pheno_data <- downsample_cntrls(pheno_data, study)
     pheno_data <- add_diag_time_cols(pheno_data, study)
     pheno_data <- filter_ancestry(pheno_data, study@ancs)
     elig_indv <- create_return_tib(pheno_data, study@endpt)

@@ -13,7 +13,7 @@ create_endpt_study_obj(
   wash_len = 2,
   obs_len = 8,
   obs_end = NULL,
-  downsample_fctr = NULL,
+  downsample_fctr = NA_integer_,
   ancs = c("EAS")
 )
 }

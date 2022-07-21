@@ -15,7 +15,7 @@ run_surv_studies(
   wash_len = 2,
   obs_len = 8,
   obs_end = NULL,
-  downsample_fctr = NULL,
+  downsample_fctr = NA_integer_,
   ancs = NA_character_,
   max_age = 90,
   covs = c("SEX", "YEAR_OF_BIRTH"),

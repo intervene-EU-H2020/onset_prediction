@@ -4,7 +4,7 @@
 \alias{get_coxph_formula}
 \title{Creates the forumla string for the Cox-PH model}
 \usage{
-get_coxph_formula(surv_ana, pred_score = "SCORE_GROUP")
+get_coxph_formula(surv_ana, pred_score = "SCORE_GROUP", pec = FALSE)
 }
 \arguments{
 \item{surv_ana}{An S4 class representing the current survival analysis

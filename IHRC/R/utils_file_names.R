@@ -1,3 +1,14 @@
+#' Creates directory name for the downsampling factor
+#' 
+#' @inheritParams run_surv_studies
+#' 
+#' @author Kira E. Detrois
+get_down_dir <- function(downsample_fctr) {
+    ifelse(all(is.na(downsample_fctr)),
+           "no_down/",
+           paste0("down_", downsample_fctr, "/")) 
+}
+
 #' Creats the file name for the score distribution plots
 #' 
 #' @inheritParams add_risk_group_col

@@ -8,20 +8,24 @@
 #' 
 #' @author Kira E. Detrois
 extract_coxph_res <- function(coxph_mdl) {
-    betas <- summary(coxph_mdl)$coefficients[,"coef"]
-    betas <- betas[grep("SCORE", names(betas))]
-    std_errs <- summary(coxph_mdl)$coefficients[,"se(coef)"]
-    std_errs <- std_errs[grep("SCORE", names(std_errs))]
-    pvals <- summary(coxph_mdl)$coefficients[,"Pr(>|z|)"]
-    pvals <- pvals[grep("SCORE", names(pvals))]
-    OR <- exp(betas)
-    CI <- get_CI(betas, std_errs)
-    if("SCORE_GROUP" %in% names(coxph_mdl$xlevels)) {
-        groups <- coxph_mdl$xlevels$SCORE_GROUP[2:length(coxph_mdl$xlevels$SCORE_GROUP)]
+    if(!is.null(coxph_mdl)) {
+        betas <- summary(coxph_mdl)$coefficients[,"coef"]
+        betas <- betas[grep("SCORE", names(betas))]
+        std_errs <- summary(coxph_mdl)$coefficients[,"se(coef)"]
+        std_errs <- std_errs[grep("SCORE", names(std_errs))]
+        pvals <- summary(coxph_mdl)$coefficients[,"Pr(>|z|)"]
+        pvals <- pvals[grep("SCORE", names(pvals))]
+        OR <- exp(betas)
+        CI <- get_CI(betas, std_errs)
+        if("SCORE_GROUP" %in% names(coxph_mdl$xlevels)) {
+            groups <- coxph_mdl$xlevels$SCORE_GROUP[2:length(coxph_mdl$xlevels$SCORE_GROUP)]
+        } else {
+            groups <- "no groups"
+        }
+        return(list(beta=betas, std_err=std_errs, p_val=pvals, HR=OR, CI_neg=exp(CI$neg), CI_pos=exp(CI$pos), groups=groups))
     } else {
-        groups <- "no groups"
+        return(list())
     }
-    return(list(beta=betas, std_err=std_errs, p_val=pvals, HR=OR, CI_neg=CI$neg, CI_pos=CI$pos, groups=groups))
 }
 
 #' 95% confidence interval given the ML estimator and SE
@@ -29,9 +33,10 @@ extract_coxph_res <- function(coxph_mdl) {
 #' @param ML maximum likelihood estimator of the parameter
 #' @param SE standard error of the ML estimator
 #' 
+#' @return `c(neg, pos)` the upper and lower bounds of the CI.
 #' @author Kira E. Detrois
 get_CI <- function(ML, SE) {
-    CIneg <- exp(ML-1.96*SE)
-    CIpos <- exp(ML+1.96*SE)
+    CIneg <- ML-1.96*SE
+    CIpos <- ML+1.96*SE
     return(list(neg=CIneg, pos=CIpos))
 }

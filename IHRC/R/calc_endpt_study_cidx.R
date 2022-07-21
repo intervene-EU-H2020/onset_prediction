@@ -19,9 +19,17 @@
 calc_endpt_study_cidx <- function(surv_ana) {
     coxph_mdl <- get_coxph_mdl(surv_ana,
                                pred_score="SCORE")
-    c_idx_res <- get_cidx(coxph_mdl, surv_ana)
-
-    return(c_idx_res)
+    if(!is.null(coxph_mdl)) {
+        preds <- predict(coxph_mdl, type="risk")
+        surv_obj <- get_surv_obj(surv_ana@elig_score_data, 
+                                 surv_ana@study@endpt)    
+        c_idx_hmisc <- Hmisc::rcorr.cens(preds, surv_obj)
+        c_idx <- summary(coxph_mdl)$concordance
+    } else {
+        c_idx_hmisc <- NULL
+        c_idx <- NULL
+    }
+    return(list(Hmisc=c_idx_hmisc, summary=c_idx))
 }
 
 

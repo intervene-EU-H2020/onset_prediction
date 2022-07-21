@@ -9,9 +9,7 @@
 check_and_get_file_path <- function(surv_ana,
                                     res_type) {
     if(surv_ana@write_res) {
-        down_dir_name <- ifelse(!is.na(surv_ana@study@downsample_fctr), 
-                           paste0("down_", surv_ana@study@downsample_fctr, "/"), 
-                           "no_down/")
+        down_dir_name <- get_down_dir(surv_ana@study@downsample_fctr)
         if(!is.null(surv_ana@covs)) {
             covs_dir_name <- paste0(down_dir_name, get_pretty_covs_string(surv_ana@covs, file_name=TRUE), "/")
         } else if(res_type %in% c("HRs", "coxph", "surv")) {
@@ -37,8 +35,6 @@ check_and_get_file_path <- function(surv_ana,
              res_type == "HRs" ~ get_hr_file_name(surv_ana),
              res_type == "surv" ~ get_surv_file_name(surv_ana),
              res_type == "log" ~ get_score_cut_file_name(surv_ana))
-            if(length(file_name) > 1)
-                file_name <- unique(file_name)
             file_path <- paste0(curnt_res_dir, file_name)
             return(file_path)
         } 
