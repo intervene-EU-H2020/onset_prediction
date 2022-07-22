@@ -107,7 +107,8 @@ run_surv_studies <- function(pheno_data,
                                      bin_cut=bin_cut,
                                      write_res=write_res,
                                      res_dir=res_dir)
-            coxph_mdl <- calc_endpt_study_hr(surv_ana)
+            coxph_mdl <- get_coxph_mdl(surv_ana=surv_ana,
+                                       pred_score="SCORE_GROUP")
             all_age_hrs_tib <- add_coxph_res_row(
                                     endpt_hrs_tib=all_age_hrs_tib,
                                     coxph_mdl=coxph_mdl,

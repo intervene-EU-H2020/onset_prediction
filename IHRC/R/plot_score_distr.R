@@ -18,7 +18,7 @@ plot_score_distr <- function(score_data,
         else {
             plot_descr <- paste0("until ", surv_ana@study@obs_end)
         }
-        plt <- ggplot(score_data, aes(x=get("SCORE"))) + 
+        plt <- ggplot(score_data, aes(x=get(paste0(surv_ana@score_type, "_SCORE")))) + 
                     geom_histogram(fill="#405e46", binwidth = 1.0)  +
                     labs(title=paste0(surv_ana@score_type, " Score Histogram"),
                          subtitle=paste0(nrow(score_data), " Individuals ", plot_descr),
@@ -28,7 +28,7 @@ plot_score_distr <- function(score_data,
                     theme_minimal() + 
                     theme(text=element_text(size=21))
     } else {
-        plt <- suppressMessages(ggplot(score_data, aes(x=get("SCORE"))) + 
+        plt <- suppressMessages(ggplot(score_data, aes(x=get(paste0(surv_ana@score_type, "_SCORE")))) + 
                     geom_histogram(fill="#405e46", bins=30)  +
                     labs(title=paste0(surv_ana@score_type, " Score Histogram"),
                         subtitle=paste0(nrow(score_data), " Individuals "),
@@ -77,7 +77,7 @@ plot_endpt_score_distr <- function(score_data,
 
     plt <- ggplot(score_data, 
                       aes(x=get(surv_ana@study@endpt),
-                          y=SCORE, 
+                          y=paste0(surv_ana@score_type, "_SCORE"), 
                           fill=get(surv_ana@study@endpt))) + 
                     geom_boxplot(show.legend=FALSE) +
                     scale_x_discrete(labels=c("Controls", "Cases")) +

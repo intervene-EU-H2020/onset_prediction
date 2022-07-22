@@ -1,9 +1,9 @@
 
 get_comp_group <- function(score_type,
                            bin_cut=1) {
-    if(score_type == "CCI") {
+    if("CCI" %in% score_type) {
         comp_group <- paste0(">", bin_cut)
-    } else if(score_type == "PRS") {
+    } else if("PRS" %in% score_type) {
         comp_group <- "(Group 99% - Group 100%]"
     }
     return(comp_group)

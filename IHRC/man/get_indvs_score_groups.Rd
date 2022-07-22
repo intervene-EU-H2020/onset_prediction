@@ -5,7 +5,7 @@
 \title{Gets the risk score groups for each individual based on a score cutoff
 table}
 \usage{
-get_indvs_score_groups(score_data, score_group_tbl)
+get_indvs_score_groups(score_data, score_type, score_group_tbl)
 }
 \arguments{
 \item{score_data}{A data.frame with at least column \code{SCORE}.}

@@ -10,9 +10,10 @@
 #' 
 #' @author Kira E. Detrois
 get_indvs_score_groups <- function(score_data,
+                                   score_type,
                                    score_group_tbl) {
     # Risk group left-open intervals for each individual
-    indv_score_groups <- cut(x=score_data$SCORE,
+    indv_score_groups <- cut(x=dplyr::pull(score_data, paste0(score_type, "_SCORE")),
                              breaks=score_group_tbl,
                              labels=get_risk_group_labs(score_group_tbl),
                              include.lowest=TRUE, # Include Group 0%

@@ -19,6 +19,6 @@ get_study_cci_scores <- function(elig_indv,
     cci_data <- ICCI::calc_cci(icd_data,
                                exp_start=0,
                                exp_end=dplyr::select(elig_indv, ID, EXP_END)) %>%
-                    dplyr::rename(SCORE=CCI_score)
+                    dplyr::rename(CCI_SCORE=CCI_score)
     return(cci_data)
 }

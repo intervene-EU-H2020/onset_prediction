@@ -4,7 +4,7 @@
 \alias{get_score_group_tbl}
 \title{Get's the score cutoff values}
 \usage{
-get_score_group_tbl(score_data, quantiles)
+get_score_group_tbl(score_data, score_type, quantiles)
 }
 \arguments{
 \item{score_data}{A data.frame with at least column \code{SCORE}.}

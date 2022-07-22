@@ -90,7 +90,8 @@ add_coxph_res_row <- function(endpt_hrs_tib,
 #' @author Kira E. Detrois
 get_min_indvs_data <- function(coxph_mdl,
                                surv_ana) {
-    coxph_res_list <- extract_coxph_res(coxph_mdl)
+    coxph_res_list <- extract_coxph_res(coxph_mdl,
+                                        surv_ana@score_type)
     n_cntrls_vec <- get_n_group_cntrls(surv_ana@elig_score_data, 
                                        levels(surv_ana@elig_score_data$SCORE_GROUP),
                                        surv_ana@study@endpt)

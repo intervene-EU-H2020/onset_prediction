@@ -22,7 +22,6 @@ get_coxph_mdl <- function(surv_ana,
                                         surv_ana@elig_score_data,
                                         surv_ana@covs)
         coxph_formula <- get_coxph_formula(surv_ana, pred_score)
-
         build_mdl <- TRUE
         if(pred_score == "SCORE_GROUP") {
             Istudy::check_cols_exist(surv_ana@elig_score_data, 

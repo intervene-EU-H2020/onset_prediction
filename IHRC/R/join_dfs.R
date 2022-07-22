@@ -15,10 +15,12 @@ join_dfs <- function(pheno_data,
                      score_data,
                      score_type="CCI",
                      endpt=NULL) {
+
     pheno_score_data <- dplyr::left_join(x=pheno_data,
                                          y=score_data,
                                          by="ID")
-    pheno_score_data <- dplyr::filter(pheno_score_data, 
-                                      !is.na(SCORE))
+    if("CCI" %in% score_type) {
+        pheno_score_data$CCI_SCORE[is.na(pheno_score_data$CCI_SCORE)] <- 0
+    }
     return(pheno_score_data)
 }

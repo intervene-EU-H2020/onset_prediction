@@ -10,8 +10,9 @@
 #' 
 #' @author Kira E. Detrois
 get_score_group_tbl <- function(score_data, 
+                                score_type,
                                 quantiles) {
-    stats::quantile(x=score_data$SCORE, 
+    stats::quantile(x=dplyr::pull(score_data, paste0(score_type, "_SCORE")), 
                     probs=quantiles,
                     na.rm=TRUE)
 }

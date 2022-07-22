@@ -8,7 +8,7 @@
 #' form of `J10_ASTHMA_PRS`. The function renames the
 #' current PRS column of interest to `SCORE`. Then it
 #' filters out all NAs in the column. See function 
-#' \code{\link{get_and_filter_endpt_scores}}.
+#' \code{\link{get_prs_endpt_scores}}.
 #' 
 #' Joins the resulting score data with the phenotypic data
 #' on the eligible individuals.

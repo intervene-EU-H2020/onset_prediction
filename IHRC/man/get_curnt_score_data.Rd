@@ -24,7 +24,7 @@ For the PRS data the score columsn have names in the
 form of \code{J10_ASTHMA_PRS}. The function renames the
 current PRS column of interest to \code{SCORE}. Then it
 filters out all NAs in the column. See function
-\code{\link{get_and_filter_endpt_scores}}.
+\code{\link{get_prs_endpt_scores}}.
 }
 \author{
 Kira E. Detrois

@@ -21,14 +21,16 @@
 #' @author Kira E. Detrois
 add_risk_group_col <- function(score_data,
                                surv_ana) {
-    if(surv_ana@score_type == "CCI") {
+    if("CCI" %in% surv_ana@score_type) {
         indv_score_groups <- get_two_level_groups(score_data, 
                                                   surv_ana@bin_cut)
     } else {
         quantiles <- c(0,0.01,0.05,0.1,0.2,0.4,0.6,0.8,0.9,0.95,0.99,1)
         score_group_tbl <- get_score_group_tbl(score_data, 
+                                               surv_ana@score_type,
                                                quantiles)
         indv_score_groups <- get_indvs_score_groups(score_data,
+                                                    surv_ana@score_type,
                                                     score_group_tbl)
         write_score_groups_to_log(score_group_tbl=score_group_tbl,
                                   surv_ana)

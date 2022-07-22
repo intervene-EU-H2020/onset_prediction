@@ -8,7 +8,7 @@
 #' form of `J10_ASTHMA_PRS`. The function renames the
 #' current PRS column of interest to `SCORE`. Then it
 #' filters out all NAs in the column. See function 
-#' \code{\link{get_and_filter_endpt_scores}}.
+#' \code{\link{get_prs_endpt_scores}}.
 #' 
 #' @inheritParams add_risk_group_col
 #' 
@@ -17,14 +17,18 @@
 #' 
 #' @author Kira E. Detrois
 get_curnt_score_data <- function(surv_ana) {
-    if(surv_ana@score_type == "CCI") {
+    curnt_score_data <- surv_ana@elig_score_data
+    # Adding CCI_SCORE column
+    if("CCI" %in% surv_ana@score_type) {
         curnt_score_data <- get_study_cci_scores(surv_ana@elig_indv,
-                                                 surv_ana@elig_score_data)  
-    } else {
-        curnt_score_data <- surv_ana@elig_score_data
+                                                 curnt_score_data)  
+    } 
+    # Adding PRS_SCORE column
+    if("PRS" %in% surv_ana@score_type) {
+        curnt_score_data <- get_prs_endpt_scores(curnt_score_data,
+                                                 surv_ana@score_type,
+                                                 surv_ana@study@endpt)
     }
-    curnt_score_data <- get_and_filter_endpt_scores(curnt_score_data,
-                                                    surv_ana@score_type,
-                                                    surv_ana@study@endpt)
+
     return(curnt_score_data)
 }

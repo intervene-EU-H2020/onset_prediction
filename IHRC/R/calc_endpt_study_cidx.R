@@ -19,9 +19,10 @@
 calc_endpt_study_cidx <- function(surv_ana) {
     set.seed(923)
     coxph_mdl <- get_coxph_mdl(surv_ana,
-                               pred_score="SCORE")
+                               pred_score=paste0(surv_ana@score_type, "_SCORE", collapse=" + "))
     if(!is.null(coxph_mdl)) {
-        preds <- predict(coxph_mdl, type="survival")
+        # Risk and survival have opposite directions
+        preds <- (-1)*predict(coxph_mdl, type="risk")
         surv_obj <- get_surv_obj(surv_ana@elig_score_data, 
                                  surv_ana@study@endpt)    
         c_idx_res <- Hmisc::rcorr.cens(preds, surv_obj)

@@ -7,7 +7,8 @@
 #' @export 
 #' 
 #' @author Kira E. Detrois
-extract_coxph_res <- function(coxph_mdl) {
+extract_coxph_res <- function(coxph_mdl, 
+                              score_type) {
     if(!is.null(coxph_mdl)) {
         betas <- summary(coxph_mdl)$coefficients[,"coef"]
         betas <- betas[grep("SCORE", names(betas))]
