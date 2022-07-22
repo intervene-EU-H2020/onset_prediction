@@ -34,10 +34,11 @@ create_empty_cidx_tib <- function() {
         ENDPOINT = character(),
         EXP_AGE = numeric(),
         SURV_MODEL = character(),
-        C_INDEX = numeric(),
-        CI_NEG = numeric(),
-        CI_POS = numeric(),
-        C_INDEX_HMISC = numeric()
+        N_CASES = numeric(),
+        N_CONTROLS = numeric(),
+        C_IDX = numeric(),
+        C_IDX_CI_NEG = numeric(),
+        C_IDX_CI_POS = numeric()
     )
 }
 
@@ -141,20 +142,20 @@ get_min_indvs_data <- function(coxph_mdl,
 add_cidx_res_row <- function(endpt_c_idxs_tib,
                              c_idx_res,
                              surv_ana) {
-
     if(!is.null(c_idx_res)) {
         surv_descr=get_surv_descr(surv_ana,
                                   surv_type="surv")  
-        c_idx_ci <- get_CI(c_idx_res$summary[[1]], c_idx_res$summary[[2]])
+        c_idx_ci <- get_CI(c_idx_res["C Index"], c_idx_res["S.D."])
         endpt_c_idxs_tib <- tibble::add_row(
                             endpt_c_idxs_tib,
                             ENDPOINT=surv_ana@study@endpt,
                             EXP_AGE=surv_ana@study@exp_age,
                             SURV_MODEL=surv_descr,
-                            C_INDEX=c_idx_res$summary[[1]],
-                            CI_NEG=c_idx_ci[[1]],
-                            CI_POS=c_idx_ci[[2]],
-                            C_INDEX_HMISC=c_idx_res$Hmisc["C Index"])
+                            N_CASES=Istudy::get_n_cases(surv_ana@elig_indv, surv_ana@study@endpt),
+                            N_CONTROLS=Istudy::get_n_cntrls(surv_ana@elig_indv, surv_ana@study@endpt),
+                            C_IDX=c_idx_res["C Index"],
+                            C_IDX_CI_NEG=c_idx_ci[[1]],
+                            C_IDX_CI_POS=c_idx_ci[[2]])
     }
     return(endpt_c_idxs_tib)
 }

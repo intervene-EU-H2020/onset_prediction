@@ -82,12 +82,9 @@ run_surv_studies <- function(pheno_data,
     if(is.null(exp_ages)) {
         exp_ages = 0
     }
-    all_age_hrs_tib <- tibble::tibble()
-    all_age_cidxs_tib <- tibble::tibble()
+    all_age_hrs_tib <- create_empty_endpt_hrs_tib() 
+    all_age_cidxs_tib <- create_empty_cidx_tib()
     for(endpt in endpts) {
-        endpt_hrs_tib <- create_empty_endpt_hrs_tib() 
-        endpt_c_idxs_tib <- create_empty_cidx_tib()
-
         for(exp_age in exp_ages) {
             study <- create_endpt_study_obj(pheno_data=pheno_data,
                                             study_type=study_type,
@@ -111,18 +108,15 @@ run_surv_studies <- function(pheno_data,
                                      write_res=write_res,
                                      res_dir=res_dir)
             coxph_mdl <- calc_endpt_study_hr(surv_ana)
-            endpt_hrs_tib <- add_coxph_res_row(endpt_hrs_tib=endpt_hrs_tib,
-                                               coxph_mdl=coxph_mdl,
-                                               surv_ana=surv_ana)
+            all_age_hrs_tib <- add_coxph_res_row(
+                                    endpt_hrs_tib=all_age_hrs_tib,
+                                    coxph_mdl=coxph_mdl,
+                                    surv_ana=surv_ana)
             c_idx_res <- calc_endpt_study_cidx(surv_ana)
-            endpt_c_idxs_tib <- add_cidx_res_row(
-                                    endpt_c_idxs_tib=endpt_c_idxs_tib, 
+            all_age_cidxs_tib <- add_cidx_res_row(
+                                    endpt_c_idxs_tib=all_age_cidxs_tib, 
                                     c_idx_res=c_idx_res, 
                                     surv_ana=surv_ana)
-            all_age_hrs_tib <- dplyr::bind_rows(all_age_hrs_tib, 
-                                                endpt_hrs_tib)
-            all_age_cidxs_tib <- dplyr::bind_rows(all_age_cidxs_tib,
-                                                  endpt_c_idxs_tib)
         }
     }
     write_res_files(endpt_hrs_tib=all_age_hrs_tib,

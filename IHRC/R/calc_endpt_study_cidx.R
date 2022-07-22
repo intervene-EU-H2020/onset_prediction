@@ -17,19 +17,18 @@
 #' 
 #' @author Kira E. Detrois
 calc_endpt_study_cidx <- function(surv_ana) {
+    set.seed(923)
     coxph_mdl <- get_coxph_mdl(surv_ana,
                                pred_score="SCORE")
     if(!is.null(coxph_mdl)) {
-        preds <- predict(coxph_mdl, type="risk")
+        preds <- predict(coxph_mdl, type="survival")
         surv_obj <- get_surv_obj(surv_ana@elig_score_data, 
                                  surv_ana@study@endpt)    
-        c_idx_hmisc <- Hmisc::rcorr.cens(preds, surv_obj)
-        c_idx <- summary(coxph_mdl)$concordance
+        c_idx_res <- Hmisc::rcorr.cens(preds, surv_obj)
     } else {
-        c_idx_hmisc <- NULL
-        c_idx <- NULL
+        c_idx_res <- NULL
     }
-    return(list(Hmisc=c_idx_hmisc, summary=c_idx))
+    return(c_idx_res)
 }
 
 

@@ -29,16 +29,9 @@ make_covs_fctrs <- function(elig_score_data,
 #' 
 #' @return A character. The formula string for the Cox-PH model.
 get_coxph_formula <- function(surv_ana,
-                              pred_score="SCORE_GROUP",
-                              pec=FALSE) {
+                              pred_score="SCORE_GROUP") {
     pred_string <- get_pred_string(surv_ana@covs, pred_score)
-    if(!pec) {
-        formula <- "survival::"
-    } else {
-        formula <- ""
-    }
-    stats::as.formula(paste0(formula,
-                        "Surv(", surv_ana@study@endpt, "_AGE, ",  surv_ana@study@endpt, ") ~ ",  pred_string))
+    stats::as.formula(paste0("survival::Surv(", surv_ana@study@endpt, "_AGE, ",  surv_ana@study@endpt, ") ~ ",  pred_string))
 }
 
 #' Creates the predictor string for the Cox-PH model
