@@ -16,7 +16,8 @@
 #' 
 #' @author Kira E. Detrois
 get_coxph_mdl <- function(surv_ana,
-                          pred_score="SCORE_GROUP") {
+                          pred_score="SCORE_GROUP",
+                          test_idxs=NULL) {
     if(nrow(surv_ana@elig_score_data) > 0) {
         surv_ana@elig_score_data <- make_covs_fctrs(
                                         surv_ana@elig_score_data,
@@ -32,9 +33,13 @@ get_coxph_mdl <- function(surv_ana,
             }
         }
         if(build_mdl) {
+            test_data <- surv_ana@elig_score_data
+            if(!is.null(test_idxs)) {
+                test_data <- surv_ana@elig_score_data[test_idxs,]
+            }
             coxph_mdl <- suppressWarnings(
                             survival::coxph(formula=coxph_formula, 
-                                            data=surv_ana@elig_score_data,
+                                            data=test_data,
                                             # Larger fit object but no need for
                                             # other functions to reconstruct
                                             # which fails in this setup
