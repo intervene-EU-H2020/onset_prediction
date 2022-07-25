@@ -101,7 +101,6 @@ get_min_indvs_data <- function(coxph_mdl,
     ref_level = levels(surv_ana@elig_score_data$SCORE_GROUP)[1]
     
     # Reference group has enough cases and controls
-
     if((n_cntrls_vec[1] > surv_ana@min_indvs) & 
             (n_cases_vec[1] > surv_ana@min_indvs)) {
         coxph_res_tib <- tibble::as_tibble(coxph_res_list)

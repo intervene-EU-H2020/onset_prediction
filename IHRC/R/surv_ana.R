@@ -71,9 +71,8 @@ setMethod("initialize", "surv_ana", function(.Object, ...) {
                                         res_dir=paste0(.Object@res_dir, get_down_dir(.Object@study@downsample_fctr), .Object@score_type, "_logs/"))
     .Object@elig_score_data <- get_elig_score_data(.Object)
     if(nrow(.Object@elig_score_data) > 0) {
-        .Object@elig_score_data <- add_risk_group_col(
-                                            .Object@elig_score_data,
-                                            .Object)
+        .Object@elig_score_data <- add_risk_group_col(.Object@elig_score_data,
+                                                      .Object)
     }
     return(.Object)
 })

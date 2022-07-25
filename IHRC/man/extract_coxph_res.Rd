@@ -8,6 +8,9 @@ extract_coxph_res(coxph_mdl, score_type)
 }
 \arguments{
 \item{coxph_mdl}{A Cox-PH model.}
+
+\item{score_type}{A character. The score type. At the moment the two
+options are \code{CCI}, and \code{PRS}.}
 }
 \value{
 A list(\code{beta}, \code{std_err}, \code{p_val}, \code{HR}, \code{CI}, \code{groups}).

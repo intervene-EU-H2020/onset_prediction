@@ -7,7 +7,7 @@
 get_study_elig_indv(
   pheno_data,
   study,
-  max_age = 90,
+  max_age = 200,
   write_res = FALSE,
   res_dir = NULL
 )

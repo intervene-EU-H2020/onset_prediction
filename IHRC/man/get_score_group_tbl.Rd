@@ -9,6 +9,9 @@ get_score_group_tbl(score_data, score_type, quantiles)
 \arguments{
 \item{score_data}{A data.frame with at least column \code{SCORE}.}
 
+\item{score_type}{A character. The score type. At the moment the two
+options are \code{CCI}, and \code{PRS}.}
+
 \item{quantiles}{A numeric. The probabilities for the quantiles.}
 }
 \value{

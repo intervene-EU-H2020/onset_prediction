@@ -21,7 +21,8 @@ get_curnt_score_data <- function(surv_ana) {
     # Adding CCI_SCORE column
     if("CCI" %in% surv_ana@score_type) {
         curnt_score_data <- get_study_cci_scores(surv_ana@elig_indv,
-                                                 curnt_score_data)  
+                                                 curnt_score_data,
+                                                 surv_ana@study)  
     } 
     # Adding PRS_SCORE column
     if("PRS" %in% surv_ana@score_type) {

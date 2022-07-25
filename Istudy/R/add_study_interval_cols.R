@@ -36,7 +36,7 @@ add_study_interval_cols <- function(pheno_data,
                                     study) {
     check_cols_exist(pheno_data, c("DATE_OF_BIRTH"), "add_study_interval_cols")
 
-    pheno_data <- tibble::add_column(pheno_data, EXP_LEN=study@exp_len)
+    pheno_data <- tibble::add_column(pheno_data, EXP_LEN=study@exp_age+study@exp_len)
 
     endpt_free <- calc_endpt_free_time(pheno_data$DATE_OF_BIRTH, study)
     total_study_time <- calc_study_time(pheno_data, study)

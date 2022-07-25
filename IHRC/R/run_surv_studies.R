@@ -1,8 +1,5 @@
 #' Calcualtes HR from a Cox-PH model for each exposure age and endpoint
 #' 
-#' For more details see \link{calc_endpt_study_hr} function 
-#' documentation.
-#' 
 #' @param pheno_data A data.frame with at least the columns: 
 #'                   `ID`, the columns specified in `covs` and 
 #'                   i.e. `J10_ASTHMA`, and `J10_ASTHMA_AGE_DAYS` where 

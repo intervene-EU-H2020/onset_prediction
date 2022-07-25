@@ -23,7 +23,6 @@
 #' 
 #' @author Kira E. Detrois
 get_elig_score_data  <- function(surv_ana) {
-
     if(Istudy::get_n_cases(surv_ana@elig_indv, surv_ana@study@endpt) > surv_ana@min_indvs &
         Istudy::get_n_cntrls(surv_ana@elig_indv, surv_ana@study@endpt) > surv_ana@min_indvs) {
         curnt_score_data <- get_curnt_score_data(surv_ana)

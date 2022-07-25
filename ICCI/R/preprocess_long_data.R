@@ -14,8 +14,8 @@
 #' 
 #' @author Kira E. Detrois
 preprocess_icd_data <- function(icd_data,
-                                 exp_start=NULL,
-                                 exp_end=NULL) {
+                                exp_start=NULL,
+                                exp_end=NULL) {
     icd_data <- ILongDataUtils::get_exposure_data(icd_data, 
                                                   exp_start, 
                                                   exp_end)

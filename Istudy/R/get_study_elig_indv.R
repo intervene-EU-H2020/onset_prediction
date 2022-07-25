@@ -56,7 +56,7 @@
 #' @author Kira E. Detrois
 get_study_elig_indv <- function(pheno_data,
                                 study,
-                                max_age=90,
+                                max_age=200,
                                 write_res=FALSE,
                                 res_dir=NULL) {
     check_cols_exist(pheno_data, study@endpt, "get_study_elig_indv")

@@ -20,6 +20,9 @@
 #' 
 #' @author Kira E. Detrois
 add_up_cci_scores <- function(cci_scores) {
-    dplyr::group_by(cci_scores, ID_num) %>%
-        dplyr::summarise_all(sum)
+    if(nrow(cci_scores) > 0) {
+        cci_scores <- dplyr::group_by(cci_scores, ID_num) %>%
+                        dplyr::summarise_all(sum)
+    } 
+    return(cci_scores)
 }

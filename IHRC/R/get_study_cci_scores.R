@@ -11,13 +11,14 @@
 #' 
 #' @author Kira E. Detrois
 get_study_cci_scores <- function(elig_indv,
-                                 icd_data) {
+                                 icd_data,
+                                 study) {
     if("EXP_LEN" %in% colnames(elig_indv)) {
         elig_indv <- dplyr::rename(elig_indv, 
                                    EXP_END=EXP_LEN)
     } 
     cci_data <- ICCI::calc_cci(icd_data,
-                               exp_start=0,
+                               exp_start=study@exp_age,
                                exp_end=dplyr::select(elig_indv, ID, EXP_END)) %>%
                     dplyr::rename(CCI_SCORE=CCI_score)
     return(cci_data)

@@ -46,7 +46,7 @@ add_diag_time_cols <- function(pheno_data,
 #' 
 #' @author Kira E. Detrois
 calc_diag_time <- function(pheno_data, 
-                            study) {
+                           study) {
     check_cols_exist(pheno_data, 
                      c(study@endpt, paste0(study@endpt, "_DATE"), "DATE_OF_BIRTH", "EXP_LEN"),
                      "calc_diag_time")  

@@ -15,7 +15,6 @@ join_dfs <- function(pheno_data,
                      score_data,
                      score_type="CCI",
                      endpt=NULL) {
-
     pheno_score_data <- dplyr::left_join(x=pheno_data,
                                          y=score_data,
                                          by="ID")

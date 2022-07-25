@@ -2,6 +2,7 @@
 #' table
 #' 
 #' @inheritParams add_risk_group_col
+#' @inheritParams run_surv_studies
 #' @inheritParams get_risk_group_labs
 #' 
 #' @return A factor. The risk score group for each individual.

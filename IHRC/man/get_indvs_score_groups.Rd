@@ -10,6 +10,9 @@ get_indvs_score_groups(score_data, score_type, score_group_tbl)
 \arguments{
 \item{score_data}{A data.frame with at least column \code{SCORE}.}
 
+\item{score_type}{A character. The score type. At the moment the two
+options are \code{CCI}, and \code{PRS}.}
+
 \item{score_group_tbl}{A named numeric. The risk score cuts for the
 different quantiles.}
 }

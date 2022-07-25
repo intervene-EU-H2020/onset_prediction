@@ -1,6 +1,7 @@
 #' Get's the score cutoff values 
 #' 
 #' @param score_data A data.frame with at least column `SCORE`.
+#' @inheritParams run_surv_studies
 #' @param quantiles A numeric. The probabilities for the quantiles.
 #' 
 #' @return A named numeric vector with the quantiles as names 

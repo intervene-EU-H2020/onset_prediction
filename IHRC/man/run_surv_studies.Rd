@@ -99,8 +99,7 @@ files.}
 log to.}
 }
 \description{
-For more details see \link{calc_endpt_study_hr} function
-documentation.
+Calcualtes HR from a Cox-PH model for each exposure age and endpoint
 }
 \author{
 Kira E. Detrois

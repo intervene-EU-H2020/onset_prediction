@@ -9,7 +9,7 @@
 #                                  exp_end=30) %>% 
 #                     dplyr::rename(SCORE=CCI_score)
 
-#     endpt_studies <- create_endpts_study_objs(endpts=c("J10_ASTHMA", "I9_VTE"), 
+#     endpt_studies <- create_endpts_study_obj(endpts=c("J10_ASTHMA", "I9_VTE"), 
 #                                               exp_age=20,
 #                                               exp_len=10,
 #                                               wash_len=2,

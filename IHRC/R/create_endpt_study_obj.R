@@ -6,6 +6,8 @@
 #'                   (in years).
 #' 
 #' @return An S4 study object. 
+#' 
+#' @importClassesFrom Istudy study
 #' @export 
 #' 
 #' @author Kira E. Detrois

@@ -1,6 +1,7 @@
 #' Extracts the relevant results from the Cox-PH model
 #' 
 #' @inheritParams add_coxph_res_row
+#' @inheritParams run_surv_studies
 #' 
 #' @return A list(`beta`, `std_err`, `p_val`, `HR`, `CI`, `groups`).
 #' 
