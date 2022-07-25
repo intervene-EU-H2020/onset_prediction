@@ -4,7 +4,7 @@
 \alias{get_coxph_mdl}
 \title{Fits the Cox-PH model for a survival analysis setup}
 \usage{
-get_coxph_mdl(surv_ana, pred_score = "SCORE_GROUP")
+get_coxph_mdl(surv_ana, pred_score = "SCORE_GROUP", test_idxs = NULL)
 }
 \arguments{
 \item{surv_ana}{An S4 class representing the current survival analysis

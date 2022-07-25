@@ -23,7 +23,7 @@ test_that("select_elig_indv of surv_ana works", {
          elig_indv <- Istudy::get_study_elig_indv(pheno_data, study)
          cci_scores <- ICCI::calc_cci(icd_data, exp_start=20, exp_end=30)
          elig_cci_scores <- dplyr::left_join(elig_indv, cci_scores, by="ID")
-         elig_cci_scores <- dplyr::mutate(elig_cci_scores, CCI_score=tidyr::replace_na(CCI_score, 0))
+         elig_cci_scores$CCI_score[is.na(elig_cci_scores$CCI_score)] <- 0
          expect_equal(table(elig_cci_scores$CCI_score), table(surv_ana@elig_score_data$CCI_SCORE))
    } else {
       message("Could not run tests, because ICCI is not available.")

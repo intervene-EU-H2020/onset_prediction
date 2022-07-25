@@ -4,7 +4,7 @@
 \alias{get_study_cci_scores}
 \title{Calcualtes the CCI score on the exposure window}
 \usage{
-get_study_cci_scores(elig_indv, icd_data)
+get_study_cci_scores(elig_indv, icd_data, study)
 }
 \arguments{
 \item{elig_indv}{A data.frame. The individuals which were eligble under

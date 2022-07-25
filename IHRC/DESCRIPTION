@@ -21,7 +21,6 @@ Imports:
     lubridate,
     methods,
     readr,
-    rms,
     stringr,
     survival,
     tibble
