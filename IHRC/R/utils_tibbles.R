@@ -20,7 +20,6 @@ create_empty_endpt_hrs_tib <- function() {
                    CI_NEG=numeric(),
                    CI_POS=numeric())
 }
-
 #' Creates an empty tibble for the C-index results
 #' 
 #' @return An empty tibble with all relevant columns for the final 
@@ -36,14 +35,11 @@ create_empty_cidx_tib <- function() {
         SURV_MODEL = character(),
         N_CASES = numeric(),
         N_CONTROLS = numeric(),
-        C_IDX_TEST = numeric(),
-        CI_TEST_NEG = numeric(),
-        CI_TEST_POS = numeric(),
-        C_IDX_TRAIN = numeric(),
-        CI_TRAIN_NEG = numeric(),
-        CI_TRAIN_POS = numeric())
+        C_IDX = numeric(),
+        C_IDX_CI_NEG = numeric(),
+        C_IDX_CI_POS = numeric()
+    )
 }
-
 #' Adds a row to the Cox-PH HR results tibble
 #' 
 #' @param endpt_hrs_tib A tibble with the results for previous endpts.
@@ -62,25 +58,23 @@ add_coxph_res_row <- function(endpt_hrs_tib,
                                              surv_ana=surv_ana)
         if(!is.null(coxph_res_list)) {
             endpt_hrs_tib <- tibble::add_row(
-                                endpt_hrs_tib, 
-                                ENDPOINT=surv_ana@study@endpt,
-                                EXP_AGE=surv_ana@study@exp_age,
-                                SCORE=surv_ana@score_type,
-                                GROUP=coxph_res_list$groups,
-                                N_CONTROLS=coxph_res_list$n_cntrl,
-                                N_CASES=coxph_res_list$n_case,
-                                BETA=coxph_res_list$beta,
-                                STD_ERRS=coxph_res_list$std_err,
-                                P_VAL=coxph_res_list$p_val,
-                                HR=coxph_res_list$HR,
-                                CI_NEG=coxph_res_list$CI_neg,
-                                CI_POS=coxph_res_list$CI_pos)
+                                         endpt_hrs_tib, 
+                                         ENDPOINT=surv_ana@study@endpt,
+                                         EXP_AGE=surv_ana@study@exp_age,
+                                         SCORE=surv_ana@score_type,
+                                         GROUP=coxph_res_list$groups,
+                                         N_CONTROLS=coxph_res_list$n_cntrl,
+                                         N_CASES=coxph_res_list$n_case,
+                                         BETA=coxph_res_list$beta,
+                                         STD_ERRS=coxph_res_list$std_err,
+                                         P_VAL=coxph_res_list$p_val,
+                                         HR=coxph_res_list$HR,
+                                         CI_NEG=coxph_res_list$CI_neg,
+                                         CI_POS=coxph_res_list$CI_pos)
         }
-
     } 
     return(endpt_hrs_tib)
 }
-
 #' Get's the Cox-PH model results for runs where each group has at
 #' least 5 controls and cases in each group
 #' 
@@ -101,8 +95,9 @@ get_min_indvs_data <- function(coxph_mdl,
                                      levels(surv_ana@elig_score_data$SCORE_GROUP),
                                      surv_ana@study@endpt)
     ref_level = levels(surv_ana@elig_score_data$SCORE_GROUP)[1]
-    
+
     # Reference group has enough cases and controls
+
     if((n_cntrls_vec[1] > surv_ana@min_indvs) & 
             (n_cases_vec[1] > surv_ana@min_indvs)) {
         coxph_res_tib <- tibble::as_tibble(coxph_res_list)
@@ -130,7 +125,6 @@ get_min_indvs_data <- function(coxph_mdl,
         return(NULL)
     }
 }
-
 #' Adds a row to the C-index results tibble
 #' 
 #' @param endpt_c_idxs_tib A tibble with the results for previous endpts.
@@ -147,8 +141,8 @@ add_cidx_res_row <- function(endpt_c_idxs_tib,
     if(!is.null(c_idx_res)) {
         surv_descr=get_surv_descr(surv_ana,
                                   surv_type="surv")  
-        c_idx_ci_test <- get_CI(c_idx_res$test["C Index"], c_idx_res$test["S.D."]/2)
-        c_idx_ci_train <- get_CI(c_idx_res$train["C Index"], c_idx_res$train["S.D."]/2)
+        # In docu it says to use se=sd/2
+        c_idx_ci <- get_CI(c_idx_res["C Index"], c_idx_res["S.D."]/2)
         endpt_c_idxs_tib <- tibble::add_row(
                             endpt_c_idxs_tib,
                             ENDPOINT=surv_ana@study@endpt,
@@ -156,12 +150,9 @@ add_cidx_res_row <- function(endpt_c_idxs_tib,
                             SURV_MODEL=surv_descr,
                             N_CASES=Istudy::get_n_cases(surv_ana@elig_indv, surv_ana@study@endpt),
                             N_CONTROLS=Istudy::get_n_cntrls(surv_ana@elig_indv, surv_ana@study@endpt),
-                            C_IDX_TEST=c_idx_res$test["C Index"],
-                            CI_TEST_NEG=c_idx_ci_test[[1]],
-                            CI_TEST_POS=c_idx_ci_test[[2]],
-                            C_IDX_TRAIN=c_idx_res$train["C Index"],
-                            CI_TRAIN_NEG=c_idx_ci_train[[1]],
-                            CI_TRAIN_POS=c_idx_ci_train[[2]])
+                            C_IDX=c_idx_res["C Index"],
+                            C_IDX_CI_NEG=c_idx_ci[[1]],
+                            C_IDX_CI_POS=c_idx_ci[[2]])
     }
     return(endpt_c_idxs_tib)
 }

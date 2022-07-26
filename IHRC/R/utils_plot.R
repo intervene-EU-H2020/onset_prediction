@@ -94,4 +94,5 @@ get_study_subtitle <- function(study) {
         study_sub <- paste0("Exp from Birth until ", exp_end)
     }
     return(study_sub)
-}   
+} 
+

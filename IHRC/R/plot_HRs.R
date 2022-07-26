@@ -18,7 +18,7 @@ plot_endpt_hrs <- function(coxph_hr_res,
                             caption=paste0("Obs: ", surv_ana@study@obs_len, " Years until ", surv_ana@study@obs_end, " Wash: ", surv_ana@study@wash_len, " Years", get_surv_descr(surv_ana, surv_type="HR")),
                             x="Hazard Ratio (95%)",
                             y="") +
-                        theme_minimal() +
+                        ILongDataUtils::theme_custom() +
                         coord_cartesian(xlim=c(0, 7.1)) +
                         geom_errorbar(aes(xmin=CI_NEG, xmax=CI_POS), width=0.2) +
                         geom_vline(xintercept = 1.0)+
@@ -49,18 +49,25 @@ plot_age_hrs <- function(coxph_hr_res,
                                             ENDPOINT == endpt)
         if(nrow(endpt_coxph_hr_res) > 0) {
             plt <- ggplot2::ggplot(endpt_coxph_hr_res, aes(x=as.character(EXP_AGE), y=HR)) +
+                    # Points and error bars
+                    geom_point() + 
+                    geom_errorbar(aes(ymin=CI_NEG, ymax=CI_POS), width=.1) +
+                    # Axis settings
+                    geom_hline(yintercept=1.0) + 
+                    coord_cartesian(ylim=c(-1,10)) +
+                    scale_x_discrete(breaks=unique(endpt_coxph_hr_res$EXP_AGE),
+                                     labels=get_obs_per_strings(endpt_coxph_hr_res, surv_ana)) +
+                    # Labels and titles
                     labs(subtitle=paste0(get_comp_descr(surv_ana, surv_type="HR")),
                          title=endpt,
                          caption=paste0("Exp: ", surv_ana@study@exp_len, " Wash: ", surv_ana@study@wash_len, " Obs: ",  surv_ana@study@obs_len, " Years", get_surv_descr(surv_ana, surv_type="HR")),
-                         x="Age",
+                         x="Observation Age",
                          y="Hazard Ratio (95% CI)") +
-                    geom_point() + 
-                    geom_errorbar(aes(ymin=CI_NEG, ymax=CI_POS), width=.1) +
-                    geom_hline(yintercept=1.0) + 
-                    coord_cartesian(ylim=c(-1,10)) +
-                    theme_minimal() +
+                    # Theme
+                    ILongDataUtils::theme_custom(base_size=16) +
                     theme(text=element_text(size=21),
-                          plot.caption=element_text(size=10, hjust=0))
+                          plot.caption=element_text(size=10, hjust=0),
+                          panel.grid.major.x =element_blank()) 
 
             file_path <- check_and_get_file_path(surv_ana, res_type="HRs")
             if(!is.null(file_path) & !is.null(plt)) {
@@ -74,4 +81,11 @@ plot_age_hrs <- function(coxph_hr_res,
         }
     }
     return(NULL)
+}
+
+get_obs_per_strings <- function(endpt_coxph_hr_res,
+                                surv_ana) {
+    paste0(unique(endpt_coxph_hr_res$EXP_AGE)+surv_ana@study@exp_len+surv_ana@study@wash_len, 
+           "-", 
+           unique(endpt_coxph_hr_res$EXP_AGE+surv_ana@study@exp_len)+surv_ana@study@wash_len+surv_ana@study@obs_len)
 }

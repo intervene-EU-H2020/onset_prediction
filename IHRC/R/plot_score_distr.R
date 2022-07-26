@@ -25,7 +25,7 @@ plot_score_distr <- function(score_data,
                          x=surv_ana@score_type,
                          y="Count") +
                     coord_cartesian(xlim=c(0,15)) +
-                    theme_minimal() + 
+                    ILongDataUtils::theme_custom() + 
                     theme(text=element_text(size=21))
     } else {
         plt <- suppressMessages(ggplot(score_data, aes(x=get(paste0(surv_ana@score_type, "_SCORE")))) + 
@@ -34,7 +34,7 @@ plot_score_distr <- function(score_data,
                         subtitle=paste0(nrow(score_data), " Individuals "),
                         x=surv_ana@score_type,
                         y="Count") +
-                    theme_minimal() + 
+                    ILongDataUtils::theme_custom() + 
                     theme(text=element_text(size=21)))
     }
 
@@ -85,7 +85,7 @@ plot_endpt_score_distr <- function(score_data,
                          subtitle=get_study_subtitle(surv_ana@study),
                          x="",
                          y=paste0(surv_ana@score_type, " Score")) +
-                    theme_minimal() +
+                    ILongDataUtils::theme_custom() +
                     theme(text=element_text(size=21))
 
     file_path <- check_and_get_file_path(surv_ana,

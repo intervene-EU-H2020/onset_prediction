@@ -18,38 +18,19 @@
 #' @author Kira E. Detrois
 calc_endpt_study_cidx <- function(surv_ana) {
     set.seed(923)
-    test_idxs <- sample(seq(nrow(surv_ana@elig_score_data)),
-                        0.5*nrow(surv_ana@elig_score_data),
-                        replace=FALSE)
-
     coxph_mdl <- get_coxph_mdl(surv_ana,
-                               pred_score=paste0(surv_ana@score_type, "_SCORE", collapse=" + "),
-                               test_idxs=test_idxs)
+                               pred_score=paste0(surv_ana@score_type, "_SCORE", collapse=" + "))
     if(!is.null(coxph_mdl)) {
         # Risk and survival have opposite directions
-        preds_test <- (-1)*predict(
-                                coxph_mdl, 
-                                type="risk",
-                                newdata=surv_ana@elig_score_data[test_idxs,])
-        surv_obj_test <- get_surv_obj(
-                            surv_ana@elig_score_data[test_idxs,], 
-                            surv_ana@study@endpt)    
-        c_idx_test <- Hmisc::rcorr.cens(preds_test, surv_obj_test)
-
-        # Risk and survival have opposite directions
-        preds_train <- (-1)*predict(
-                              coxph_mdl, 
-                              type="risk",
-                              newdata=surv_ana@elig_score_data[-test_idxs,])
-        surv_obj_train <- get_surv_obj(
-                            surv_ana@elig_score_data[-test_idxs,],
-                            surv_ana@study@endpt)    
-        c_idx_train <- Hmisc::rcorr.cens(preds_train, surv_obj_train)
+        preds <- (-1)*predict(coxph_mdl, 
+                              type="risk")
+        surv_obj <- get_surv_obj(surv_ana@elig_score_data, 
+                                 surv_ana@study@endpt)    
+        c_idx <- Hmisc::rcorr.cens(preds, surv_obj)
     } else {
-        c_idx_test <- NULL
-        c_idx_train <- NULL
+        c_idx <- NULL
     }
-    return(list(test=c_idx_test, train=c_idx_train))
+    return(c_idx)
 }
 
 
