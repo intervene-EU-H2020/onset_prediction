@@ -21,11 +21,6 @@ See [How to install a R package into Sandbox?](https://finngen.gitbook.io/finnge
 ## ICCI
 
 Calculates the Charlson Comorbidity Index (CCI) on longitudinal data in INTERVENE format, using the R package `comorbidity`.
-
-## IHRC
-
-Builds Cox-propotional hazards model (Cox-PH) for the different endpoints and study setups. Calcualtes the Hazard Ratios(HRs) and the c-index for the different models. 
-
 ## Istudy
 
 The goal of this package is to select individuals from the data that are eligible given a certain study setup. A study setup consists of an exposure, a washout, and an observation period. Eligible individuals cannot have the selected endpoint of interest inside the endpoint free period. The endpoint free period ranges from birth until the observation period begins. 
@@ -40,6 +35,9 @@ There are two types of study setups:
 ![Study Setup Backwards](https://github.com/intervene-EU-H2020/onset_prediction/blob/main/Istudy/man/Study_Setup_Back_Schema.png)
 
 The important column names for the input data are indicated in each function documentation.
+## IHRC
+
+Builds Cox-propotional hazards model (Cox-PH) for the different endpoints and study setups. Calcualtes the Hazard Ratios(HRs) and the c-index for the different models. 
 
 ## IUtils
 
