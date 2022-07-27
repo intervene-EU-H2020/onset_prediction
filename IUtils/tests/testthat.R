@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/reference/test_package.html#special-files
 
 library(testthat)
-library(ILongDataUtils)
+library(IUtils)
 
-test_check("ILongDataUtils")
+test_check("IUtils")

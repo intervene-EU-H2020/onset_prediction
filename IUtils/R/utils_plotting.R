@@ -25,6 +25,8 @@ custom_colors_brewer <- function(N_colors) {
 #' @param base_rect_size Rectangle size
 #' 
 #' @author Kira E. Detrois
+#' 
+#' @importFrom ggplot2 %+replace%
 #'  
 #' @export 
 theme_custom <- function(base_size = 18,
@@ -36,39 +38,39 @@ theme_custom <- function(base_size = 18,
     base_rect_size = base_rect_size
   ) +
     ggplot2::theme(
-      rect = element_blank(),
-      text = element_text(
+      rect = ggplot2::element_blank(),
+      text = ggplot2::element_text(
         colour = "black"
       )
     ) %+replace%
     ggplot2::theme(
-      plot.title = element_text(
+      plot.title = ggplot2::element_text(
         face = "bold",
         hjust = 0
       ),
-      axis.text.y = element_text(
+      axis.text.y = ggplot2::element_text(
         colour = "black"
       ),
-      axis.text.y.right = element_text(
+      axis.text.y.right = ggplot2::element_text(
         hjust = 1
       ),
-      axis.text.x = element_text(
+      axis.text.x = ggplot2::element_text(
         colour = "black"
       ),
-      panel.border = element_blank(),
-      strip.text = element_text(
+      panel.border = ggplot2::element_blank(),
+      strip.text = ggplot2::element_text(
         face = "bold",
         hjust = 0
       ),
-      panel.background = element_rect(
+      panel.background = ggplot2::element_rect(
         colour = NA,
         fill = NA
       ),
-      panel.grid.major.x = element_line(
+      panel.grid.major.x = ggplot2::element_line(
         colour = "gray50",
         size = 0.25,
         linetype = 2
       ),
-      panel.grid.minor.x = element_blank(),
+      panel.grid.minor.x = ggplot2::element_blank(),
     )
 }
