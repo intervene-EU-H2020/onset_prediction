@@ -4,7 +4,7 @@
 \alias{get_pred_string}
 \title{Creates the predictor string for the Cox-PH model}
 \usage{
-get_pred_string(covs, pred_score = "SCORE_GROUP")
+get_pred_string(covs, score_type, pred_score = "SCORE_GROUP")
 }
 \arguments{
 \item{covs}{A vector of characters. The column names of the covariates

@@ -13,6 +13,10 @@ setup.}
 \item{pred_score}{A character. The score type to predict. For direct
 regression \code{SCORE}, and for regression on the
 risk group \code{SCORE_GROUP}.}
+
+\item{test_idxs}{An integer (vector). The indices of the test data
+subset. Default is \code{NULL}, meaning the whole data
+is used for fitting.}
 }
 \value{
 A Cox-PH model object or \code{NULL} if the model couldn't be fit.

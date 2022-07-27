@@ -16,5 +16,5 @@ Imports:
     assertthat,
     comorbidity (>= 1.0.0),
     dplyr,
-    ILongDataUtils,
+    IUtils,
     tibble

@@ -4,7 +4,7 @@ test_that("calc_endpt_studies_hrs works", {
       library("ICCI")
 
       pheno_data <- readr::read_delim("/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/true_results/pheno_data.tsv", delim="\t", show_col_types = FALSE)
-      icd_data <- ILongDataUtils::create_test_df_multi_icd_ver(
+      icd_data <- IUtils::create_test_df_multi_icd_ver(
                                                 n_icd10=50000, 
                                                 icd10_indv=pheno_data$ID)
       exp_ages <- c(20, 30, 40)
@@ -50,7 +50,7 @@ test_that("calc_endpt_studies_hrs works", {
       library("ICCI")
 
       pheno_data <- Istudy::create_test_df(10000)
-      icd_data <- ILongDataUtils::create_test_df_multi_icd_ver(
+      icd_data <- IUtils::create_test_df_multi_icd_ver(
                                                 n_icd10=50000, 
                                                 icd10_indv=pheno_data$ID)
       exp_ages <- c(20,30,40)

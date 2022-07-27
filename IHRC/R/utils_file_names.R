@@ -30,7 +30,7 @@ get_score_distr_file_name <- function(surv_ana) {
     paste0(surv_ana@score_type, "_score_distr", plot_descr, ".png")
 }
 
-#' Creats the file name for the HR plots
+#' Creats the file name for the HR plots with risk grouping
 #' 
 #' @inheritParams add_risk_group_col
 #' 
@@ -39,15 +39,33 @@ get_score_distr_file_name <- function(surv_ana) {
 #' @export 
 #' 
 #' @author Kira E. Detrois
-get_hr_file_name <- function(surv_ana) {
+get_hr_rg_file_name <- function(surv_ana) {
     if(surv_ana@study@study_type == "forward") {
         file_name <- paste0(surv_ana@study@endpt, "_e", surv_ana@study@exp_len, "_w", surv_ana@study@wash_len, "_o", surv_ana@study@obs_len, "_", surv_ana@score_type)
     } else {
-        file_name <- paste0(surv_ana@study@obs_end, "_o", surv_ana@study@obs_len, "_w", surv_ana@study@wash_len)
+        file_name <- paste0(surv_ana@study@obs_end, "_o", surv_ana@study@obs_len, "_w", surv_ana@study@wash_len, "_", surv_ana@score_type)
     }
     if(surv_ana@score_type == "CCI") {
         file_name <- paste0(file_name, "_cut", surv_ana@bin_cut)
     } 
+    paste0(file_name, "_HRs.png")
+}
+
+#' Creats the file name for the HR plots with continuous scores
+#' 
+#' @inheritParams add_risk_group_col
+#' 
+#' @return A character. The file name.
+#' 
+#' @export 
+#' 
+#' @author Kira E. Detrois
+get_hr_sd_file_name <- function(surv_ana) {
+    if(surv_ana@study@study_type == "forward") {
+        file_name <- paste0(surv_ana@study@endpt, "_e", surv_ana@study@exp_len, "_w", surv_ana@study@wash_len, "_o", surv_ana@study@obs_len, "_", surv_ana@score_type)
+    } else {
+        file_name <- paste0(surv_ana@study@obs_end, "_o", surv_ana@study@obs_len, "_w", surv_ana@study@wash_len, "_", surv_ana@score_type)
+    }
     paste0(file_name, "_HRs.png")
 }
 
@@ -90,7 +108,6 @@ get_endpt_score_file_name <- function(surv_ana) {
 get_surv_file_name <- function(surv_ana) {
     paste0(Istudy::get_study_file_name(surv_ana@study), "_", surv_ana@score_type, "_surv.png")
 }
-
 
 #' Creats the file name for Cox-PH model results file
 #' 

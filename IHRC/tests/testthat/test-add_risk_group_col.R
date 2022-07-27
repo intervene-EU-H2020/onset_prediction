@@ -2,7 +2,7 @@ test_that("add_risk_group_col works", {
     set.seed(191)
 
     pheno_data <- Istudy::create_test_df(5)
-    icd_data <- ILongDataUtils::create_test_df_multi_icd_ver(n_icd10=30, icd10_indv=pheno_data$ID)
+    icd_data <- IUtils::create_test_df_multi_icd_ver(n_icd10=30, icd10_indv=pheno_data$ID)
     cci_data <- ICCI::calc_cci(icd_data) %>% dplyr::rename(CCI_SCORE=CCI_score)
     pheno_score_data <- join_dfs(pheno_data, cci_data)
 

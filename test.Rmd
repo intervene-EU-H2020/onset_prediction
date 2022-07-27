@@ -2,12 +2,12 @@
 ```{r}
 library(ICCI)
 library(Istudysetup)
-library(ILongDataUtils)
+library(IUtils)
 library(IHRC)
 
 set.seed(919923)
 pheno_data <- Istudysetup::create_test_df(10000)
-icd_data <- ILongDataUtils::create_test_df_multi_icd_ver(n_icd10=50000, 
+icd_data <- IUtils::create_test_df_multi_icd_ver(n_icd10=50000, 
                                                          icd10_indv=pheno_data$ID)  
 
 phenocols <- c("J10_ASTHMA", "I9_VTE")

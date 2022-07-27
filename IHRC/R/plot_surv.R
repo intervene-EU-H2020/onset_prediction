@@ -15,7 +15,7 @@
 #                 title = paste0("Age at Onset of ", study@endpt),
 #                 subtitle = IHRC::get_study_subtitle(study),
 #                 caption = paste0(get_surv_descr(score_type, surv_type="surv", covs), "  C-index: ", round(c_idx[1], 2)),
-#                 #ggtheme = ggplot2::ILongDataUtils::theme_custom(),
+#                 #ggtheme = ggplot2::IUtils::theme_custom(),
 #                 # ####### Confidence Intervals ########
 #                 conf.int = TRUE, # To Remove conf intervals use "FALSE"
 #                 # ####### Format Axes #######

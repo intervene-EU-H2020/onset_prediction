@@ -21,6 +21,6 @@ add_num_id_col <- function(icd_data) {
                     dplyr::distinct(ID)
     id_num_map <- id_num_map %>%
                     tibble::add_column(ID_num = seq_len(nrow(id_num_map)))
-    icd_data <- ILongDataUtils::add_map_col(icd_data, id_num_map, "ID")
+    icd_data <- IUtils::add_map_col(icd_data, id_num_map, "ID")
     return(icd_data)
 }

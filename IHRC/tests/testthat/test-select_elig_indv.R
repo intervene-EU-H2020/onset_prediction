@@ -5,7 +5,7 @@ test_that("select_elig_indv of surv_ana works", {
       library("ICCI")
 
          pheno_data <- Istudy::create_test_df(10000)
-         icd_data <- ILongDataUtils::create_test_df_multi_icd_ver(
+         icd_data <- IUtils::create_test_df_multi_icd_ver(
                                                 n_icd10=50000, 
                                                 icd10_indv=pheno_data$ID)
          study <- methods::new("study",

@@ -4,7 +4,7 @@ test_that("calc_endpt_studies_hrs works", {
       library("ICCI")
 
       pheno_data <- Istudy::create_test_df(500)
-      icd_data <- ILongDataUtils::create_test_df_multi_icd_ver(
+      icd_data <- IUtils::create_test_df_multi_icd_ver(
                                                 n_icd10=1000, 
                                                 icd10_indv=pheno_data$ID)
       expect_error(run_surv_studies(

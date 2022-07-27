@@ -2,7 +2,7 @@
 #   if (requireNamespace("ICCI", quietly = TRUE)) {
 #     set.seed(919923)
 #     pheno_data <- Istudy::create_test_df(10000)
-#     icd_data <- ILongDataUtils::create_test_df_multi_icd_ver(n_icd10=500000, 
+#     icd_data <- IUtils::create_test_df_multi_icd_ver(n_icd10=500000, 
 #                                                              icd10_indv=pheno_data$ID)
 #     score_data <- ICCI::calc_cci(icd_data=icd_data, 
 #                                  exp_start=20, 

@@ -4,7 +4,12 @@
 \alias{add_coxph_res_row}
 \title{Adds a row to the Cox-PH HR results tibble}
 \usage{
-add_coxph_res_row(endpt_hrs_tib, coxph_mdl, surv_ana)
+add_coxph_res_row(
+  endpt_hrs_tib,
+  coxph_mdl,
+  surv_ana,
+  pred_score = "SCORE_GROUP"
+)
 }
 \arguments{
 \item{endpt_hrs_tib}{A tibble with the results for previous endpts.}

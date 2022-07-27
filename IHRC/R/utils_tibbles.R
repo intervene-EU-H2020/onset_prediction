@@ -52,10 +52,12 @@ create_empty_cidx_tib <- function() {
 #' @author Kira E. Detrois 
 add_coxph_res_row <- function(endpt_hrs_tib,
                               coxph_mdl,
-                              surv_ana) {
+                              surv_ana,
+                              pred_score="SCORE_GROUP") {
     if(!is.null(coxph_mdl)) {
         coxph_res_list <- get_min_indvs_data(coxph_mdl=coxph_mdl,
-                                             surv_ana=surv_ana)
+                                             surv_ana=surv_ana,
+                                             pred_score=pred_score)
         if(!is.null(coxph_res_list)) {
             endpt_hrs_tib <- tibble::add_row(
                                          endpt_hrs_tib, 
@@ -85,46 +87,51 @@ add_coxph_res_row <- function(endpt_hrs_tib,
 #' 
 #' @author Kira E. Detrois
 get_min_indvs_data <- function(coxph_mdl,
-                               surv_ana) {
+                               surv_ana,
+                               pred_score="SCORE_GROUP") {
     coxph_res_list <- extract_coxph_res(coxph_mdl,
                                         surv_ana@score_type)
-    n_cntrls_vec <- get_n_group_cntrls(surv_ana@elig_score_data, 
-                                       levels(surv_ana@elig_score_data$SCORE_GROUP),
-                                       surv_ana@study@endpt)
-    n_cases_vec <- get_n_group_cases(surv_ana@elig_score_data, 
-                                     levels(surv_ana@elig_score_data$SCORE_GROUP),
-                                     surv_ana@study@endpt)
-    ref_level = levels(surv_ana@elig_score_data$SCORE_GROUP)[1]
+    if(pred_score == "SCORE_GROUP") {
+        n_cntrls_vec <- get_n_group_cntrls(surv_ana@elig_score_data, 
+                                        levels(surv_ana@elig_score_data$SCORE_GROUP),
+                                        surv_ana@study@endpt)
+        n_cases_vec <- get_n_group_cases(surv_ana@elig_score_data, 
+                                        levels(surv_ana@elig_score_data$SCORE_GROUP),
+                                        surv_ana@study@endpt)
+        ref_level = levels(surv_ana@elig_score_data$SCORE_GROUP)[1]
 
-    # Reference group has enough cases and controls
-
-    if((n_cntrls_vec[1] > surv_ana@min_indvs) & 
-            (n_cases_vec[1] > surv_ana@min_indvs)) {
-        coxph_res_tib <- tibble::as_tibble(coxph_res_list)
-        coxph_res_tib <- tibble::add_row(coxph_res_tib,
-                                         .before=1,
-                                         beta=NA_real_,
-                                         std_err=NA_real_,
-                                         p_val=NA_real_,
-                                         HR=NA_real_,
-                                         CI_neg=NA_real_,
-                                         CI_pos=NA_real_,
-                                         groups=ref_level) 
-        coxph_res_tib <- tibble::add_column(coxph_res_tib,
-                                            n_cntrl=n_cntrls_vec)
-        coxph_res_tib <- tibble::add_column(coxph_res_tib,
-                                            n_case=n_cases_vec)
-        coxph_res_tib <- coxph_res_tib[coxph_res_tib$n_cntrl > surv_ana@min_indvs &
-                                        coxph_res_tib$n_case > surv_ana@min_indvs,]
-        if(nrow(coxph_res_tib) < 2) {
-            return(NULL)
+        # Reference group has enough cases and controls
+        if((n_cntrls_vec[1] > surv_ana@min_indvs) & 
+                (n_cases_vec[1] > surv_ana@min_indvs)) {
+            coxph_res_tib <- tibble::as_tibble(coxph_res_list)
+            coxph_res_tib <- tibble::add_row(coxph_res_tib,
+                                             .before=1,
+                                             beta=NA_real_,
+                                             std_err=NA_real_,
+                                             p_val=NA_real_,
+                                             HR=NA_real_,
+                                             CI_neg=NA_real_,
+                                             CI_pos=NA_real_,
+                                             groups=ref_level) 
+            coxph_res_tib <- tibble::add_column(coxph_res_tib,
+                                                n_cntrl=n_cntrls_vec)
+            coxph_res_tib <- tibble::add_column(coxph_res_tib,
+                                                n_case=n_cases_vec)
+            coxph_res_tib <- coxph_res_tib[coxph_res_tib$n_cntrl > surv_ana@min_indvs &
+                                            coxph_res_tib$n_case > surv_ana@min_indvs,]
+            if(nrow(coxph_res_tib) < 2) {
+                return(NULL)
+            } else {
+                return(as.list(coxph_res_tib))
+            }
         } else {
-            return(as.list(coxph_res_tib))
+            return(NULL)
         }
     } else {
-        return(NULL)
+        return(coxph_res_list)
     }
 }
+
 #' Adds a row to the C-index results tibble
 #' 
 #' @param endpt_c_idxs_tib A tibble with the results for previous endpts.

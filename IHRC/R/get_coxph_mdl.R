@@ -9,6 +9,9 @@
 #' @param pred_score A character. The score type to predict. For direct
 #'                      regression `SCORE`, and for regression on the
 #'                      risk group `SCORE_GROUP`.
+#' @param test_idxs An integer (vector). The indices of the test data
+#'                  subset. Default is `NULL`, meaning the whole data
+#'                  is used for fitting.
 #' 
 #' @return A Cox-PH model object or `NULL` if the model couldn't be fit.
 #' 
@@ -18,6 +21,7 @@
 get_coxph_mdl <- function(surv_ana,
                           pred_score="SCORE_GROUP",
                           test_idxs=NULL) {
+    coxph_mdl <- NULL
     if(nrow(surv_ana@elig_score_data) > 0) {
         surv_ana@elig_score_data <- make_covs_fctrs(
                                         surv_ana@elig_score_data,
@@ -31,6 +35,12 @@ get_coxph_mdl <- function(surv_ana,
             if(length(unique(surv_ana@elig_score_data$SCORE_GROUP)) < 2) {
                 build_mdl <- FALSE
             }
+        } else if(pred_score == "SCORE") {
+            score_col_name <- paste0(surv_ana@score_type, "_SCORE")
+            Istudy::check_cols_exist(surv_ana@elig_score_data, 
+                                     score_col_name, 
+                                     "get_coxph_mdl")
+            surv_ana@elig_score_data[,score_col_name] <- scale(surv_ana@elig_score_data[,score_col_name])
         }
         if(build_mdl) {
             test_data <- surv_ana@elig_score_data
@@ -44,11 +54,7 @@ get_coxph_mdl <- function(surv_ana,
                                             # other functions to reconstruct
                                             # which fails in this setup
                                             model=TRUE))
-        } else {
-            return(NULL)
-        }
-    } else {
-        return(NULL)
+        } 
     }
     return(coxph_mdl)
 }

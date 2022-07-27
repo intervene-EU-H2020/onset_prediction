@@ -30,7 +30,7 @@ make_covs_fctrs <- function(elig_score_data,
 #' @return A character. The formula string for the Cox-PH model.
 get_coxph_formula <- function(surv_ana,
                               pred_score="SCORE_GROUP") {
-    pred_string <- get_pred_string(surv_ana@covs, pred_score)
+    pred_string <- get_pred_string(surv_ana@covs, surv_ana@score_type, pred_score)
     stats::as.formula(paste0("survival::Surv(", surv_ana@study@endpt, "_AGE, ",  surv_ana@study@endpt, ") ~ ",  pred_string))
 }
 
@@ -43,8 +43,14 @@ get_coxph_formula <- function(surv_ana,
 #' 
 #' @author Kira E. Detrois
 get_pred_string <- function(covs,
+                            score_type,
                             pred_score="SCORE_GROUP") {
-    paste0(pred_score, " + ", paste0(covs, collapse=" + "))
+    if(pred_score == "SCORE_GROUP") {
+        pred_string <- pred_score
+    } else {
+        pred_string <- paste0(score_type, "_SCORE")
+    }
+    paste0(pred_string, " + ", paste0(covs, collapse=" + "))
 }
 
 #' Creates a survival object for the selected endpoint
