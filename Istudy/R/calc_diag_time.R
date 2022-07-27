@@ -48,16 +48,15 @@ add_diag_time_cols <- function(pheno_data,
 calc_diag_time <- function(pheno_data, 
                            study) {
     check_cols_exist(pheno_data, 
-                     c(study@endpt, paste0(study@endpt, "_DATE"), "DATE_OF_BIRTH", "EXP_LEN"),
+                     c(study@endpt, paste0(study@endpt, "_DATE"), "OBS_END_DATE", "EXP_END_DATE"),
                      "calc_diag_time")  
 
     endpt_date <- dplyr::pull(pheno_data, get(paste0(study@endpt, "_DATE")))
-    study_end <- calc_end_of_study(pheno_data, study)
     cntrls_idxs <- (pheno_data[,study@endpt] == 0)
     # Setting Date / AGE at onset of controls to end of study
-    endpt_date[cntrls_idxs] <- study_end[cntrls_idxs]
+    endpt_date[cntrls_idxs] <- pheno_data$OBS_END_DATE[cntrls_idxs]
     # Gets exact age in years
     endpt_date <- as.Date(endpt_date, origin="1970/01/01")
-    age_at_onset <- lubridate::time_length(pheno_data$DATE_OF_BIRTH %--% endpt_date, "years")
+    age_at_onset <- lubridate::time_length(pheno_data$EXP_END_DATE %--% endpt_date, "years")
     return(list(exact_age_yrs=age_at_onset, onset_date=endpt_date))
 }

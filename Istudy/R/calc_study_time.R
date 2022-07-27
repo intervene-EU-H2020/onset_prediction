@@ -16,7 +16,7 @@
 #' @examples 
 #' test_data <- Istudy::create_test_df(30)
 #' study <- methods::new("study", endpt="J10_ASTHMA", exp_age=30, 
-#'                       exp_len=10, wash_len=2, obs_len=8, ancs="EUR")
+#'                       EXP_END=10, wash_len=2, obs_len=8, ancs="EUR")
 #' test_data <- Istudy::add_study_interval_cols(test_data, study)
 #' calc_study_time(test_data, study)
 #' 

@@ -4,23 +4,9 @@
 \alias{get_study_elig_indv}
 \title{Gets the individuals which are eligble given the study setup}
 \usage{
-get_study_elig_indv(
-  pheno_data,
-  study,
-  max_age = 200,
-  write_res = FALSE,
-  res_dir = NULL
-)
+get_study_elig_indv(study, max_age = 200, write_res = FALSE, res_dir = NULL)
 }
 \arguments{
-\item{pheno_data}{A data.frame with at least the columns:
-\code{ID}, \code{SEX}, \code{DATE_OF_BIRTH}, \code{ANCESTRY},
-\code{START_OF_FOLLOWUP}, \code{END_OF_FOLLOWUP},
-\code{DATE_OF_BIRTH}, and i.e. \code{J10_ASTHMA}, and
-\code{J10_ASTHMA_DATE} where the columns are the study
-endpoint and date, which will differ depending on
-the input variable \code{endpt}.}
-
 \item{study}{An S4 class representing the study setup.}
 
 \item{max_age}{A numeric. The maximum length of the exposure period.}
@@ -29,6 +15,14 @@ the input variable \code{endpt}.}
 a file or not. Default is FALSE.}
 
 \item{res_dir}{A character. The directory to write the results to.}
+
+\item{study@study_data}{A data.frame with at least the columns:
+\code{ID}, \code{SEX}, \code{DATE_OF_BIRTH}, \code{ANCESTRY},
+\code{START_OF_FOLLOWUP}, \code{END_OF_FOLLOWUP},
+\code{DATE_OF_BIRTH}, and i.e. \code{J10_ASTHMA}, and
+\code{J10_ASTHMA_DATE} where the columns are the study
+endpoint and date, which will differ depending on
+the input variable \code{endpt}.}
 }
 \value{
 A tibble with the information for the eligible individuals

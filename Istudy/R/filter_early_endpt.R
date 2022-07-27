@@ -27,7 +27,7 @@
 #' @examples 
 #' test_data <- Istudy::create_test_df(30)
 #' study <- methods::new("study", endpt="J10_ASTHMA", exp_age=30, 
-#'                       exp_len=10, wash_len=2, obs_len=8, ancs="EUR")
+#'                       EXP_END=10, wash_len=2, obs_len=8, ancs="EUR")
 #' test_data <- add_study_interval_cols(test_data, study)
 #' filter_early_endpt(test_data, "J10_ASTHMA")
 #'  
@@ -36,10 +36,10 @@ filter_early_endpt <- function(pheno_data,
                                endpt) {    
     endpt_date_str <- paste0(endpt, "_DATE")
     check_cols_exist(pheno_data,
-                     c(endpt_date_str, "ENDPT_FREE"),
+                     c(endpt_date_str, "ENDPT_FREE_PERIOD"),
                      "filter_early_endpt")
 
     dplyr::filter(pheno_data, 
-                  !(get(endpt_date_str) %within% ENDPT_FREE) | 
+                  !(get(endpt_date_str) %within% ENDPT_FREE_PERIOD) | 
                   is.na(get(endpt_date_str))) # If no endpoint date then NA 
 }

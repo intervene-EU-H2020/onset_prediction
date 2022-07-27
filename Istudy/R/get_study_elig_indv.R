@@ -31,7 +31,7 @@
 #'        observation has ended are considered controls in this setup. 
 #' }
 #' 
-#' @param pheno_data A data.frame with at least the columns: 
+#' @param study@study_data A data.frame with at least the columns: 
 #'                   `ID`, `SEX`, `DATE_OF_BIRTH`, `ANCESTRY`, 
 #'                   `START_OF_FOLLOWUP`, `END_OF_FOLLOWUP`, 
 #'                   `DATE_OF_BIRTH`, and i.e. `J10_ASTHMA`, and
@@ -54,24 +54,27 @@
 #' @export
 #' 
 #' @author Kira E. Detrois
-get_study_elig_indv <- function(pheno_data,
-                                study,
+get_study_elig_indv <- function(study,
                                 max_age=200,
                                 write_res=FALSE,
                                 res_dir=NULL) {
-    check_cols_exist(pheno_data, study@endpt, "get_study_elig_indv")
+    check_cols_exist(study@study_data, study@endpt, "get_study_elig_indv")
 
-    pheno_data <- add_study_interval_cols(pheno_data, study)
-    pheno_data <- filter_too_old_and_young(pheno_data, max_age)
-    pheno_data <- filter_missing_endpt_data(pheno_data, study@endpt)
-    pheno_data <- filter_early_endpt(pheno_data, study@endpt)
-    pheno_data <- adj_case_cntrl_status(pheno_data, study@endpt)
-    pheno_data <- downsample_cntrls(pheno_data, study)
-    pheno_data <- add_diag_time_cols(pheno_data, study)
-    pheno_data <- filter_ancestry(pheno_data, study@ancs)
-    elig_indv <- create_return_tib(pheno_data, study@endpt)
-    write_res_files(elig_indv, study, write_res, res_dir)
+    study@study_data <- filter_too_old_and_young(study@study_data,
+                                                 study@obs_end_date, 
+                                                 study@study_type,
+                                                 max_age)
 
-    return(elig_indv)
+    study@study_data <- filter_missing_endpt_data(study@study_data, 
+                                                  study@endpt)
+    study@study_data <- filter_early_endpt(study@study_data, 
+                                           study@endpt)
+    study@study_data <- adj_case_cntrl_status(study@study_data, 
+                                              study@endpt)
+    study@study_data <- downsample_cntrls(study@study_data, study)
+    study@study_data <- add_diag_time_cols(study@study_data, study)
+    study@study_data <- filter_ancestry(study@study_data, study@ancs)
+    write_res_files(study@study_data, study, write_res, res_dir)
+
+    return(study@study_data)
 }
-

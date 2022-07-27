@@ -7,7 +7,7 @@
 filter_too_old_and_young(pheno_data, max_age = 200)
 }
 \arguments{
-\item{pheno_data}{A data.frame with at least column \code{EXP_LEN}.}
+\item{pheno_data}{A data.frame with at least column \code{EXP_END}.}
 
 \item{max_age}{A numeric. The maximum length of the exposure period.}
 }
@@ -15,7 +15,7 @@ filter_too_old_and_young(pheno_data, max_age = 200)
 This is mainly needed for studies that consider variable exposure lengths for
 individuals selected at a given time point.
 Here the exposure length will be the time from birth until the time point
-considered and should be provided in the S4 study object in slot \code{exp_len}
+considered and should be provided in the S4 study object in slot \code{EXP_END}
 in the same order as the individuals in the data.frame. A study setup like
 this can be created using the function \code{\link{get_backward_study}}.
 }

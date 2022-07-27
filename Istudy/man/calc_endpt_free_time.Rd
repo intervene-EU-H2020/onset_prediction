@@ -4,12 +4,15 @@
 \alias{calc_endpt_free_time}
 \title{Calcualtes endpoint free intervals}
 \usage{
-calc_endpt_free_time(bds, study)
+calc_endpt_free_time(pheno_data, study)
 }
 \arguments{
-\item{bds}{A Date (vector). The birth days of the individuals.}
+\item{pheno_data}{A data.frame with at least columns \code{DATE_OF_BIRTH},
+and \code{EXP_END}.}
 
 \item{study}{An S4 class representing the study setup.}
+
+\item{bds}{A Date (vector). The birth days of the individuals.}
 }
 \value{
 A lubdridate interval (vector). The endpoint free intervals.
@@ -22,13 +25,6 @@ exposure and washout period.
 }
 \details{
 Creates lubridate \code{\link[lubridate]{interval}}s.
-}
-\examples{
-bds <- c(as.Date("1923/07/01"), as.Date("1823/07/02"), as.Date("2002/04/01"))
-study <- methods::new("study", endpt="J10_ASTHMA", exp_age=30, 
-                      exp_len=10, wash_len=2, obs_len=8, ancs="EUR")
-calc_endpt_free_time(bds, study)
-
 }
 \author{
 Kira E. Detrois

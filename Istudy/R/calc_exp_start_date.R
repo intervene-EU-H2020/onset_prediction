@@ -16,12 +16,16 @@
 #' @examples 
 #' bds <- c(as.Date("1923/07/01"), as.Date("1823/07/02"), as.Date("2002/04/01"))
 #' study <- methods::new("study", endpt="J10_ASTHMA", exp_age=30, 
-#'                       exp_len=10, wash_len=2, obs_len=8, ancs="EUR")
+#'                       EXP_END=10, wash_len=2, obs_len=8, ancs="EUR")
 #' calc_exp_start_date(bds, study@exp_age)
 #' 
 #' @author Kira E. Detrois
 calc_exp_start_date <- function(bds, 
                                 exp_age) {
     test_date_var_correct(bds, "bds")
-    bds %m+% lubridate::years(exp_age)
+    if(length(exp_age) == 1) {
+        bds %m+% lubridate::years(exp_age)
+    } else {
+        bds + lubridate::dyears(exp_age)
+    }
 }

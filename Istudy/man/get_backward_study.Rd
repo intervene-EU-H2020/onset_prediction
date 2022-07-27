@@ -7,6 +7,7 @@
 get_backward_study(
   pheno_data,
   endpt,
+  EXP_END = NULL,
   wash_len = 2,
   obs_len = 8,
   obs_end = NULL,

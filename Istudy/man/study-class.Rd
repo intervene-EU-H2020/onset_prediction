@@ -27,7 +27,7 @@ This setup can be created, using the function
 
 \item{\code{exp_age}}{An integer. Age at which exposure period starts (in years).}
 
-\item{\code{exp_len}}{An integer. Length of the exposure period (in years).}
+\item{\code{EXP_END}}{An integer. Length of the exposure period (in years).}
 
 \item{\code{exp_ids}}{A character (vector). The IDs for the exposure lengths,
 if they differ between individuals.}

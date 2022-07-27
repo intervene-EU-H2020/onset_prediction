@@ -25,18 +25,25 @@
 #' @export 
 get_backward_study <- function(pheno_data,
                                endpt,
+                               EXP_END=NULL,
                                wash_len=2,
                                obs_len=8,
                                obs_end=NULL,
                                downsample_fctr=NA_real_,
                                ancs=NA_character_) {
-
-    exp_len <- get_indv_exp_len(pheno_data, wash_len, obs_len, obs_end)
+    if(is.null(EXP_END)) {
+        EXP_END <- get_indv_EXP_END(pheno_data, wash_len, obs_len, obs_end)
+        obs_end <- get_obs_end(pheno_data, obs_end)
+        exp_age=0
+    } else {
+        exp_age <- get_indv_exp_age(pheno_data, EXP_END, wash_len, obs_len, obs_end)
+    }
     obs_end <- get_obs_end(pheno_data, obs_end)
+
     study <- methods::new("study",
                           endpt=endpt,
-                          exp_age=0,
-                          exp_len=exp_len,
+                          exp_age=exp_age,
+                          EXP_END=EXP_END,
                           exp_ids=pheno_data$ID,
                           wash_len=wash_len,
                           obs_len=obs_len,

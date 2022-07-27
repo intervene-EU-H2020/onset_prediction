@@ -7,13 +7,11 @@
 create_return_tib(pheno_data, endpt)
 }
 \arguments{
-\item{pheno_data}{A data.frame with at least the columns:
-\code{ID}, \code{SEX}, \code{DATE_OF_BIRTH}, \code{ANCESTRY},
-\code{START_OF_FOLLOWUP}, \code{END_OF_FOLLOWUP},
-\code{DATE_OF_BIRTH}, and i.e. \code{J10_ASTHMA}, and
-\code{J10_ASTHMA_DATE} where the columns are the study
-endpoint and date, which will differ depending on
-the input variable \code{endpt}.}
+\item{pheno_data}{A data.frame with at least columns \code{STUDY_TIME}
+and i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_DATE}
+where the columns are the study endpoint and
+date, which will differ depending on the input
+variable \code{endpt}.}
 
 \item{endpt}{A character. The column name of the current endpoint of
 interest.}

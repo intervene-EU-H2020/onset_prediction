@@ -14,7 +14,7 @@
 create_return_tib <- function(pheno_data,
                               endpt) {
     check_cols_exist(pheno_data, endpt, "create_return_tib")
-    pheno_data$YEAR_OF_BIRTH <- lubridate::year(pheno_data$DATE_OF_BIRTH)
+
     elig_data <- dplyr::select(pheno_data, 
                                ID, 
                                SEX, 
@@ -29,7 +29,7 @@ create_return_tib <- function(pheno_data,
                                paste0(endpt, "_AGE"),
                                paste0(endpt, "_DATE"),
                                dplyr::starts_with("PC"),
-                               EXP_LEN)
+                               EXP_END)
 }
 
 #' Creates a file name for the current study setup
@@ -42,7 +42,7 @@ create_return_tib <- function(pheno_data,
 #' @author Kira E. Detrois
 get_study_file_name <- function(study) {
     if(study@study_type == "forward") {
-        paste0(study@endpt, "_a", study@exp_age, "_e", study@exp_len, "_w", study@wash_len, "_o", study@obs_len)
+        paste0(study@endpt, "_a", study@exp_age, "_e", study@EXP_END, "_w", study@wash_len, "_o", study@obs_len)
     } else {
         paste0(study@endpt, "_", study@obs_end, "_o", study@obs_len, "_w", study@wash_len)
     }
@@ -107,7 +107,7 @@ log_msg_string <- function(elig_indv,
                "No of cases: ", n_cases, "\n",
                "No of ctrls: ", n_cntrls, "\n",   
                "Age at exposure start:        ", study@exp_age, "\n",
-               "Length of exposure period:    ", study@exp_len, "\n", 
+               "Length of exposure period:    ", study@EXP_END, "\n", 
                "Length of washout period:     ", study@wash_len, "\n",
                "Length of observation period: ", study@obs_len, "\n")
     } else {

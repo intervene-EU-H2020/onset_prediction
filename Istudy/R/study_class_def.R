@@ -13,7 +13,7 @@
 #'              \code{\link{get_backward_study}}.
 #' @slot endpt A character. The column name of the current endpoint of interest. 
 #' @slot exp_age An integer. Age at which exposure period starts (in years).
-#' @slot exp_len An integer. Length of the exposure period (in years).
+#' @slot EXP_END An integer. Length of the exposure period (in years).
 #' @slot exp_ids A character (vector). The IDs for the exposure lengths,
 #'                   if they differ between individuals.
 #' @slot wash_len An integer. Length of the washout period (in years).
@@ -29,26 +29,93 @@
 #' 
 #' @author Kira E. Detrois
 study <- methods::setClass("study", 
-                            slots=list(study_type="character",
-                                       endpt="character",
-                                       exp_age="numeric",
-                                       exp_len="numeric",
-                                       exp_ids="character",
-                                       wash_len="numeric",
-                                       obs_len="numeric",
-                                       obs_end="Date",
-                                       downsample_fctr="numeric",
-                                       ancs="character"),
-                            prototype=list(study_type="forward",
-                                           endpt=NA_character_,
-                                           exp_age=30,
-                                           exp_len=10,
-                                           exp_ids=NA_character_,
-                                           wash_len=2,
-                                           obs_len=8,
-                                           obs_end=as.Date("3000/01/01"),
-                                           downsample_fctr=NA_real_,
-                                           ancs=NA_character_))
+                           slots=list(study_type="character",
+                                      study_data="data.frame",
+                                      endpt="character",
+                                      exp_age="numeric",
+                                      exp_len="numeric",
+                                      wash_len="numeric",
+                                      obs_len="numeric",
+                                      obs_end_date="Date",
+                                      downsample_fctr="numeric",
+                                      ancs="character"),
+                           prototype=list(study_type="forward",
+                                          study_data=tibble::tibble(),
+                                          endpt=NA_character_,
+                                          exp_age=NA_integer_,
+                                          exp_len=NA_integer_,
+                                          wash_len=NA_integer_,
+                                          obs_len=NA_integer_,
+                                          obs_end_date=as.Date("2021/01/01"),
+                                          downsample_fctr=NA_real_,
+                                          ancs=NA_character_))
+#' @importFrom methods callNextMethod
+#' @importFrom lubridate %--%
+setMethod("initialize", "study", function(.Object, ...) {
+    .Object <- callNextMethod()
+    check_cols_exist(.Object@study_data, .Object@endpt, "initialize")
+    .Object@study_data <- dplyr::select(.Object@study_data,
+                                        ID, 
+                                        SEX, 
+                                        DATE_OF_BIRTH, 
+                                        ANCESTRY, 
+                                        # Otherwise dplyr will throw error. 
+                                        # test_endpt_input_correct already 
+                                        # checks that this is only a single 
+                                        # string and not a vector.
+                                        .Object@endpt,  
+                                        paste0(.Object@endpt, "_DATE"),
+                                        dplyr::starts_with("PC"))
+    .Object@study_data$YEAR_OF_BIRTH <- lubridate::year(.Object@study_data$DATE_OF_BIRTH)
+    .Object@study_data$EXP_START_DATE <- calc_exp_start_date(.Object)
+    .Object@study_data$EXP_END_DATE <- calc_exp_end_date(.Object)
+    .Object@study_data$WASH_END_DATE <- calc_wash_end_date(.Object)
+    .Object@study_data$OBS_END_DATE <- calc_obs_end_date(.Object)
+    .Object@study_data$ENDPT_FREE_PERIOD <- .Object@study_data$DATE_OF_BIRTH %--% .Object@study_data$WASH_END_DATE
+    .Object@study_data$STUDY_TIME <- .Object@study_data$EXP_START_DATE %--% .Object@study_data$OBS_END_DATE
+
+    return(.Object)
+})
+
+calc_obs_end_date <- function(.Object) {
+    if(.Object@study_type == "forward") {
+        obs_end_date <- .Object@study_data$WASH_END_DATE %m+% lubridate::years(.Object@obs_len)
+    } else if(.Object@study_type == "backward") {
+        obs_end_date <- .Object@obs_end_date
+    }
+    return(obs_end_date)
+}
+
+calc_wash_end_date <- function(.Object) {
+    if(.Object@study_type == "forward") {
+        wash_end_date <- .Object@study_data$EXP_END_DATE %m+% lubridate::years(.Object@wash_len)
+    } else if(.Object@study_type == "backward") {
+        wash_end_date <- .Object@obs_end_date %m-% lubridate::years(.Object@obs_len)
+    }
+    return(wash_end_date)
+}
+
+calc_exp_end_date <- function(.Object) {
+    if(.Object@study_type == "forward") {
+        exp_end_date <- .Object@study_data$EXP_START_DATE %m+% lubridate::years(.Object@exp_len)
+    } else if(.Object@study_type == "backward") {
+        exp_end_date <- .Object@obs_end_date %m-% lubridate::years(.Object@obs_len + .Object@wash_len)
+    }
+    return(exp_end_date)
+}
+
+calc_exp_start_date <- function(.Object) {
+    if(.Object@study_type == "forward") {
+        exp_start_date <- .Object@study_data$DATE_OF_BIRTH %m+% lubridate::years(.Object@exp_age)
+    } else if(.Object@study_type == "backward") {
+        if(.Object@exp_age == 0) {
+            exp_start_date <- .Object@study_data$DATE_OF_BIRTH
+        } else {
+            exp_start_date <- .Object@obs_end_date %m-% lubridate::years(.Object@obs_len + .Object@wash_len + .Object@exp_len) 
+        }
+    }
+    return(exp_start_date)
+}
 
 setValidity("study", function(object) {
     msg <- ""
