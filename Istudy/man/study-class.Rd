@@ -23,11 +23,13 @@ different for each individual depending on their birth date.
 This setup can be created, using the function
 \code{\link{get_backward_study}}.}
 
-\item{\code{endpt}}{A character. The column name of the current endpoint of interest.}
+\item{\code{endpt}}{A character. The column name of the current endpoint of
+interest.}
 
-\item{\code{exp_age}}{An integer. Age at which exposure period starts (in years).}
+\item{\code{exp_age}}{An integer. Age at which exposure period starts
+(in years).}
 
-\item{\code{EXP_END}}{An integer. Length of the exposure period (in years).}
+\item{\code{exp_len}}{An integer. Length of the exposure period (in years).}
 
 \item{\code{exp_ids}}{A character (vector). The IDs for the exposure lengths,
 if they differ between individuals.}

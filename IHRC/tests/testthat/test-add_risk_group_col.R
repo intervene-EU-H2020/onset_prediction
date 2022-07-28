@@ -7,13 +7,15 @@ test_that("add_risk_group_col works", {
     pheno_score_data <- join_dfs(pheno_data, cci_data)
 
     study <- methods::new("study",
+                          study_data=pheno_data,
                           study_type="forward",
-                          endpt="J10_ASTHMA")
+                          endpt="J10_ASTHMA",
+                          wash_len=2,
+                          obs_len=8)
     surv_ana <- methods::new("surv_ana",
-                             pheno_data=pheno_data,
+                             study=study,
                              elig_score_data=icd_data,
-                             score_type="CCI",
-                             study=study)
+                             score_type="CCI")
     pheno_score_data <- add_risk_group_col(pheno_score_data, surv_ana)
     expect_res <- factor(c("<=1", "<=1", ">1", ">1", ">1"),
                          levels=c("<=1", ">1"))

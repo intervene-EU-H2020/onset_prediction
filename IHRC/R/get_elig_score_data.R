@@ -23,10 +23,10 @@
 #' 
 #' @author Kira E. Detrois
 get_elig_score_data  <- function(surv_ana) {
-    if(Istudy::get_n_cases(surv_ana@elig_indv, surv_ana@study@endpt) > surv_ana@min_indvs &
-        Istudy::get_n_cntrls(surv_ana@elig_indv, surv_ana@study@endpt) > surv_ana@min_indvs) {
+    if(Istudy::get_n_cases(surv_ana@study@study_data, surv_ana@study@endpt) > surv_ana@min_indvs &
+        Istudy::get_n_cntrls(surv_ana@study@study_data, surv_ana@study@endpt) > surv_ana@min_indvs) {
         curnt_score_data <- get_curnt_score_data(surv_ana)
-        pheno_score_data <- join_dfs(pheno_data=surv_ana@elig_indv, 
+        pheno_score_data <- join_dfs(pheno_data=surv_ana@study@study_data, 
                                      score_data=curnt_score_data,
                                      score_type=surv_ana@score_type,
                                      endpt=surv_ana@study@endpt)

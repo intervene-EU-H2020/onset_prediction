@@ -5,7 +5,7 @@
 \title{Creates an S4 study object}
 \usage{
 create_endpt_study_obj(
-  pheno_data,
+  study_data,
   study_type = "forward",
   endpt = "J10_ASTHMA",
   exp_age = NULL,
@@ -18,13 +18,6 @@ create_endpt_study_obj(
 )
 }
 \arguments{
-\item{pheno_data}{A data.frame with at least the columns:
-\code{ID}, the columns specified in \code{covs} and
-i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_AGE_DAYS} where
-the columns are the study endpoint and date, which
-will differ depending on the chosen \code{endpts}.
-The phenotypic data on the individuals.}
-
 \item{study_type}{A character. Can be either \code{forward} or \code{backward}.
 \code{forward} considers individuals of a certain age
 and a set exposure, washout, and observation periods

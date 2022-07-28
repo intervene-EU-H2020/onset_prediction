@@ -9,8 +9,8 @@ get_study_cci_scores(elig_indv, icd_data, study)
 \arguments{
 \item{elig_indv}{A data.frame. The individuals which were eligble under
 the current study setup. Needs to at least
-contain the column defined in \code{ID}, and
-\code{EXP_LEN} or \code{EXP_END}.}
+contain the column defined in \code{ID}, \code{DATE_OF_BIRTH},
+and \code{EXP_END_PERIOD}.}
 
 \item{icd_data}{A data.frame with at least columns \code{ID}, \code{Event_age},
 and \code{PRIMARY_ICD}.}

@@ -11,9 +11,11 @@
 #'              different for each individual depending on their birth date. 
 #'              This setup can be created, using the function 
 #'              \code{\link{get_backward_study}}.
-#' @slot endpt A character. The column name of the current endpoint of interest. 
-#' @slot exp_age An integer. Age at which exposure period starts (in years).
-#' @slot EXP_END An integer. Length of the exposure period (in years).
+#' @slot endpt A character. The column name of the current endpoint of 
+#'             interest. 
+#' @slot exp_age An integer. Age at which exposure period starts 
+#'              (in years).
+#' @slot exp_len An integer. Length of the exposure period (in years).
 #' @slot exp_ids A character (vector). The IDs for the exposure lengths,
 #'                   if they differ between individuals.
 #' @slot wash_len An integer. Length of the washout period (in years).
@@ -25,6 +27,7 @@
 #'                                   downsampling is performed.
 #' @slot ancs A character (vector). The ancestries to consider.
 #' @importFrom methods new
+#' @importFrom lubridate %--%
 #' @export
 #' 
 #' @author Kira E. Detrois
@@ -66,60 +69,13 @@ setMethod("initialize", "study", function(.Object, ...) {
                                         .Object@endpt,  
                                         paste0(.Object@endpt, "_DATE"),
                                         dplyr::starts_with("PC"))
-    .Object@study_data$YEAR_OF_BIRTH <- lubridate::year(.Object@study_data$DATE_OF_BIRTH)
-    .Object@study_data$EXP_START_DATE <- calc_exp_start_date(.Object)
-    .Object@study_data$EXP_END_DATE <- calc_exp_end_date(.Object)
-    .Object@study_data$WASH_END_DATE <- calc_wash_end_date(.Object)
-    .Object@study_data$OBS_END_DATE <- calc_obs_end_date(.Object)
-    .Object@study_data$ENDPT_FREE_PERIOD <- .Object@study_data$DATE_OF_BIRTH %--% .Object@study_data$WASH_END_DATE
-    .Object@study_data$STUDY_TIME <- .Object@study_data$EXP_START_DATE %--% .Object@study_data$OBS_END_DATE
+    .Object <- set_study_data_dates(.Object)
 
     return(.Object)
 })
 
-calc_obs_end_date <- function(.Object) {
-    if(.Object@study_type == "forward") {
-        obs_end_date <- .Object@study_data$WASH_END_DATE %m+% lubridate::years(.Object@obs_len)
-    } else if(.Object@study_type == "backward") {
-        obs_end_date <- .Object@obs_end_date
-    }
-    return(obs_end_date)
-}
-
-calc_wash_end_date <- function(.Object) {
-    if(.Object@study_type == "forward") {
-        wash_end_date <- .Object@study_data$EXP_END_DATE %m+% lubridate::years(.Object@wash_len)
-    } else if(.Object@study_type == "backward") {
-        wash_end_date <- .Object@obs_end_date %m-% lubridate::years(.Object@obs_len)
-    }
-    return(wash_end_date)
-}
-
-calc_exp_end_date <- function(.Object) {
-    if(.Object@study_type == "forward") {
-        exp_end_date <- .Object@study_data$EXP_START_DATE %m+% lubridate::years(.Object@exp_len)
-    } else if(.Object@study_type == "backward") {
-        exp_end_date <- .Object@obs_end_date %m-% lubridate::years(.Object@obs_len + .Object@wash_len)
-    }
-    return(exp_end_date)
-}
-
-calc_exp_start_date <- function(.Object) {
-    if(.Object@study_type == "forward") {
-        exp_start_date <- .Object@study_data$DATE_OF_BIRTH %m+% lubridate::years(.Object@exp_age)
-    } else if(.Object@study_type == "backward") {
-        if(.Object@exp_age == 0) {
-            exp_start_date <- .Object@study_data$DATE_OF_BIRTH
-        } else {
-            exp_start_date <- .Object@obs_end_date %m-% lubridate::years(.Object@obs_len + .Object@wash_len + .Object@exp_len) 
-        }
-    }
-    return(exp_start_date)
-}
-
 setValidity("study", function(object) {
     msg <- ""
-    msg <- test_integer_correct(msg, object@exp_age, "exp_age", TRUE)
     msg <- test_integer_correct(msg, object@wash_len, "wash_len", TRUE)
     msg <- test_integer_correct(msg, object@obs_len, "obs_len", TRUE)
     msg <- test_integer_correct(msg, object@downsample_fctr, "downsample_fctr")

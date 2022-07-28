@@ -10,7 +10,7 @@ write_res_file(elig_indv, study, write_res, res_dir)
 \item{elig_indv}{A tibble with the information for the eligible
 individuals that should be written to the file.}
 
-\item{study}{An S4 class representing the study setup.}
+\item{study}{An S4 study object. The current study setup.}
 
 \item{write_res}{A boolean. Defines whether to write the results to
 a file or not. Default is FALSE.}

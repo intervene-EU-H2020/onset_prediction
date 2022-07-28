@@ -2,8 +2,8 @@
 #' 
 #' @param elig_indv A data.frame. The individuals which were eligble under
 #'                        the current study setup. Needs to at least 
-#'                        contain the column defined in `ID`, and 
-#'                        `EXP_LEN` or `EXP_END`.
+#'                        contain the column defined in `ID`, `DATE_OF_BIRTH`,
+#'                        and `EXP_END_PERIOD`.
 #' @param icd_data A data.frame with at least columns `ID`, `Event_age`, 
 #'                  and `PRIMARY_ICD`.
 #' 
@@ -13,13 +13,16 @@
 get_study_cci_scores <- function(elig_indv,
                                  icd_data,
                                  study) {
-    if("EXP_LEN" %in% colnames(elig_indv)) {
-        elig_indv <- dplyr::rename(elig_indv, 
-                                   EXP_END=EXP_LEN)
-    } 
     cci_data <- ICCI::calc_cci(icd_data,
                                exp_start=study@exp_age,
-                               exp_end=dplyr::select(elig_indv, ID, EXP_END)) %>%
+                               exp_end=calc_exp_end_age(elig_indv)) %>%
                     dplyr::rename(CCI_SCORE=CCI_score)
     return(cci_data)
+}
+
+#' @importFrom lubridate %--%
+calc_exp_end_age <- function(elig_indv) {
+    elig_indv <- dplyr::mutate(elig_indv, 
+                               EXP_END = lubridate::time_length(DATE_OF_BIRTH %--% EXP_END_DATE, "years"))
+    return(dplyr::select(elig_indv, ID, EXP_END))
 }

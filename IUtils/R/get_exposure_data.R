@@ -43,15 +43,23 @@ get_exposure_data <- function(long_data,
             exp_start[is.na(exp_start)] = 0
         }
         if(!is.data.frame(exp_end)) {
-            long_data <- dplyr::filter(long_data, 
-                                       Event_age >= exp_start & 
-                                        Event_age <= exp_end)
+            long_data <- tibble::add_column(long_data, 
+                                            EXP_END=exp_end) 
         } else {
-            long_exp_data <- dplyr::inner_join(exp_end, long_data, by="ID")
-            long_data <- dplyr::filter(long_exp_data, 
-                                       Event_age >= exp_start & 
-                                            Event_age <= EXP_END)
+            long_data <- dplyr::inner_join(exp_end, long_data, by="ID")
         }
-    } 
+        if(!is.data.frame(exp_start)) {
+            long_data <- tibble::add_column(long_data, 
+                                            EXP_START=exp_start) 
+        } else {
+            long_data <- dplyr::inner_join(exp_start, long_data, by="ID")
+        }
+
+        long_data <- dplyr::filter(long_data, 
+                                    Event_age >= EXP_START & 
+                                    Event_age <= EXP_END) %>%
+                     dplyr::select(-EXP_END, -EXP_START)
+        
+    }
     return(long_data)               
 }

@@ -1,50 +1,18 @@
-
-#' Creates a list with relevant information of the selected data
-#' 
-#' Gets only the columns relevant for the current endpoint.
-#' Creates a list with the data, as well as the selected
-#' study period intervals.
-#' 
-#' @inheritParams get_study_elig_indv
-#' @inheritParams adj_case_cntrl_status
-#' 
-#' @return The results data.frame to return
-#' 
-#' @author Kira E. Detrois
-create_return_tib <- function(pheno_data,
-                              endpt) {
-    check_cols_exist(pheno_data, endpt, "create_return_tib")
-
-    elig_data <- dplyr::select(pheno_data, 
-                               ID, 
-                               SEX, 
-                               DATE_OF_BIRTH, 
-                               YEAR_OF_BIRTH,
-                               ANCESTRY, 
-                               # Otherwise dplyr will throw error. 
-                               # test_endpt_input_correct already checks that
-                               # this is only a single string and not
-                               # a vector
-                               dplyr::all_of(endpt), 
-                               paste0(endpt, "_AGE"),
-                               paste0(endpt, "_DATE"),
-                               dplyr::starts_with("PC"),
-                               EXP_END)
-}
-
 #' Creates a file name for the current study setup
 #' 
-#' @inheritParams add_study_interval_cols
-#' @inheritParams get_backward_study
+#' @param study An S4 study object. The current study setup.
 #' 
 #' @export 
 #' 
 #' @author Kira E. Detrois
 get_study_file_name <- function(study) {
     if(study@study_type == "forward") {
-        paste0(study@endpt, "_a", study@exp_age, "_e", study@EXP_END, "_w", study@wash_len, "_o", study@obs_len)
+        file_name <- paste0(study@endpt, "_a", study@exp_age, "_e", study@exp_len, "_w", study@wash_len, "_o", study@obs_len)
     } else {
-        paste0(study@endpt, "_", study@obs_end, "_o", study@obs_len, "_w", study@wash_len)
+        file_name <- paste0(study@endpt, "_", study@obs_end_date, "_o", study@obs_len, "_w", study@wash_len)
+        if(!is.na(study@exp_len)) {
+            file_name <- paste0(file_name, "_e", study@exp_len)
+        }
     }
 }   
 
@@ -107,7 +75,7 @@ log_msg_string <- function(elig_indv,
                "No of cases: ", n_cases, "\n",
                "No of ctrls: ", n_cntrls, "\n",   
                "Age at exposure start:        ", study@exp_age, "\n",
-               "Length of exposure period:    ", study@EXP_END, "\n", 
+               "Length of exposure period:    ", study@exp_len, "\n", 
                "Length of washout period:     ", study@wash_len, "\n",
                "Length of observation period: ", study@obs_len, "\n")
     } else {
@@ -116,7 +84,7 @@ log_msg_string <- function(elig_indv,
                "No of ctrls: ", n_cntrls, "\n",   
                "Length of washout period:     ", study@wash_len, "\n",
                "Length of observation period: ", study@obs_len, "\n",
-               "End of observation:        ", study@obs_end, "\n")      
+               "End of observation:        ", study@obs_end_date, "\n")      
     }
 }
 

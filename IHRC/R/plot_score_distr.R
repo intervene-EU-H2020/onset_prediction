@@ -16,7 +16,7 @@ plot_score_distr <- function(score_data,
             plot_descr <- paste0(surv_ana@study@exp_age, " to ", surv_ana@study@exp_age+surv_ana@study@exp_len)
         }
         else {
-            plot_descr <- paste0("until ", surv_ana@study@obs_end)
+            plot_descr <- paste0("until ", surv_ana@study@obs_end_date)
         }
         plt <- ggplot(score_data, aes(x=get(paste0(surv_ana@score_type, "_SCORE")))) + 
                     geom_histogram(fill="#405e46", binwidth = 1.0)  +

@@ -14,15 +14,21 @@ test_that("get_backward_study from birth works", {
   expect_equal(elig_indv$I9_VTE_DATE, date_expect)
 })
 
-# test_that("get_backward_study set EXP_END works", {
-#   set.seed(21923)
-#   test_data <- create_test_df(10)
-#   study <- get_backward_study(test_data, EXP_END=20, "I9_VTE")
-#   elig_indv <- get_study_elig_indv(test_data,
-#                                    study)
-#   date_expect <- c(as.Date("2019/11/24"), as.Date("2019/12/21"), as.Date("2019/12/21"), as.Date("2019/12/21"), as.Date("2019/12/21"), as.Date("2014/06/13"))
-#   expect_equal(elig_indv$I9_VTE_DATE, date_expect)
-# })
+test_that("get_backward_study set exp len works", {
+  set.seed(21923)
+  test_data <- create_test_df(10)
+  study <- methods::new("study",
+                        study_type="backward",
+                        study_data=test_data,
+                        endpt="I9_VTE",
+                        exp_len=5,
+                        wash_len=2,
+                        obs_len=8,
+                        obs_end_date=as.Date("2019-12-21"))
+  elig_indv <- get_study_elig_indv(study)
+  date_expect <- rep(as.Date("2004/12/21"), 6)
+  expect_equal(elig_indv$EXP_START_DATE, date_expect)
+})
 
 test_that("filter_too_old_and_young works", {
   set.seed(21923)

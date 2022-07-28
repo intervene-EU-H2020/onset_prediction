@@ -7,7 +7,7 @@
 get_study_file_name(study)
 }
 \arguments{
-\item{study}{An S4 class representing the study setup.}
+\item{study}{An S4 study object. The current study setup.}
 }
 \description{
 Creates a file name for the current study setup

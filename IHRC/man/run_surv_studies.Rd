@@ -11,7 +11,7 @@ run_surv_studies(
   study_type = "forward",
   endpts = c("J10_ASTHMA"),
   exp_ages = NULL,
-  exp_len = 10,
+  exp_len = NULL,
   wash_len = 2,
   obs_len = 8,
   obs_end = NULL,

@@ -64,10 +64,10 @@ run_surv_studies <- function(pheno_data,
                              study_type="forward",
                              endpts=c("J10_ASTHMA"),
                              exp_ages=NULL,
-                             exp_len=10,
+                             exp_len=NULL,
                              wash_len=2,
                              obs_len=8,
-                             obs_end=NULL,
+                             obs_end_date=NULL,
                              downsample_fctr=NA_integer_,
                              ancs=NA_character_,
                              max_age=90,
@@ -76,30 +76,29 @@ run_surv_studies <- function(pheno_data,
                              min_indvs=5,
                              write_res=FALSE,
                              res_dir=NULL) {
-    if(is.null(exp_ages)) {
-        exp_ages = 0
+    if(is.null(exp_ages) & is.null(exp_len)) {
+        exp_ages <- 0
     }
     all_age_hrs_tib <- create_empty_endpt_hrs_tib() 
     all_age_cidxs_tib <- create_empty_cidx_tib()
     for(endpt in endpts) {
         for(exp_age in exp_ages) {
-            study <- create_endpt_study_obj(pheno_data=pheno_data,
+            study <- create_endpt_study_obj(study_data=pheno_data,
                                             study_type=study_type,
                                             endpt=endpt, 
                                             exp_age=exp_age,
                                             exp_len=exp_len,
                                             wash_len=wash_len,
                                             obs_len=obs_len,
-                                            obs_end=obs_end,
+                                            obs_end_date=obs_end_date,
                                             downsample_fctr=downsample_fctr,
                                             ancs=ancs)
             surv_ana <- methods::new("surv_ana",
-                                     pheno_data=pheno_data,
+                                     study=study,
                                      elig_score_data=score_data,
                                      score_type=score_type,
                                      min_indvs=min_indvs,
                                      max_age=max_age,
-                                     study=study,
                                      covs=covs,
                                      bin_cut=bin_cut,
                                      write_res=write_res,

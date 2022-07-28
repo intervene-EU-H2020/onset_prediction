@@ -46,7 +46,7 @@ plot_endpt_hrs <- function(coxph_hr_res,
                             geom_vline(xintercept = 1.0) +
                             # Legends and labels
                             labs(title=paste0(get_comp_descr(surv_ana, surv_type="HR")),
-                                 caption=paste0("Obs: ", surv_ana@study@obs_len, " Years until ", surv_ana@study@obs_end, " Wash: ", surv_ana@study@wash_len, " Years", get_surv_descr(surv_ana, surv_type="HR")),
+                                 caption=paste0("Obs: ", surv_ana@study@obs_len, " Years until ", surv_ana@study@obs_end_date, " Wash: ", surv_ana@study@wash_len, " Years", get_surv_descr(surv_ana, surv_type="HR")),
                                  x="Hazard Ratio (95%)",
                                  y="") +
                             # Theme

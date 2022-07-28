@@ -10,7 +10,7 @@ log_msg_string(elig_indv, study)
 \item{elig_indv}{A tibble with the information for the eligible
 individuals that should be written to the file.}
 
-\item{study}{An S4 class representing the study setup.}
+\item{study}{An S4 study object. The current study setup.}
 }
 \value{
 The log message character string

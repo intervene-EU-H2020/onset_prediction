@@ -23,13 +23,6 @@
 #' 
 #' @importFrom lubridate %within%
 #' @export
-#' 
-#' @examples 
-#' test_data <- Istudy::create_test_df(30)
-#' study <- methods::new("study", endpt="J10_ASTHMA", exp_age=30, 
-#'                       EXP_END=10, wash_len=2, obs_len=8, ancs="EUR")
-#' test_data <- add_study_interval_cols(test_data, study)
-#' filter_early_endpt(test_data, "J10_ASTHMA")
 #'  
 #' @author Kira E. Detrois
 filter_early_endpt <- function(pheno_data, 
