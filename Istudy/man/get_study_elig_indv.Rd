@@ -7,26 +7,7 @@
 get_study_elig_indv(study)
 }
 \arguments{
-\item{study}{An S4 class representing the study setup.}
-
-\item{study@study_data}{A data.frame with at least the columns:
-\code{ID}, \code{SEX}, \code{DATE_OF_BIRTH}, \code{ANCESTRY},
-\code{START_OF_FOLLOWUP}, \code{END_OF_FOLLOWUP},
-\code{DATE_OF_BIRTH}, and i.e. \code{J10_ASTHMA}, and
-\code{J10_ASTHMA_DATE} where the columns are the study
-endpoint and date, which will differ depending on
-the input variable \code{endpt}.}
-
-\item{write_res}{A boolean. Defines whether to write the results to
-a file or not. Default is FALSE.}
-
-\item{res_dir}{A character. The directory to write the results to.}
-}
-\value{
-A tibble with the information for the eligible individuals
-with columns: \code{ID}, \code{SEX}, \code{DATE_OF_BIRTH},
-\code{START_OF_FOLLOWUP}, \code{END_OF_FOLLOWUP}, \code{ANCESTRY},
-and i.e. \code{J10_ASTHMA}, and \verb{J10_ASTHMA_DATE. where the last two columns are the study endpoint and date,  which will differ depending on the input variable }endpt`.
+\item{study}{An S4 object with the current study setup.}
 }
 \description{
 There are two types of study setup:

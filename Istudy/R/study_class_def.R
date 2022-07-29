@@ -65,6 +65,7 @@ study <- methods::setClass("study",
 setMethod("initialize", "study", function(.Object, ...) {
     .Object <- callNextMethod()
     check_cols_exist(.Object@study_data, .Object@endpt, "initialize")
+    .Object@res_dir <- paste0(.Object@res_dir, "logs/")
     .Object@study_data <- dplyr::select(.Object@study_data,
                                         ID, 
                                         SEX, 

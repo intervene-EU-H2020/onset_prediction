@@ -27,8 +27,8 @@ get_study_file_name <- function(study) {
 #' 
 #' @author Kira E. Detrois
 write_res_files <- function(study) {
-    write_res_file(study)
-    write_log_file(study)
+    write_res_file(study=study)
+    write_log_file(study=study)
 }
 
 #' Writes results to a tab-delim file
@@ -39,7 +39,7 @@ write_res_files <- function(study) {
 write_res_file <- function(study) {
     if(check_res_dir(study@write_res, study@res_dir) & 
         get_n_cases(study@study_data, study@endpt) > 0) {
-            elig_res_dir <- paste0(res_dir, "elig_indv/")
+            elig_res_dir <- paste0(study@res_dir, "elig_indv/")
             if(!dir.exists(elig_res_dir)) {
                 dir.create(elig_res_dir)
             }
@@ -91,7 +91,7 @@ write_log_file <- function(study) {
         if(!dir.exists(log_res_dir)) {
             dir.create(log_res_dir)
         }
-        readr::write_file(log_msg_string(study@study_data, study), 
+        readr::write_file(log_msg_string(study), 
                           paste0(log_res_dir, 
                                  get_study_file_name(study), 
                                  "_log.txt"))
@@ -109,10 +109,10 @@ write_log_file <- function(study) {
 #' @export 
 #' 
 #' @author Kira E. Detrois
-check_res_dir <- function(write_res,
-                          res_dir) { 
+check_res_dir <- function(write_res=NULL,
+                          res_dir=NULL) { 
    if(write_res) {
-        if(is.null(res_dir)) {
+        if(is.na(res_dir)) {
             message("Variable write_res was set to TRUE but res_dir was not provided. Cannot write results to file.")
             return(FALSE)
         } else {

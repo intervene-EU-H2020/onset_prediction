@@ -34,7 +34,7 @@ filter_too_old_and_young <- function(study_data,
     # Too old
     study_data <- dplyr::filter(study_data, lubridate::time_length(DATE_OF_BIRTH %--% OBS_END_DATE, "years") < max_age)
     if(filter_1998) {
-        study_data <- dplyr::filter(study_data, lubridate::year(EXP_START_DATE) < 1998)
+        study_data <- dplyr::filter(study_data, lubridate::year(EXP_START_DATE) >= 1998)
     }
 
     return(study_data)

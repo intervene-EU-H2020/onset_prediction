@@ -31,25 +31,7 @@
 #'        observation has ended are considered controls in this setup. 
 #' }
 #' 
-#' @param study@study_data A data.frame with at least the columns: 
-#'                   `ID`, `SEX`, `DATE_OF_BIRTH`, `ANCESTRY`, 
-#'                   `START_OF_FOLLOWUP`, `END_OF_FOLLOWUP`, 
-#'                   `DATE_OF_BIRTH`, and i.e. `J10_ASTHMA`, and
-#'                   `J10_ASTHMA_DATE` where the columns are the study 
-#'                   endpoint and date, which will differ depending on 
-#'                   the input variable `endpt`.
-#' @inheritParams filter_too_old_and_young
-#' @param study An S4 class representing the study setup.
-#' @param write_res A boolean. Defines whether to write the results to
-#'                  a file or not. Default is FALSE.
-#' @param res_dir A character. The directory to write the results to.
-#' 
-#' @return A tibble with the information for the eligible individuals 
-#'         with columns: `ID`, `SEX`, `DATE_OF_BIRTH`, 
-#'         `START_OF_FOLLOWUP`, `END_OF_FOLLOWUP`, `ANCESTRY`, 
-#'         and i.e. `J10_ASTHMA`, and `J10_ASTHMA_DATE.
-#'         where the last two columns are the study endpoint and date, 
-#'         which will differ depending on the input variable `endpt`.
+#' @param study An S4 object with the current study setup.
 #' 
 #' @export
 #' 
@@ -79,7 +61,7 @@ get_study_elig_indv <- function(study) {
                                 endpt=study@endpt)
     study@study_data <- filter_ancestry(study@study_data, 
                                         study@ancs)
-    write_res_files(study)
+    write_res_files(study=study)
 
     return(study@study_data)
 }

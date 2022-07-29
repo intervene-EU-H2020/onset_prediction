@@ -4,7 +4,7 @@
 \alias{check_res_dir}
 \title{Checks whether to write a results file and if the directory exists}
 \usage{
-check_res_dir(write_res, res_dir)
+check_res_dir(write_res = NULL, res_dir = NULL)
 }
 \value{
 A boolean. Whether to write the results to the \code{res_dir}.
