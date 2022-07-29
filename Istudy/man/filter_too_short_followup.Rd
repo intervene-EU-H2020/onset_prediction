@@ -4,10 +4,10 @@
 \alias{filter_too_short_followup}
 \title{Filters out too short follow-up interval}
 \usage{
-filter_too_short_followup(pheno_data)
+filter_too_short_followup(study_data)
 }
 \arguments{
-\item{pheno_data}{A data.frame with at least the columns:
+\item{study_data}{A data.frame with at least the columns:
 \code{STUDY_TIME}, and \code{FOLLOWUP}.}
 }
 \value{

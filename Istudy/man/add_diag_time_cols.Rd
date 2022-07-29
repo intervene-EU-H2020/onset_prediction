@@ -4,16 +4,14 @@
 \alias{add_diag_time_cols}
 \title{Adds columns for the date and exact age in years of onset}
 \usage{
-add_diag_time_cols(pheno_data, study)
+add_diag_time_cols(study_data, endpt)
 }
 \arguments{
-\item{pheno_data}{A data.frame with at least columns \code{DATE_OF_BIRTH}
+\item{study_data}{A data.frame with at least columns \code{DATE_OF_BIRTH}
 and i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_DATE}
 where the columns are the study endpoint and
 date, which will differ depending on the input
 variable \code{endpt}.}
-
-\item{study}{An S4 class representing the study setup.}
 }
 \value{
 The data.frame. For example for endpoint \code{J10_ASTHMA},

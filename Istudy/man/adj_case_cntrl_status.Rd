@@ -4,10 +4,10 @@
 \alias{adj_case_cntrl_status}
 \title{Adjusts the case status of individuals with late onset endpoints}
 \usage{
-adj_case_cntrl_status(pheno_data, endpt)
+adj_case_cntrl_status(study_data, endpt)
 }
 \arguments{
-\item{pheno_data}{A data.frame with at least columns \code{STUDY_TIME}
+\item{study_data}{A data.frame with at least columns \code{STUDY_TIME}
 and i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_DATE}
 where the columns are the study endpoint and
 date, which will differ depending on the input

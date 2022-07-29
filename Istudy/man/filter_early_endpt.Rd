@@ -4,10 +4,10 @@
 \alias{filter_early_endpt}
 \title{Filters out individuals with early endpoints}
 \usage{
-filter_early_endpt(pheno_data, endpt)
+filter_early_endpt(study_data, endpt)
 }
 \arguments{
-\item{pheno_data}{A data.frame with at least columns \code{ENDPT_FREE}
+\item{study_data}{A data.frame with at least columns \code{ENDPT_FREE}
 and i.e. \code{J10_ASTHMA_DATE} where the columns are the study
 endpoint and date, which will differ depending on the input
 variable \code{endpt}.}

@@ -6,12 +6,6 @@
 \usage{
 check_res_dir(write_res, res_dir)
 }
-\arguments{
-\item{write_res}{A boolean. Defines whether to write the results to
-a file or not. Default is FALSE.}
-
-\item{res_dir}{A character. The directory to write the results to.}
-}
 \value{
 A boolean. Whether to write the results to the \code{res_dir}.
 }

@@ -4,10 +4,10 @@
 \alias{get_followup_time}
 \title{Gets the follow-up period}
 \usage{
-get_followup_time(pheno_data)
+get_followup_time(study_data)
 }
 \arguments{
-\item{pheno_data}{A data.frame with at least the columns:
+\item{study_data}{A data.frame with at least the columns:
 \code{END_OF_FOLLOWUP} and \code{START_OF_FOLLOWUP}.}
 }
 \description{

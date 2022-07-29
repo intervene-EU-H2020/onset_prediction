@@ -4,10 +4,18 @@
 \alias{set_study_data_dates}
 \title{Sets the important dates for the study individuals}
 \usage{
-set_study_data_dates(.Object)
+set_study_data_dates(
+  study_data,
+  study_type = "forward",
+  exp_age = NA_integer_,
+  exp_len = NA_integer_,
+  wash_len = 2,
+  obs_len = 8,
+  obs_end_date = as.Date("2021/01/01")
+)
 }
 \arguments{
-\item{.Object}{The S4 study object.}
+\item{study}{The S4 study object.}
 }
 \value{
 The S4 study object with the \code{study_data} tibble updated

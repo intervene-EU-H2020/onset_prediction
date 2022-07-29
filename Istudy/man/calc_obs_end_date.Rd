@@ -5,10 +5,7 @@
 \title{Calcualtes the start date of the observation period for each
 individual}
 \usage{
-calc_obs_end_date(.Object)
-}
-\arguments{
-\item{.Object}{The S4 study object.}
+calc_obs_end_date(study_data, study_type, obs_len, obs_end_date)
 }
 \value{
 A vector of Dates. The start date of the observation period

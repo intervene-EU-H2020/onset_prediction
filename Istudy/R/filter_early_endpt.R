@@ -11,7 +11,7 @@
 #' function \code{\link{calc_endpt_free_time}} directly or 
 #' \code{\link{add_study_interval_cols}}.
 #' 
-#' @param pheno_data A data.frame with at least columns `ENDPT_FREE`
+#' @param study_data A data.frame with at least columns `ENDPT_FREE`
 #'                   and i.e. `J10_ASTHMA_DATE` where the columns are the study 
 #'                   endpoint and date, which will differ depending on the input 
 #'                   variable `endpt`.
@@ -25,14 +25,14 @@
 #' @export
 #'  
 #' @author Kira E. Detrois
-filter_early_endpt <- function(pheno_data, 
+filter_early_endpt <- function(study_data, 
                                endpt) {    
     endpt_date_str <- paste0(endpt, "_DATE")
-    check_cols_exist(pheno_data,
+    check_cols_exist(study_data,
                      c(endpt_date_str, "ENDPT_FREE_PERIOD"),
                      "filter_early_endpt")
 
-    dplyr::filter(pheno_data, 
+    dplyr::filter(study_data, 
                   !(get(endpt_date_str) %within% ENDPT_FREE_PERIOD) | 
                   is.na(get(endpt_date_str))) # If no endpoint date then NA 
 }

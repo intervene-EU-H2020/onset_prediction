@@ -12,26 +12,30 @@
 #' Additionally, individuals are filtered out based on some maximum exposure 
 #' length which can be set using the input variable `max_age`.
 #' 
-#' @param pheno_data A data.frame with at least column `EXP_END`.
+#' @param study_data A data.frame with at least column `EXP_END`.
 #' @param max_age A numeric. The maximum length of the exposure period.
 #' 
 #' @export 
 #' 
 #' @author Kira E. Detrois
-filter_too_old_and_young <- function(pheno_data,
+filter_too_old_and_young <- function(study_data,
                                      obs_end_date,
                                      study_type,
-                                     max_age=200) {
-    check_cols_exist(pheno_data, 
+                                     max_age=200,
+                                     filter_1998=FALSE) {
+    check_cols_exist(study_data, 
                      c("DATE_OF_BIRTH", "EXP_START_DATE", "OBS_END_DATE"),
                      "filter_too_old_and_young")
     # Too young
     if(study_type == "backward") {
-        pheno_data <- dplyr::filter(pheno_data, 
+        study_data <- dplyr::filter(study_data, 
                                     EXP_START_DATE <= obs_end_date)
     }
     # Too old
-    pheno_data <- dplyr::filter(pheno_data, lubridate::time_length(DATE_OF_BIRTH %--% OBS_END_DATE, "years") < max_age)
+    study_data <- dplyr::filter(study_data, lubridate::time_length(DATE_OF_BIRTH %--% OBS_END_DATE, "years") < max_age)
+    if(filter_1998) {
+        study_data <- dplyr::filter(study_data, lubridate::year(EXP_START_DATE) < 1998)
+    }
 
-    return(pheno_data)
+    return(study_data)
 }

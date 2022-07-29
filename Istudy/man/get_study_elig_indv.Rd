@@ -4,17 +4,10 @@
 \alias{get_study_elig_indv}
 \title{Gets the individuals which are eligble given the study setup}
 \usage{
-get_study_elig_indv(study, max_age = 200, write_res = FALSE, res_dir = NULL)
+get_study_elig_indv(study)
 }
 \arguments{
 \item{study}{An S4 class representing the study setup.}
-
-\item{max_age}{A numeric. The maximum length of the exposure period.}
-
-\item{write_res}{A boolean. Defines whether to write the results to
-a file or not. Default is FALSE.}
-
-\item{res_dir}{A character. The directory to write the results to.}
 
 \item{study@study_data}{A data.frame with at least the columns:
 \code{ID}, \code{SEX}, \code{DATE_OF_BIRTH}, \code{ANCESTRY},
@@ -23,6 +16,11 @@ a file or not. Default is FALSE.}
 \code{J10_ASTHMA_DATE} where the columns are the study
 endpoint and date, which will differ depending on
 the input variable \code{endpt}.}
+
+\item{write_res}{A boolean. Defines whether to write the results to
+a file or not. Default is FALSE.}
+
+\item{res_dir}{A character. The directory to write the results to.}
 }
 \value{
 A tibble with the information for the eligible individuals

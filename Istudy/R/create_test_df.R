@@ -22,7 +22,7 @@ create_test_df <- function(n_indv=10) {
     asthma_samples <- draw_cases(n_indv, 0.16, 0.33, sf_samples)
     vte_samples <- draw_cases(n_indv, 0.4, 0, sf_samples)
     cov_samples <- draw_cases(n_indv, 0.34, 0.12, sf_samples)
-    pheno_data <- tibble::tibble(
+    study_data <- tibble::tibble(
         ID=ids,
         SEX=sex_samples,
         DATE_OF_BIRTH=bd_samples,
@@ -44,21 +44,21 @@ create_test_df <- function(n_indv=10) {
         PC1=10
     )
 
-    pheno_data <- adjust_followup_time(pheno_data)
-    return(pheno_data)
+    study_data <- adjust_followup_time(study_data)
+    return(study_data)
 }
 
-adjust_followup_time <- function(pheno_data) {
-    date_cols = colnames(dplyr::select(pheno_data, 
+adjust_followup_time <- function(study_data) {
+    date_cols = colnames(dplyr::select(study_data, 
                                        dplyr::matches("(*.)_DATE$")))
-    followup_interval <- get_followup_time(pheno_data)
+    followup_interval <- get_followup_time(study_data)
     for(date_col in date_cols) {
-        not_nas = !is.na(pheno_data[[date_col]])
-        selector = !(pheno_data[[date_col]] %within% followup_interval)
+        not_nas = !is.na(study_data[[date_col]])
+        selector = !(study_data[[date_col]] %within% followup_interval)
         selector[is.na(selector)] = FALSE
-        pheno_data$END_OF_FOLLOWUP[selector] = NA
+        study_data$END_OF_FOLLOWUP[selector] = NA
     }
-    return(pheno_data)
+    return(study_data)
 }
 
 add_case_dates <- function(all_samples, start_dates) {
@@ -164,19 +164,19 @@ create_indv_ids <- function(n_indv) {
 #' from the fact that the followup has not yet ended and is not dues 
 #' some other reason.
 #' 
-#' @param pheno_data A data.frame with at least the columns:
+#' @param study_data A data.frame with at least the columns:
 #'                   `END_OF_FOLLOWUP` and `START_OF_FOLLOWUP`.
 #' 
 #' @importFrom lubridate %--%
 #' 
 #' @author Kira E. Detrois
-get_followup_time <- function(pheno_data) {
+get_followup_time <- function(study_data) {
     # Replacing NAs with current date
-    followup_complete = pheno_data$END_OF_FOLLOWUP
+    followup_complete = study_data$END_OF_FOLLOWUP
     followup_complete[is.na(followup_complete)] = lubridate::today()
 
     # Creating intervals
-    followup_time <- pheno_data$START_OF_FOLLOWUP %--% followup_complete
+    followup_time <- study_data$START_OF_FOLLOWUP %--% followup_complete
 
     return(followup_time)
 }
@@ -199,13 +199,13 @@ get_followup_time <- function(pheno_data) {
 #' \code{\link{calc_study_time}} and \code{\link{get_followup_time}}
 #' directly, or \code{\link{add_study_interval_cols}}.
 #' 
-#' @param pheno_data A data.frame with at least the columns: 
+#' @param study_data A data.frame with at least the columns: 
 #'                   `STUDY_TIME`, and `FOLLOWUP`.
 #'                   
 #' @return The filtered data.frame without the individuals where the
 #'         the follow-up period doesn't cover the study period. 
 #'
 #' @author Kira E. Detrois
-filter_too_short_followup <- function(pheno_data) {
-    dplyr::filter(pheno_data, STUDY_TIME %within% FOLLOWUP)
+filter_too_short_followup <- function(study_data) {
+    dplyr::filter(study_data, STUDY_TIME %within% FOLLOWUP)
 }

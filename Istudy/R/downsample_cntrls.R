@@ -12,21 +12,22 @@
 #' @export 
 #' 
 #' @author Kira E. Detrois
-downsample_cntrls <- function(pheno_data,
-                              study) {
-    if(!is.na(study@downsample_fctr)) {
-        n_cases <- get_n_cases(pheno_data, study@endpt)
-        n_cntrls <- study@downsample_fctr*n_cases 
+downsample_cntrls <- function(study_data,
+                              endpt,
+                              downsample_fctr) {
+    if(!is.na(downsample_fctr)) {
+        n_cases <- get_n_cases(study_data, endpt)
+        n_cntrls <- downsample_fctr*n_cases 
 
-        cntrl_idxs <- which(pheno_data[[study@endpt]] == 0)
-        case_idxs <- which(pheno_data[[study@endpt]] == 1)
+        cntrl_idxs <- which(study_data[[endpt]] == 0)
+        case_idxs <- which(study_data[[endpt]] == 1)
 
         set.seed(1923) # Making control selection reproducible
         if(length(cntrl_idxs) > n_cntrls) {
             cntrl_idxs_down <- sample(cntrl_idxs, size=n_cntrls, replace=FALSE)
             select_idxs <- sort(c(cntrl_idxs_down, case_idxs))
-            pheno_data <- pheno_data[select_idxs,]
+            study_data <- study_data[select_idxs,]
         }
     }
-    return(pheno_data)
+    return(study_data)
 }   

@@ -4,10 +4,10 @@
 \alias{filter_missing_endpt_data}
 \title{Filters out missing information on the endpoint}
 \usage{
-filter_missing_endpt_data(pheno_data, endpt)
+filter_missing_endpt_data(study_data, endpt)
 }
 \arguments{
-\item{pheno_data}{A data.frame with at least the columns:
+\item{study_data}{A data.frame with at least the columns:
 i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_DATE} where
 the columns are the study endpoint and date,
 which will differ depending on the input variable

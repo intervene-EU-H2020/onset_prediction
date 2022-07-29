@@ -25,17 +25,17 @@ calc_age_at_diag <- function(bds, diag_dates) {
 #' @export
 #' 
 #' @author Kira E. Detrois
-add_age_at_diag_col <- function(pheno_data,
+add_age_at_diag_col <- function(study_data,
                                 endpt) {
-    check_cols_exist(pheno_data, 
+    check_cols_exist(study_data, 
                      c("DATE_OF_BIRTH", paste0(endpt, "_DATE")),
                      "add_age_at_diag_col")
-    age_at_diag <- calc_age_at_diag(pheno_data$DATE_OF_BIRTH, 
-                                    pheno_data[[paste0(endpt, "_DATE")]])
-    pheno_data <- tibble::add_column(pheno_data, 
+    age_at_diag <- calc_age_at_diag(study_data$DATE_OF_BIRTH, 
+                                    study_data[[paste0(endpt, "_DATE")]])
+    study_data <- tibble::add_column(study_data, 
                                      AGE_AT_DIAG=age_at_diag)
 
-    return(pheno_data)
+    return(study_data)
 }
 
 #' Counts the number of cases in the data 
@@ -46,16 +46,16 @@ add_age_at_diag_col <- function(pheno_data,
 #' the study setup. This should be handled prior using functions 
 #' `add_study_interval_cols`, and `adj_case_cntrl_status`.
 #' 
-#' @param pheno_data A data.frame with at least the column defined in `endpt`.
+#' @param study_data A data.frame with at least the column defined in `endpt`.
 #' @inheritParams adj_case_cntrl_status
 #' 
 #' @export 
 #' 
 #' @author Kira E. Detrois
-get_n_cases <- function(pheno_data, 
+get_n_cases <- function(study_data, 
                         endpt) {
-    check_cols_exist(pheno_data, endpt, "get_n_cases")
-    sum(pheno_data[[endpt]], na.rm=TRUE)
+    check_cols_exist(study_data, endpt, "get_n_cases")
+    sum(study_data[[endpt]], na.rm=TRUE)
 }
 
 #' Counts the number of controls in the data 
@@ -71,9 +71,9 @@ get_n_cases <- function(pheno_data,
 #' @export 
 #' 
 #' @author Kira E. Detrois 
-get_n_cntrls <- function(pheno_data, 
-                        endpt) {
-    check_cols_exist(pheno_data, endpt, "get_n_cntrls")
-    sum(pheno_data[[endpt]] == 0, na.rm=TRUE)
+get_n_cntrls <- function(study_data, 
+                         endpt) {
+    check_cols_exist(study_data, endpt, "get_n_cntrls")
+    sum(study_data[[endpt]] == 0, na.rm=TRUE)
 }
 

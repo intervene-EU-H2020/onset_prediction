@@ -41,7 +41,11 @@ study <- methods::setClass("study",
                                       obs_len="numeric",
                                       obs_end_date="Date",
                                       downsample_fctr="numeric",
-                                      ancs="character"),
+                                      ancs="character",
+                                      max_age="numeric",
+                                      filter_1998="logical",
+                                      write_res="logical",
+                                      res_dir="character"),
                            prototype=list(study_type="forward",
                                           study_data=tibble::tibble(),
                                           endpt=NA_character_,
@@ -51,7 +55,11 @@ study <- methods::setClass("study",
                                           obs_len=NA_integer_,
                                           obs_end_date=as.Date("2021/01/01"),
                                           downsample_fctr=NA_real_,
-                                          ancs=NA_character_))
+                                          ancs=NA_character_,
+                                          max_age=200,
+                                          filter_1998=FALSE,
+                                          write_res=FALSE,
+                                          res_dir=NA_character_))
 #' @importFrom methods callNextMethod
 #' @importFrom lubridate %--%
 setMethod("initialize", "study", function(.Object, ...) {
@@ -69,7 +77,15 @@ setMethod("initialize", "study", function(.Object, ...) {
                                         .Object@endpt,  
                                         paste0(.Object@endpt, "_DATE"),
                                         dplyr::starts_with("PC"))
-    .Object <- set_study_data_dates(.Object)
+    .Object@study_data <- set_study_data_dates(study_data=.Object@study_data,
+                                    study_type=.Object@study_type,
+                                    exp_age=.Object@exp_age,
+                                    exp_len=.Object@exp_len,
+                                    wash_len=.Object@wash_len,
+                                    obs_len=.Object@obs_len,
+                                    obs_end_date=.Object@obs_end_date)
+
+    .Object@study_data <- get_study_elig_indv(study=.Object)
 
     return(.Object)
 })

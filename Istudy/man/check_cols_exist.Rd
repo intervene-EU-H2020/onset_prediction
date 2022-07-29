@@ -4,12 +4,12 @@
 \alias{check_cols_exist}
 \title{Checks that the data.frame contains the chosen columns}
 \usage{
-check_cols_exist(pheno_data, cols, func_name)
+check_cols_exist(study_data, cols, func_name)
 }
 \arguments{
-\item{pheno_data}{A data.frame.}
+\item{study_data}{A data.frame.}
 
-\item{cols}{A character. The columns \code{pheno_data} needs to contain.}
+\item{cols}{A character. The columns \code{study_data} needs to contain.}
 
 \item{func_name}{A character. The name of the function to print in the error message.}
 }

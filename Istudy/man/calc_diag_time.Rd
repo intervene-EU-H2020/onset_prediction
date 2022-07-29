@@ -4,16 +4,14 @@
 \alias{calc_diag_time}
 \title{Calculates the date and exact age in years of onset}
 \usage{
-calc_diag_time(pheno_data, study)
+calc_diag_time(study_data, endpt)
 }
 \arguments{
-\item{pheno_data}{A data.frame with at least columns \code{DATE_OF_BIRTH}
+\item{study_data}{A data.frame with at least columns \code{DATE_OF_BIRTH}
 and i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_DATE}
 where the columns are the study endpoint and
 date, which will differ depending on the input
 variable \code{endpt}.}
-
-\item{study}{An S4 class representing the study setup.}
 }
 \value{
 A list(\code{exact_age_yrs}, \code{age_date}).

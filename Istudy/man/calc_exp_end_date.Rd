@@ -4,10 +4,14 @@
 \alias{calc_exp_end_date}
 \title{Calcualtes the end date of the exposure period for each individual}
 \usage{
-calc_exp_end_date(.Object)
-}
-\arguments{
-\item{.Object}{The S4 study object.}
+calc_exp_end_date(
+  study_data,
+  study_type,
+  exp_len,
+  wash_len,
+  obs_len,
+  obs_end_date
+)
 }
 \value{
 A vector of Dates. The end of the exposure period for

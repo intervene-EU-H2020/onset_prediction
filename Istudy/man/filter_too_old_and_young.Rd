@@ -4,10 +4,16 @@
 \alias{filter_too_old_and_young}
 \title{Filters out individuals that are too old or young for the study}
 \usage{
-filter_too_old_and_young(pheno_data, obs_end_date, study_type, max_age = 200)
+filter_too_old_and_young(
+  study_data,
+  obs_end_date,
+  study_type,
+  max_age = 200,
+  filter_1998 = FALSE
+)
 }
 \arguments{
-\item{pheno_data}{A data.frame with at least column \code{EXP_END}.}
+\item{study_data}{A data.frame with at least column \code{EXP_END}.}
 
 \item{max_age}{A numeric. The maximum length of the exposure period.}
 }

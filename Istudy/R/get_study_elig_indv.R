@@ -54,27 +54,32 @@
 #' @export
 #' 
 #' @author Kira E. Detrois
-get_study_elig_indv <- function(study,
-                                max_age=200,
-                                write_res=FALSE,
-                                res_dir=NULL) {
-    check_cols_exist(study@study_data, study@endpt, "get_study_elig_indv")
-
-    study@study_data <- filter_too_old_and_young(study@study_data,
-                                                 study@obs_end_date, 
-                                                 study@study_type,
-                                                 max_age)
-
-    study@study_data <- filter_missing_endpt_data(study@study_data, 
-                                                  study@endpt)
-    study@study_data <- filter_early_endpt(study@study_data, 
-                                           study@endpt)
-    study@study_data <- adj_case_cntrl_status(study@study_data, 
-                                              study@endpt)
-    study@study_data <- downsample_cntrls(study@study_data, study)
-    study@study_data <- add_diag_time_cols(study@study_data, study)
-    study@study_data <- filter_ancestry(study@study_data, study@ancs)
-    write_res_files(study@study_data, study, write_res, res_dir)
+get_study_elig_indv <- function(study) {
+    study@study_data <- filter_too_old_and_young(
+                                study_data=study@study_data,
+                                obs_end_date=study@obs_end_date, 
+                                study_type=study@study_type,
+                                max_age=study@max_age,
+                                filter_1998=study@filter_1998)
+    study@study_data <- filter_missing_endpt_data(
+                                study_data=study@study_data, 
+                                endpt=study@endpt)
+    study@study_data <- filter_early_endpt(
+                                study_data=study@study_data, 
+                                endpt=study@endpt)
+    study@study_data <- adj_case_cntrl_status(
+                                study_data=study@study_data, 
+                                endpt=study@endpt)
+    study@study_data <- downsample_cntrls(
+                                study_data=study@study_data,
+                                endpt=study@endpt,
+                                downsample_fctr=study@downsample_fctr)
+    study@study_data <- add_diag_time_cols(
+                                study_data=study@study_data,
+                                endpt=study@endpt)
+    study@study_data <- filter_ancestry(study@study_data, 
+                                        study@ancs)
+    write_res_files(study)
 
     return(study@study_data)
 }

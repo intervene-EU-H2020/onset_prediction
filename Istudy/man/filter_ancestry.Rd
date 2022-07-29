@@ -4,7 +4,7 @@
 \alias{filter_ancestry}
 \title{Gets only the individuals from the specified ancestries}
 \usage{
-filter_ancestry(pheno_data, ancs = "EUR")
+filter_ancestry(study_data, ancs = "EUR")
 }
 \arguments{
 \item{ancs}{A character (vector). The ancestries to select.}

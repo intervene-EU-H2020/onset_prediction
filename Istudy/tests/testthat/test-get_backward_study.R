@@ -9,9 +9,8 @@ test_that("get_backward_study from birth works", {
                         wash_len=2,
                         obs_len=8,
                         obs_end_date=as.Date("2019-12-21"))
-  elig_indv <- get_study_elig_indv(study)
   date_expect <- c(as.Date("2019/11/24"), as.Date("2019/12/21"), as.Date("2019/12/21"), as.Date("2019/12/21"), as.Date("2019/12/21"), as.Date("2014/06/13"))
-  expect_equal(elig_indv$I9_VTE_DATE, date_expect)
+  expect_equal(study@study_data$I9_VTE_DATE, date_expect)
 })
 
 test_that("get_backward_study set exp len works", {
@@ -25,9 +24,8 @@ test_that("get_backward_study set exp len works", {
                         wash_len=2,
                         obs_len=8,
                         obs_end_date=as.Date("2019-12-21"))
-  elig_indv <- get_study_elig_indv(study)
   date_expect <- rep(as.Date("2004/12/21"), 6)
-  expect_equal(elig_indv$EXP_START_DATE, date_expect)
+  expect_equal(study@study_data$EXP_START_DATE, date_expect)
 })
 
 test_that("filter_too_old_and_young works", {
@@ -42,10 +40,9 @@ test_that("filter_too_old_and_young works", {
                         wash_len=2,
                         obs_len=8,
                         obs_end_date=as.Date("2019-12-21"))
-  elig_indv <- get_study_elig_indv(back_study)
 
   date_expect <- c(as.Date("2019/11/24"), rep(as.Date("2019-12-21"), 3), as.Date("2014/06/13"))
   id_expect <- c("KT000002", "KT000005", "KT000006", "KT000008", "KT0000010")
-  expect_equal(elig_indv$I9_VTE_DATE, date_expect)
-  expect_equal(elig_indv$ID, id_expect)
+  expect_equal(back_study@study_data$I9_VTE_DATE, date_expect)
+  expect_equal(back_study@study_data$ID, id_expect)
 })

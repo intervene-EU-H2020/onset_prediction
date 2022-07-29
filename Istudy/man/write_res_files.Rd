@@ -4,18 +4,13 @@
 \alias{write_res_files}
 \title{Writes results and log file}
 \usage{
-write_res_files(elig_indv, study, write_res, res_dir)
+write_res_files(study)
 }
 \arguments{
-\item{elig_indv}{A tibble with the information for the eligible
-individuals that should be written to the file.}
-
 \item{study}{An S4 study object. The current study setup.}
 
-\item{write_res}{A boolean. Defines whether to write the results to
-a file or not. Default is FALSE.}
-
-\item{res_dir}{A character. The directory to write the results to.}
+\item{study@study_data}{A tibble with the information for the eligible
+individuals that should be written to the file.}
 }
 \description{
 Prints to console if something goes wrong.

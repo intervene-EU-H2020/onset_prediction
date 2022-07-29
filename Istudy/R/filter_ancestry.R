@@ -6,11 +6,11 @@
 #' @return The filtered data.frame.
 #' 
 #' @author Kira E. Detrois
-filter_ancestry <- function(pheno_data,
+filter_ancestry <- function(study_data,
                             ancs="EUR") {
     if(!all(is.na(ancs))) {
-        pheno_data <- dplyr::filter(pheno_data, 
+        study_data <- dplyr::filter(study_data, 
                                     ANCESTRY %in% ancs)
     }
-    return(pheno_data)
+    return(study_data)
 }

@@ -6,7 +6,7 @@
 #' (endpt: NA), or for cases no recorded date of endpoint (endpt: 1, 
 #' endpt_date: NA).
 #' 
-#' @param pheno_data A data.frame with at least the columns:
+#' @param study_data A data.frame with at least the columns:
 #'                   i.e. `J10_ASTHMA`, and `J10_ASTHMA_DATE` where 
 #'                   the columns are the study endpoint and date, 
 #'                   which will differ depending on the input variable 
@@ -23,13 +23,13 @@
 #' filter_missing_endpt_data(test_data, "J10_ASTHMA")
 #' 
 #' @author Kira E. Detrois
-filter_missing_endpt_data <- function(pheno_data,       
+filter_missing_endpt_data <- function(study_data,       
                                       endpt) { 
-    check_cols_exist(pheno_data,
+    check_cols_exist(study_data,
                      c(endpt, paste0(endpt, "_DATE")),
                      "filter_missing_endpt_data")
 
-    dplyr::filter(pheno_data, 
+    dplyr::filter(study_data, 
                   !is.na(get(endpt)),
                   !((get(endpt) == 1) & is.na(get(paste0(endpt, "_DATE")))))
 }

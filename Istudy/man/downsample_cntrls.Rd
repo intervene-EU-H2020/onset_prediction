@@ -4,12 +4,13 @@
 \alias{downsample_cntrls}
 \title{Downsamples the number of controls in the data}
 \usage{
-downsample_cntrls(pheno_data, study)
+downsample_cntrls(study_data, endpt, downsample_fctr)
 }
 \arguments{
-\item{pheno_data}{A data.frame with at least the column defined in \code{endpt}.}
+\item{study_data}{A data.frame with at least the column defined in \code{endpt}.}
 
-\item{study}{An S4 class representing the study setup.}
+\item{endpt}{A character. The column name of the current endpoint of
+interest.}
 }
 \value{
 The downsampled data.frame.

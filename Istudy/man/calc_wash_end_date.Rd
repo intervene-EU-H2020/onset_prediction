@@ -4,10 +4,7 @@
 \alias{calc_wash_end_date}
 \title{Calcualtes the end date of the washout period for each individual}
 \usage{
-calc_wash_end_date(.Object)
-}
-\arguments{
-\item{.Object}{The S4 study object.}
+calc_wash_end_date(study_data, study_type, wash_len, obs_len, obs_end_date)
 }
 \value{
 A vector of Dates. The end of the washout period for

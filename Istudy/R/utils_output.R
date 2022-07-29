@@ -20,18 +20,15 @@ get_study_file_name <- function(study) {
 #' 
 #' Prints to console if something goes wrong.
 #' 
-#' @param elig_indv A tibble with the information for the eligible 
+#' @param study@study_data A tibble with the information for the eligible 
 #'                  individuals that should be written to the file.
 #' @inheritParams get_study_file_name
-#' @inheritParams get_study_elig_indv
+#' @inheritParams get_study_study@study_data
 #' 
 #' @author Kira E. Detrois
-write_res_files <- function(elig_indv,
-                            study,
-                            write_res,
-                            res_dir) {
-    write_res_file(elig_indv, study, write_res, res_dir)
-    write_log_file(elig_indv, study, write_res, res_dir)
+write_res_files <- function(study) {
+    write_res_file(study)
+    write_log_file(study)
 }
 
 #' Writes results to a tab-delim file
@@ -39,20 +36,16 @@ write_res_files <- function(elig_indv,
 #' @inheritParams write_res_files
 #' 
 #' @author Kira E. Detrois
-write_res_file <- function(elig_indv,
-                           study,
-                           write_res,
-                           res_dir) {
- 
-    if(check_res_dir(write_res, res_dir) & 
-        get_n_cases(elig_indv, study@endpt) > 0) {
+write_res_file <- function(study) {
+    if(check_res_dir(study@write_res, study@res_dir) & 
+        get_n_cases(study@study_data, study@endpt) > 0) {
             elig_res_dir <- paste0(res_dir, "elig_indv/")
             if(!dir.exists(elig_res_dir)) {
                 dir.create(elig_res_dir)
             }
             res_file_name <- paste0(get_study_file_name(study), 
                                     "_elig_indv.tsv")
-            readr::write_delim(elig_indv, 
+            readr::write_delim(study@study_data, 
                                paste0(elig_res_dir, res_file_name),
                                delim="\t")
     }
@@ -65,10 +58,9 @@ write_res_file <- function(elig_indv,
 #' @return The log message character string
 #' 
 #' @author Kira E. Detrois
-log_msg_string <- function(elig_indv,
-                           study) {
-    n_cases <- get_n_cases(elig_indv, study@endpt)
-    n_cntrls <- get_n_cntrls(elig_indv, study@endpt)
+log_msg_string <- function(study) {
+    n_cases <- get_n_cases(study@study_data, study@endpt)
+    n_cntrls <- get_n_cntrls(study@study_data, study@endpt)
 
     if(study@study_type == "forward") {
         paste0("Endpoint: ", study@endpt, "\n",
@@ -93,16 +85,13 @@ log_msg_string <- function(elig_indv,
 #' @inheritParams write_res_files
 #' 
 #' @author Kira E. Detrois
-write_log_file <- function(elig_indv,
-                           study,
-                           write_res,
-                           res_dir) {
-    if(check_res_dir(write_res, res_dir)) {
-        log_res_dir <- paste0(res_dir, "log/")
+write_log_file <- function(study) {
+    if(check_res_dir(study@write_res, study@res_dir)) {
+        log_res_dir <- paste0(study@res_dir, "log/")
         if(!dir.exists(log_res_dir)) {
             dir.create(log_res_dir)
         }
-        readr::write_file(log_msg_string(elig_indv, study), 
+        readr::write_file(log_msg_string(study@study_data, study), 
                           paste0(log_res_dir, 
                                  get_study_file_name(study), 
                                  "_log.txt"))

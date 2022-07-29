@@ -4,10 +4,10 @@
 \alias{get_n_cntrls}
 \title{Counts the number of controls in the data}
 \usage{
-get_n_cntrls(pheno_data, endpt)
+get_n_cntrls(study_data, endpt)
 }
 \arguments{
-\item{pheno_data}{A data.frame with at least the column defined in \code{endpt}.}
+\item{study_data}{A data.frame with at least the column defined in \code{endpt}.}
 
 \item{endpt}{A character. The column name of the current endpoint of
 interest.}
