@@ -34,7 +34,7 @@ Helper functions for working with INTERVENE Longitudinal Files and plotting resu
 
 ## Installation
 
-To install a given package in the FinnGen Sandbox, compress it and upload it through green uploads and then use i.e.
+To install any of the previous named packages in the FinnGen Sandbox, compress it and upload it through green uploads and then use i.e.
 
 ```{r example}
 install.packages("/finngen/green/path/to/package/packag_name.tar.xz",
