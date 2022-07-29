@@ -13,6 +13,7 @@
 #' @author Kira E. Detrois
 create_endpt_study_obj <- function(study_data,
                                    study_type="forward",
+                                   score_type="CCI",
                                    endpt="J10_ASTHMA",
                                    exp_age=NULL,
                                    exp_len=NULL,
@@ -20,8 +21,14 @@ create_endpt_study_obj <- function(study_data,
                                    obs_len=8,
                                    obs_end_date=as.Date("2021/01/01"),
                                    downsample_fctr=NA_integer_,
-                                   ancs=c("EAS")) {
-
+                                   ancs=c("EAS"),
+                                   max_age=200,
+                                   filter_1998=FALSE,
+                                   write_res=FALSE,
+                                   res_dir=NA_character_) {
+    if(!is.na(res_dir)) {
+        res_dir <- paste0(res_dir, score_type, "_logs/")
+    }
     if(study_type == "forward") {
         study <- methods::new("study",
                               study_data=study_data,
@@ -32,7 +39,11 @@ create_endpt_study_obj <- function(study_data,
                               wash_len=wash_len,
                               obs_len=obs_len,
                               downsample_fctr=downsample_fctr,
-                              ancs=ancs)
+                              ancs=ancs,
+                              max_age=max_age,
+                              filter_1998=filter_1998,
+                              write_res=write_res,
+                              res_dir=res_dir)
     } else if(study_type == "backward") {
         if(!is.null(exp_len)) {
             exp_age <- NA_integer_
@@ -49,7 +60,11 @@ create_endpt_study_obj <- function(study_data,
                               obs_len=obs_len,
                               obs_end_date=obs_end_date,
                               downsample_fctr=downsample_fctr,
-                              ancs=ancs)
+                              ancs=ancs,
+                              max_age=max_age,
+                              filter_1998=filter_1998,
+                              write_res=write_res,
+                              res_dir=res_dir)
     }
     
     return(study)

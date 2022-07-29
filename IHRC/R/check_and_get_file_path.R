@@ -8,20 +8,20 @@
 #' @author Kira E. Detrois
 check_and_get_file_path <- function(surv_ana,
                                     res_type) {
+    print(surv_ana@res_dir)
     if(surv_ana@write_res) {
-        down_dir_name <- get_down_dir(surv_ana@study@downsample_fctr)
         if(!is.null(surv_ana@covs)) {
-            covs_dir_name <- paste0(down_dir_name, get_pretty_covs_string(surv_ana@covs, file_name=TRUE), "/")
+            covs_dir_name <- paste0(get_pretty_covs_string(surv_ana@covs, file_name=TRUE), "/")
         } else if(res_type %in% c("HRs", "coxph", "surv")) {
             message("Could not make correct directory because covariates not given")
         }
 
         # Results type specific folder
         type_dir <- dplyr::case_when(
-            res_type == "endpt" ~ paste0(down_dir_name, "score_distr/endpts/"),
-            res_type == "distr" ~ paste0(down_dir_name, "score_distr/"),
+            res_type == "endpt" ~ paste0("score_distr/endpts/"),
+            res_type == "distr" ~ paste0( "score_distr/"),
             res_type == "coxph" ~ covs_dir_name,
-            res_type == "log" ~ paste0(down_dir_name, "PRS_logs/score_cut/"),
+            res_type == "log" ~ paste0("PRS_logs/score_cut/"),
             res_type == "HR RG" ~ paste0(covs_dir_name, "HRs/"), 
             res_type == "HR SD" ~ paste0(covs_dir_name, "HRs/"), 
             res_type == "surv" ~ paste0(covs_dir_name, "surv/"),

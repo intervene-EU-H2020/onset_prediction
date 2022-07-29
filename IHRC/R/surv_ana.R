@@ -43,7 +43,6 @@ surv_ana <- methods::setClass("surv_ana",
                            elig_score_data="data.frame",
                            score_type="character",
                            min_indvs="numeric",
-                           max_age="numeric",
                            covs="character",
                            bin_cut="numeric",
                            write_res="logical",
@@ -51,7 +50,6 @@ surv_ana <- methods::setClass("surv_ana",
                 prototype=list(elig_score_data=tibble::tibble(),
                                score_type=NA_character_,
                                min_indvs=5,
-                               max_age=90,
                                covs=c("SEX", "YEAR_OF_BIRTH"),
                                bin_cut=1,
                                write_res=FALSE,
@@ -60,10 +58,6 @@ surv_ana <- methods::setClass("surv_ana",
 #' @importFrom methods callNextMethod
 setMethod("initialize", "surv_ana", function(.Object, ...) {
     .Object <- callNextMethod()
-    .Object@study@study_data <- Istudy::get_study_elig_indv(study=.Object@study,
-                                                            max_age=.Object@max_age,
-                                                            write_res=.Object@write_res,
-                                                            res_dir=paste0(.Object@res_dir, get_down_dir(.Object@study@downsample_fctr), .Object@score_type, "_logs/"))
     .Object@elig_score_data <- get_elig_score_data(.Object)
     if(nrow(.Object@elig_score_data) > 0) {
         .Object@elig_score_data <- add_risk_group_col(.Object@elig_score_data,

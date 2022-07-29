@@ -71,6 +71,7 @@ run_surv_studies <- function(pheno_data,
                              downsample_fctr=NA_integer_,
                              ancs=NA_character_,
                              max_age=90,
+                             filter_1998=FALSE,
                              covs=c("SEX", "YEAR_OF_BIRTH"),
                              bin_cut=1,
                              min_indvs=5,
@@ -79,12 +80,16 @@ run_surv_studies <- function(pheno_data,
     if(is.null(exp_ages) & is.null(exp_len)) {
         exp_ages <- 0
     }
+    if(write_res) {
+        res_dir <- paste0(res_dir, get_down_dir(downsample_fctr), ifelse(filter_1998, "/f1998/", ""))
+    }
     all_age_hrs_tib <- create_empty_endpt_hrs_tib() 
     all_age_cidxs_tib <- create_empty_cidx_tib()
     for(endpt in endpts) {
         for(exp_age in exp_ages) {
             study <- create_endpt_study_obj(study_data=pheno_data,
                                             study_type=study_type,
+                                            score_type=score_type,
                                             endpt=endpt, 
                                             exp_age=exp_age,
                                             exp_len=exp_len,
@@ -92,13 +97,16 @@ run_surv_studies <- function(pheno_data,
                                             obs_len=obs_len,
                                             obs_end_date=obs_end_date,
                                             downsample_fctr=downsample_fctr,
-                                            ancs=ancs)
+                                            ancs=ancs,
+                                            max_age=max_age,
+                                            filter_1998=filter_1998,
+                                            write_res=write_res,
+                                            res_dir=res_dir)
             surv_ana <- methods::new("surv_ana",
                                      study=study,
                                      elig_score_data=score_data,
                                      score_type=score_type,
                                      min_indvs=min_indvs,
-                                     max_age=max_age,
                                      covs=covs,
                                      bin_cut=bin_cut,
                                      write_res=write_res,

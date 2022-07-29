@@ -14,10 +14,11 @@ run_surv_studies(
   exp_len = NULL,
   wash_len = 2,
   obs_len = 8,
-  obs_end = NULL,
+  obs_end_date = NULL,
   downsample_fctr = NA_integer_,
   ancs = NA_character_,
   max_age = 90,
+  filter_1998 = FALSE,
   covs = c("SEX", "YEAR_OF_BIRTH"),
   bin_cut = 1,
   min_indvs = 5,
@@ -67,10 +68,6 @@ starts (in years).}
 \item{obs_len}{An integer. Length of the prediction period
 (in years).}
 
-\item{obs_end}{A Date. The end of the observation period. Needed for
-\code{backward} studies. If not set the end will be
-the most recent date across the diagnosis columns.}
-
 \item{downsample_fctr}{A numeric. Defines how many controls there
 should be for every case.
 Default is NA, which means no
@@ -97,6 +94,10 @@ files.}
 
 \item{res_dir}{A character. The directory to write the results and
 log to.}
+
+\item{obs_end}{A Date. The end of the observation period. Needed for
+\code{backward} studies. If not set the end will be
+the most recent date across the diagnosis columns.}
 }
 \description{
 Calcualtes HR from a Cox-PH model for each exposure age and endpoint

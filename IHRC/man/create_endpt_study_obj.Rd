@@ -7,14 +7,19 @@
 create_endpt_study_obj(
   study_data,
   study_type = "forward",
+  score_type = "CCI",
   endpt = "J10_ASTHMA",
   exp_age = NULL,
-  exp_len = 10,
+  exp_len = NULL,
   wash_len = 2,
   obs_len = 8,
-  obs_end = NULL,
+  obs_end_date = as.Date("2021/01/01"),
   downsample_fctr = NA_integer_,
-  ancs = c("EAS")
+  ancs = c("EAS"),
+  max_age = 200,
+  filter_1998 = FALSE,
+  write_res = FALSE,
+  res_dir = NA_character_
 )
 }
 \arguments{
@@ -29,6 +34,9 @@ backwards from this time point. The exposure period will
 be different for each individual depending on their birth
 date. This setup can be created, using the function
 \code{\link{get_backward_study}}.}
+
+\item{score_type}{A character. The score type. At the moment the two
+options are \code{CCI}, and \code{PRS}.}
 
 \item{endpt}{A character. The column name of the current endpoint
 of interest.}
@@ -45,16 +53,21 @@ of interest.}
 \item{obs_len}{An integer. Length of the prediction period
 (in years).}
 
-\item{obs_end}{A Date. The end of the observation period. Needed for
-\code{backward} studies. If not set the end will be
-the most recent date across the diagnosis columns.}
-
 \item{downsample_fctr}{A numeric. Defines how many controls there
 should be for every case.
 Default is NA, which means no
 downsampling is performed.}
 
 \item{ancs}{A character (vector). The ancestries to consider.}
+
+\item{max_age}{A numeric. The maximum age at the end of the exposure
+window of individuals.}
+
+\item{write_res}{A boolean. Defines whether to save the results to
+files.}
+
+\item{res_dir}{A character. The directory to write the results and
+log to.}
 }
 \value{
 An S4 study object.
