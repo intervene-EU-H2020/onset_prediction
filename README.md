@@ -5,17 +5,6 @@
 
 This project includes different R packages to help working with INTERVENE longitudinal and phenotype files with the goal of predicting the late-onset of different endpoints.
 
-# Installation
-
-To install a given package in the FinnGen Sandbox, compress it and upload it through green uploads and then use i.e.
-
-```{r example}
-install.packages("/finngen/green/path/to/package/packag_name.tar.xz",
-                 "/home/ivm/R/x86_64-pc-linux-gnu-library/4.1",
-                 repos = NULL, type="source")
-```
-
-See [How to install a R package into Sandbox?](https://finngen.gitbook.io/finngen-analyst-handbook/working-in-the-sandbox/quirks-and-features/how-to-upload-to-your-own-ivm-via-finngen-green/my-r-package-doesnt-exist-in-finngen-sandbox-r-rstudio.-how-can-i-get-a-new-r-package-to-finngen).
 
 # Packages
 ## ICCI
@@ -42,3 +31,15 @@ Builds Cox-propotional hazards model (Cox-PH) for the different endpoints and st
 ## IUtils
 
 Helper functions for working with INTERVENE Longitudinal Files and plotting results.
+
+## Installation
+
+To install any of the previous named packages in the FinnGen Sandbox, compress it and upload it through green uploads and then use i.e.
+
+```{r example}
+install.packages("/finngen/green/path/to/package/packag_name.tar.xz",
+                 "/home/ivm/R/x86_64-pc-linux-gnu-library/4.1",
+                 repos = NULL, type="source")
+```
+
+See [How to install a R package into Sandbox?](https://finngen.gitbook.io/finngen-analyst-handbook/working-in-the-sandbox/quirks-and-features/how-to-upload-to-your-own-ivm-via-finngen-green/my-r-package-doesnt-exist-in-finngen-sandbox-r-rstudio.-how-can-i-get-a-new-r-package-to-finngen).
