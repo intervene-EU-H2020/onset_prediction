@@ -35,14 +35,23 @@ plot_hrs <- function(coxph_hr_res,
 plot_endpt_hrs <- function(coxph_hr_res,
                            surv_ana) {
     if(nrow(coxph_hr_res) > 0) {
-        top_group <- dplyr::filter(coxph_hr_res, GROUP == get_comp_group(surv_ana@score_type, surv_ana@bin_cut))
-        plt <- ggplot2::ggplot(top_group,
+        plot_endpt_rg_hr(coxph_hr_res, surv_ana)
+        plot_endpt_sd_hr(coxph_hr_res, surv_ana)
+    }
+}
+
+plot_endpt_rg_hr <- function(coxph_hr_res,
+                             surv_ana) {
+    top_group <- dplyr::filter(coxph_hr_res, GROUP == get_comp_group(surv_ana@score_type, surv_ana@bin_cut))
+    max_x <- round(max(top_group$CI_POS))+1
+    min_x <- min(c(0, round(coxph_hr_res$CI_NEG)-1))
+    plt <- ggplot2::ggplot(top_group,
                             # Plot basics
                             aes(y=ENDPOINT, x=HR)) +
                             geom_point(show.legend = FALSE) +
                             geom_errorbar(aes(xmin=CI_NEG, xmax=CI_POS), width=0.2) +
                             # Axis settings
-                            coord_cartesian(xlim=c(0, 7.1)) +
+                            coord_cartesian(xlim=c(min_x, max_x)) +
                             geom_vline(xintercept = 1.0) +
                             # Legends and labels
                             labs(title=paste0(get_comp_descr(surv_ana, surv_type="HR")),
@@ -53,15 +62,47 @@ plot_endpt_hrs <- function(coxph_hr_res,
                             IUtils::theme_custom() +
                             theme(text=element_text(size=21))
 
-        file_path <- check_and_get_file_path(surv_ana, res_type="HR RG")
-        if(!is.null(file_path) & !is.null(plt)) {
+    file_path <- check_and_get_file_path(surv_ana, res_type="HR RG")
+    if(!is.null(file_path) & !is.null(plt)) {
             ggsave(file_path,
                 width=12,
                 height=7,
                 plot=plt, 
                 device="png", 
                 bg="white")
-        }
+    }
+}
+
+plot_endpt_sd_hr <- function(coxph_hr_res,
+                             surv_ana) {
+    top_group <- dplyr::filter(coxph_hr_res, GROUP == "no groups")
+    max_x <- round(max(top_group$CI_POS))+1
+    min_x <- min(c(0, round(coxph_hr_res$CI_NEG)-1))
+    plt <- ggplot2::ggplot(top_group,
+                            # Plot basics
+                            aes(y=ENDPOINT, x=HR)) +
+                            geom_point(show.legend = FALSE) +
+                            geom_errorbar(aes(xmin=CI_NEG, xmax=CI_POS), width=0.2) +
+                            # Axis settings
+                            coord_cartesian(xlim=c(min_x, max_x)) +
+                            geom_vline(xintercept = 1.0) +
+                            # Legends and labels
+                            labs(title=paste0(surv_ana@score_type, " 1-SD Increment"),
+                                 caption=paste0("Obs: ", surv_ana@study@obs_len, " Years until ", surv_ana@study@obs_end_date, " Wash: ", surv_ana@study@wash_len, " Years", get_surv_descr(surv_ana, surv_type="HR")),
+                                 x="Hazard Ratio (95%)",
+                                 y="") +
+                            # Theme
+                            IUtils::theme_custom() +
+                            theme(text=element_text(size=21))
+
+    file_path <- check_and_get_file_path(surv_ana, res_type="HR SD")
+    if(!is.null(file_path) & !is.null(plt)) {
+            ggsave(file_path,
+                width=12,
+                height=7,
+                plot=plt, 
+                device="png", 
+                bg="white")
     }
 }
 
@@ -83,10 +124,26 @@ plot_age_hrs <- function(coxph_hr_res,
 
     for(endpt in endpts) {
         surv_ana@study@endpt <- endpt # Cheating the system for easier plotting here
-        endpt_coxph_hr_res <- dplyr::filter(coxph_hr_res,
-                                            ENDPOINT == endpt)
-        plot_risk_group_hr(surv_ana, endpt_coxph_hr_res, endpt)
-        plot_sd_hr(surv_ana, endpt_coxph_hr_res, endpt)
+        curnt_coxph_hr_res <- dplyr::filter(coxph_hr_res, GROUP != "no groups")
+        if(nrow(curnt_coxph_hr_res) > 0) {
+            min_y <- min(c(0, round(curnt_coxph_hr_res$CI_NEG)-1))
+            max_y <- round(max(curnt_coxph_hr_res$CI_POS))+1
+            plot_age_rg_hr(surv_ana=surv_ana, 
+                           coxph_hr_res=curnt_coxph_hr_res, 
+                           endpt=endpt, 
+                           min_y=min_y, 
+                           max_y=max_y)
+        } 
+        curnt_coxph_hr_res <- dplyr::filter(coxph_hr_res, GROUP == "no groups")
+        if(nrow(curnt_coxph_hr_res) > 0) {
+            min_y <- min(c(0, round(curnt_coxph_hr_res$CI_NEG)-1))
+            max_y <- round(max(curnt_coxph_hr_res$CI_POS))
+            plot_age_sd_hr(surv_ana=surv_ana, 
+                           coxph_hr_res=curnt_coxph_hr_res, 
+                           endpt=endpt, 
+                           min_y=min_y, 
+                           max_y=max_y)
+        }
     }
     return(NULL)
 }
@@ -104,18 +161,21 @@ plot_age_hrs <- function(coxph_hr_res,
 #' @export 
 #' 
 #' @author Kira E. Detrois
-plot_sd_hr <- function(surv_ana,
-                       endpt_coxph_hr_res,
-                       endpt) {
-    endpt_coxph_hr_res <- dplyr::filter(endpt_coxph_hr_res, GROUP == "no groups")
+plot_age_sd_hr <- function(surv_ana,
+                           coxph_hr_res,
+                           endpt,
+                           min_y, 
+                           max_y) {
+    endpt_coxph_hr_res <- dplyr::filter(coxph_hr_res, ENDPOINT == endpt)
     if(nrow(endpt_coxph_hr_res) > 0) {
+
         plt <- ggplot2::ggplot(endpt_coxph_hr_res, aes(x=as.character(EXP_AGE), y=HR)) +
                     # Points and error bars
                     geom_point() + 
                     geom_errorbar(aes(ymin=CI_NEG, ymax=CI_POS), width=.1) +
                     # Axis settings
                     geom_hline(yintercept=1.0) + 
-                    coord_cartesian(ylim=c(-1,10)) +
+                    coord_cartesian(ylim=c(min_y,max_y)) +
                     scale_x_discrete(breaks=unique(endpt_coxph_hr_res$EXP_AGE),
                                      labels=get_obs_per_strings(endpt_coxph_hr_res, surv_ana)) +
                     # Labels and titles
@@ -156,15 +216,17 @@ plot_sd_hr <- function(surv_ana,
 #' @export 
 #' 
 #' @author Kira E. Detrois
-plot_risk_group_hr <- function(surv_ana,
-                               endpt_coxph_hr_res,
-                               endpt) {
+plot_age_rg_hr <- function(surv_ana,
+                           coxph_hr_res,
+                           endpt,
+                           min_y,
+                           max_y) {
 
     comp_group <- get_comp_group(surv_ana@score_type)
-    endpt_coxph_hr_res <- dplyr::filter(endpt_coxph_hr_res,
-                                        GROUP == comp_group)
+    endpt_coxph_hr_res <- dplyr::filter(coxph_hr_res,
+                                        GROUP == comp_group &
+                                            ENDPOINT == endpt)
 
-    endpt_coxph_hr_res <- dplyr::filter(endpt_coxph_hr_res, GROUP != "no group")
     if(nrow(endpt_coxph_hr_res) > 0) {
         plt <- ggplot2::ggplot(endpt_coxph_hr_res, aes(x=as.character(EXP_AGE), y=HR)) +
                     # Points and error bars
@@ -172,7 +234,7 @@ plot_risk_group_hr <- function(surv_ana,
                     geom_errorbar(aes(ymin=CI_NEG, ymax=CI_POS), width=.1) +
                     # Axis settings
                     geom_hline(yintercept=1.0) + 
-                    coord_cartesian(ylim=c(-1,10)) +
+                    coord_cartesian(ylim=c(min_y, max_y)) +
                     scale_x_discrete(breaks=unique(endpt_coxph_hr_res$EXP_AGE),
                                      labels=get_obs_per_strings(endpt_coxph_hr_res, surv_ana)) +
                     # Labels and titles

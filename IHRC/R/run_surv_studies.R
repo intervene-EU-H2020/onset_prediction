@@ -67,7 +67,7 @@ run_surv_studies <- function(pheno_data,
                              exp_len=NULL,
                              wash_len=2,
                              obs_len=8,
-                             obs_end_date=NULL,
+                             obs_end_date=as.Date("2021/01/01"),
                              downsample_fctr=NA_integer_,
                              ancs=NA_character_,
                              max_age=90,
@@ -81,7 +81,7 @@ run_surv_studies <- function(pheno_data,
         exp_ages <- 0
     }
     if(write_res) {
-        res_dir <- paste0(res_dir, get_down_dir(downsample_fctr), ifelse(filter_1998, "/f1998/", ""))
+        res_dir <- paste0(res_dir, get_down_dir(downsample_fctr), ifelse(filter_1998, "f1998/", "all/"))
     }
     all_age_hrs_tib <- create_empty_endpt_hrs_tib() 
     all_age_cidxs_tib <- create_empty_cidx_tib()

@@ -14,7 +14,7 @@ run_surv_studies(
   exp_len = NULL,
   wash_len = 2,
   obs_len = 8,
-  obs_end_date = NULL,
+  obs_end_date = as.Date("2021/01/01"),
   downsample_fctr = NA_integer_,
   ancs = NA_character_,
   max_age = 90,

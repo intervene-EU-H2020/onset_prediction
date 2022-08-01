@@ -66,7 +66,7 @@ get_hr_sd_file_name <- function(surv_ana) {
     } else {
         file_name <- paste0(surv_ana@study@obs_end_date, "_o", surv_ana@study@obs_len, "_w", surv_ana@study@wash_len, "_", surv_ana@score_type)
     }
-    paste0(file_name, "_HRs.png")
+    paste0(file_name, "_sd_HRs.png")
 }
 
 #' Creats the file name for the score cut log file

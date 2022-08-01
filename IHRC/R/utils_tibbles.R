@@ -20,6 +20,7 @@ create_empty_endpt_hrs_tib <- function() {
                    CI_NEG=numeric(),
                    CI_POS=numeric())
 }
+
 #' Creates an empty tibble for the C-index results
 #' 
 #' @return An empty tibble with all relevant columns for the final 
@@ -40,6 +41,7 @@ create_empty_cidx_tib <- function() {
         C_IDX_CI_POS = numeric()
     )
 }
+
 #' Adds a row to the Cox-PH HR results tibble
 #' 
 #' @param endpt_hrs_tib A tibble with the results for previous endpts.
@@ -59,6 +61,11 @@ add_coxph_res_row <- function(endpt_hrs_tib,
                                              surv_ana=surv_ana,
                                              pred_score=pred_score)
         if(!is.null(coxph_res_list)) {
+            #print(endpt_hrs_tib)
+            #print(paste0("surv_ana@study@endpt ", surv_ana@study@endpt))
+            #print(paste0("surv_ana@study@exp_age ", surv_ana@study@exp_age))
+            #print(paste0("surv_ana@score_type ", surv_ana@score_type))
+            #print(coxph_res_list)
             endpt_hrs_tib <- tibble::add_row(
                                          endpt_hrs_tib, 
                                          ENDPOINT=surv_ana@study@endpt,
@@ -77,6 +84,7 @@ add_coxph_res_row <- function(endpt_hrs_tib,
     } 
     return(endpt_hrs_tib)
 }
+
 #' Get's the Cox-PH model results for runs where each group has at
 #' least 5 controls and cases in each group
 #' 
@@ -128,6 +136,8 @@ get_min_indvs_data <- function(coxph_mdl,
             return(NULL)
         }
     } else {
+        coxph_res_list$n_case <- Istudy::get_n_cases(surv_ana@study@study_data, surv_ana@study@endpt)
+        coxph_res_list$n_cntrl <- Istudy::get_n_cntrls(surv_ana@study@study_data, surv_ana@study@endpt)
         return(coxph_res_list)
     }
 }

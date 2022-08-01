@@ -8,7 +8,6 @@
 #' @author Kira E. Detrois
 check_and_get_file_path <- function(surv_ana,
                                     res_type) {
-    print(surv_ana@res_dir)
     if(surv_ana@write_res) {
         if(!is.null(surv_ana@covs)) {
             covs_dir_name <- paste0(get_pretty_covs_string(surv_ana@covs, file_name=TRUE), "/")
