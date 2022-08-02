@@ -33,7 +33,7 @@ add_risk_group_col <- function(score_data,
                                                     surv_ana@score_type,
                                                     score_group_tbl)
         write_score_groups_to_log(score_group_tbl=score_group_tbl,
-                                  surv_ana)
+                                  surv_ana=surv_ana)
     } 
     score_data <- tibble::add_column(score_data, 
                                      SCORE_GROUP=indv_score_groups)

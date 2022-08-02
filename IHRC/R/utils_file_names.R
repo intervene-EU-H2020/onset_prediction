@@ -119,7 +119,7 @@ get_surv_file_name <- function(surv_ana) {
 #' 
 #' @author Kira E. Detrois
 get_coxph_res_file_name <- function(surv_ana) {
-    if(surv_ana@study@obs_end_date == as.Date("3000/01/01")) {
+    if(surv_ana@study@study_type == "forward") {
         file_name <- paste0("e", surv_ana@study@exp_len, "_w", surv_ana@study@wash_len, "_o", 
         surv_ana@study@obs_len, "_", surv_ana@score_type)
     } else {

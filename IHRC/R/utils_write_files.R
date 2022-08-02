@@ -10,7 +10,7 @@
 write_res_files <- function(endpt_hrs_tib,
                             endpt_c_idxs_tib,
                             surv_ana) {
-    file_path_coxph <- check_and_get_file_path(surv_ana,
+    file_path_coxph <- check_and_get_file_path(surv_ana=surv_ana,
                                                res_type="coxph")
     file_path_cidx <- stringr::str_replace(string=file_path_coxph,
                                            pattern="coxph",
@@ -35,7 +35,7 @@ write_res_files <- function(endpt_hrs_tib,
 #' @author Kira E. Detrois
 write_score_groups_to_log <- function(score_group_tbl,
                                       surv_ana) {
-    file_path <- check_and_get_file_path(surv_ana,
+    file_path <- check_and_get_file_path(surv_ana=surv_ana,
                                          res_type="log")
     if(!is.null(file_path)) {
         readr::write_delim(log_msg_table(score_group_tbl), 

@@ -15,6 +15,11 @@
 #' @author Kira E. Detrois
 plot_hrs <- function(coxph_hr_res,
                      surv_ana) {
+                            
+    coxph_hr_res <- dplyr::filter(coxph_hr_res, 
+                                  !is.na(HR) &    
+                                    !is.infinite(CI_NEG) &
+                                    !is.infinite(CI_POS))
     if(surv_ana@study@study_type == "forward") {
         plt <- plot_age_hrs(coxph_hr_res, surv_ana)
     } else {
@@ -35,16 +40,17 @@ plot_hrs <- function(coxph_hr_res,
 plot_endpt_hrs <- function(coxph_hr_res,
                            surv_ana) {
     if(nrow(coxph_hr_res) > 0) {
-        plot_endpt_rg_hr(coxph_hr_res, surv_ana)
-        plot_endpt_sd_hr(coxph_hr_res, surv_ana)
+        plot_endpt_rg_hr(coxph_hr_res=coxph_hr_res, surv_ana=surv_ana)
+        plot_endpt_sd_hr(coxph_hr_res=coxph_hr_res, surv_ana=surv_ana)
     }
 }
 
 plot_endpt_rg_hr <- function(coxph_hr_res,
                              surv_ana) {
     top_group <- dplyr::filter(coxph_hr_res, GROUP == get_comp_group(surv_ana@score_type, surv_ana@bin_cut))
-    max_x <- round(max(top_group$CI_POS))+1
-    min_x <- min(c(0, round(coxph_hr_res$CI_NEG)-1))
+    max_x <- min(max(c(2, round(top_group$CI_POS+0.5)), na.rm=TRUE), 10)
+    min_x <- min(c(0, round(top_group$CI_NEG-0.5)), na.rm=TRUE)
+
     plt <- ggplot2::ggplot(top_group,
                             # Plot basics
                             aes(y=ENDPOINT, x=HR)) +
@@ -62,7 +68,7 @@ plot_endpt_rg_hr <- function(coxph_hr_res,
                             IUtils::theme_custom() +
                             theme(text=element_text(size=21))
 
-    file_path <- check_and_get_file_path(surv_ana, res_type="HR RG")
+    file_path <- check_and_get_file_path(surv_ana=surv_ana, res_type="HR RG")
     if(!is.null(file_path) & !is.null(plt)) {
             ggsave(file_path,
                 width=12,
@@ -76,8 +82,9 @@ plot_endpt_rg_hr <- function(coxph_hr_res,
 plot_endpt_sd_hr <- function(coxph_hr_res,
                              surv_ana) {
     top_group <- dplyr::filter(coxph_hr_res, GROUP == "no groups")
-    max_x <- round(max(top_group$CI_POS))+1
-    min_x <- min(c(0, round(coxph_hr_res$CI_NEG)-1))
+    max_x <- min(max(c(2, round(top_group$CI_POS+0.5)), na.rm=TRUE), 10)
+    min_x <- min(c(0, round(top_group$CI_NEG-0.5)), na.rm=TRUE)
+
     plt <- ggplot2::ggplot(top_group,
                             # Plot basics
                             aes(y=ENDPOINT, x=HR)) +
@@ -88,14 +95,14 @@ plot_endpt_sd_hr <- function(coxph_hr_res,
                             geom_vline(xintercept = 1.0) +
                             # Legends and labels
                             labs(title=paste0(surv_ana@score_type, " 1-SD Increment"),
-                                 caption=paste0("Obs: ", surv_ana@study@obs_len, " Years until ", surv_ana@study@obs_end_date, " Wash: ", surv_ana@study@wash_len, " Years", get_surv_descr(surv_ana, surv_type="HR")),
+                                 caption=paste0("Obs: ", surv_ana@study@obs_len, " Years until ", surv_ana@study@obs_end_date, " Wash: ", surv_ana@study@wash_len, " Years", get_surv_descr(surv_ana, surv_type="surv")),
                                  x="Hazard Ratio (95%)",
                                  y="") +
                             # Theme
                             IUtils::theme_custom() +
                             theme(text=element_text(size=21))
 
-    file_path <- check_and_get_file_path(surv_ana, res_type="HR SD")
+    file_path <- check_and_get_file_path(surv_ana=surv_ana, res_type="HR SD")
     if(!is.null(file_path) & !is.null(plt)) {
             ggsave(file_path,
                 width=12,
@@ -118,16 +125,15 @@ plot_endpt_sd_hr <- function(coxph_hr_res,
 #' @author Kira E. Detrois
 plot_age_hrs <- function(coxph_hr_res,
                          surv_ana) {
-                            
-    coxph_hr_res <- dplyr::filter(coxph_hr_res, !is.na(HR))
+
     endpts <- unique(coxph_hr_res$ENDPOINT)
 
     for(endpt in endpts) {
         surv_ana@study@endpt <- endpt # Cheating the system for easier plotting here
         curnt_coxph_hr_res <- dplyr::filter(coxph_hr_res, GROUP != "no groups")
         if(nrow(curnt_coxph_hr_res) > 0) {
-            min_y <- min(c(0, round(curnt_coxph_hr_res$CI_NEG)-1))
-            max_y <- round(max(curnt_coxph_hr_res$CI_POS))+1
+            max_y <- min(max(c(2, round(curnt_coxph_hr_res$CI_POS+0.5)), na.rm=TRUE), 10)
+            min_y <- min(c(0, round(curnt_coxph_hr_res$CI_NEG-0.5)), na.rm=TRUE)
             plot_age_rg_hr(surv_ana=surv_ana, 
                            coxph_hr_res=curnt_coxph_hr_res, 
                            endpt=endpt, 
@@ -136,8 +142,8 @@ plot_age_hrs <- function(coxph_hr_res,
         } 
         curnt_coxph_hr_res <- dplyr::filter(coxph_hr_res, GROUP == "no groups")
         if(nrow(curnt_coxph_hr_res) > 0) {
-            min_y <- min(c(0, round(curnt_coxph_hr_res$CI_NEG)-1))
-            max_y <- round(max(curnt_coxph_hr_res$CI_POS))
+            max_y <- min(max(c(2, round(curnt_coxph_hr_res$CI_POS+0.5)), na.rm=TRUE), 10)
+            min_y <- min(c(0, round(curnt_coxph_hr_res$CI_NEG-0.5)), na.rm=TRUE)
             plot_age_sd_hr(surv_ana=surv_ana, 
                            coxph_hr_res=curnt_coxph_hr_res, 
                            endpt=endpt, 
@@ -190,7 +196,7 @@ plot_age_sd_hr <- function(surv_ana,
                           plot.caption=element_text(size=10, hjust=0),
                           panel.grid.major.x =element_blank()) 
 
-        file_path <- check_and_get_file_path(surv_ana, res_type="HR SD")
+        file_path <- check_and_get_file_path(surv_ana=surv_ana, res_type="HR SD")
        if(!is.null(file_path) & !is.null(plt)) {
             ggsave(file_path,
                    width=7,
@@ -249,7 +255,7 @@ plot_age_rg_hr <- function(surv_ana,
                           plot.caption=element_text(size=10, hjust=0),
                           panel.grid.major.x =element_blank()) 
 
-        file_path <- check_and_get_file_path(surv_ana, res_type="HR RG")
+        file_path <- check_and_get_file_path(surv_ana=surv_ana, res_type="HR RG")
        if(!is.null(file_path) & !is.null(plt)) {
             ggsave(file_path,
                    width=7,

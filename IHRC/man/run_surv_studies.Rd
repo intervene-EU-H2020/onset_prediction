@@ -10,7 +10,7 @@ run_surv_studies(
   score_type,
   study_type = "forward",
   endpts = c("J10_ASTHMA"),
-  exp_ages = NULL,
+  exp_ages = 0,
   exp_len = NULL,
   wash_len = 2,
   obs_len = 8,
@@ -68,6 +68,10 @@ starts (in years).}
 \item{obs_len}{An integer. Length of the prediction period
 (in years).}
 
+\item{obs_end_date}{A Date. The end of the observation period. Needed
+for \code{backward} studies. If not set the end will
+be the most recent date across the diagnosis columns.}
+
 \item{downsample_fctr}{A numeric. Defines how many controls there
 should be for every case.
 Default is NA, which means no
@@ -77,6 +81,9 @@ downsampling is performed.}
 
 \item{max_age}{A numeric. The maximum age at the end of the exposure
 window of individuals.}
+
+\item{filter_1998}{A boolean. Whether to filter out individuals
+where the exposure period is before 1998.}
 
 \item{covs}{A vector of characters. The column names of the covariates
 to add to the predictor of the Cox-PH model.}
@@ -94,10 +101,6 @@ files.}
 
 \item{res_dir}{A character. The directory to write the results and
 log to.}
-
-\item{obs_end}{A Date. The end of the observation period. Needed for
-\code{backward} studies. If not set the end will be
-the most recent date across the diagnosis columns.}
 }
 \description{
 Calcualtes HR from a Cox-PH model for each exposure age and endpoint

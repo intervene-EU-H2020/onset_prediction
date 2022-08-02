@@ -53,6 +53,10 @@ of interest.}
 \item{obs_len}{An integer. Length of the prediction period
 (in years).}
 
+\item{obs_end_date}{A Date. The end of the observation period. Needed
+for \code{backward} studies. If not set the end will
+be the most recent date across the diagnosis columns.}
+
 \item{downsample_fctr}{A numeric. Defines how many controls there
 should be for every case.
 Default is NA, which means no
@@ -62,6 +66,9 @@ downsampling is performed.}
 
 \item{max_age}{A numeric. The maximum age at the end of the exposure
 window of individuals.}
+
+\item{filter_1998}{A boolean. Whether to filter out individuals
+where the exposure period is before 1998.}
 
 \item{write_res}{A boolean. Defines whether to save the results to
 files.}

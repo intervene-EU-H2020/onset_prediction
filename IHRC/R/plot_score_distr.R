@@ -38,7 +38,7 @@ plot_score_distr <- function(score_data,
                     theme(text=element_text(size=21)))
     }
 
-    file_path <- check_and_get_file_path(surv_ana,
+    file_path <- check_and_get_file_path(surv_ana=surv_ana,
                                          res_type="distr")
     if(!is.null(file_path)) {
         ggsave(file_path,
@@ -88,7 +88,7 @@ plot_endpt_score_distr <- function(score_data,
                     IUtils::theme_custom() +
                     theme(text=element_text(size=21))
 
-    file_path <- check_and_get_file_path(surv_ana,
+    file_path <- check_and_get_file_path(surv_ana=surv_ana,
                                          res_type="endpt")
     if(!is.null(file_path)) {
         ggsave(file_path,

@@ -20,6 +20,7 @@ test_that("run_back_endpt_studies PRS works", {
                                  score_type="PRS",
                                  study_type="backward",
                                  endpts=c("J10_ASTHMA", "I9_VTE"),
+                                 exp_len=10,
                                  wash_len=2,
                                  obs_len=8,
                                  obs_end_date=as.Date("2021/01/01"),

@@ -52,6 +52,5 @@ create_endpt_study_obj <- function(study_data,
                           filter_1998=filter_1998,
                           write_res=write_res,
                           res_dir=res_dir)
-    
     return(study)
 }

@@ -32,9 +32,9 @@
 #'                             (in years).
 #' @param obs_len An integer. Length of the prediction period
 #'                            (in years).
-#' @param obs_end A Date. The end of the observation period. Needed for
-#'                  `backward` studies. If not set the end will be
-#'                  the most recent date across the diagnosis columns.
+#' @param obs_end_date A Date. The end of the observation period. Needed 
+#'                      for `backward` studies. If not set the end will 
+#'                      be the most recent date across the diagnosis columns.
 #' @param downsample_fctr A numeric. Defines how many controls there
 #'                                   should be for every case.
 #'                                   Default is NA, which means no
@@ -42,6 +42,8 @@
 #' @param ancs A character (vector). The ancestries to consider.
 #' @param max_age A numeric. The maximum age at the end of the exposure
 #'                  window of individuals.
+#' @param filter_1998 A boolean. Whether to filter out individuals
+#'                      where the exposure period is before 1998.
 #' @param covs A vector of characters. The column names of the covariates 
 #'              to add to the predictor of the Cox-PH model.
 #' @param bin_cut A numeric. The binary cutoff value for classifying high
@@ -63,7 +65,7 @@ run_surv_studies <- function(pheno_data,
                              score_type,
                              study_type="forward",
                              endpts=c("J10_ASTHMA"),
-                             exp_ages=NULL,
+                             exp_ages=0,
                              exp_len=NULL,
                              wash_len=2,
                              obs_len=8,
@@ -77,9 +79,7 @@ run_surv_studies <- function(pheno_data,
                              min_indvs=5,
                              write_res=FALSE,
                              res_dir=NULL) {
-    if(is.null(exp_ages) & is.null(exp_len)) {
-        exp_ages <- 0
-    }
+
     if(write_res) {
         res_dir <- paste0(res_dir, get_down_dir(downsample_fctr), ifelse(filter_1998, "f1998/", "all/"))
     }
@@ -87,6 +87,7 @@ run_surv_studies <- function(pheno_data,
     all_age_cidxs_tib <- create_empty_cidx_tib()
     for(endpt in endpts) {
         for(exp_age in exp_ages) {
+            print(paste(study_type, endpt, exp_age))
             study <- create_endpt_study_obj(study_data=pheno_data,
                                             study_type=study_type,
                                             score_type=score_type,
@@ -132,10 +133,12 @@ run_surv_studies <- function(pheno_data,
                                     surv_ana=surv_ana)
         }
     }
-    write_res_files(endpt_hrs_tib=all_age_hrs_tib,
-                    endpt_c_idxs_tib=all_age_cidxs_tib,
-                    surv_ana=surv_ana)
-    plot_hrs(all_age_hrs_tib, surv_ana) 
+    if(nrow(all_age_hrs_tib) > 0 | nrow(all_age_hrs_tib) > 0) {
+        write_res_files(endpt_hrs_tib=all_age_hrs_tib,
+                        endpt_c_idxs_tib=all_age_cidxs_tib,
+                        surv_ana=surv_ana)
+        plot_hrs(all_age_hrs_tib, surv_ana) 
+    }
 }
 
 

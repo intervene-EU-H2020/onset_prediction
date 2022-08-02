@@ -22,6 +22,7 @@ test_that("calc_endpt_studies_hrs works", {
                          exp_len=10,
                          wash_len=2,
                          obs_len=8,
+                         max_age=50,
                          ancs=NA_character_,
                          filter_1998 = TRUE,
                          covs=c("SEX", "YEAR_OF_BIRTH"),
