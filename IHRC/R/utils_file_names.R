@@ -20,14 +20,14 @@ get_down_dir <- function(downsample_fctr) {
 #' @author Kira E. Detrois
 get_score_distr_file_name <- function(surv_ana) {
     plot_descr <- ""
-    if(surv_ana@score_type == "CCI") {
+    if("CCI" %in% surv_ana@score_type) {
         if(surv_ana@study@study_type == "forward") {
             plot_descr <- paste0("_", surv_ana@study@exp_age, "_to_", surv_ana@study@exp_age+surv_ana@study@exp_len)
         } else {
             plot_descr <- paste0("_until_", surv_ana@study@obs_end_date)
         }
     } 
-    paste0(surv_ana@score_type, "_score_distr", plot_descr, ".png")
+    paste0(paste0(surv_ana@score_type, collapse="_"), "_score_distr", plot_descr, ".png")
 }
 
 #' Creats the file name for the HR plots with risk grouping
@@ -41,11 +41,11 @@ get_score_distr_file_name <- function(surv_ana) {
 #' @author Kira E. Detrois
 get_hr_rg_file_name <- function(surv_ana) {
     if(surv_ana@study@study_type == "forward") {
-        file_name <- paste0(surv_ana@study@endpt, "_e", surv_ana@study@exp_len, "_w", surv_ana@study@wash_len, "_o", surv_ana@study@obs_len, "_", surv_ana@score_type)
+        file_name <- paste0(surv_ana@study@endpt, "_e", surv_ana@study@exp_len, "_w", surv_ana@study@wash_len, "_o", surv_ana@study@obs_len, "_", paste0(surv_ana@score_type, collapse="_"))
     } else {
-        file_name <- paste0(surv_ana@study@obs_end_date, "_o", surv_ana@study@obs_len, "_w", surv_ana@study@wash_len, "_", surv_ana@score_type)
+        file_name <- paste0(surv_ana@study@obs_end_date, "_o", surv_ana@study@obs_len, "_w", surv_ana@study@wash_len, "_", paste0(surv_ana@score_type, collapse="_"))
     }
-    if(surv_ana@score_type == "CCI") {
+    if("CCI" %in% surv_ana@score_type) {
         file_name <- paste0(file_name, "_cut", surv_ana@bin_cut)
     } 
     paste0(file_name, "_HRs.png")
@@ -62,9 +62,9 @@ get_hr_rg_file_name <- function(surv_ana) {
 #' @author Kira E. Detrois
 get_hr_sd_file_name <- function(surv_ana) {
     if(surv_ana@study@study_type == "forward") {
-        file_name <- paste0(surv_ana@study@endpt, "_e", surv_ana@study@exp_len, "_w", surv_ana@study@wash_len, "_o", surv_ana@study@obs_len, "_", surv_ana@score_type)
+        file_name <- paste0(surv_ana@study@endpt, "_e", surv_ana@study@exp_len, "_w", surv_ana@study@wash_len, "_o", surv_ana@study@obs_len, "_",paste0(surv_ana@score_type, collapse="_"))
     } else {
-        file_name <- paste0(surv_ana@study@obs_end_date, "_o", surv_ana@study@obs_len, "_w", surv_ana@study@wash_len, "_", surv_ana@score_type)
+        file_name <- paste0(surv_ana@study@obs_end_date, "_o", surv_ana@study@obs_len, "_w", surv_ana@study@wash_len, "_", paste0(surv_ana@score_type, collapse="_"))
     }
     paste0(file_name, "_sd_HRs.png")
 }
@@ -79,7 +79,7 @@ get_hr_sd_file_name <- function(surv_ana) {
 #' 
 #' @author Kira E. Detrois
 get_score_cut_file_name <- function(surv_ana) {
-    file_name <- paste0(Istudy::get_study_file_name(surv_ana@study), "_", surv_ana@score_type, "_cut_log.txt")
+    file_name <- paste0(Istudy::get_study_file_name(surv_ana@study), "_", paste0(surv_ana@score_type, collapse="_"), "_cut_log.txt")
     return(file_name)
 }
 
@@ -93,7 +93,7 @@ get_score_cut_file_name <- function(surv_ana) {
 #' 
 #' @author Kira E. Detrois
 get_endpt_score_file_name <- function(surv_ana) {
-    paste0(Istudy::get_study_file_name(surv_ana@study), "_",surv_ana@score_type, "_score.png")
+    paste0(Istudy::get_study_file_name(surv_ana@study), "_",paste0(surv_ana@score_type, collapse="_"), "_score.png")
 }
 
 #' Creats the file name for endpoint specific score distribution plot
@@ -106,7 +106,7 @@ get_endpt_score_file_name <- function(surv_ana) {
 #' 
 #' @author Kira E. Detrois
 get_surv_file_name <- function(surv_ana) {
-    paste0(Istudy::get_study_file_name(surv_ana@study), "_", surv_ana@score_type, "_surv.png")
+    paste0(Istudy::get_study_file_name(surv_ana@study), "_", paste0(surv_ana@score_type, collapse="_"), "_surv.png")
 }
 
 #' Creats the file name for Cox-PH model results file
@@ -121,13 +121,33 @@ get_surv_file_name <- function(surv_ana) {
 get_coxph_res_file_name <- function(surv_ana) {
     if(surv_ana@study@study_type == "forward") {
         file_name <- paste0("e", surv_ana@study@exp_len, "_w", surv_ana@study@wash_len, "_o", 
-        surv_ana@study@obs_len, "_", surv_ana@score_type)
+        surv_ana@study@obs_len)
     } else {
         file_name <- paste0(surv_ana@study@obs_end_date, "_o", surv_ana@study@obs_len, "_w", surv_ana@study@wash_len)
     }  
-    if(surv_ana@score_type == "CCI") {
+    file_name <- paste0(file_name, "_", paste0(surv_ana@score_type, collapse="_"))
+    if("CCI" %in% surv_ana@score_type & length(surv_ana@score_type) == 1) {
         file_name <- paste0(file_name, "_cut", surv_ana@bin_cut, "_coxph.tsv")
     } else {
         file_name <- paste0(file_name, "_coxph.tsv")
     }
+}
+
+#' Creats the file name for Cox-PH model results file
+#' 
+#' @inheritParams add_risk_group_col
+#' 
+#' @return A character. The file name.
+#' 
+#' @export 
+#' 
+#' @author Kira E. Detrois
+get_cidx_res_file_name <- function(surv_ana) {
+    if(surv_ana@study@study_type == "forward") {
+        file_name <- paste0("e", surv_ana@study@exp_len, "_w", surv_ana@study@wash_len, "_o", 
+        surv_ana@study@obs_len)
+    } else {
+        file_name <- paste0(surv_ana@study@obs_end_date, "_o", surv_ana@study@obs_len, "_w", surv_ana@study@wash_len)
+    }  
+    file_name <- paste0(file_name, "_", paste0(surv_ana@score_type, collapse="_"), "_cidx.tsv")
 }

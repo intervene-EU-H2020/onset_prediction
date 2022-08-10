@@ -6,7 +6,8 @@
 \usage{
 run_surv_studies(
   pheno_data,
-  score_data,
+  icd_data = NULL,
+  prs_data = NULL,
   score_type,
   study_type = "forward",
   endpts = c("J10_ASTHMA"),
@@ -33,10 +34,6 @@ i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_AGE_DAYS} where
 the columns are the study endpoint and date, which
 will differ depending on the chosen \code{endpts}.
 The phenotypic data on the individuals.}
-
-\item{score_data}{A data.frame with at least columns \code{SCORE}, or
-i.e. \code{J10_ASTHMA_PRS} for endpoint \code{J10_ASTHMA}
-and score type \code{PRS}.}
 
 \item{score_type}{A character. The score type. At the moment the two
 options are \code{CCI}, and \code{PRS}.}
@@ -101,6 +98,10 @@ files.}
 
 \item{res_dir}{A character. The directory to write the results and
 log to.}
+
+\item{score_data}{A data.frame with at least columns \code{SCORE}, or
+i.e. \code{J10_ASTHMA_PRS} for endpoint \code{J10_ASTHMA}
+and score type \code{PRS}.}
 }
 \description{
 Calcualtes HR from a Cox-PH model for each exposure age and endpoint

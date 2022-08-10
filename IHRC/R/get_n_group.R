@@ -11,9 +11,11 @@
 #' 
 #' @author Kira E. Detrois
 get_n_group_cases <- function(pheno_score_data, 
+                              group_col_name,
                               groups,
                               endpt) {
-    get_n_group_indvs(pheno_score_data=pheno_score_data, 
+    get_n_group_indvs(pheno_score_data=pheno_score_data,
+                      group_col_name=group_col_name, 
                       groups=groups, 
                       endpt=endpt, 
                       indv_type="cases")
@@ -28,9 +30,11 @@ get_n_group_cases <- function(pheno_score_data,
 #' 
 #' @author Kira E. Detrois
 get_n_group_cntrls <- function(pheno_score_data, 
+                               group_col_name,
                                groups,
                                endpt) {
     get_n_group_indvs(pheno_score_data=pheno_score_data, 
+                      group_col_name=group_col_name,
                       groups=groups, 
                       endpt=endpt, 
                       indv_type="cntrls")
@@ -47,6 +51,7 @@ get_n_group_cntrls <- function(pheno_score_data,
 #' 
 #' @export 
 get_n_group_indvs <- function(pheno_score_data,
+                              group_col_name,
                               groups,
                               endpt,
                               indv_type) {
@@ -54,7 +59,7 @@ get_n_group_indvs <- function(pheno_score_data,
         n_indvs <- c()
         for(group in groups) {
             group_data <- dplyr::filter(pheno_score_data, 
-                                        SCORE_GROUP == group)
+                                        get(group_col_name) == group)
             if(indv_type == "cntrls") {
                 crnt_n_indv <- Istudy::get_n_cntrls(group_data, endpt)
             } else if(indv_type == "cases") {

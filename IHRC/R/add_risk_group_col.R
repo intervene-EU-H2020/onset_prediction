@@ -24,18 +24,24 @@ add_risk_group_col <- function(score_data,
     if("CCI" %in% surv_ana@score_type) {
         indv_score_groups <- get_two_level_groups(score_data, 
                                                   surv_ana@bin_cut)
-    } else {
+        score_data <- tibble::add_column(
+                                score_data, 
+                                CCI_SCORE_GROUP=indv_score_groups)
+    } 
+    if("PRS" %in% surv_ana@score_type) {
         quantiles <- c(0,0.01,0.05,0.1,0.2,0.4,0.6,0.8,0.9,0.95,0.99,1)
         score_group_tbl <- get_score_group_tbl(score_data, 
-                                               surv_ana@score_type,
+                                               "PRS",
                                                quantiles)
         indv_score_groups <- get_indvs_score_groups(score_data,
-                                                    surv_ana@score_type,
+                                                    "PRS",
                                                     score_group_tbl)
         write_score_groups_to_log(score_group_tbl=score_group_tbl,
                                   surv_ana=surv_ana)
+        score_data <- tibble::add_column(
+                                score_data, 
+                                PRS_SCORE_GROUP=indv_score_groups)
     } 
-    score_data <- tibble::add_column(score_data, 
-                                     SCORE_GROUP=indv_score_groups)
+
     return(score_data)
 }

@@ -4,7 +4,7 @@
 \alias{get_n_group_cases}
 \title{Gets the number of cases of a score group for a given endpoint}
 \usage{
-get_n_group_cases(pheno_score_data, groups, endpt)
+get_n_group_cases(pheno_score_data, group_col_name, groups, endpt)
 }
 \arguments{
 \item{pheno_score_data}{A data.frame with at least columns

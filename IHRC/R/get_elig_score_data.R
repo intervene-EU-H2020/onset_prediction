@@ -22,15 +22,25 @@
 #'          under the study setup of the current survival analysis setup.
 #' 
 #' @author Kira E. Detrois
-get_elig_score_data  <- function(surv_ana) {
-    if(Istudy::get_n_cases(surv_ana@study@study_data, surv_ana@study@endpt) > surv_ana@min_indvs &
-        Istudy::get_n_cntrls(surv_ana@study@study_data, surv_ana@study@endpt) > surv_ana@min_indvs) {
-        curnt_score_data <- get_curnt_score_data(surv_ana)
-        pheno_score_data <- join_dfs(pheno_data=surv_ana@study@study_data, 
-                                     score_data=curnt_score_data,
-                                     score_type=surv_ana@score_type,
-                                     endpt=surv_ana@study@endpt)
-        return(pheno_score_data)
+get_elig_score_data  <- function(score_type,
+                                 study_data,
+                                 icd_data=NULL,
+                                 prs_data=NULL,
+                                 endpt=NULL,
+                                 min_indvs=5) {
+    n_cases <- Istudy::get_n_cases(study_data, endpt)
+    n_cntrls <- Istudy::get_n_cntrls(study_data, endpt)
+    if(n_cases > min_indvs & n_cntrls > min_indvs) {
+        score_data <- preprocess_score_data(score_type=score_type, 
+                                            study_data=study_data,
+                                            icd_data=icd_data, 
+                                            prs_data=prs_data,
+                                            endpt=endpt)
+        elig_score_data <- join_dfs(study_data=study_data,
+                                    score_data=score_data,
+                                    score_type=score_type,
+                                    endpt=endpt)
+        return(elig_score_data)
     } else {
         return(tibble::tibble())
     }

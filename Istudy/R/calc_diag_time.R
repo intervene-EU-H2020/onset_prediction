@@ -52,9 +52,15 @@ calc_diag_time <- function(study_data,
                      "calc_diag_time")  
 
     endpt_date <- dplyr::pull(study_data, get(paste0(endpt, "_DATE")))
+    folend_date <- dplyr::pull(study_data, END_OF_FOLLOWUP)
     cntrls_idxs <- (study_data[,endpt] == 0)
     # Setting Date / AGE at onset of controls to end of study
     endpt_date[cntrls_idxs] <- study_data$OBS_END_DATE[cntrls_idxs]
+    # Setting censored individuals dates
+    cens_idxs <- (study_data$END_OF_FOLLOWUP < study_data$OBS_END_DATE & 
+                    !is.na(study_data$END_OF_FOLLOWUP))
+    endpt_date[cens_idxs] <- study_data$END_OF_FOLLOWUP[cens_idxs]
+
     # Gets exact age in years
     endpt_date <- as.Date(endpt_date, origin="1970/01/01")
     age_at_onset <- lubridate::time_length(study_data$EXP_END_DATE %--% endpt_date, "years")

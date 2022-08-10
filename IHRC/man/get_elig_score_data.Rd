@@ -4,11 +4,14 @@
 \alias{get_elig_score_data}
 \title{Gets the full score and phenotype data on the eligible individuals}
 \usage{
-get_elig_score_data(surv_ana)
-}
-\arguments{
-\item{surv_ana}{An S4 class representing the current survival analysis
-setup.}
+get_elig_score_data(
+  score_type,
+  study_data,
+  icd_data = NULL,
+  prs_data = NULL,
+  endpt = NULL,
+  min_indvs = 5
+)
 }
 \value{
 The data.frame with the score data for all eligible individuals

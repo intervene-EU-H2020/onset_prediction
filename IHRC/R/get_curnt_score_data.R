@@ -20,16 +20,22 @@ get_curnt_score_data <- function(surv_ana) {
     curnt_score_data <- surv_ana@elig_score_data
     # Adding CCI_SCORE column
     if("CCI" %in% surv_ana@score_type) {
-        curnt_score_data <- get_study_cci_scores(surv_ana@study@study_data,
-                                                 curnt_score_data,
-                                                 surv_ana@study)  
+        score_data <- get_study_cci_scores(surv_ana@study@study_data,
+                                           curnt_score_data)  
     } 
     # Adding PRS_SCORE column
     if("PRS" %in% surv_ana@score_type) {
-        curnt_score_data <- get_prs_endpt_scores(curnt_score_data,
-                                                 surv_ana@score_type,
-                                                 surv_ana@study@endpt)
+        curnt_score_data <- get_prs_endpt_scores(   
+                                    score_data=surv_ana@elig_score_data,
+                                    endpt=surv_ana@study@endpt)
+        if("CCI" %in% surv_ana@score_type) {
+            score_data <- dplyr::left_join(score_data, 
+                                           curnt_score_data, 
+                                           by="ID")
+        } else {
+            score_data <- curnt_score_data
+        }
     }
 
-    return(curnt_score_data)
+    return(score_data)
 }

@@ -38,7 +38,7 @@ write_res_files <- function(study) {
 #' @author Kira E. Detrois
 write_res_file <- function(study) {
     if(check_res_dir(study@write_res, study@res_dir) & 
-        get_n_cases(study@study_data, study@endpt) > 0) {
+        (get_n_cases(study@study_data, study@endpt) > 0)) {
             elig_res_dir <- paste0(study@res_dir, "elig_indv/")
             if(!dir.exists(elig_res_dir)) {
                 dir.create(elig_res_dir)

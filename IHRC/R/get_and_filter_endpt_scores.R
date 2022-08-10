@@ -14,14 +14,11 @@
 #' 
 #' @importFrom dplyr %>% 
 get_prs_endpt_scores <- function(score_data,
-                                 score_type,
                                  endpt) {
     
-    if("PRS" %in% score_type) {
-        prs_col_name <- paste0(endpt, "_PRS")
-        score_data <- dplyr::select(.data=score_data, 
-                                    ID, 
-                                    {{ prs_col_name }}) %>% 
-                        dplyr::rename("PRS_SCORE" = {{ prs_col_name }})
-    }
+    prs_col_name <- paste0(endpt, "_PRS")
+    score_data <- dplyr::select(.data=score_data, 
+                                ID, 
+                                {{ prs_col_name }}) %>% 
+                    dplyr::rename("PRS_SCORE" = {{ prs_col_name }})
 }

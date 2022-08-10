@@ -8,13 +8,19 @@
 #' 
 #' @export 
 custom_colors_brewer <- function(N_colors) {
-    cols <- dplyr::case_when(
-        N_colors == 2 ~ c("#0571B0","#CA0020"),
-        N_colors == 3 ~ c("#0571b0","#CA0020", "#424B54"),
-        N_colors == 4 ~ c("#0571B0","#CA0020", "#424B54", "#92C5DE"),
-        N_colors == 5 ~ c("#0571B0","#CA0020", "#424B54", "#92C5DE", "#F4A582")
-    )
-    return(cols)
+    if(N_colors == 1)
+      c("#000000")
+    else if(N_colors == 2) {
+      #c("#0571B0","#CA0020")
+      c("#D5694F", "#224767")
+    } else if(N_colors == 3)  {
+      c("#D5694F", "#224767", "#EAB034")
+    } else if(N_colors == 4) {
+      c("#D5694F", "#224767", "#EAB034", "#748AAA")
+    } else if(N_colors == 5) {
+      c("#D5694F", "#224767", "#EAB034", "#748AAA", "#9E577C")
+      #c("#0571B0","#CA0020", "#424B54", "#92C5DE", "#F4A582")
+    }
 }
 
 #' Custom theme for plottig
@@ -26,7 +32,7 @@ custom_colors_brewer <- function(N_colors) {
 #' 
 #' @author Kira E. Detrois
 #' 
-#' @importFrom ggplot2 %+replace%
+#' @import ggplot2
 #'  
 #' @export 
 theme_custom <- function(base_size = 18,
@@ -38,6 +44,7 @@ theme_custom <- function(base_size = 18,
     base_rect_size = base_rect_size
   ) +
     ggplot2::theme(
+      plot.caption=ggplot2::element_text(size=base_size/2, hjust=0),
       rect = ggplot2::element_blank(),
       text = ggplot2::element_text(
         colour = "black"

@@ -16,7 +16,7 @@ test_that("run_back_endpt_studies PRS works", {
    test_data <- create_prs_test(length(pheno_data$ID), pheno_data$ID)
 
    expect_error(run_surv_studies(pheno_data=pheno_data, 
-                                 score_data=test_data,
+                                 prs_data=test_data,
                                  score_type="PRS",
                                  study_type="backward",
                                  endpts=c("J10_ASTHMA", "I9_VTE"),

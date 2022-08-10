@@ -65,8 +65,7 @@ plot_endpt_rg_hr <- function(coxph_hr_res,
                                  x="Hazard Ratio (95%)",
                                  y="") +
                             # Theme
-                            IUtils::theme_custom() +
-                            theme(text=element_text(size=21))
+                            IUtils::theme_custom(base_size=21)
 
     file_path <- check_and_get_file_path(surv_ana=surv_ana, res_type="HR RG")
     if(!is.null(file_path) & !is.null(plt)) {
@@ -87,20 +86,32 @@ plot_endpt_sd_hr <- function(coxph_hr_res,
 
     plt <- ggplot2::ggplot(top_group,
                             # Plot basics
-                            aes(y=ENDPOINT, x=HR)) +
-                            geom_point(show.legend = FALSE) +
-                            geom_errorbar(aes(xmin=CI_NEG, xmax=CI_POS), width=0.2) +
+                            aes(y=ENDPOINT, x=HR, color=SCORE)) +
                             # Axis settings
                             coord_cartesian(xlim=c(min_x, max_x)) +
                             geom_vline(xintercept = 1.0) +
                             # Legends and labels
-                            labs(title=paste0(surv_ana@score_type, " 1-SD Increment"),
-                                 caption=paste0("Obs: ", surv_ana@study@obs_len, " Years until ", surv_ana@study@obs_end_date, " Wash: ", surv_ana@study@wash_len, " Years", get_surv_descr(surv_ana, surv_type="surv")),
+                            labs(caption=paste0("Obs: ", surv_ana@study@obs_len, " Years until ", surv_ana@study@obs_end_date, " Wash: ", surv_ana@study@wash_len, " Years", get_surv_descr(surv_ana, surv_type="surv")),
                                  x="Hazard Ratio (95%)",
                                  y="") +
+                            scale_color_manual(values=IUtils::custom_colors_brewer(length(surv_ana@score_type)), 
+                                       name="Score", 
+                                       labels=surv_ana@score_type) +
                             # Theme
-                            IUtils::theme_custom() +
-                            theme(text=element_text(size=21))
+                            IUtils::theme_custom(base_size=21) 
+        if(length(surv_ana@score_type) > 1) {
+            plt <- plt + 
+                    geom_point(position = position_dodge(width = .3)) +
+                    geom_errorbar(position = position_dodge(width = .3), width=0.1, 
+                                  aes(xmin=CI_NEG, xmax=CI_POS)) +
+                    labs(title="1-SD Increment")
+        } else {
+            # Points and error bars
+            plt <- plt + geom_point(show.legend = FALSE) + 
+                    geom_errorbar(aes(xmin=CI_NEG, xmax=CI_POS), width=.1) +
+                    theme(legend.position = "none") +
+                    labs(title=paste0(surv_ana@score_type, " 1-SD Increment"))
+        }
 
     file_path <- check_and_get_file_path(surv_ana=surv_ana, res_type="HR SD")
     if(!is.null(file_path) & !is.null(plt)) {
@@ -144,7 +155,7 @@ plot_age_hrs <- function(coxph_hr_res,
         if(nrow(curnt_coxph_hr_res) > 0) {
             max_y <- min(max(c(2, round(curnt_coxph_hr_res$CI_POS+0.5)), na.rm=TRUE), 10)
             min_y <- min(c(0, round(curnt_coxph_hr_res$CI_NEG-0.5)), na.rm=TRUE)
-            plot_age_sd_hr(surv_ana=surv_ana, 
+            plot_age_sd_hr(surv_ana=surv_ana,  
                            coxph_hr_res=curnt_coxph_hr_res, 
                            endpt=endpt, 
                            min_y=min_y, 
@@ -174,11 +185,7 @@ plot_age_sd_hr <- function(surv_ana,
                            max_y) {
     endpt_coxph_hr_res <- dplyr::filter(coxph_hr_res, ENDPOINT == endpt)
     if(nrow(endpt_coxph_hr_res) > 0) {
-
-        plt <- ggplot2::ggplot(endpt_coxph_hr_res, aes(x=as.character(EXP_AGE), y=HR)) +
-                    # Points and error bars
-                    geom_point() + 
-                    geom_errorbar(aes(ymin=CI_NEG, ymax=CI_POS), width=.1) +
+        plt <- ggplot2::ggplot(endpt_coxph_hr_res, aes(x=as.character(EXP_AGE), y=HR, color=SCORE)) +
                     # Axis settings
                     geom_hline(yintercept=1.0) + 
                     coord_cartesian(ylim=c(min_y,max_y)) +
@@ -190,12 +197,25 @@ plot_age_sd_hr <- function(surv_ana,
                          caption=paste0("Exp: ", surv_ana@study@exp_len, " Wash: ", surv_ana@study@wash_len, " Obs: ",  surv_ana@study@obs_len, " Years", get_surv_descr(surv_ana, surv_type="surv")),
                          x="Observation Age",
                          y="Hazard Ratio (95% CI)") +
+                    scale_color_manual(values=IUtils::custom_colors_brewer(length(surv_ana@score_type)), 
+                                       name="Score", 
+                                       labels=surv_ana@score_type) +
                     # Theme
-                    IUtils::theme_custom(base_size=16) +
-                    theme(text=element_text(size=21),
-                          plot.caption=element_text(size=10, hjust=0),
-                          panel.grid.major.x =element_blank()) 
-
+                    IUtils::theme_custom(base_size=21) +
+                    theme(panel.grid.major.x=element_blank()) 
+        if(length(surv_ana@score_type) > 1) {
+            plt <- plt + 
+                    geom_point(position = position_dodge(width = .3),
+                               aes(color=SCORE)) +
+                    geom_errorbar(position = position_dodge(width = .3), width=0.1, 
+                                  aes(ymin=CI_NEG, ymax=CI_POS, color=SCORE)) 
+        } else {
+            # Points and error bars
+            plt <- plt + geom_point(show.legend = FALSE) + 
+                    geom_errorbar(aes(ymin=CI_NEG, ymax=CI_POS), width=.1) +
+                    theme(legend.position = "none")
+        }
+        
         file_path <- check_and_get_file_path(surv_ana=surv_ana, res_type="HR SD")
        if(!is.null(file_path) & !is.null(plt)) {
             ggsave(file_path,
@@ -245,17 +265,16 @@ plot_age_rg_hr <- function(surv_ana,
                                      labels=get_obs_per_strings(endpt_coxph_hr_res, surv_ana)) +
                     # Labels and titles
                     labs(title=endpt,
-                         subtitle=paste0(get_comp_descr(surv_ana, surv_type="HR")),
+                         subtitle=get_comp_descr(surv_ana, surv_type="HR"),
                          caption=paste0("Exp: ", surv_ana@study@exp_len, " Wash: ", surv_ana@study@wash_len, " Obs: ",  surv_ana@study@obs_len, " Years", get_surv_descr(surv_ana, surv_type="HR")),
                          x="Observation Age",
                          y="Hazard Ratio (95% CI)") +
                     # Theme
-                    IUtils::theme_custom(base_size=16) +
-                    theme(text=element_text(size=21),
-                          plot.caption=element_text(size=10, hjust=0),
-                          panel.grid.major.x =element_blank()) 
+                    IUtils::theme_custom(base_size=21) +
+                    theme(panel.grid.major.x=element_blank()) 
 
-        file_path <- check_and_get_file_path(surv_ana=surv_ana, res_type="HR RG")
+
+    file_path <- check_and_get_file_path(surv_ana=surv_ana, res_type="HR RG")
        if(!is.null(file_path) & !is.null(plt)) {
             ggsave(file_path,
                    width=7,

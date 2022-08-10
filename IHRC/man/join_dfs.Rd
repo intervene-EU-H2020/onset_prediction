@@ -4,16 +4,9 @@
 \alias{join_dfs}
 \title{Joins the two data.frames}
 \usage{
-join_dfs(pheno_data, score_data, score_type = "CCI", endpt = NULL)
+join_dfs(study_data, score_data, score_type = "CCI", endpt = NULL)
 }
 \arguments{
-\item{pheno_data}{A data.frame with at least the columns:
-\code{ID}, the columns specified in \code{covs} and
-i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_AGE_DAYS} where
-the columns are the study endpoint and date, which
-will differ depending on the chosen \code{endpts}.
-The phenotypic data on the individuals.}
-
 \item{score_data}{A data.frame with at least columns \code{SCORE}, or
 i.e. \code{J10_ASTHMA_PRS} for endpoint \code{J10_ASTHMA}
 and score type \code{PRS}.}

@@ -11,15 +11,15 @@
 #' @export 
 #' 
 #' @author Kira E. Detrois
-join_dfs <- function(pheno_data,
+join_dfs <- function(study_data,
                      score_data,
                      score_type="CCI",
                      endpt=NULL) {
-    pheno_score_data <- dplyr::left_join(x=pheno_data,
-                                         y=score_data,
-                                         by="ID")
+    elig_score_data <- dplyr::left_join(x=study_data,
+                                        y=score_data,
+                                        by="ID")
     if("CCI" %in% score_type) {
-        pheno_score_data$CCI_SCORE[is.na(pheno_score_data$CCI_SCORE)] <- 0
+        elig_score_data$CCI_SCORE[is.na(elig_score_data$CCI_SCORE)] <- 0
     }
-    return(pheno_score_data)
+    return(elig_score_data)
 }

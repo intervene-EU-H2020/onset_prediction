@@ -10,7 +10,7 @@ test_that("calc_endpt_studies_hrs works", {
       exp_ages <- c(20, 30, 40)
       expect_error(run_surv_studies(
                          pheno_data=pheno_data, 
-                         score_data=icd_data,
+                         icd_data=icd_data,
                          score_type="CCI",
                          study_type="forward",
                          endpts=c("J10_ASTHMA", 
@@ -56,7 +56,7 @@ test_that("calc_endpt_studies_hrs works", {
       exp_ages <- c(20,30,40)
       expect_error(run_surv_studies(
                          pheno_data=pheno_data, 
-                         score_data=icd_data,
+                         icd_data=icd_data,
                          score_type="CCI",
                          study_type="forward",
                          endpts=c("J10_ASTHMA", 

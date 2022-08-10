@@ -19,13 +19,15 @@
 calc_endpt_study_cidx <- function(surv_ana) {
     set.seed(923)
     coxph_mdl <- get_coxph_mdl(surv_ana,
-                               pred_score=paste0(surv_ana@score_type, "_SCORE", collapse=" + "))
+                               pred_score="SCORE")
     if(!is.null(coxph_mdl)) {
         # Risk and survival have opposite directions
         preds <- (-1)*predict(coxph_mdl, 
                               type="risk")
-        surv_obj <- get_surv_obj(surv_ana@elig_score_data, 
-                                 surv_ana@study@endpt)    
+        
+        surv_obj <- get_surv_obj(
+                        get_score_data_no_na(surv_ana), 
+                        surv_ana@study@endpt)    
         c_idx <- Hmisc::rcorr.cens(preds, surv_obj)
     } else {
         c_idx <- NULL
@@ -33,4 +35,11 @@ calc_endpt_study_cidx <- function(surv_ana) {
     return(c_idx)
 }
 
-
+get_score_data_no_na <- function(surv_ana) {
+    score_data <- surv_ana@elig_score_data
+    for(score_type in surv_ana@score_type) {
+        score_data <- dplyr::filter(score_data, 
+                        !is.na(get(paste0(score_type, "_SCORE"))))
+    }
+    return(score_data)
+}

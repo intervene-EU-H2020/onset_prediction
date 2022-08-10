@@ -58,7 +58,6 @@ surv_ana <- methods::setClass("surv_ana",
 #' @importFrom methods callNextMethod
 setMethod("initialize", "surv_ana", function(.Object, ...) {
     .Object <- callNextMethod()
-    .Object@elig_score_data <- get_elig_score_data(.Object)
     if(nrow(.Object@elig_score_data) > 0) {
         .Object@elig_score_data <- add_risk_group_col(.Object@elig_score_data,
                                                       .Object)

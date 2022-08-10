@@ -61,7 +61,8 @@
 #' 
 #' @author Kira E. Detrois
 run_surv_studies <- function(pheno_data, 
-                             score_data,
+                             icd_data=NULL,
+                             prs_data=NULL,
                              score_type,
                              study_type="forward",
                              endpts=c("J10_ASTHMA"),
@@ -87,7 +88,6 @@ run_surv_studies <- function(pheno_data,
     all_age_cidxs_tib <- create_empty_cidx_tib()
     for(endpt in endpts) {
         for(exp_age in exp_ages) {
-            print(paste(study_type, endpt, exp_age))
             study <- create_endpt_study_obj(study_data=pheno_data,
                                             study_type=study_type,
                                             score_type=score_type,
@@ -103,9 +103,15 @@ run_surv_studies <- function(pheno_data,
                                             filter_1998=filter_1998,
                                             write_res=write_res,
                                             res_dir=res_dir)
+            elig_score_data <- get_elig_score_data(score_type=score_type, 
+                                                study_data=study@study_data,
+                                                icd_data=icd_data, 
+                                                prs_data=prs_data,
+                                                endpt=endpt,
+                                                min_indvs=min_indvs)
             surv_ana <- methods::new("surv_ana",
                                      study=study,
-                                     elig_score_data=score_data,
+                                     elig_score_data=elig_score_data,
                                      score_type=score_type,
                                      min_indvs=min_indvs,
                                      covs=covs,

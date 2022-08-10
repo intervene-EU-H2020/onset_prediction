@@ -57,29 +57,27 @@ add_coxph_res_row <- function(endpt_hrs_tib,
                               surv_ana,
                               pred_score="SCORE_GROUP") {
     if(!is.null(coxph_mdl)) {
-        coxph_res_list <- get_min_indvs_data(coxph_mdl=coxph_mdl,
-                                             surv_ana=surv_ana,
-                                             pred_score=pred_score)
-        if(!is.null(coxph_res_list)) {
-            #print(endpt_hrs_tib)
-            #print(paste0("surv_ana@study@endpt ", surv_ana@study@endpt))
-            #print(paste0("surv_ana@study@exp_age ", surv_ana@study@exp_age))
-            #print(paste0("surv_ana@score_type ", surv_ana@score_type))
-            #print(coxph_res_list)
-            endpt_hrs_tib <- tibble::add_row(
-                                         endpt_hrs_tib, 
-                                         ENDPOINT=surv_ana@study@endpt,
-                                         EXP_AGE=surv_ana@study@exp_age,
-                                         SCORE=surv_ana@score_type,
-                                         GROUP=coxph_res_list$groups,
-                                         N_CONTROLS=coxph_res_list$n_cntrl,
-                                         N_CASES=coxph_res_list$n_case,
-                                         BETA=coxph_res_list$beta,
-                                         STD_ERRS=coxph_res_list$std_err,
-                                         P_VAL=coxph_res_list$p_val,
-                                         HR=coxph_res_list$HR,
-                                         CI_NEG=coxph_res_list$CI_neg,
-                                         CI_POS=coxph_res_list$CI_pos)
+        for(score_type in surv_ana@score_type) {
+            coxph_res_list <- get_min_indvs_data(coxph_mdl=coxph_mdl,
+                                                 surv_ana=surv_ana,
+                                                 pred_score=pred_score,
+                                                 score_type=score_type)
+            if(!is.null(coxph_res_list)) {
+                endpt_hrs_tib <- tibble::add_row(
+                                            endpt_hrs_tib, 
+                                            ENDPOINT=surv_ana@study@endpt,
+                                            EXP_AGE=surv_ana@study@exp_age,
+                                            SCORE=score_type,
+                                            GROUP=coxph_res_list$groups,
+                                            N_CONTROLS=coxph_res_list$n_cntrl,
+                                            N_CASES=coxph_res_list$n_case,
+                                            BETA=coxph_res_list$beta,
+                                            STD_ERRS=coxph_res_list$std_err,
+                                            P_VAL=coxph_res_list$p_val,
+                                            HR=coxph_res_list$HR,
+                                            CI_NEG=coxph_res_list$CI_neg,
+                                            CI_POS=coxph_res_list$CI_pos)
+            }
         }
     } 
     return(endpt_hrs_tib)
@@ -96,17 +94,25 @@ add_coxph_res_row <- function(endpt_hrs_tib,
 #' @author Kira E. Detrois
 get_min_indvs_data <- function(coxph_mdl,
                                surv_ana,
-                               pred_score="SCORE_GROUP") {
+                               pred_score="SCORE_GROUP",
+                               score_type) {
     coxph_res_list <- extract_coxph_res(coxph_mdl,
-                                        surv_ana@score_type)
+                                        score_type)
     if(pred_score == "SCORE_GROUP") {
-        n_cntrls_vec <- get_n_group_cntrls(surv_ana@elig_score_data, 
-                                        levels(surv_ana@elig_score_data$SCORE_GROUP),
-                                        surv_ana@study@endpt)
-        n_cases_vec <- get_n_group_cases(surv_ana@elig_score_data, 
-                                        levels(surv_ana@elig_score_data$SCORE_GROUP),
-                                        surv_ana@study@endpt)
-        ref_level = levels(surv_ana@elig_score_data$SCORE_GROUP)[1]
+        group_col_name <- paste0(score_type, "_SCORE_GROUP")
+        score_group_data <- dplyr::pull(surv_ana@elig_score_data,   
+                                        get(group_col_name))
+        n_cntrls_vec <- get_n_group_cntrls(
+                            pheno_score_data=surv_ana@elig_score_data, 
+                            group_col_name=group_col_name,
+                            groups=levels(score_group_data),
+                            endpt=surv_ana@study@endpt)
+        n_cases_vec <- get_n_group_cases(
+                            pheno_score_data=surv_ana@elig_score_data, 
+                            group_col_name=group_col_name,
+                            groups=levels(score_group_data),
+                            endpt=surv_ana@study@endpt)
+        ref_level = levels(score_group_data)[1]
 
         # Reference group has enough cases and controls
         if((n_cntrls_vec[1] > surv_ana@min_indvs) & 

@@ -5,7 +5,7 @@
 \title{Gets the number of cases or controls of a score group for a given
 endpoint}
 \usage{
-get_n_group_indvs(pheno_score_data, groups, endpt, indv_type)
+get_n_group_indvs(pheno_score_data, group_col_name, groups, endpt, indv_type)
 }
 \arguments{
 \item{pheno_score_data}{A data.frame with at least columns

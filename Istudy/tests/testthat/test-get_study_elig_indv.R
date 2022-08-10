@@ -1,7 +1,6 @@
 test_that("get_study_elig_indv works", {
   set.seed(9231)
-  test_data <- create_test_df(25)
-
+    test_data <- create_test_df(25)
   # Removed because of early diagnosis
   test_data[test_data$ID == "KT000001",]$J10_ASTHMA = 1 
   test_data[test_data$ID == "KT000001",]$J10_ASTHMA_DATE = as.Date("1930/01/01")
@@ -18,7 +17,7 @@ test_that("get_study_elig_indv works", {
                         exp_len=10,
                         wash_len=2,
                         obs_len=8)
-  expected_res_ids = c("KT000002", "KT000005", "KT000006", "KT000008", "KT000009", "KT0000011",
+  expected_res_ids = c("KT000002", "KT000005", "KT000006", "KT000008", "KT000009", 
                        "KT0000013", "KT0000014", "KT0000015", "KT0000017", "KT0000018", "KT0000019",
                        "KT0000020", "KT0000021", "KT0000022", "KT0000023")
   expect_equal(study@study_data$ID, expected_res_ids)
@@ -49,8 +48,6 @@ test_that("study setup works", {
                         wash_len=2,
                         obs_len=8)
   true_res <- readr::read_delim("/home/kira/duni/helsinki/DSGE/Code/onset_prediction/Istudy/tests/true_res/study_test_results.tsv", delim="\t", show_col_types = FALSE) %>% dplyr::select(-ENDPT_FREE_PERIOD, -STUDY_TIME)
-  #print(true_res)
-  #print(dplyr::select(study@study_data, ENDPT_FREE_PERIOD, J10_ASTHMA, J10_ASTHMA_DATE))
   expect_equal(study@study_data$ID, true_res$ID)
   expect_equal(study@study_data$EXP_START_DATE, true_res$EXP_START_DATE)
 })
@@ -78,7 +75,7 @@ test_that("get_study_elig_indv adj case control works", {
                         wash_len=2,
                         obs_len=8, 
                         ancs="EUR")
-  expected_res = c(0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0)   
+  expected_res = c(0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0)   
   expect_equal(study@study_data$J10_ASTHMA, expected_res)
 })
 

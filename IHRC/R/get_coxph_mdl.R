@@ -28,13 +28,12 @@ get_coxph_mdl <- function(surv_ana,
                                         surv_ana@covs)
         coxph_formula <- get_coxph_formula(surv_ana, pred_score)
         build_mdl <- TRUE
+
         if(pred_score == "SCORE_GROUP") {
+            score_col_name <- paste0(surv_ana@score_type, "_SCORE_GROUP")
             Istudy::check_cols_exist(surv_ana@elig_score_data, 
-                                    "SCORE_GROUP", 
-                                    "get_coxph_mdl")
-            if(length(unique(surv_ana@elig_score_data$SCORE_GROUP)) < 2) {
-                build_mdl <- FALSE
-            }
+                                     score_col_name, 
+                                     "get_coxph_mdl")
         } else if(pred_score == "SCORE") {
             score_col_name <- paste0(surv_ana@score_type, "_SCORE")
             Istudy::check_cols_exist(surv_ana@elig_score_data, 

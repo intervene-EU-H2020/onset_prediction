@@ -12,14 +12,15 @@ test_that("add_risk_group_col works", {
                           endpt="J10_ASTHMA",
                           wash_len=2,
                           obs_len=8)
+    score_data <- preprocess_score_data("CCI", study@study_data, icd_data)
     surv_ana <- methods::new("surv_ana",
                              study=study,
-                             elig_score_data=icd_data,
+                             elig_score_data=score_data,
                              score_type="CCI")
     pheno_score_data <- add_risk_group_col(pheno_score_data, surv_ana)
     expect_res <- factor(c("<=1", "<=1", ">1", ">1", ">1"),
                          levels=c("<=1", ">1"))
-    expect_equal(pheno_score_data$SCORE_GROUP, expect_res)
+    expect_equal(pheno_score_data$CCI_SCORE_GROUP, expect_res)
 })
 
 test_that("get_risk_group_labs works", {

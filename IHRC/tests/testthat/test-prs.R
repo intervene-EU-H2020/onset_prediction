@@ -15,7 +15,7 @@ test_that("calc_endpt_studies_hrs for prs works", {
     test_data <- create_prs_test(length(pheno_data$ID), pheno_data$ID)
     exp_ages <- c(20,30,40)
     expect_error(run_surv_studies(pheno_data=pheno_data, 
-                     score_data=test_data,
+                     prs_data=test_data,
                      score_type="PRS",
                      exp_ages=exp_ages,
                      exp_len=10,

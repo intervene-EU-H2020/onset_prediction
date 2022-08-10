@@ -75,6 +75,7 @@ setMethod("initialize", "study", function(.Object, ...) {
                                         # string and not a vector.
                                         .Object@endpt,  
                                         paste0(.Object@endpt, "_DATE"),
+                                        END_OF_FOLLOWUP,
                                         dplyr::starts_with("PC"))
     .Object@study_data <- set_study_data_dates(study_data=.Object@study_data,
                                     study_type=.Object@study_type,
@@ -83,7 +84,6 @@ setMethod("initialize", "study", function(.Object, ...) {
                                     wash_len=.Object@wash_len,
                                     obs_len=.Object@obs_len,
                                     obs_end_date=.Object@obs_end_date)
-
     .Object@study_data <- get_study_elig_indv(study=.Object)
 
     return(.Object)

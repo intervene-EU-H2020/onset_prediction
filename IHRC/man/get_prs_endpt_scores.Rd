@@ -4,15 +4,12 @@
 \alias{get_prs_endpt_scores}
 \title{Renames the score column to \code{SCORE} and filters out NAs}
 \usage{
-get_prs_endpt_scores(score_data, score_type, endpt)
+get_prs_endpt_scores(score_data, endpt)
 }
 \arguments{
 \item{score_data}{A data.frame with at least columns \code{SCORE}, or
 i.e. \code{J10_ASTHMA_PRS} for endpoint \code{J10_ASTHMA}
 and score type \code{PRS}.}
-
-\item{score_type}{A character. The score type. At the moment the two
-options are \code{CCI}, and \code{PRS}.}
 
 \item{endpt}{A character. The column name of the current endpoint
 of interest.}

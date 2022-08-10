@@ -24,18 +24,26 @@ filter_too_old_and_young <- function(study_data,
                                      max_age=200,
                                      filter_1998=FALSE) {
     check_cols_exist(study_data, 
-                     c("DATE_OF_BIRTH", "EXP_START_DATE", "OBS_END_DATE"),
+                     c("DATE_OF_BIRTH", "EXP_START_DATE", 
+                     "OBS_END_DATE", "END_OF_FOLLOWUP"),
                      "filter_too_old_and_young")
     # Too young
     if(study_type == "backward") {
         study_data <- dplyr::filter(study_data, 
-                                    EXP_START_DATE <= obs_end_date)
+                                    EXP_START_DATE <= OBS_END_DATE & 
+                                    DATE_OF_BIRTH <= EXP_START_DATE)
     }
     # Too old
-    study_data <- dplyr::filter(study_data, lubridate::time_length(DATE_OF_BIRTH %--% OBS_END_DATE, "years") < max_age)
+    study_data <- dplyr::filter(study_data, 
+                    lubridate::time_length(DATE_OF_BIRTH %--% OBS_END_DATE, "years") < max_age)
     if(filter_1998) {
-        study_data <- dplyr::filter(study_data, lubridate::year(EXP_START_DATE) >= 1998)
+        study_data <- dplyr::filter(study_data, 
+                        lubridate::year(EXP_START_DATE) >= 1998)
     }
+    # End of followup is either last day indv known to be alive or death date
+    # Has to be non-censored at least at the end of the wash-out period
+    study_data <- dplyr::filter(study_data, END_OF_FOLLOWUP > WASH_END_DATE | 
+                                    is.na(END_OF_FOLLOWUP))
 
     return(study_data)
 }

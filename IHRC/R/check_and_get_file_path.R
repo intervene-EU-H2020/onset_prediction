@@ -20,6 +20,7 @@ check_and_get_file_path <- function(surv_ana,
             res_type == "endpt" ~ paste0("score_distr/endpts/"),
             res_type == "distr" ~ paste0( "score_distr/"),
             res_type == "coxph" ~ covs_dir_name,
+            res_type == "cidx" ~ covs_dir_name,
             res_type == "log" ~ paste0("PRS_logs/score_cut/"),
             res_type == "HR RG" ~ paste0(covs_dir_name, "HRs/"), 
             res_type == "HR SD" ~ paste0(covs_dir_name, "HRs/"), 
@@ -29,14 +30,17 @@ check_and_get_file_path <- function(surv_ana,
         # Make the folder if it doesn't exist yet
         if(Istudy::check_res_dir(surv_ana@write_res, curnt_res_dir)) {
             file_name <- dplyr::case_when(
-             res_type == "endpt" ~ get_endpt_score_file_name(surv_ana),
-             res_type == "distr" ~ get_score_distr_file_name(surv_ana),
-             res_type == "coxph" ~ get_coxph_res_file_name(surv_ana),
-             res_type == "HR RG" ~ get_hr_rg_file_name(surv_ana),
-            res_type == "HR SD" ~ get_hr_sd_file_name(surv_ana), 
-             res_type == "surv" ~ get_surv_file_name(surv_ana),
-             res_type == "log" ~ get_score_cut_file_name(surv_ana))
+              res_type == "endpt" ~ get_endpt_score_file_name(surv_ana),
+              res_type == "distr" ~ get_score_distr_file_name(surv_ana),
+              res_type == "coxph" ~ get_coxph_res_file_name(surv_ana),
+              res_type == "cidx" ~ get_cidx_res_file_name(surv_ana),
+              res_type == "HR RG" ~ get_hr_rg_file_name(surv_ana),
+              res_type == "HR SD" ~ get_hr_sd_file_name(surv_ana), 
+              res_type == "surv" ~ get_surv_file_name(surv_ana),
+              res_type == "log" ~ get_score_cut_file_name(surv_ana))
+            
             file_path <- paste0(curnt_res_dir, file_name)
+
             return(file_path)
         } 
     }
