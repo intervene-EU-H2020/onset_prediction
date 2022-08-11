@@ -31,7 +31,7 @@ In FinnGen you can find the package at `/finngen/green/kira/pckg_share/`. Or alt
 Then in the Sandbox use i.e.
 
 ```{r example}
-install.packages("finngen/green/kira/pckg_share/ICCI_2.0.0.tar.gz",
+install.packages("finngen/green/kira/pckg_share/ICCI_2.0.0.tar.xz",
                  "/home/ivm/R/x86_64-pc-linux-gnu-library/4.1",
                  repos = NULL, type="source")
 ```
