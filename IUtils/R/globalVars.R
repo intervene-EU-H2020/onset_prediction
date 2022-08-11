@@ -1,4 +1,0 @@
-# This is just to stop RMD check from throwing Notes about these
-# These are column names used with the dplyr package
-# The alternative would be to use package rlang and .data$x in dplyr.
-utils::globalVariables(c("ID", "Event_age", "ICD_version", "EXP_END", "EXP_START"))

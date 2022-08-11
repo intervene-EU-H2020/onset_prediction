@@ -22,7 +22,7 @@
 #' @author Kira E. Detrois
 add_back_orig_ids <- function(cci_scores, 
                               icd_data) {
-    IUtils::add_map_col(cci_scores,
+    add_map_col(cci_scores,
                         dplyr::select(icd_data, ID, ID_num),
                         "ID_num")
 }

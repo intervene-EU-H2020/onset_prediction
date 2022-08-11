@@ -37,13 +37,13 @@ calc_cci <- function(icd_data,
                      exp_end=NULL) {
     process_icd_data <- preprocess_icd_data(icd_data, exp_start, exp_end)
     if(nrow(process_icd_data) > 0) {
-        group_icd_data <- IUtils::group_icd_data_by_ver(process_icd_data)
+        group_icd_data <- group_icd_data_by_ver(process_icd_data)
 
         # For adding up different ICD-version scores
         all_cci_scores <- tibble::tibble()
         for (icd_version in as.character(group_icd_data$keys)) {
-            curnt_icd_data <- IUtils::get_group_icd_data(group_icd_data, 
-                                                                icd_version)
+            curnt_icd_data <- get_group_icd_data(group_icd_data, 
+                                                 icd_version)
             curnt_cci_scores <- calc_icd_ver_spec_ccis(curnt_icd_data, 
                                                     icd_version)
             all_cci_scores <- dplyr::bind_rows(all_cci_scores, 
