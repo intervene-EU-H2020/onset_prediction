@@ -11,9 +11,11 @@ get_comp_group <- function(score_type,
 
 get_surv_descr <- function(surv_ana,
                            surv_type) {
-    plot_caption <- paste0("   Surv ~ ", paste0(surv_ana@score_type, collapse=" + "))
+    plot_caption <- paste0("   Surv ~ ")
     if(surv_type == "HR") {
-        plot_caption <- paste0(plot_caption, " Risk Group")
+        plot_caption <- paste0(plot_caption, paste0(surv_ana@score_type, " Risk Group", collapse=" + "))
+    } else {
+        plot_caption <- paste0(plot_caption, paste0(surv_ana@score_type, collapse=" + "))
     }
     plot_caption <- paste0(plot_caption, " + ", get_pretty_covs_string(surv_ana@covs))
     return(plot_caption)

@@ -49,13 +49,13 @@ plot_endpt_rg_hr <- function(coxph_hr_res,
                              surv_ana) {
     top_group <- dplyr::filter(coxph_hr_res, GROUP == get_comp_group(surv_ana@score_type, surv_ana@bin_cut))
     max_x <- min(max(c(2, round(top_group$CI_POS+0.5)), na.rm=TRUE), 10)
-    min_x <- min(c(0, round(top_group$CI_NEG-0.5)), na.rm=TRUE)
+    min_x <- min(c(0.5, round(top_group$CI_NEG-0.5)), na.rm=TRUE)
 
     plt <- ggplot2::ggplot(top_group,
                             # Plot basics
                             aes(y=ENDPOINT, x=HR)) +
-                            geom_point(show.legend = FALSE) +
-                            geom_errorbar(aes(xmin=CI_NEG, xmax=CI_POS), width=0.2) +
+                            geom_point(show.legend = FALSE, size=3) +
+                            geom_errorbar(aes(xmin=CI_NEG, xmax=CI_POS), size=1, width=.1) +
                             # Axis settings
                             coord_cartesian(xlim=c(min_x, max_x)) +
                             geom_vline(xintercept = 1.0) +
@@ -72,6 +72,7 @@ plot_endpt_rg_hr <- function(coxph_hr_res,
             ggsave(file_path,
                 width=12,
                 height=7,
+                dpi=600,
                 plot=plt, 
                 device="png", 
                 bg="white")
@@ -82,7 +83,7 @@ plot_endpt_sd_hr <- function(coxph_hr_res,
                              surv_ana) {
     top_group <- dplyr::filter(coxph_hr_res, GROUP == "no groups")
     max_x <- min(max(c(2, round(top_group$CI_POS+0.5)), na.rm=TRUE), 10)
-    min_x <- min(c(0, round(top_group$CI_NEG-0.5)), na.rm=TRUE)
+    min_x <- min(c(0.5, round(top_group$CI_NEG-0.5)), na.rm=TRUE)
 
     plt <- ggplot2::ggplot(top_group,
                             # Plot basics
@@ -101,14 +102,14 @@ plot_endpt_sd_hr <- function(coxph_hr_res,
                             IUtils::theme_custom(base_size=21) 
         if(length(surv_ana@score_type) > 1) {
             plt <- plt + 
-                    geom_point(position = position_dodge(width = .3)) +
-                    geom_errorbar(position = position_dodge(width = .3), width=0.1, 
-                                  aes(xmin=CI_NEG, xmax=CI_POS)) +
+                    geom_point(position = position_dodge(width = .4), size=3) +
+                    geom_errorbar(position = position_dodge(width = .4), size=1,
+                                  aes(xmin=CI_NEG, xmax=CI_POS), width=.1) +
                     labs(title="1-SD Increment")
         } else {
             # Points and error bars
-            plt <- plt + geom_point(show.legend = FALSE) + 
-                    geom_errorbar(aes(xmin=CI_NEG, xmax=CI_POS), width=.1) +
+            plt <- plt + geom_point(show.legend = FALSE, size=3) + 
+                    geom_errorbar(aes(xmin=CI_NEG, xmax=CI_POS), size=1, width=.1) +
                     theme(legend.position = "none") +
                     labs(title=paste0(surv_ana@score_type, " 1-SD Increment"))
         }
@@ -118,6 +119,7 @@ plot_endpt_sd_hr <- function(coxph_hr_res,
             ggsave(file_path,
                 width=12,
                 height=7,
+                dpi=600,
                 plot=plt, 
                 device="png", 
                 bg="white")
@@ -205,14 +207,14 @@ plot_age_sd_hr <- function(surv_ana,
                     theme(panel.grid.major.x=element_blank()) 
         if(length(surv_ana@score_type) > 1) {
             plt <- plt + 
-                    geom_point(position = position_dodge(width = .3),
+                    geom_point(position = position_dodge(width = .4), size=3,
                                aes(color=SCORE)) +
-                    geom_errorbar(position = position_dodge(width = .3), width=0.1, 
+                    geom_errorbar(position = position_dodge(width = .4), size=1, width=0.1, 
                                   aes(ymin=CI_NEG, ymax=CI_POS, color=SCORE)) 
         } else {
             # Points and error bars
-            plt <- plt + geom_point(show.legend = FALSE) + 
-                    geom_errorbar(aes(ymin=CI_NEG, ymax=CI_POS), width=.1) +
+            plt <- plt + geom_point(show.legend = FALSE, size=3) + 
+                    geom_errorbar(aes(ymin=CI_NEG, ymax=CI_POS), size=1, width=.1) +
                     theme(legend.position = "none")
         }
         
@@ -221,6 +223,7 @@ plot_age_sd_hr <- function(surv_ana,
             ggsave(file_path,
                    width=7,
                    height=7,
+                   dpi=600,
                    plot=plt, 
                    device="png", 
                    bg="white")
@@ -256,8 +259,8 @@ plot_age_rg_hr <- function(surv_ana,
     if(nrow(endpt_coxph_hr_res) > 0) {
         plt <- ggplot2::ggplot(endpt_coxph_hr_res, aes(x=as.character(EXP_AGE), y=HR)) +
                     # Points and error bars
-                    geom_point() + 
-                    geom_errorbar(aes(ymin=CI_NEG, ymax=CI_POS), width=.1) +
+                    geom_point(size=3) + 
+                    geom_errorbar(aes(ymin=CI_NEG, ymax=CI_POS), size=1, width=.2) +
                     # Axis settings
                     geom_hline(yintercept=1.0) + 
                     coord_cartesian(ylim=c(min_y, max_y)) +
@@ -279,6 +282,7 @@ plot_age_rg_hr <- function(surv_ana,
             ggsave(file_path,
                    width=7,
                    height=7,
+                   dpi=600,
                    plot=plt, 
                    device="png", 
                    bg="white")

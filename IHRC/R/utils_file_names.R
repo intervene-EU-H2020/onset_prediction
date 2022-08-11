@@ -41,12 +41,15 @@ get_score_distr_file_name <- function(surv_ana) {
 #' @author Kira E. Detrois
 get_hr_rg_file_name <- function(surv_ana) {
     if(surv_ana@study@study_type == "forward") {
-        file_name <- paste0(surv_ana@study@endpt, "_e", surv_ana@study@exp_len, "_w", surv_ana@study@wash_len, "_o", surv_ana@study@obs_len, "_", paste0(surv_ana@score_type, collapse="_"))
+        file_name <- paste0(surv_ana@study@endpt, "_e", surv_ana@study@exp_len, "_w", surv_ana@study@wash_len, "_o", surv_ana@study@obs_len)
     } else {
-        file_name <- paste0(surv_ana@study@obs_end_date, "_o", surv_ana@study@obs_len, "_w", surv_ana@study@wash_len, "_", paste0(surv_ana@score_type, collapse="_"))
+        file_name <- paste0(surv_ana@study@obs_end_date, "_o", surv_ana@study@obs_len, "_w", surv_ana@study@wash_len)
+    }
+    if("PRS" %in% surv_ana@score_type) {
+        file_name <- paste0(file_name, "_PRS")
     }
     if("CCI" %in% surv_ana@score_type) {
-        file_name <- paste0(file_name, "_cut", surv_ana@bin_cut)
+        file_name <- paste0(file_name, "_CCI_cut", surv_ana@bin_cut)
     } 
     paste0(file_name, "_HRs.png")
 }
