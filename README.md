@@ -21,6 +21,7 @@ There are two types of study setups:
 ![Study Setup](https://github.com/intervene-EU-H2020/onset_prediction/blob/main/Istudy/man/Forward_Study_160822.svg)
 
 2. The second one considers all individuals at a set time point. The observation and washout period are calcualted backwards from this time point. The exposure period will be different for each individual depending on their birth date. 
+
 ![Study Setup Backwards](https://github.com/intervene-EU-H2020/onset_prediction/blob/main/Istudy/man/Study_Setup_Back_Schema.svg)
 The important column names for the input data are indicated in each function documentation.
 ## IHRC
