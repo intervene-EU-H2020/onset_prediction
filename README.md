@@ -7,30 +7,30 @@ This project includes different R packages to help working with INTERVENE longit
 
 
 # Packages
-## ICCI
 
-Calculates the Charlson Comorbidity Index (CCI) on longitudinal data in INTERVENE format, using the R package `comorbidity`.
 ## Istudy
 
 The goal of this package is to select individuals from the data that are eligible given a certain study setup. A study setup consists of an exposure, a washout, and an observation period. Eligible individuals cannot have the selected endpoint of interest inside the endpoint free period. The endpoint free period ranges from birth until the observation period begins. 
 
 There are two types of study setups:
 
-1. The first one considers individuals of a certain age and a set exposure, washout, and observation periods calcualted onwards from this age. 
+1. The first one considers individuals of a certain age and a set exposure, washout, and observation periods, calcualted onwards from this age. 
 
 ![Study Setup](https://github.com/intervene-EU-H2020/onset_prediction/blob/main/Istudy/man/Forward_Study_160822.svg)
 
-2. The second one considers all individuals at a set time point. The observation and washout period are calcualted backwards from this time point. The exposure period will be different for each individual depending on their birth date. 
+2. The second one considers all individuals at a set time point. The observation, washout, and exposure period are calcualted backwards from this time point.
 
 ![Study Setup Backwards](https://github.com/intervene-EU-H2020/onset_prediction/blob/main/Istudy/man/Study_Setup_Back_Schema.svg)
+
 The important column names for the input data are indicated in each function documentation.
+
 ## IHRC
 
-Builds Cox-propotional hazards model (Cox-PH) for the different endpoints and study setups. Calcualtes the Hazard Ratios(HRs) and the c-index for the different models. 
+Builds Cox-propotional hazards models (Cox-PH) for the different endpoints and study setups. Calcualtes the Hazard Ratios(HRs) and the c-index for the different models. 
 
 ## IUtils
 
-Helper functions for working with INTERVENE Longitudinal Files and plotting results.
+Helper functions for plotting results.
 
 ## Installation
 
