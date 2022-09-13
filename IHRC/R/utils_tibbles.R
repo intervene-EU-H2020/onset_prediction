@@ -9,7 +9,7 @@
 create_empty_endpt_hrs_tib <- function() {
     tibble::tibble(ENDPOINT=character(),
                    EXP_AGE=numeric(),
-                   SCORE=character(),
+                   VAR=character(),
                    GROUP=character(),
                    N_CONTROLS=numeric(),
                    N_CASES=numeric(),
@@ -37,6 +37,7 @@ create_empty_cidx_tib <- function() {
         N_CASES = numeric(),
         N_CONTROLS = numeric(),
         C_IDX = numeric(),
+        SE = numeric(),
         C_IDX_CI_NEG = numeric(),
         C_IDX_CI_POS = numeric()
     )
@@ -46,7 +47,6 @@ create_empty_cidx_tib <- function() {
 #' 
 #' @param endpt_hrs_tib A tibble with the results for previous endpts.
 #' @param coxph_mdl A Cox-PH model. 
-#' @inheritParams add_risk_group_col
 #' 
 #' @return A tibble. The updated `endpt_hrs_tib` with the added results for
 #'          the current endpoint.
@@ -54,20 +54,17 @@ create_empty_cidx_tib <- function() {
 #' @author Kira E. Detrois 
 add_coxph_res_row <- function(endpt_hrs_tib,
                               coxph_mdl,
-                              surv_ana,
-                              pred_score="SCORE_GROUP") {
+                              surv_ana) {
     if(!is.null(coxph_mdl)) {
-        for(score_type in surv_ana@score_type) {
-            coxph_res_list <- get_min_indvs_data(coxph_mdl=coxph_mdl,
-                                                 surv_ana=surv_ana,
-                                                 pred_score=pred_score,
-                                                 score_type=score_type)
-            if(!is.null(coxph_res_list)) {
-                endpt_hrs_tib <- tibble::add_row(
+        coxph_res_list <- get_min_indvs_data(coxph_mdl=coxph_mdl,
+                                             surv_ana=surv_ana,
+                                             var="SEX")
+         if(!is.null(coxph_res_list)) {
+            endpt_hrs_tib <- tibble::add_row(
                                             endpt_hrs_tib, 
                                             ENDPOINT=surv_ana@study@endpt,
                                             EXP_AGE=surv_ana@study@exp_age,
-                                            SCORE=score_type,
+                                            VAR=coxph_res_list$preds,
                                             GROUP=coxph_res_list$groups,
                                             N_CONTROLS=coxph_res_list$n_cntrl,
                                             N_CASES=coxph_res_list$n_case,
@@ -78,7 +75,6 @@ add_coxph_res_row <- function(endpt_hrs_tib,
                                             CI_NEG=coxph_res_list$CI_neg,
                                             CI_POS=coxph_res_list$CI_pos)
             }
-        }
     } 
     return(endpt_hrs_tib)
 }
@@ -87,72 +83,23 @@ add_coxph_res_row <- function(endpt_hrs_tib,
 #' least 5 controls and cases in each group
 #' 
 #' @inheritParams add_coxph_res_row
-#' @inheritParams add_risk_group_col
 #' 
 #' @return A list. The filtered results.
 #' 
 #' @author Kira E. Detrois
 get_min_indvs_data <- function(coxph_mdl,
                                surv_ana,
-                               pred_score="SCORE_GROUP",
-                               score_type) {
-    coxph_res_list <- extract_coxph_res(coxph_mdl,
-                                        score_type)
-    if(pred_score == "SCORE_GROUP") {
-        group_col_name <- paste0(score_type, "_SCORE_GROUP")
-        score_group_data <- dplyr::pull(surv_ana@elig_score_data,   
-                                        get(group_col_name))
-        n_cntrls_vec <- get_n_group_cntrls(
-                            pheno_score_data=surv_ana@elig_score_data, 
-                            group_col_name=group_col_name,
-                            groups=levels(score_group_data),
-                            endpt=surv_ana@study@endpt)
-        n_cases_vec <- get_n_group_cases(
-                            pheno_score_data=surv_ana@elig_score_data, 
-                            group_col_name=group_col_name,
-                            groups=levels(score_group_data),
-                            endpt=surv_ana@study@endpt)
-        ref_level = levels(score_group_data)[1]
-
-        # Reference group has enough cases and controls
-        if((n_cntrls_vec[1] > surv_ana@min_indvs) & 
-                (n_cases_vec[1] > surv_ana@min_indvs)) {
-            coxph_res_tib <- tibble::as_tibble(coxph_res_list)
-            coxph_res_tib <- tibble::add_row(coxph_res_tib,
-                                             .before=1,
-                                             beta=NA_real_,
-                                             std_err=NA_real_,
-                                             p_val=NA_real_,
-                                             HR=NA_real_,
-                                             CI_neg=NA_real_,
-                                             CI_pos=NA_real_,
-                                             groups=ref_level) 
-            coxph_res_tib <- tibble::add_column(coxph_res_tib,
-                                                n_cntrl=n_cntrls_vec)
-            coxph_res_tib <- tibble::add_column(coxph_res_tib,
-                                                n_case=n_cases_vec)
-            coxph_res_tib <- coxph_res_tib[coxph_res_tib$n_cntrl > surv_ana@min_indvs &
-                                            coxph_res_tib$n_case > surv_ana@min_indvs,]
-            if(nrow(coxph_res_tib) < 2) {
-                return(NULL)
-            } else {
-                return(as.list(coxph_res_tib))
-            }
-        } else {
-            return(NULL)
-        }
-    } else {
-        coxph_res_list$n_case <- Istudy::get_n_cases(surv_ana@study@study_data, surv_ana@study@endpt)
-        coxph_res_list$n_cntrl <- Istudy::get_n_cntrls(surv_ana@study@study_data, surv_ana@study@endpt)
-        return(coxph_res_list)
-    }
+                               var) {
+    coxph_res_list <- extract_coxph_res(coxph_mdl)
+    coxph_res_list$n_case <- Istudy::get_n_cases(surv_ana@study@study_data, surv_ana@study@endpt)
+    coxph_res_list$n_cntrl <- Istudy::get_n_cntrls(surv_ana@study@study_data, surv_ana@study@endpt)
+    return(coxph_res_list)
 }
 
 #' Adds a row to the C-index results tibble
 #' 
 #' @param endpt_c_idxs_tib A tibble with the results for previous endpts.
 #' @param c_idx_res A tibble with the new results to add.
-#' @inheritParams add_risk_group_col
 #' 
 #' @return A tibble. The updated `endpt_c_idxs_tib` with the added results for
 #'          the current endpoint.
