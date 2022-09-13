@@ -4,20 +4,12 @@
 \alias{add_coxph_res_row}
 \title{Adds a row to the Cox-PH HR results tibble}
 \usage{
-add_coxph_res_row(
-  endpt_hrs_tib,
-  coxph_mdl,
-  surv_ana,
-  pred_score = "SCORE_GROUP"
-)
+add_coxph_res_row(endpt_hrs_tib, coxph_mdl, surv_ana)
 }
 \arguments{
 \item{endpt_hrs_tib}{A tibble with the results for previous endpts.}
 
 \item{coxph_mdl}{A Cox-PH model.}
-
-\item{surv_ana}{An S4 class representing the current survival analysis
-setup.}
 }
 \value{
 A tibble. The updated \code{endpt_hrs_tib} with the added results for

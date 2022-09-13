@@ -6,10 +6,6 @@
 \usage{
 get_curnt_score_data(surv_ana)
 }
-\arguments{
-\item{surv_ana}{An S4 class representing the current survival analysis
-setup.}
-}
 \value{
 The data.frame with the score data for all eligible individuals
 under the study setup of the current survival analysis setup.

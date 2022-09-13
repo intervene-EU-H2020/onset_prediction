@@ -6,10 +6,6 @@
 \usage{
 get_hr_rg_file_name(surv_ana)
 }
-\arguments{
-\item{surv_ana}{An S4 class representing the current survival analysis
-setup.}
-}
 \value{
 A character. The file name.
 }

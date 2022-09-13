@@ -15,9 +15,7 @@
 #' 
 #' Checks wether there are enough individuals in the case
 #' and control groups. Otherwise returns an empty data.frame. 
-#' 
-#' @inheritParams add_risk_group_col
-#' 
+#'  
 #' @return The data.frame with the score data for all eligible individuals
 #'          under the study setup of the current survival analysis setup.
 #' 
@@ -31,15 +29,19 @@ get_elig_score_data  <- function(score_type,
     n_cases <- Istudy::get_n_cases(study_data, endpt)
     n_cntrls <- Istudy::get_n_cntrls(study_data, endpt)
     if(n_cases > min_indvs & n_cntrls > min_indvs) {
-        score_data <- preprocess_score_data(score_type=score_type, 
-                                            study_data=study_data,
-                                            icd_data=icd_data, 
-                                            prs_data=prs_data,
-                                            endpt=endpt)
-        elig_score_data <- join_dfs(study_data=study_data,
-                                    score_data=score_data,
-                                    score_type=score_type,
-                                    endpt=endpt)
+        if(any(stringr::str_detect(score_type, "[CCI|PRS]"))) {
+            score_data <- preprocess_score_data(score_type=score_type, 
+                                                study_data=study_data,
+                                                icd_data=icd_data, 
+                                                prs_data=prs_data,
+                                                endpt=endpt)
+            elig_score_data <- join_dfs(study_data=study_data,
+                                        score_data=score_data,
+                                        score_type=score_type,
+                                        endpt=endpt)
+        } else {
+            elig_score_data <- study_data
+        }
         return(elig_score_data)
     } else {
         return(tibble::tibble())

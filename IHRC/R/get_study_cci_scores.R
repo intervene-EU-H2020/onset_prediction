@@ -10,12 +10,12 @@
 #' @return A data.frame with columns `ID`, and `SCORE`.
 #' 
 #' @author Kira E. Detrois
-get_study_cci_scores <- function(elig_indv,
-                                 icd_data) {
+get_study_CCI_data <- function(elig_indv,
+                               icd_data) {
     cci_data <- ICCI::calc_cci(icd_data,
                                exp_start=calc_exp_start_age(elig_indv),
                                exp_end=calc_exp_end_age(elig_indv)) %>%
-                    dplyr::rename(CCI_SCORE=CCI_score)
+                    dplyr::rename(CCI=CCI_score)
     return(cci_data)
 }
 

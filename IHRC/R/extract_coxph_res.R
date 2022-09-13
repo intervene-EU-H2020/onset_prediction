@@ -12,22 +12,13 @@ extract_coxph_res <- function(coxph_mdl,
                               score_type) {
     if(!is.null(coxph_mdl)) {
         betas <- summary(coxph_mdl)$coefficients[,"coef"]
-        betas <- betas[grep(paste0(score_type, "_SCORE"), names(betas))]
         std_errs <- summary(coxph_mdl)$coefficients[,"se(coef)"]
-        std_errs <- std_errs[grep(paste0(score_type, "_SCORE"), names(std_errs))]
         pvals <- summary(coxph_mdl)$coefficients[,"Pr(>|z|)"]
-        pvals <- pvals[grep(paste0(score_type, "_SCORE"), names(pvals))]
         OR <- exp(betas)
         CI <- get_CI(betas, std_errs)
-        if(any(grep("SCORE_GROUP", names(coxph_mdl$xlevels)))) {
-            score_group_col_name <- paste0(score_type, "_SCORE_GROUP")
-            idx_score_group_col <- which(names(coxph_mdl$xlevels) == score_group_col_name)
-            group_levels <- coxph_mdl$xlevels[[idx_score_group_col]]
-            groups <- group_levels[2:length(group_levels)]
-        } else {
-            groups <- "no groups"
-        }
-        return(list(beta=betas, std_err=std_errs, p_val=pvals, HR=OR, CI_neg=exp(CI$neg), CI_pos=exp(CI$pos), groups=groups))
+        preds <- names(summary(coxph_mdl)$coefficients[,"coef"])
+        groups <- "no groups"
+        return(list(beta=betas, std_err=std_errs, p_val=pvals, HR=OR, CI_neg=exp(CI$neg), CI_pos=exp(CI$pos), groups=groups, preds=preds))
     } else {
         return(list())
     }

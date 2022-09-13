@@ -5,9 +5,7 @@
 #' `covs = c("SEX", "YEAR_OF_BIRTH")` the model would be 
 #' `Surv(J10_ASTHMA_AGE_DAYS, J10_ASTHMA) ~ SCORE + SEX +
 #' YEAR_OF_BIRTH`.
-#' 
-#' @inheritParams add_risk_group_col
-#' 
+#'  
 #' @return A tibble with columns `Endpoint`, `Score`, `Group`, 
 #'          `N_controls`, `N_cases`, `beta`, `std_errs`, `p_val`, `HR`, 
 #'          `CI_pos`, `CI_neg`. The Cox-PH analysis results for all 
@@ -18,16 +16,13 @@
 #' @author Kira E. Detrois
 calc_endpt_study_cidx <- function(surv_ana) {
     set.seed(923)
-    coxph_mdl <- get_coxph_mdl(surv_ana,
-                               pred_score="SCORE")
+    coxph_mdl <- get_coxph_mdl(surv_ana)
     if(!is.null(coxph_mdl)) {
         # Risk and survival have opposite directions
         preds <- (-1)*predict(coxph_mdl, 
                               type="risk")
-        
-        surv_obj <- get_surv_obj(
-                        get_score_data_no_na(surv_ana), 
-                        surv_ana@study@endpt)    
+        surv_obj <- get_surv_obj(get_non_na_pred_rows(surv_ana), 
+                                 surv_ana@study@endpt)    
         c_idx <- Hmisc::rcorr.cens(preds, surv_obj)
     } else {
         c_idx <- NULL
@@ -35,11 +30,13 @@ calc_endpt_study_cidx <- function(surv_ana) {
     return(c_idx)
 }
 
-get_score_data_no_na <- function(surv_ana) {
+get_non_na_pred_rows <- function(surv_ana) {
     score_data <- surv_ana@elig_score_data
-    for(score_type in surv_ana@score_type) {
-        score_data <- dplyr::filter(score_data, 
-                        !is.na(get(paste0(score_type, "_SCORE"))))
+    for(pred in surv_ana@preds) {
+        if(pred %in% colnames(surv_ana@elig_score_data)) {
+            score_data <- dplyr::filter(score_data, 
+                                        !is.na(get(pred)))
+        }
     }
     return(score_data)
 }

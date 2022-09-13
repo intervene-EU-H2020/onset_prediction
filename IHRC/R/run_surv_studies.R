@@ -104,34 +104,24 @@ run_surv_studies <- function(pheno_data,
                                             write_res=write_res,
                                             res_dir=res_dir)
             elig_score_data <- get_elig_score_data(score_type=score_type, 
-                                                study_data=study@study_data,
-                                                icd_data=icd_data, 
-                                                prs_data=prs_data,
-                                                endpt=endpt,
-                                                min_indvs=min_indvs)
+                                                   study_data=study@study_data,
+                                                   icd_data=icd_data, 
+                                                   prs_data=prs_data,
+                                                   endpt=endpt,
+                                                   min_indvs=min_indvs)
             surv_ana <- methods::new("surv_ana",
                                      study=study,
                                      elig_score_data=elig_score_data,
-                                     score_type=score_type,
                                      min_indvs=min_indvs,
-                                     covs=covs,
+                                     preds=c(score_type, covs),
                                      bin_cut=bin_cut,
                                      write_res=write_res,
                                      res_dir=res_dir)
-            coxph_mdl <- get_coxph_mdl(surv_ana=surv_ana,
-                                       pred_score="SCORE_GROUP")
+            coxph_mdl <- get_coxph_mdl(surv_ana=surv_ana)
             all_age_hrs_tib <- add_coxph_res_row(
                                     endpt_hrs_tib=all_age_hrs_tib,
                                     coxph_mdl=coxph_mdl,
-                                    surv_ana=surv_ana,
-                                    pred_score="SCORE_GROUP")
-            coxph_mdl <- get_coxph_mdl(surv_ana=surv_ana,
-                                       pred_score="SCORE")
-            all_age_hrs_tib <- add_coxph_res_row(
-                                    endpt_hrs_tib=all_age_hrs_tib,
-                                    coxph_mdl=coxph_mdl,
-                                    surv_ana=surv_ana,
-                                    pred_score="SCORE")
+                                    surv_ana=surv_ana)
             c_idx_res <- calc_endpt_study_cidx(surv_ana)
             all_age_cidxs_tib <- add_cidx_res_row(
                                     endpt_c_idxs_tib=all_age_cidxs_tib, 

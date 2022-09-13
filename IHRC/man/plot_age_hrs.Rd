@@ -13,9 +13,6 @@ plot_age_hrs(coxph_hr_res, surv_ana)
 \item{coxph_hr_res}{A tibble. The Cox-PH HR results. Needs
 to at least contain the columns \code{ENDPOINT},
 \code{HR}, \code{CI_NEG}, \code{CI_POS}, and \code{GROUP}.}
-
-\item{surv_ana}{An S4 class representing the current survival analysis
-setup.}
 }
 \description{
 Plots the HR from the Cox-PH model of a forward study

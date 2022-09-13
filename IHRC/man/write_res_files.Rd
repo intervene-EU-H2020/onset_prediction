@@ -10,9 +10,6 @@ write_res_files(endpt_hrs_tib, endpt_c_idxs_tib, surv_ana)
 \item{endpt_hrs_tib}{A tibble with the results for previous endpts.}
 
 \item{endpt_c_idxs_tib}{A tibble with the results for previous endpts.}
-
-\item{surv_ana}{An S4 class representing the current survival analysis
-setup.}
 }
 \description{
 Writes model results to a tab-delim file

@@ -41,16 +41,14 @@
 surv_ana <- methods::setClass("surv_ana", 
                 slots=list(study="study",
                            elig_score_data="data.frame",
-                           score_type="character",
                            min_indvs="numeric",
-                           covs="character",
+                           preds="character",
                            bin_cut="numeric",
                            write_res="logical",
                            res_dir="character"),
                 prototype=list(elig_score_data=tibble::tibble(),
-                               score_type=NA_character_,
                                min_indvs=5,
-                               covs=c("SEX", "YEAR_OF_BIRTH"),
+                               preds=c("SEX", "YEAR_OF_BIRTH"),
                                bin_cut=1,
                                write_res=FALSE,
                                res_dir=NA_character_))
@@ -58,9 +56,5 @@ surv_ana <- methods::setClass("surv_ana",
 #' @importFrom methods callNextMethod
 setMethod("initialize", "surv_ana", function(.Object, ...) {
     .Object <- callNextMethod()
-    if(nrow(.Object@elig_score_data) > 0) {
-        .Object@elig_score_data <- add_risk_group_col(.Object@elig_score_data,
-                                                      .Object)
-    }
     return(.Object)
 })

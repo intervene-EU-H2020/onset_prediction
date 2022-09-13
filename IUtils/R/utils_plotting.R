@@ -11,7 +11,6 @@ custom_colors_brewer <- function(N_colors) {
     if(N_colors == 1)
       c("#000000")
     else if(N_colors == 2) {
-      #c("#0571B0","#CA0020")
       c("#D5694F", "#224767")
     } else if(N_colors == 3)  {
       c("#D5694F", "#224767", "#EAB034")
@@ -19,7 +18,6 @@ custom_colors_brewer <- function(N_colors) {
       c("#D5694F", "#224767", "#EAB034", "#748AAA")
     } else if(N_colors == 5) {
       c("#D5694F", "#224767", "#EAB034", "#748AAA", "#9E577C")
-      #c("#0571B0","#CA0020", "#424B54", "#92C5DE", "#F4A582")
     }
 }
 

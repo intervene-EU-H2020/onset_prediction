@@ -5,13 +5,10 @@
 \title{Get's the Cox-PH model results for runs where each group has at
 least 5 controls and cases in each group}
 \usage{
-get_min_indvs_data(coxph_mdl, surv_ana, pred_score = "SCORE_GROUP", score_type)
+get_min_indvs_data(coxph_mdl, surv_ana, var)
 }
 \arguments{
 \item{coxph_mdl}{A Cox-PH model.}
-
-\item{surv_ana}{An S4 class representing the current survival analysis
-setup.}
 }
 \value{
 A list. The filtered results.

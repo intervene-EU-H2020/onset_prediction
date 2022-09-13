@@ -7,9 +7,6 @@
 check_and_get_file_path(surv_ana, res_type)
 }
 \arguments{
-\item{surv_ana}{An S4 class representing the current survival analysis
-setup.}
-
 \item{res_type}{A character. The results type.}
 }
 \value{

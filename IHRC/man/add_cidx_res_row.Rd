@@ -10,9 +10,6 @@ add_cidx_res_row(endpt_c_idxs_tib, c_idx_res, surv_ana)
 \item{endpt_c_idxs_tib}{A tibble with the results for previous endpts.}
 
 \item{c_idx_res}{A tibble with the new results to add.}
-
-\item{surv_ana}{An S4 class representing the current survival analysis
-setup.}
 }
 \value{
 A tibble. The updated \code{endpt_c_idxs_tib} with the added results for

@@ -4,16 +4,9 @@
 \alias{get_coxph_mdl}
 \title{Fits the Cox-PH model for a survival analysis setup}
 \usage{
-get_coxph_mdl(surv_ana, pred_score = "SCORE_GROUP", test_idxs = NULL)
+get_coxph_mdl(surv_ana, test_idxs = NULL)
 }
 \arguments{
-\item{surv_ana}{An S4 class representing the current survival analysis
-setup.}
-
-\item{pred_score}{A character. The score type to predict. For direct
-regression \code{SCORE}, and for regression on the
-risk group \code{SCORE_GROUP}.}
-
 \item{test_idxs}{An integer (vector). The indices of the test data
 subset. Default is \code{NULL}, meaning the whole data
 is used for fitting.}
@@ -24,7 +17,7 @@ A Cox-PH model object or \code{NULL} if the model couldn't be fit.
 \description{
 For i.e. \code{endpt = "J10_ASTHMA"} and \code{covs = c("SEX", "YEAR_OF_BIRTH")}
 the model would be
-\code{Surv(J10_ASTHMA_AGE_DAYS, J10_ASTHMA) ~ SCORE_GROUP + SEX + YEAR_OF_BIRTH}.
+\code{Surv(J10_ASTHMA_AGE_DAYS, J10_ASTHMA) ~ PRS + SEX + YEAR_OF_BIRTH}.
 }
 \author{
 Kira E. Detrois

@@ -4,15 +4,7 @@
 \alias{get_coxph_formula}
 \title{Creates the forumla string for the Cox-PH model}
 \usage{
-get_coxph_formula(surv_ana, pred_score = "SCORE_GROUP")
-}
-\arguments{
-\item{surv_ana}{An S4 class representing the current survival analysis
-setup.}
-
-\item{pred_score}{A character. The score type to predict. For direct
-regression \code{SCORE}, and for regression on the
-risk group \code{SCORE_GROUP}.}
+get_coxph_formula(surv_ana)
 }
 \value{
 A character. The formula string for the Cox-PH model.

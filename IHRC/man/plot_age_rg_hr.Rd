@@ -10,9 +10,6 @@ Plots the top 1\% compared to the 40-60\% group.}
 plot_age_rg_hr(surv_ana, coxph_hr_res, endpt, min_y, max_y)
 }
 \arguments{
-\item{surv_ana}{An S4 class representing the current survival analysis
-setup.}
-
 \item{coxph_hr_res}{A tibble. The Cox-PH HR results. Needs
 to at least contain the columns \code{ENDPOINT},
 \code{HR}, \code{CI_NEG}, \code{CI_POS}, and \code{GROUP}.}

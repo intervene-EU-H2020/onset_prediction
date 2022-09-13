@@ -2,13 +2,9 @@
 #' 
 #' For i.e. `endpt = "J10_ASTHMA"` and `covs = c("SEX", "YEAR_OF_BIRTH")` 
 #' the model would be 
-#' `Surv(J10_ASTHMA_AGE_DAYS, J10_ASTHMA) ~ SCORE_GROUP + SEX +
+#' `Surv(J10_ASTHMA_AGE_DAYS, J10_ASTHMA) ~ PRS + SEX +
 #' YEAR_OF_BIRTH`.
 #' 
-#' @inheritParams add_risk_group_col
-#' @param pred_score A character. The score type to predict. For direct
-#'                      regression `SCORE`, and for regression on the
-#'                      risk group `SCORE_GROUP`.
 #' @param test_idxs An integer (vector). The indices of the test data
 #'                  subset. Default is `NULL`, meaning the whole data
 #'                  is used for fitting.
@@ -19,40 +15,39 @@
 #' 
 #' @author Kira E. Detrois
 get_coxph_mdl <- function(surv_ana,
-                          pred_score="SCORE_GROUP",
                           test_idxs=NULL) {
     coxph_mdl <- NULL
     if(nrow(surv_ana@elig_score_data) > 0) {
-        surv_ana@elig_score_data <- make_covs_fctrs(
-                                        surv_ana@elig_score_data,
-                                        surv_ana@covs)
-        coxph_formula <- get_coxph_formula(surv_ana, pred_score)
-        build_mdl <- TRUE
+        coxph_formula <- get_coxph_formula(surv_ana)
+        print(coxph_formula)
 
-        if(pred_score == "SCORE_GROUP") {
-            score_col_name <- paste0(surv_ana@score_type, "_SCORE_GROUP")
-            Istudy::check_cols_exist(surv_ana@elig_score_data, 
-                                     score_col_name, 
-                                     "get_coxph_mdl")
-        } else if(pred_score == "SCORE") {
-            score_col_name <- paste0(surv_ana@score_type, "_SCORE")
-            Istudy::check_cols_exist(surv_ana@elig_score_data, 
-                                     score_col_name, 
-                                     "get_coxph_mdl")
-            surv_ana@elig_score_data[,score_col_name] <- scale(surv_ana@elig_score_data[,score_col_name])
+        build_mdl <- TRUE
+  
+        for(pred in surv_ana@preds) {
+            if(pred %in% colnames(surv_ana@elig_score_data)) {
+                if(pred %in% c("PRS", "CCI")) {
+                    surv_ana@elig_score_data[,pred] <- scale(surv_ana@elig_score_data[,pred])
+                } else if(pred %in% c("SEX", "ANCESTRY")) {
+                    surv_ana@elig_score_data <- dplyr::mutate_at(surv_ana@elig_score_data, 
+                                                                 {{ pred }},
+                                                                 as.factor)
+                }
+            }
         }
         if(build_mdl) {
             test_data <- surv_ana@elig_score_data
             if(!is.null(test_idxs)) {
                 test_data <- surv_ana@elig_score_data[test_idxs,]
             }
-            coxph_mdl <- suppressWarnings(
-                            survival::coxph(formula=coxph_formula, 
-                                            data=test_data,
-                                            # Larger fit object but no need for
-                                            # other functions to reconstruct
-                                            # which fails in this setup
-                                            model=TRUE))
+            if(nrow(test_data) > 0) {
+                coxph_mdl <- suppressWarnings(
+                                survival::coxph(formula=coxph_formula, 
+                                                data=test_data,
+                                                # Larger fit object but no need for
+                                                # other functions to reconstruct
+                                                # which fails in this setup
+                                                model=TRUE))
+            }
         } 
     }
     return(coxph_mdl)

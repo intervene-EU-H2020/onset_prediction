@@ -12,23 +12,18 @@ get_comp_group <- function(score_type,
 get_surv_descr <- function(surv_ana,
                            surv_type) {
     plot_caption <- paste0("   Surv ~ ")
-    if(surv_type == "HR") {
-        plot_caption <- paste0(plot_caption, paste0(surv_ana@score_type, " Risk Group", collapse=" + "))
-    } else {
-        plot_caption <- paste0(plot_caption, paste0(surv_ana@score_type, collapse=" + "))
-    }
-    plot_caption <- paste0(plot_caption, " + ", get_pretty_covs_string(surv_ana@covs))
-    return(plot_caption)
+    plot_caption <- paste0(reformat_preds(surv_ana@preds), collapse=" + ")
+    return(paste0(" ", plot_caption))
 }
 
 get_comp_descr <- function(surv_ana,
                            surv_type) {
     plot_caption <- ""
-    if("CCI" %in% surv_ana@score_type & surv_type == "HR") {
+    if(any(stringr::str_detect(surv_ana@preds, "CCI")) & surv_type == "HR") {
         plot_caption <- paste0("CCI >", surv_ana@bin_cut, " vs. <=", surv_ana@bin_cut)
 
     } 
-    if("PRS" %in% surv_ana@score_type & surv_type == "HR") {
+    if(any(stringr::str_detect(surv_ana@preds, "PRS")) & surv_type == "HR") {
         plot_caption <- "PRS Top 1% vs. 40-60%"
     }
     return(plot_caption)
@@ -61,6 +56,18 @@ get_pretty_covs_string <- function(covs,
         pretty_string <- stringr::str_flatten(covs, collapse="_")
     }
     return(pretty_string)
+}
+
+reformat_preds <- function(preds) {
+    preds <- stringr::str_replace(preds, "YEAR_OF_BIRTH", "Year of birth")
+    preds <- stringr::str_replace(preds, "SEX", "Sex")        
+    n_pcs <- sum(stringr::str_count(preds, "PC"))
+    if(n_pcs > 1) {
+        preds <- preds[stringr::str_detect(preds, "PC", negate=TRUE)]
+        preds <- c(preds, "PCs")
+    } 
+
+    return(preds)
 }
 
 read_coxph_res_file <- function(res_dir,

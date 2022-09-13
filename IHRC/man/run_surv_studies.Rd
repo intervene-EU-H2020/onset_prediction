@@ -9,6 +9,7 @@ run_surv_studies(
   icd_data = NULL,
   prs_data = NULL,
   score_type,
+  pred_score = "SCORE",
   study_type = "forward",
   endpts = c("J10_ASTHMA"),
   exp_ages = 0,

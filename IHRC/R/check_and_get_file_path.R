@@ -1,6 +1,5 @@
 #' Creats the file directory and name for the different result types
 #' 
-#' @inheritParams add_risk_group_col
 #' @param res_type A character. The results type.
 #' 
 #' @return A character. The file name.
@@ -9,22 +8,15 @@
 check_and_get_file_path <- function(surv_ana,
                                     res_type) {
     if(surv_ana@write_res) {
-        if(!is.null(surv_ana@covs)) {
-            covs_dir_name <- paste0(get_pretty_covs_string(surv_ana@covs, file_name=TRUE), "/")
-        } else if(res_type %in% c("HRs", "coxph", "surv")) {
-            message("Could not make correct directory because covariates not given")
-        }
-
         # Results type specific folder
         type_dir <- dplyr::case_when(
             res_type == "endpt" ~ paste0("score_distr/endpts/"),
             res_type == "distr" ~ paste0( "score_distr/"),
-            res_type == "coxph" ~ covs_dir_name,
-            res_type == "cidx" ~ covs_dir_name,
             res_type == "log" ~ paste0("PRS_logs/score_cut/"),
-            res_type == "HR RG" ~ paste0(covs_dir_name, "HRs/"), 
-            res_type == "HR SD" ~ paste0(covs_dir_name, "HRs/"), 
-            res_type == "surv" ~ paste0(covs_dir_name, "surv/"),
+            res_type == "HR RG" ~ "HRs/", 
+            res_type == "HR SD" ~ "HRs/", 
+            res_type == "surv" ~ "surv/",
+            TRUE ~ ""
         )
         curnt_res_dir <- paste0(surv_ana@res_dir, type_dir)
         # Make the folder if it doesn't exist yet
