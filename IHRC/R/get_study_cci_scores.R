@@ -14,8 +14,7 @@ get_study_CCI_data <- function(elig_indv,
                                icd_data) {
     cci_data <- ICCI::calc_cci(icd_data,
                                exp_start=calc_exp_start_age(elig_indv),
-                               exp_end=calc_exp_end_age(elig_indv)) %>%
-                    dplyr::rename(CCI=CCI_score)
+                               exp_end=calc_exp_end_age(elig_indv)) 
     return(cci_data)
 }
 

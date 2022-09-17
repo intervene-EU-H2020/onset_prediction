@@ -14,6 +14,7 @@ get_study_file_name <- function(study) {
             file_name <- paste0(file_name, "_e", study@exp_len)
         }
     }
+    return(file_name)
 }   
 
 #' Writes results and log file
@@ -62,22 +63,13 @@ log_msg_string <- function(study) {
     n_cases <- get_n_cases(study@study_data, study@endpt)
     n_cntrls <- get_n_cntrls(study@study_data, study@endpt)
 
-    if(study@study_type == "forward") {
-        paste0("Endpoint: ", study@endpt, "\n",
-               "No of cases: ", n_cases, "\n",
-               "No of ctrls: ", n_cntrls, "\n",   
-               "Age at exposure start:        ", study@exp_age, "\n",
-               "Length of exposure period:    ", study@exp_len, "\n", 
-               "Length of washout period:     ", study@wash_len, "\n",
-               "Length of observation period: ", study@obs_len, "\n")
-    } else {
-        paste0("Endpoint: ", study@endpt, "\n",
-               "No of cases: ", n_cases, "\n",
-               "No of ctrls: ", n_cntrls, "\n",   
-               "Length of washout period:     ", study@wash_len, "\n",
-               "Length of observation period: ", study@obs_len, "\n",
-               "End of observation:        ", study@obs_end_date, "\n")      
-    }
+    paste0("Endpoint: ", study@endpt, "\n",
+           "No of cases: ", n_cases, "\n",
+           "No of ctrls: ", n_cntrls, "\n",   
+           "Age at exposure start:        ", study@exp_age, "\n",
+           "Length of exposure period:    ", study@exp_len, "\n", 
+           "Length of washout period:     ", study@wash_len, "\n",
+           "Length of observation period: ", study@obs_len, "\n")
 }
 
 #' Writes study setup to a file

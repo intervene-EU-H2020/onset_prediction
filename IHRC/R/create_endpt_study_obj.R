@@ -13,7 +13,7 @@
 #' @author Kira E. Detrois
 create_endpt_study_obj <- function(study_data,
                                    study_type="forward",
-                                   score_type="CCI",
+                                   preds="CCI",
                                    endpt="J10_ASTHMA",
                                    exp_age=NULL,
                                    exp_len=NULL,
@@ -27,7 +27,7 @@ create_endpt_study_obj <- function(study_data,
                                    write_res=FALSE,
                                    res_dir=NA_character_) {
     if(!is.na(res_dir)) {
-        res_dir <- paste0(res_dir, paste0(score_type, collapse="_"), "_logs/")
+        res_dir <- paste0(res_dir, "logs/", study_type, "/", get_preds_file_name(preds), "_logs/")
     }
     if(study_type == "backward") {
         if(!is.null(exp_len)) {

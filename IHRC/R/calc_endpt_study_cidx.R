@@ -7,7 +7,7 @@
 #' YEAR_OF_BIRTH`.
 #'  
 #' @return A tibble with columns `Endpoint`, `Score`, `Group`, 
-#'          `N_controls`, `N_cases`, `beta`, `std_errs`, `p_val`, `HR`, 
+#'          `N_controls`, `N_cases`, `beta`, `SE`, `p_val`, `HR`, 
 #'          `CI_pos`, `CI_neg`. The Cox-PH analysis results for all 
 #'          selected endpoints. 
 #' 

@@ -12,13 +12,13 @@ extract_coxph_res <- function(coxph_mdl,
                               score_type) {
     if(!is.null(coxph_mdl)) {
         betas <- summary(coxph_mdl)$coefficients[,"coef"]
-        std_errs <- summary(coxph_mdl)$coefficients[,"se(coef)"]
+        SE <- summary(coxph_mdl)$coefficients[,"se(coef)"]
         pvals <- summary(coxph_mdl)$coefficients[,"Pr(>|z|)"]
         OR <- exp(betas)
-        CI <- get_CI(betas, std_errs)
+        CI <- get_CI(betas, SE)
         preds <- names(summary(coxph_mdl)$coefficients[,"coef"])
         groups <- "no groups"
-        return(list(beta=betas, std_err=std_errs, p_val=pvals, HR=OR, CI_neg=exp(CI$neg), CI_pos=exp(CI$pos), groups=groups, preds=preds))
+        return(list(beta=betas, std_err=SE, p_val=pvals, HR=OR, CI_neg=exp(CI$neg), CI_pos=exp(CI$pos), groups=groups, preds=preds))
     } else {
         return(list())
     }

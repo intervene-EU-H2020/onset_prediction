@@ -19,13 +19,12 @@ get_coxph_mdl <- function(surv_ana,
     coxph_mdl <- NULL
     if(nrow(surv_ana@elig_score_data) > 0) {
         coxph_formula <- get_coxph_formula(surv_ana)
-        print(coxph_formula)
 
         build_mdl <- TRUE
   
         for(pred in surv_ana@preds) {
             if(pred %in% colnames(surv_ana@elig_score_data)) {
-                if(pred %in% c("PRS", "CCI")) {
+                if(pred %in% c("PRS", "CCI", "YEAR_OF_BIRTH", "MI")) {
                     surv_ana@elig_score_data[,pred] <- scale(surv_ana@elig_score_data[,pred])
                 } else if(pred %in% c("SEX", "ANCESTRY")) {
                     surv_ana@elig_score_data <- dplyr::mutate_at(surv_ana@elig_score_data, 

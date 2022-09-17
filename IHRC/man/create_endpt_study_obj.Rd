@@ -7,7 +7,7 @@
 create_endpt_study_obj(
   study_data,
   study_type = "forward",
-  score_type = "CCI",
+  preds = "CCI",
   endpt = "J10_ASTHMA",
   exp_age = NULL,
   exp_len = NULL,
@@ -34,9 +34,6 @@ backwards from this time point. The exposure period will
 be different for each individual depending on their birth
 date. This setup can be created, using the function
 \code{\link{get_backward_study}}.}
-
-\item{score_type}{A character. The score type. At the moment the two
-options are \code{CCI}, and \code{PRS}.}
 
 \item{endpt}{A character. The column name of the current endpoint
 of interest.}

@@ -13,6 +13,7 @@ write_res_files <- function(endpt_hrs_tib,
                                                res_type="coxph")
     file_path_cidx <- check_and_get_file_path(surv_ana=surv_ana,
                                               res_type="cidx")
+
     if(!is.null(file_path_coxph)) {
         readr::write_delim(x=endpt_hrs_tib, 
                            file=file_path_coxph, 

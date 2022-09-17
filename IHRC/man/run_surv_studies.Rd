@@ -7,9 +7,10 @@
 run_surv_studies(
   pheno_data,
   icd_data = NULL,
+  atc_data = NULL,
   prs_data = NULL,
   score_type,
-  pred_score = "SCORE",
+  plot_preds = NULL,
   study_type = "forward",
   endpts = c("J10_ASTHMA"),
   exp_ages = 0,

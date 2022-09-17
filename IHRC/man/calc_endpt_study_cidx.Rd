@@ -9,7 +9,7 @@ calc_endpt_study_cidx(surv_ana)
 }
 \value{
 A tibble with columns \code{Endpoint}, \code{Score}, \code{Group},
-\code{N_controls}, \code{N_cases}, \code{beta}, \code{std_errs}, \code{p_val}, \code{HR},
+\code{N_controls}, \code{N_cases}, \code{beta}, \code{SE}, \code{p_val}, \code{HR},
 \code{CI_pos}, \code{CI_neg}. The Cox-PH analysis results for all
 selected endpoints.
 }

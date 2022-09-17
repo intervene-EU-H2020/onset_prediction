@@ -9,45 +9,33 @@ get_down_dir <- function(downsample_fctr) {
            paste0("down_", downsample_fctr, "/")) 
 }
 
-#' Creats the file name for the score distribution plots
+#' Creats the file directory and name for the different result types
+#' 
+#' @param res_type A character. The results type.
 #' 
 #' @return A character. The file name.
 #' 
-#' @export 
-#' 
 #' @author Kira E. Detrois
-get_score_distr_file_name <- function(surv_ana) {
-    plot_descr <- ""
-    if(any(stringr::str_detect(surv_ana@preds, "CCI"))) {
-        if(surv_ana@study@study_type == "forward") {
-            plot_descr <- paste0("_", surv_ana@study@exp_age, "_to_", surv_ana@study@exp_age+surv_ana@study@exp_len)
-        } else {
-            plot_descr <- paste0("_until_", surv_ana@study@obs_end_date)
+check_and_get_file_path <- function(surv_ana,
+                                    res_type) {
+    if(surv_ana@write_res) {
+        # Results type specific folder
+        curnt_res_dir <- paste0(surv_ana@res_dir, paste0(res_type, "/", surv_ana@study@study_type, "/"))
+        if(res_type == "HR") {
+            curnt_res_dir <- paste0(curnt_res_dir, get_preds_file_name(surv_ana@preds), "/")
         }
-    } 
-    paste0(get_preds_file_name(surv_ana@preds), "_score_distr", plot_descr, ".png")
-}
-
-#' Creats the file name for the HR plots with risk grouping
-#' 
-#' @return A character. The file name.
-#' 
-#' @export 
-#' 
-#' @author Kira E. Detrois
-get_hr_rg_file_name <- function(surv_ana) {
-    if(surv_ana@study@study_type == "forward") {
-        file_name <- paste0(surv_ana@study@endpt, "_e", surv_ana@study@exp_len, "_w", surv_ana@study@wash_len, "_o", surv_ana@study@obs_len)
-    } else {
-        file_name <- paste0(surv_ana@study@obs_end_date, "_o", surv_ana@study@obs_len, "_w", surv_ana@study@wash_len)
+        # Make the folder if it doesn't exist yet
+        if(Istudy::check_res_dir(surv_ana@write_res, curnt_res_dir)) {
+            res_file_end <- dplyr::case_when(
+                                res_type == "HR" ~ "HRs.png",
+                                res_type == "coxph" ~ "coxph.tsv",
+                                res_type == "cidx" ~ "cidx.tsv"
+                            )
+            file_path <- paste0(curnt_res_dir, get_file_name(surv_ana, res_type), "_", res_file_end)
+        }
+        return(file_path)
     }
-    if(any(stringr::str_detect(surv_ana@preds, "PRS"))) {
-        file_name <- paste0(file_name, "_PRS")
-    }
-    if(any(stringr::str_detect(surv_ana@preds, "CCI"))) {
-        file_name <- paste0(file_name, "_CCI_cut", surv_ana@bin_cut)
-    } 
-    paste0(file_name, "_HRs.png")
+    return(NA_character_)
 }
 
 #' Creats the file name for the HR plots with continuous scores
@@ -57,91 +45,44 @@ get_hr_rg_file_name <- function(surv_ana) {
 #' @export 
 #' 
 #' @author Kira E. Detrois
-get_hr_sd_file_name <- function(surv_ana) {
+get_file_name <- function(surv_ana,
+                          res_type) {
     if(surv_ana@study@study_type == "forward") {
-        file_name <- paste0(surv_ana@study@endpt, "_e", surv_ana@study@exp_len, "_w", surv_ana@study@wash_len, "_o", surv_ana@study@obs_len, "_", get_preds_file_name(surv_ana@preds))
+        file_name <- surv_ana@study@endpt
     } else {
-        file_name <- paste0(surv_ana@study@obs_end_date, "_o", surv_ana@study@obs_len, "_w", surv_ana@study@wash_len, "_", get_preds_file_name(surv_ana@preds))
+        file_name <- surv_ana@study@obs_end_date
     }
-    paste0(file_name, "_sd_HRs.png")
+    file_name <- paste0(file_name, "_", get_ewo_file_name(surv_ana), "_")
+    if(res_type == "HR") {
+        file_name <- paste0(file_name, get_preds_file_name(surv_ana@plot_preds))
+    } else {
+        file_name <- paste0(file_name, get_preds_file_name(surv_ana@preds))
+    }
+    return(file_name)
 }
 
 get_preds_file_name <- function(preds) {
-    preds <- reformat_preds(preds)
     preds <- stringr::str_replace_all(preds, " ", "_")
+    preds <- stringr::str_replace_all(preds, "[*]", "i")
+    preds <- stringr::str_replace_all(preds, "YEAR_OF_BIRTH", "YOB")
+    n_pcs <- sum(stringr::str_count(preds, "PC"))
+    if(n_pcs > 1) {
+        preds <- preds[!stringr::str_detect(preds, "PC")]
+        preds <- c(preds, "PCs")
+    } 
     file_name <- paste0(preds, collapse="_")
     return(file_name)
 }
 
-#' Creats the file name for the score cut log file
-#' 
-#' @return A character. The file name.
-#' 
-#' @export 
-#' 
-#' @author Kira E. Detrois
-get_score_cut_file_name <- function(surv_ana) {
-    file_name <- paste0(Istudy::get_study_file_name(surv_ana@study), "_", get_preds_file_name(surv_ana@preds), "_cut_log.txt")
-    return(file_name)
-}
-
-#' Creats the file name for endpoint specific score distribution plot
-#' 
-#' @return A character. The file name.
-#' 
-#' @export 
-#' 
-#' @author Kira E. Detrois
-get_endpt_score_file_name <- function(surv_ana) {
-    paste0(Istudy::get_study_file_name(surv_ana@study), "_",get_preds_file_name(surv_ana@preds), "_score.png")
-}
-
-#' Creats the file name for endpoint specific score distribution plot
-#' 
-#' @return A character. The file name.
-#' 
-#' @export 
-#' 
-#' @author Kira E. Detrois
-get_surv_file_name <- function(surv_ana) {
-    paste0(Istudy::get_study_file_name(surv_ana@study), "_", get_preds_file_name(surv_ana@preds), "_surv.png")
-}
-
-#' Creats the file name for Cox-PH model results file
-#' 
-#' @return A character. The file name.
-#' 
-#' @export 
-#' 
-#' @author Kira E. Detrois
-get_coxph_res_file_name <- function(surv_ana) {
-    if(surv_ana@study@study_type == "forward") {
-        file_name <- paste0("e", surv_ana@study@exp_len, "_w", surv_ana@study@wash_len, "_o", 
-        surv_ana@study@obs_len)
+get_ewo_file_name <- function(surv_ana) {
+    if(surv_ana@study@study_type == "foward") {
+        paste0("e", surv_ana@study@exp_len, "_w", surv_ana@study@wash_len, "_o", surv_ana@study@obs_len)
     } else {
-        file_name <- paste0(surv_ana@study@obs_end_date, "_o", surv_ana@study@obs_len, "_w", surv_ana@study@wash_len)
-    }  
-    file_name <- paste0(file_name, "_", get_preds_file_name(surv_ana@preds))
-    if(any(stringr::str_detect(surv_ana@preds, "CCI")) & length(surv_ana@preds) == 1) {
-        file_name <- paste0(file_name, "_cut", surv_ana@bin_cut, "_coxph.tsv")
-    } else {
-        file_name <- paste0(file_name, "_coxph.tsv")
+        if(length(surv_ana@study@exp_len) == 1) {
+            paste0("o", surv_ana@study@obs_len, "_w", surv_ana@study@wash_len, )
+        }
+        else {
+            paste0("o", surv_ana@study@obs_len, "_w", surv_ana@study@wash_len, "_e", surv_ana@study@exp_len)
+        }
     }
-}
-
-#' Creats the file name for Cox-PH model results file
-#' 
-#' @return A character. The file name.
-#' 
-#' @export 
-#' 
-#' @author Kira E. Detrois
-get_cidx_res_file_name <- function(surv_ana) {
-    if(surv_ana@study@study_type == "forward") {
-        file_name <- paste0("e", surv_ana@study@exp_len, "_w", surv_ana@study@wash_len, "_o", 
-        surv_ana@study@obs_len)
-    } else {
-        file_name <- paste0(surv_ana@study@obs_end_date, "_o", surv_ana@study@obs_len, "_w", surv_ana@study@wash_len)
-    }  
-    file_name <- paste0(file_name, "_", get_preds_file_name(surv_ana@preds), "_cidx.tsv")
 }

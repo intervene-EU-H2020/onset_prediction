@@ -23,6 +23,7 @@
 get_elig_score_data  <- function(score_type,
                                  study_data,
                                  icd_data=NULL,
+                                 atc_data=NULL,
                                  prs_data=NULL,
                                  endpt=NULL,
                                  min_indvs=5) {
@@ -33,6 +34,7 @@ get_elig_score_data  <- function(score_type,
             score_data <- preprocess_score_data(score_type=score_type, 
                                                 study_data=study_data,
                                                 icd_data=icd_data, 
+                                                atc_data=atc_data,
                                                 prs_data=prs_data,
                                                 endpt=endpt)
             elig_score_data <- join_dfs(study_data=study_data,

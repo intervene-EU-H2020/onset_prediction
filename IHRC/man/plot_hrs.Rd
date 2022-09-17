@@ -4,7 +4,13 @@
 \alias{plot_hrs}
 \title{Plot the HR from the Cox-PH model}
 \usage{
-plot_hrs(coxph_hr_res, surv_ana)
+plot_hrs(
+  coxph_hr_res,
+  surv_ana,
+  from_file = FALSE,
+  file_dir = "",
+  plot_preds = ""
+)
 }
 \arguments{
 \item{coxph_hr_res}{A tibble. The Cox-PH HR results. Needs

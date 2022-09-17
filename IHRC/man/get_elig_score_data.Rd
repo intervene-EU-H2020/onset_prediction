@@ -8,6 +8,7 @@ get_elig_score_data(
   score_type,
   study_data,
   icd_data = NULL,
+  atc_data = NULL,
   prs_data = NULL,
   endpt = NULL,
   min_indvs = 5

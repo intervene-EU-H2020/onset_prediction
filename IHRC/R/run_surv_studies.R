@@ -62,8 +62,10 @@
 #' @author Kira E. Detrois
 run_surv_studies <- function(pheno_data, 
                              icd_data=NULL,
+                             atc_data=NULL,
                              prs_data=NULL,
                              score_type,
+                             plot_preds=NULL,
                              study_type="forward",
                              endpts=c("J10_ASTHMA"),
                              exp_ages=0,
@@ -90,7 +92,7 @@ run_surv_studies <- function(pheno_data,
         for(exp_age in exp_ages) {
             study <- create_endpt_study_obj(study_data=pheno_data,
                                             study_type=study_type,
-                                            score_type=score_type,
+                                            preds=c(score_type, covs),
                                             endpt=endpt, 
                                             exp_age=exp_age,
                                             exp_len=exp_len,
@@ -106,14 +108,18 @@ run_surv_studies <- function(pheno_data,
             elig_score_data <- get_elig_score_data(score_type=score_type, 
                                                    study_data=study@study_data,
                                                    icd_data=icd_data, 
+                                                   atc_data=atc_data,
                                                    prs_data=prs_data,
                                                    endpt=endpt,
                                                    min_indvs=min_indvs)
+            if(is.null(plot_preds))
+                plot_preds <- score_type
             surv_ana <- methods::new("surv_ana",
                                      study=study,
                                      elig_score_data=elig_score_data,
                                      min_indvs=min_indvs,
                                      preds=c(score_type, covs),
+                                     plot_preds=plot_preds,
                                      bin_cut=bin_cut,
                                      write_res=write_res,
                                      res_dir=res_dir)
