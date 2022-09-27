@@ -11,20 +11,26 @@ get_study_file_name <- function(study) {
     } else {
         file_name <- paste0(study@endpt, "_", study@obs_end_date)
     }
-    file_name <- paste0(file_name, "_", get_ewo_file_name(study))
+    file_name <- paste0(file_name, "_", get_ewo_file_name(study@study_type,
+                                                          study@exp_len,
+                                                          study@was_len,
+                                                          study@obs_len))
     return(file_name)
 }   
 
 #' @export 
-get_ewo_file_name <- function(study) {
-    if(study@study_type == "forward") {
-        file_name <- paste0("e", study@exp_len, "_w", study@wash_len, "_o", study@obs_len)
+get_ewo_file_name <- function(study_type,
+                              exp_len,
+                              wash_len,
+                              obs_len) {
+    if(study_type == "forward") {
+        file_name <- paste0("e", exp_len, "_w", wash_len, "_o", obs_len)
     } else {
-        if(length(study@exp_len) != 1) {
-            file_name <- paste0("o", study@obs_len, "_w", study@wash_len)
+        if(length(exp_len) != 1) {
+            file_name <- paste0("o", obs_len, "_w", wash_len)
         }
         else {
-            file_name <- paste0("o", study@obs_len, "_w", study@wash_len, "_e", study@exp_len)
+            file_name <- paste0("o", obs_len, "_w", wash_len, "_e", exp_len)
         }
     }
     return(file_name)
