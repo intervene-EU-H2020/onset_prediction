@@ -20,7 +20,8 @@ test_that("get_study_elig_indv downsampling works", {
                          wash_len=2,
                          obs_len=8,
                          downsample_fctr=4)
-  expect_equal(get_n_cntrls(study_1@study_data, "J10_ASTHMA"), 8)
+
+  expect_equal(get_n_cntrls(study_1@study_data, "J10_ASTHMA"), 4)
 
   study_2 <- methods::new("study", 
                          study_data=test_data,

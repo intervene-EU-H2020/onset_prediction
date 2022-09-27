@@ -7,15 +7,28 @@
 #' @author Kira E. Detrois
 get_study_file_name <- function(study) {
     if(study@study_type == "forward") {
-        file_name <- paste0(study@endpt, "_a", study@exp_age, "_e", study@exp_len, "_w", study@wash_len, "_o", study@obs_len)
+        file_name <- paste0(study@endpt, "_a", study@exp_age)
     } else {
-        file_name <- paste0(study@endpt, "_", study@obs_end_date, "_o", study@obs_len, "_w", study@wash_len)
-        if(!is.na(study@exp_len)) {
-            file_name <- paste0(file_name, "_e", study@exp_len)
+        file_name <- paste0(study@endpt, "_", study@obs_end_date)
+    }
+    file_name <- paste0(file_name, "_", get_ewo_file_name(study))
+    return(file_name)
+}   
+
+#' @export 
+get_ewo_file_name <- function(study) {
+    if(study@study_type == "forward") {
+        file_name <- paste0("e", study@exp_len, "_w", study@wash_len, "_o", study@obs_len)
+    } else {
+        if(length(study@exp_len) != 1) {
+            file_name <- paste0("o", study@obs_len, "_w", study@wash_len)
+        }
+        else {
+            file_name <- paste0("o", study@obs_len, "_w", study@wash_len, "_e", study@exp_len)
         }
     }
     return(file_name)
-}   
+}
 
 #' Writes results and log file
 #' 

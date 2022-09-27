@@ -40,6 +40,7 @@ filter_too_old_and_young <- function(study_data,
         study_data <- dplyr::filter(study_data, 
                         lubridate::year(EXP_START_DATE) >= 1998)
     }
+
     # End of followup is either last day indv known to be alive or death date
     # Has to be non-censored at least at the end of the wash-out period
     study_data <- dplyr::filter(study_data, END_OF_FOLLOWUP > WASH_END_DATE | 
