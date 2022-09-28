@@ -25,9 +25,10 @@ test_that("calc_endpt_studies_hrs for prs works", {
                               "I9_VTE",
                               "C3_BREAST", 
                               "COVHOSP"),
-                     downsample_fctr=4,
+                     down_fctr=4,
                      ancs=NA_character_,
                      covs=c("SEX", "YEAR_OF_BIRTH"),
+                     filter_1998=TRUE,
                      min_indvs=5,
                      write_res=TRUE,
                      res_dir="/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/"), regexp=NA)

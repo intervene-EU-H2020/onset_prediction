@@ -4,7 +4,7 @@
 \alias{write_res_files}
 \title{Writes model results to a tab-delim file}
 \usage{
-write_res_files(endpt_hrs_tib, endpt_c_idxs_tib, surv_ana)
+write_res_files(endpt_hrs_tib, endpt_c_idxs_tib, ana_details)
 }
 \arguments{
 \item{endpt_hrs_tib}{A tibble with the results for previous endpts.}

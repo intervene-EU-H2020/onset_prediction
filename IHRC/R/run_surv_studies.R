@@ -35,7 +35,7 @@
 #' @param obs_end_date A Date. The end of the observation period. Needed 
 #'                      for `backward` studies. If not set the end will 
 #'                      be the most recent date across the diagnosis columns.
-#' @param downsample_fctr A numeric. Defines how many controls there
+#' @param down_fctr A numeric. Defines how many controls there
 #'                                   should be for every case.
 #'                                   Default is NA, which means no
 #'                                   downsampling is performed.
@@ -73,7 +73,7 @@ run_surv_studies <- function(pheno_data,
                              wash_len=2,
                              obs_len=8,
                              obs_end_date=as.Date("2021/01/01"),
-                             downsample_fctr=NA_integer_,
+                             down_fctr=NA_integer_,
                              ancs=NA_character_,
                              max_age=90,
                              filter_1998=FALSE,
@@ -84,7 +84,7 @@ run_surv_studies <- function(pheno_data,
                              res_dir=NULL) {
 
     if(write_res) {
-        res_dir <- paste0(res_dir, get_down_dir(downsample_fctr), ifelse(filter_1998, "f1998/", "all/"))
+        res_dir <- get_full_res_path(res_dir, down_fctr, filter_1998)
     }
     all_age_hrs_tib <- create_empty_endpt_hrs_tib() 
     all_age_cidxs_tib <- create_empty_cidx_tib()
@@ -99,7 +99,7 @@ run_surv_studies <- function(pheno_data,
                                             wash_len=wash_len,
                                             obs_len=obs_len,
                                             obs_end_date=obs_end_date,
-                                            downsample_fctr=downsample_fctr,
+                                            down_fctr=down_fctr,
                                             ancs=ancs,
                                             max_age=max_age,
                                             filter_1998=filter_1998,
@@ -136,11 +136,13 @@ run_surv_studies <- function(pheno_data,
         }
     }
     if(nrow(all_age_hrs_tib) > 0 | nrow(all_age_hrs_tib) > 0) {
+        ana_details <- get_ana_details_from_surv_ana(surv_ana)
         write_res_files(endpt_hrs_tib=all_age_hrs_tib,
                         endpt_c_idxs_tib=all_age_cidxs_tib,
-                        surv_ana=surv_ana)
+                        ana_details=ana_details)
         plot_hrs(all_age_hrs_tib, surv_ana) 
     }
 }
+
 
 

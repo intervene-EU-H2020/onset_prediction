@@ -1,64 +1,22 @@
-
-get_comp_group <- function(score_type,
-                           bin_cut=1) {
-    if("CCI" %in% score_type) {
-        comp_group <- paste0(">", bin_cut)
-    } else if("PRS" %in% score_type) {
-        comp_group <- "(Group 99% - Group 100%]"
-    }
-    return(comp_group)
+#' Filters out HRs that are NA, or where either bound of the CI is infinite
+filter_out_missing_hrs <- function(coxph_hrs) {
+    dplyr::filter(coxph_hrs, 
+                    !is.na(HR) &    
+                    !is.infinite(CI_NEG) &
+                    !is.infinite(CI_POS))
 }
 
-get_surv_descr <- function(surv_ana,
-                           surv_type) {
+#' Creates a string describing the survival model
+#' 
+get_surv_descr <- function(preds) {
     plot_caption <- paste0("   Surv ~ ")
-    plot_caption <- paste0(reformat_preds(surv_ana@preds), collapse=" + ")
+    plot_caption <- paste0(plot_caption, 
+                           paste0(reformat_preds_pretty(preds), collapse=" + "))
     return(paste0(" ", plot_caption))
 }
 
-get_comp_descr <- function(surv_ana,
-                           surv_type) {
-    plot_caption <- ""
-    if(any(stringr::str_detect(surv_ana@preds, "CCI")) & surv_type == "HR") {
-        plot_caption <- paste0("CCI >", surv_ana@bin_cut, " vs. <=", surv_ana@bin_cut)
-
-    } 
-    if(any(stringr::str_detect(surv_ana@preds, "PRS")) & surv_type == "HR") {
-        plot_caption <- "PRS Top 1% vs. 40-60%"
-    }
-    return(plot_caption)
-}
-
-#' Turns vector of covariates into a string for plots
-#' 
-#' @inheritParams run_surv_studies
-#' @param file_name A boolean. Whether to create a file_name or
-#'                   a plot title.
-#'  
-#' @export 
-get_pretty_covs_string <- function(covs,
-                                   file_name=FALSE) {
-    if(!file_name) {
-        covs <- stringr::str_replace_all(covs, "_", " ")
-    }
-    n_pcs <- sum(stringr::str_count(covs, "PC"))
-    covs <- stringr::str_to_title(covs)
-    if(n_pcs > 1) {
-        covs <- covs[stringr::str_detect(covs, "Pc", negate=TRUE)]
-        covs <- c(covs, "PCs")
-    } else {
-        covs[stringr::str_detect(covs, "Pc")] <- stringr::str_to_upper(covs[stringr::str_detect(covs, "Pc")])
-    }
-    if(!file_name) {
-        pretty_string <- stringr::str_flatten(covs, collapse=" + ")
-    } else {
-        covs <- stringr::str_to_lower(covs)
-        pretty_string <- stringr::str_flatten(covs, collapse="_")
-    }
-    return(pretty_string)
-}
-
-reformat_preds <- function(preds) {
+#' Reformats predictors for plots
+reformat_preds_pretty <- function(preds) {
     preds <- stringr::str_replace(preds, "YEAR_OF_BIRTH", "Year of birth")
     preds <- stringr::str_replace(preds, "SEX", "Sex")        
     n_pcs <- sum(stringr::str_count(preds, "PC"))
@@ -106,3 +64,39 @@ get_study_subtitle <- function(study) {
     return(study_sub)
 } 
 
+
+get_caption <- function(ana_details) {
+    if(ana_details$study_type == "backward") {
+        study_caption <- paste0("Obs: ", ana_details$obs_len, 
+                                " Years until ", ana_details$obs_end_date, 
+                                " Wash: ", ana_details$wash_len)
+        if(!all(is.na(ana_details$exp_len))) {
+            study_caption <- paste0(study_caption, 
+                                    " Exp: ", ana_details$exp_len)
+        }
+        study_caption <- paste0(study_caption, " Years")
+    } else {
+        study_caption <- paste0("Exp: ", ana_details$exp_len, 
+                                " Wash: ", ana_details$wash_len, 
+                                " Obs: ",  ana_details$obs_len, " Years")
+    }
+    caption <- paste0(study_caption, get_surv_descr(ana_details$preds))
+    return(caption)
+}
+
+
+get_obs_per_strings <- function(coxph_hrs,
+                                ana_details) {
+    paste0(unique(coxph_hrs$EXP_AGE)+ana_details$exp_len+ana_details$wash_len, 
+           "-", 
+           unique(coxph_hrs$EXP_AGE+ana_details$exp_len)+ana_details$wash_len+ana_details$obs_len)
+}
+
+get_sd_title <- function(coxph_vars) {
+    if(length(unique(coxph_vars)) > 1) {
+        title <- "1-SD Increment"
+    } else {
+        title <- paste0(unique(coxph_vars), " 1-SD Increment")
+    }
+    return(title)
+}

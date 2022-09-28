@@ -21,7 +21,7 @@
 #' @slot wash_len An integer. Length of the washout period (in years).
 #' @slot obs_len  An integer. Length of the observation period (in years).
 #' @slot obs_end A Date. The end of the observation period.
-#' @slot downsample_fctr An integer. Defines how many controls there
+#' @slot down_fctr An integer. Defines how many controls there
 #'                                   should be for every case.
 #'                                   Default is NA, which means no
 #'                                   downsampling is performed.
@@ -40,7 +40,7 @@ study <- methods::setClass("study",
                                       wash_len="numeric",
                                       obs_len="numeric",
                                       obs_end_date="Date",
-                                      downsample_fctr="numeric",
+                                      down_fctr="numeric",
                                       ancs="character",
                                       max_age="numeric",
                                       filter_1998="logical",
@@ -53,7 +53,7 @@ study <- methods::setClass("study",
                                           wash_len=NA_integer_,
                                           obs_len=NA_integer_,
                                           obs_end_date=as.Date("2021/01/01"),
-                                          downsample_fctr=NA_real_,
+                                          down_fctr=NA_real_,
                                           ancs=NA_character_,
                                           max_age=200,
                                           filter_1998=FALSE,
@@ -93,7 +93,7 @@ setValidity("study", function(object) {
     msg <- ""
     msg <- test_integer_correct(msg, object@wash_len, "wash_len", TRUE)
     msg <- test_integer_correct(msg, object@obs_len, "obs_len", TRUE)
-    msg <- test_integer_correct(msg, object@downsample_fctr, "downsample_fctr")
+    msg <- test_integer_correct(msg, object@down_fctr, "down_fctr")
     msg <- test_endpt_input_correct(msg, object@endpt)
     if(msg != "") {
         return(msg)

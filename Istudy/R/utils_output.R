@@ -13,7 +13,7 @@ get_study_file_name <- function(study) {
     }
     file_name <- paste0(file_name, "_", get_ewo_file_name(study@study_type,
                                                           study@exp_len,
-                                                          study@was_len,
+                                                          study@wash_len,
                                                           study@obs_len))
     return(file_name)
 }   

@@ -14,10 +14,10 @@
 #' @author Kira E. Detrois
 downsample_cntrls <- function(study_data,
                               endpt,
-                              downsample_fctr) {
-    if(!is.na(downsample_fctr)) {
+                              down_fctr) {
+    if(!is.na(down_fctr)) {
         n_cases <- get_n_cases(study_data, endpt)
-        n_cntrls <- downsample_fctr*n_cases 
+        n_cntrls <- down_fctr*n_cases 
 
         cntrl_idxs <- which(study_data[[endpt]] == 0)
         case_idxs <- which(study_data[[endpt]] == 1)

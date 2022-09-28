@@ -19,7 +19,6 @@
 #' 
 #' @author Kira E. Detrois
 filter_too_old_and_young <- function(study_data,
-                                     obs_end_date,
                                      study_type,
                                      max_age=200,
                                      filter_1998=FALSE) {
@@ -34,6 +33,7 @@ filter_too_old_and_young <- function(study_data,
                                     DATE_OF_BIRTH <= EXP_START_DATE)
     }
     # Too old
+
     study_data <- dplyr::filter(study_data, 
                     lubridate::time_length(DATE_OF_BIRTH %--% OBS_END_DATE, "years") < max_age)
     if(filter_1998) {
@@ -46,5 +46,13 @@ filter_too_old_and_young <- function(study_data,
     study_data <- dplyr::filter(study_data, END_OF_FOLLOWUP > WASH_END_DATE | 
                                     is.na(END_OF_FOLLOWUP))
 
+    return(study_data)
+}
+
+#' Censors individuals once they reach the maximum age
+censor_old_age <- function(study_data,
+                           max_age=200) {
+    reach_max_age <- (lubridate::time_length(study_data$DATE_OF_BIRTH %--% study_data$OBS_END_DATE, "years") > max_age) & (study_data$OBS_END_DATE < study_data$END_OF_FOLLOWUP | is.na(study_data$END_OF_FOLLOWUP))
+    study_data[reach_max_age,]$END_OF_FOLLOWUP <- study_data[reach_max_age,]$OBS_END_DATE
     return(study_data)
 }

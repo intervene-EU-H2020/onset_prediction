@@ -39,7 +39,6 @@
 get_study_elig_indv <- function(study) {
     study@study_data <- filter_too_old_and_young(
                                 study_data=study@study_data,
-                                obs_end_date=study@obs_end_date, 
                                 study_type=study@study_type,
                                 max_age=study@max_age,
                                 filter_1998=study@filter_1998)
@@ -55,7 +54,7 @@ get_study_elig_indv <- function(study) {
     study@study_data <- downsample_cntrls(
                                 study_data=study@study_data,
                                 endpt=study@endpt,
-                                downsample_fctr=study@downsample_fctr)
+                                down_fctr=study@down_fctr)
     study@study_data <- add_diag_time_cols(
                                 study_data=study@study_data,
                                 endpt=study@endpt)

@@ -19,7 +19,7 @@ test_that("get_study_elig_indv downsampling works", {
                          exp_len=10,
                          wash_len=2,
                          obs_len=8,
-                         downsample_fctr=4)
+                         down_fctr=4)
 
   expect_equal(get_n_cntrls(study_1@study_data, "J10_ASTHMA"), 4)
 
@@ -30,6 +30,6 @@ test_that("get_study_elig_indv downsampling works", {
                          exp_len=10,
                          wash_len=2,
                          obs_len=8,
-                         downsample_fctr=4)
+                         down_fctr=4)
   expect_equal(study_1@study_data$ID, study_2@study_data$ID)
 })

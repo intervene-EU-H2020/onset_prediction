@@ -1,33 +1,4 @@
 
 ```{r}
-parse_res_dir <- function(file_path) {
-    file_path_parts <- unlist(stringr::str_split(file_path, "/"))
-    res_dir_idx <- seq_len(length(file_path_parts))[stringr::str_detect(file_path_parts, "results")]
-    res_dir <- paste0(file_path_parts[1:res_dir_idx], collapse="/")
 
-    file_path_parts <- file_path_parts[(res_dir_idx+1):length(file_path_parts)]
-    ana_details <- list()
-
-    ana_details$down_fctr <- ifelse(file_path_parts[1] == "no_down",  
-                                    NA_integer_,  
-                                    as.numeric(stringr::str_extract(file_path_parts[1], "[0-9]")))
-    ana_details$filter_1998 = ifelse(file_path_parts[2] == "f1998", TRUE, FALSE)
-    ana_details$study_type = file_path_parts[4]
-
-    file_name = file_path_parts[5]
-    file_name_parts <- unlist(stringr::str_split(file_name, "_"))
-    ana_details$endpt <- file_name_parts[1]
-    ana_details$exp_len <- as.numeric(stringr::str_extract(file_name_parts[2], "[0-9]+"))
-    ana_details$wash_len <- as.numeric(stringr::str_extract(file_name_parts[3], "[0-9]+"))
-    ana_details$obs_len <- as.numeric(stringr::str_extract(file_name_parts[4], "[0-9]+"))
-    ana_details$score <- as.numeric(stringr::str_extract(file_name_parts[2], "[0-9]+"))
-
-    print(ana_details)
-    print(file_name_parts)
-
-    obs_idx <- seq_len(length(file_name_parts))[stringr::str_detect(file_name_parts, "o[0-9]+")]
-    score_vec <- file_name_parts[(obs_idx+1):(length(file_name_parts)-1)]
-    print(score_vec)
-}
-parse_res_dir("/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/down_4/all/coxph/backward/CCI_SEX_YOB_CCIiPRS_CCIiYOB/COVHOSP_e10_w2_o8_CCI_CCIiPRS_CCIiYOB_coxph.tsv")
 ```

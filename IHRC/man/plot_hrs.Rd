@@ -5,7 +5,7 @@
 \title{Plot the HR from the Cox-PH model}
 \usage{
 plot_hrs(
-  coxph_hr_res,
+  coxph_hrs,
   surv_ana,
   from_file = FALSE,
   file_dir = "",
@@ -13,7 +13,7 @@ plot_hrs(
 )
 }
 \arguments{
-\item{coxph_hr_res}{A tibble. The Cox-PH HR results. Needs
+\item{coxph_hrs}{A tibble. The Cox-PH HR results. Needs
 to at least contain the columns \code{ENDPOINT},
 \code{HR}, \code{CI_NEG}, \code{CI_POS}, and \code{GROUP}.}
 }

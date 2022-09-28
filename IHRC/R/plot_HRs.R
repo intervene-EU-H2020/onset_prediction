@@ -5,50 +5,50 @@
 #' the backward study creates a single plot with the
 #' different endpoints.
 #' 
-#' @param coxph_hr_res A tibble. The Cox-PH HR results. Needs
+#' @param coxph_hrs A tibble. The Cox-PH HR results. Needs
 #'                      to at least contain the columns `ENDPOINT`,
 #'                      `HR`, `CI_NEG`, `CI_POS`, and `GROUP`.
 #'  
 #' @export 
+#' @import ggplot2
 #' 
 #' @author Kira E. Detrois
-plot_hrs <- function(coxph_hr_res,
-                     surv_ana,
+plot_hrs <- function(coxph_hrs=NULL,
+                     surv_ana=NULL,
                      from_file=FALSE,
-                     file_dir="",
+                     file_path="",
                      plot_preds="") {
-                            
-    coxph_hr_res <- filter_out_missing(coxph_hr_res)
     if(!from_file) {
-        plot_preds <- surv_ana@plot_preds
+        ana_details <- get_ana_details_from_surv_ana(surv_ana)
     } else {
-        res_dir <- parse_res_dir(file_path)
+        coxph_hrs <- readr::read_delim(file_path, delim="\t")
+        ana_details <- parse_file_path(file_path)
+        ana_details$plot_preds <- plot_preds
+        ana_details$write_res <- TRUE
     }
-
-    coxph_hr_res <- set_plot_preds_fctr(coxph_hr_res,
-                                        plot_preds)
-
-    if(surv_ana@study@study_type == "forward") {
-        plt <- plot_age_hrs(coxph_hr_res, surv_ana)
-    } else {
-        plt <- plot_endpt_hrs(coxph_hr_res, surv_ana)
+    
+    coxph_hrs <- filter_out_missing_hrs(coxph_hrs)
+    coxph_hrs <- set_plot_preds_fctr(coxph_hrs,
+                                     ana_details$plot_preds)
+    curnt_coxph_hrs <- dplyr::filter(coxph_hrs, GROUP == "no groups")
+    if(nrow(curnt_coxph_hrs) > 0) {
+        if(ana_details$study_type == "forward") {
+            plt <- plot_age_sd_hrs(curnt_coxph_hrs, 
+                                   ana_details)
+        } else {
+            plt <- plot_endpt_sd_hr(curnt_coxph_hrs, 
+                                    ana_details)
+        }
     }
 }
 
-set_plot_preds_fctr <- function(coxph_hr_res,
+set_plot_preds_fctr <- function(coxph_hrs,
                                 plot_preds) {
     plot_preds <- stringr::str_replace_all(plot_preds, "[*]", ":")
-    coxph_hr_res <- dplyr::filter(coxph_hr_res, VAR %in% plot_preds)
-    coxph_hr_res$VAR <- factor(coxph_hr_res$VAR, levels=plot_preds)
+    coxph_hrs <- dplyr::filter(coxph_hrs, VAR %in% plot_preds)
+    coxph_hrs$VAR <- factor(coxph_hrs$VAR, levels=plot_preds)
 
-    return(coxph_hr_res)
-}
-
-filter_out_missing <- function(coxph_hr_res) {
-    dplyr::filter(coxph_hr_res, 
-                    !is.na(HR) &    
-                    !is.infinite(CI_NEG) &
-                    !is.infinite(CI_POS))
+    return(coxph_hrs)
 }
 
 #' Plots the HR from the Cox-PH model of a backwards study.
@@ -60,63 +60,30 @@ filter_out_missing <- function(coxph_hr_res) {
 #' @export 
 #' 
 #' @author Kira E. Detrois
-plot_endpt_hrs <- function(coxph_hr_res,
-                           surv_ana) {
-    if(nrow(coxph_hr_res) > 0) {
-        plot_endpt_sd_hr(coxph_hr_res=coxph_hr_res, surv_ana=surv_ana)
-    }
+plot_endpt_sd_hr <- function(coxph_hrs,
+                             ana_details) {
+    max_x <- min(max(c(2, round(coxph_hrs$CI_POS)), na.rm=TRUE), 10)
+    min_x <- min(c(0.5, round(coxph_hrs$CI_NEG)), na.rm=TRUE)
+    plt <- get_endpt_sd_hr_ggplot(coxph_hrs=coxph_hrs,
+                                  ana_details=ana_details,
+                                  min_x=min_x,
+                                  max_x=max_x)
+    file_path <- check_and_get_file_path(ana_details, res_type="HR")
+    save_plt(file_path=file_path,
+             plt=plt,
+             width=12,
+             height=get_endpt_fig_height(coxph_hrs$VAR))
+    
 }
 
-plot_endpt_sd_hr <- function(coxph_hr_res,
-                             surv_ana) {
-    n_preds <- length(unique(coxph_hr_res$VAR))
-    top_group <- dplyr::filter(coxph_hr_res, GROUP == "no groups")
-    max_x <- min(max(c(2, round(top_group$CI_POS)), na.rm=TRUE), 10)
-    min_x <- min(c(0.5, round(top_group$CI_NEG)), na.rm=TRUE)
-    plt <- ggplot2::ggplot(top_group,
-                            # Plot basics
-                            aes(y=ENDPOINT, x=HR, color=VAR)) +
-                            # Axis settings
-                            coord_cartesian(xlim=c(min_x, max_x)) +
-                            geom_vline(xintercept = 1.0) +
-                            # Legends and labels
-                            labs(caption=paste0("Obs: ", surv_ana@study@obs_len, " Years until ", surv_ana@study@obs_end_date, " Wash: ", surv_ana@study@wash_len, " Years", get_surv_descr(surv_ana, surv_type="surv")),
-                                 x="Hazard Ratio (95%)",
-                                 y="") +
-                            scale_color_manual(values=IUtils::custom_colors_brewer(n_preds), 
-                                               name="Predictor") +
-                            # Theme
-                            IUtils::theme_custom(base_size=21) 
-        if(n_preds > 1) {
-            plt <- plt + 
-                    geom_point(position = position_dodge(width = .5), size=3) +
-                    geom_errorbar(position = position_dodge(width = .5), size=1,
-                                  aes(xmin=CI_NEG, xmax=CI_POS), width=.1) +
-                    labs(title="1-SD Increment")
-        } else {
-            # Points and error bars
-            plt <- plt + geom_point(show.legend = FALSE, size=3) + 
-                    geom_errorbar(aes(xmin=CI_NEG, xmax=CI_POS), size=1, width=.1) +
-                    theme(legend.position = "none") +
-                    labs(title=paste0(surv_ana@plot_preds, " 1-SD Increment"))
-        }
-
-    file_path <- check_and_get_file_path(surv_ana=surv_ana, res_type="HR")
-    fig_height <- dplyr::case_when(
+get_endpt_fig_height <- function(coxph_vars) {
+    n_preds <- length(unique(coxph_vars))
+    dplyr::case_when(
         n_preds == 2 ~ 7,
         n_preds == 3 ~ 9,
         n_preds == 4 ~ 11,
         n_preds == 5 ~ 14,
     )
-    if(!is.null(file_path) & !is.null(plt)) {
-            ggsave(file_path,
-                width=12,
-                height=fig_height,
-                dpi=600,
-                plot=plt, 
-                device="png", 
-                bg="white")
-    }
 }
 
 #' Plots the HR from the Cox-PH model of a forward study
@@ -129,96 +96,154 @@ plot_endpt_sd_hr <- function(coxph_hr_res,
 #' @export 
 #' 
 #' @author Kira E. Detrois
-plot_age_hrs <- function(coxph_hr_res,
-                         surv_ana) {
+plot_age_sd_hrs <- function(coxph_hrs,
+                            ana_details) {
 
-    endpts <- unique(coxph_hr_res$ENDPOINT)
+    max_y <- min(max(c(2, round(coxph_hrs$CI_POS+0.5)), na.rm=TRUE), 10)
+    min_y <- min(c(0, round(coxph_hrs$CI_NEG-0.5)), na.rm=TRUE)
+    endpts <- unique(coxph_hrs$ENDPOINT)
 
     for(endpt in endpts) {
-        surv_ana@study@endpt <- endpt # Cheating the system for easier plotting here
-        curnt_coxph_hr_res <- dplyr::filter(coxph_hr_res, GROUP == "no groups")
-        if(nrow(curnt_coxph_hr_res) > 0) {
-            max_y <- min(max(c(2, round(curnt_coxph_hr_res$CI_POS+0.5)), na.rm=TRUE), 10)
-            min_y <- min(c(0, round(curnt_coxph_hr_res$CI_NEG-0.5)), na.rm=TRUE)
-            plot_age_sd_hr(surv_ana=surv_ana,  
-                           coxph_hr_res=curnt_coxph_hr_res, 
-                           endpt=endpt, 
-                           min_y=min_y, 
-                           max_y=max_y)
+        endpt_coxph_hrs <- dplyr::filter(coxph_hrs, 
+                                         ENDPOINT == endpt)
+        ana_details$endpt <- endpt
+        if(nrow(endpt_coxph_hrs) > 0) {
+            plt <- get_age_sd_hr_ggplot(coxph_hrs=endpt_coxph_hrs,
+                                        ana_details=ana_details,
+                                        min_y=min_y,
+                                        max_y=max_y)
+            file_path <- check_and_get_file_path(
+                                ana_details,
+                                res_type="HR")
+            save_plt(file_path=file_path,
+                     plt=plt,
+                     width=7,
+                     height=7)
         }
     }
     return(NULL)
 }
 
-#' Plots the HR from the continuous Cox-PH model of a forward study
-#'   
-#' Creates separate plots for each endpoint for the different age studies.
-#' 
-#' @inheritParams plot_hrs
-#' @param endpt_coxph_hr_res A tibble. The Cox-PH HR results. Needs
-#'                           to at least contain the columns `ENDPOINT`,
-#'                           `HR`, `CI_NEG`, `CI_POS`, and `GROUP`.
-#' @inheritParams get_n_group_cases
-#' 
-#' @export 
-#' @import ggplot2
-#' 
-#' @author Kira E. Detrois
-plot_age_sd_hr <- function(surv_ana,
-                           coxph_hr_res,
-                           endpt,
-                           min_y, 
-                           max_y) {
-    n_preds <- length(unique(coxph_hr_res$VAR))
 
-    endpt_coxph_hr_res <- dplyr::filter(coxph_hr_res, ENDPOINT == endpt)
-    if(nrow(endpt_coxph_hr_res) > 0) {
-        plt <- ggplot2::ggplot(endpt_coxph_hr_res, ggplot2::aes(x=as.character(EXP_AGE), y=HR, color=VAR)) +
-                    # Axis settings
-                    geom_hline(yintercept=1.0) + 
-                    coord_cartesian(ylim=c(min_y,max_y)) +
-                    scale_x_discrete(breaks=unique(endpt_coxph_hr_res$EXP_AGE),
-                                     labels=get_obs_per_strings(endpt_coxph_hr_res, surv_ana)) +
-                    # Labels and titles
-                    labs(title=endpt,
-                         subtitle="1-SD Increment",
-                         caption=paste0("Exp: ", surv_ana@study@exp_len, " Wash: ", surv_ana@study@wash_len, " Obs: ",  surv_ana@study@obs_len, " Years", get_surv_descr(surv_ana, surv_type="surv")),
-                         x="Observation Age",
-                         y="Hazard Ratio (95% CI)") +
-                    scale_color_manual(values=IUtils::custom_colors_brewer(n_preds), 
-                                       name="Predictors") +
-                    # Theme
-                    IUtils::theme_custom(base_size=21) +
-                    theme(panel.grid.major.x=element_blank()) 
-        if(length(unique(coxph_hr_res$VAR)) > 1) {
-            plt <- plt + 
-                    geom_point(position = position_dodge(width = .5), size=3,
-                               aes(color=VAR)) +
-                    geom_errorbar(position = position_dodge(width = .5), size=1, width=0.1, 
-                                  aes(ymin=CI_NEG, ymax=CI_POS, color=VAR)) 
-        } else {
-            # Points and error bars
-            plt <- plt + geom_point(show.legend = FALSE, size=3) + 
-                    geom_errorbar(aes(ymin=CI_NEG, ymax=CI_POS), size=1, width=.1) +
-                    theme(legend.position = "none")
-        }
-        
-        file_path <- check_and_get_file_path(surv_ana=surv_ana, res_type="HR")
-       if(!is.null(file_path) & !is.null(plt)) {
-            ggsave(file_path,
-                   width=7,
-                   height=7,
-                   dpi=600,
-                   plot=plt, 
-                   device="png", 
-                   bg="white")
-        }
+save_plt <- function(file_path, 
+                     plt,
+                     width,
+                     height) {
+    if(!is.null(file_path) & !is.null(plt)) {
+                    ggsave(file_path,
+                        width=width,
+                        height=height,
+                        dpi=600,
+                        plot=plt, 
+                        device="png", 
+                        bg="white")
     }
 }
 
-get_obs_per_strings <- function(endpt_coxph_hr_res,
-                                surv_ana) {
-    paste0(unique(endpt_coxph_hr_res$EXP_AGE)+surv_ana@study@exp_len+surv_ana@study@wash_len, 
-           "-", 
-           unique(endpt_coxph_hr_res$EXP_AGE+surv_ana@study@exp_len)+surv_ana@study@wash_len+surv_ana@study@obs_len)
+#' @import ggplot2
+get_age_sd_hr_ggplot <- function(coxph_hrs,
+                                 ana_details,
+                                 min_y,
+                                 max_y) {
+    plt <- ggplot2::ggplot(coxph_hrs, 
+                  # Plot basics
+                  aes(x=as.character(EXP_AGE), y=HR, color=VAR)) +
+                  # Axis settings
+                  geom_hline(yintercept=1.0) + 
+                  coord_cartesian(ylim=c(min_y,max_y)) +
+                  scale_x_discrete(breaks=unique(coxph_hrs$EXP_AGE),
+                                   labels=get_obs_per_strings(coxph_hrs, ana_details)) +
+                  # Labels and titles
+                  labs(title=ana_details$endpt,
+                       subtitle=get_sd_title(coxph_hrs$VAR),
+                       caption=get_caption(ana_details),
+                       x="Observation Age",
+                       y="Hazard Ratio (95% CI)") +
+                  # Grid setting
+                  theme(panel.grid.major.x=element_blank())
+        
+    plt <- ggplot_set_general_settings(plt, coxph_hrs$VAR)
+    plt <- ggplot_points_and_errors(plt, 
+                                    coxph_vars=coxph_hrs$VAR, 
+                                    study_type=ana_details$study_type)
+    
+}
+
+#' @import ggplot2
+get_endpt_sd_hr_ggplot <- function(coxph_hrs,
+                                   ana_details,
+                                   min_x,
+                                   max_x) {
+        plt <- ggplot2::ggplot(coxph_hrs,
+                      # Plot basics
+                      aes(y=ENDPOINT, x=HR, color=VAR)) +
+                      # Axis settings
+                      coord_cartesian(xlim=c(min_x, max_x)) +
+                      geom_vline(xintercept=1.0) +
+                      # Legends and labels
+                      labs(title=get_sd_title(coxph_hrs$VAR),
+                           caption=get_caption(ana_details),
+                           x="Hazard Ratio (95%)",
+                           y="")
+        plt <- ggplot_set_general_settings(plt, coxph_hrs$VAR)
+        plt <- ggplot_points_and_errors(plt, 
+                                        coxph_vars=coxph_hrs$VAR, 
+                                        study_type=ana_details$study_type)
+
+        return(plt)
+}
+
+#' @import ggplot2
+ggplot_set_general_settings <- function(plt,
+                                        coxph_vars) {
+    n_preds <- length(unique(coxph_vars))
+    plt <- plt + scale_color_manual(
+                        values=IUtils::custom_colors_brewer(n_preds), 
+                        name="Predictor",
+                        labels=reformat_preds_pretty(levels(coxph_vars))) +
+                 # Theme
+                 IUtils::theme_custom(base_size=21) 
+    return(plt)
+}
+
+#' @import ggplot2
+ggplot_points_and_errors <- function(plt,
+                                     coxph_vars,
+                                     study_type) {
+    pos_dodge=0.5
+    size=1
+    width=0.1
+
+    if(length(unique(coxph_vars)) > 1) {
+        # Points and bars with coloring
+        plt <- plt + 
+               geom_point(position=position_dodge(width=.5), 
+                          size=3)
+        if(study_type == "forward") {
+            plt <- plt + geom_errorbar(aes(ymin=CI_NEG, ymax=CI_POS, color=VAR),
+                                       position=position_dodge(width=pos_dodge),
+                                       size=size, 
+                                       width=width)
+        } else {
+            plt <- plt + geom_errorbar(aes(xmin=CI_NEG, xmax=CI_POS, color=VAR),
+                                       position=position_dodge(width=pos_dodge),
+                                       size=size, 
+                                       width=width)
+        }
+    } else {
+        # No color and no legend
+        plt <- plt + 
+               geom_point(show.legend = FALSE, size=3) + 
+               theme(legend.position = "none")
+        if(study_type == "forward") {
+            plt <- plt + geom_errorbar(aes(ymin=CI_NEG, ymax=CI_POS),
+                                       size=size, 
+                                       width=width)
+        } else {
+            plt <- plt + geom_errorbar(aes(xmin=CI_NEG, xmax=CI_POS),
+                                       size=size, 
+                                       width=width)
+        }
+    }
+    return(plt)
 }

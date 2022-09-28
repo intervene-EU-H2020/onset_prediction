@@ -3,10 +3,19 @@
 #' @inheritParams run_surv_studies
 #' 
 #' @author Kira E. Detrois
-get_down_dir <- function(downsample_fctr) {
-    ifelse(all(is.na(downsample_fctr)),
+get_down_dir <- function(down_fctr) {
+    ifelse(all(is.na(down_fctr)),
            "no_down/",
-           paste0("down_", downsample_fctr, "/")) 
+           paste0("down_", down_fctr, "/")) 
+}
+
+#' Adds downsampling and filter information to results directory path
+get_full_res_path <- function(res_dir,
+                              down_fctr,
+                              filter_1998) {
+    paste0(res_dir, 
+           get_down_dir(down_fctr), 
+           ifelse(filter_1998, "f1998/", "all/"))
 }
 
 #' Creats the file directory and name for the different result types
@@ -16,22 +25,29 @@ get_down_dir <- function(downsample_fctr) {
 #' @return A character. The file name.
 #' 
 #' @author Kira E. Detrois
-check_and_get_file_path <- function(surv_ana,
+check_and_get_file_path <- function(ana_details,
                                     res_type) {
-    if(surv_ana@write_res) {
+    if(ana_details$write_res) {
         # Results type specific folder
-        curnt_res_dir <- paste0(surv_ana@res_dir, paste0(res_type, "/", surv_ana@study@study_type, "/"))
+        curnt_res_dir <- paste0(ana_details$res_dir,
+                                paste0(res_type, "/", ana_details$study_type, "/"))
         if(res_type == "HR") {
-            curnt_res_dir <- paste0(curnt_res_dir, get_preds_file_name(surv_ana@preds), "/")
+            curnt_res_dir <- paste0(curnt_res_dir, 
+                                    get_preds_file_name(ana_details$preds), 
+                                    "/")
         }
         # Make the folder if it doesn't exist yet
-        if(Istudy::check_res_dir(surv_ana@write_res, curnt_res_dir)) {
+        if(Istudy::check_res_dir(ana_details$write_res, curnt_res_dir)) {
             res_file_end <- dplyr::case_when(
-                                res_type == "HR" ~ "HRs.png",
-                                res_type == "coxph" ~ "coxph.tsv",
-                                res_type == "cidx" ~ "cidx.tsv"
+                                res_type == "HR" ~ "_HRs.png",
+                                res_type == "coxph" ~ "_coxph.tsv",
+                                res_type == "cidx" ~ "_cidx.tsv"
                             )
-            file_path <- paste0(curnt_res_dir, get_file_name(surv_ana, res_type), "_", res_file_end)
+            file_name <- get_file_name(ana_details,
+                                       res_type)
+            file_path <- paste0(curnt_res_dir, 
+                                file_name, 
+                                res_file_end)
         }
         return(file_path)
     }
@@ -45,18 +61,21 @@ check_and_get_file_path <- function(surv_ana,
 #' @export 
 #' 
 #' @author Kira E. Detrois
-get_file_name <- function(surv_ana,
+get_file_name <- function(ana_details,
                           res_type) {
-    if(surv_ana@study@study_type == "forward") {
-        file_name <- surv_ana@study@endpt
+    if(ana_details$study_type == "forward") {
+        file_name <- ana_details$endpt
     } else {
-        file_name <- surv_ana@study@obs_end_date
+        file_name <- ana_details$obs_end_date
     }
-    file_name <- paste0(file_name, "_", get_ewo_file_name(surv_ana), "_")
+    file_name <- paste0(file_name, "_", Istudy::get_ewo_file_name(ana_details$study_type,
+                                                                  ana_details$exp_len,
+                                                                  ana_details$wash_len,
+                                                                  ana_details$obs_len))
     if(res_type == "HR") {
-        file_name <- paste0(file_name, get_preds_file_name(surv_ana@plot_preds))
+        file_name <- paste0(file_name,  "_", get_preds_file_name(ana_details$plot_preds))
     } else {
-        file_name <- paste0(file_name, get_preds_file_name(surv_ana@preds))
+        file_name <- paste0(file_name,  "_", get_preds_file_name(ana_details$preds))
     }
     return(file_name)
 }
@@ -74,15 +93,3 @@ get_preds_file_name <- function(preds) {
     return(file_name)
 }
 
-get_ewo_file_name <- function(surv_ana) {
-    if(surv_ana@study@study_type == "foward") {
-        paste0("e", surv_ana@study@exp_len, "_w", surv_ana@study@wash_len, "_o", surv_ana@study@obs_len)
-    } else {
-        if(length(surv_ana@study@exp_len) == 1) {
-            paste0("o", surv_ana@study@obs_len, "_w", surv_ana@study@wash_len, )
-        }
-        else {
-            paste0("o", surv_ana@study@obs_len, "_w", surv_ana@study@wash_len, "_e", surv_ana@study@exp_len)
-        }
-    }
-}

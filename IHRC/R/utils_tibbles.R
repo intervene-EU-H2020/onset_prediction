@@ -109,8 +109,7 @@ add_cidx_res_row <- function(endpt_c_idxs_tib,
                              c_idx_res,
                              surv_ana) {
     if(!is.null(c_idx_res)) {
-        surv_descr=get_surv_descr(surv_ana,
-                                  surv_type="surv")  
+        surv_descr=get_surv_descr(surv_ana@preds)  
         # In docu it says to use se=sd/2
         c_idx_ci <- get_CI(c_idx_res["C Index"], c_idx_res["S.D."]/2)
         endpt_c_idxs_tib <- tibble::add_row(
