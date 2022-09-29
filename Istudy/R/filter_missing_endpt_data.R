@@ -2,11 +2,11 @@
 #' 
 #' Filters out individuals with missing information about the 
 #' endpoint of interest, defined by variable `endpt`.
-#' Missing information is defined by either no recorded endpoint 
+#' Missing information is defined as either no recorded endpoint 
 #' (endpt: NA), or for cases no recorded date of endpoint (endpt: 1, 
 #' endpt_date: NA).
 #' 
-#' @param study_data A data.frame with at least the columns:
+#' @param study_data A data.frame with at least columns:
 #'                   i.e. `J10_ASTHMA`, and `J10_ASTHMA_DATE` where 
 #'                   the columns are the study endpoint and date, 
 #'                   which will differ depending on the input variable 

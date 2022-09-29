@@ -1,11 +1,14 @@
 #' Downsamples the number of controls in the data
 #' 
-#' Given the same number of cases and the same indices
-#' will always sample the same individuals as controls. 
-#' This allows reproducibility of the study selection.
+#' Given the same selectionf of cases will always sample 
+#' the same individuals as controls, to allow reproducibility 
+#' of the study selection.
 #' 
-#' @inheritParams get_n_cases
-#' @inheritParams get_study_elig_indv
+#' @inheritParams adj_case_cntrl_status
+#' @param down_fctr An integer. Defines how many controls there
+#'                                   should be for every case.
+#'                                   Default is NA, which means no
+#'                                   downsampling is performed.
 #' 
 #' @return The downsampled data.frame.
 #' 

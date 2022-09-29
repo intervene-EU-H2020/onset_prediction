@@ -2,7 +2,7 @@
 % Please edit documentation in R/adj_case_cntrl_status.R
 \name{adj_case_cntrl_status}
 \alias{adj_case_cntrl_status}
-\title{Adjusts the case status of individuals with late onset endpoints}
+\title{Adjusts the case status of individuals with late diagnosed endpoints}
 \usage{
 adj_case_cntrl_status(study_data, endpt)
 }
@@ -17,8 +17,8 @@ variable \code{endpt}.}
 interest.}
 }
 \description{
-Those individuals where the endpoint onset date is after the
-observation has ended are considered controls in this setup.
+Those individuals where the endpoint diagnosis date is after the
+study has ended, are considered controls.
 }
 \author{
 Kira E. Detrois

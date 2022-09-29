@@ -14,32 +14,26 @@ There are two types of study setup:
 }
 \details{
 \itemize{
-\item The first one considers individuals of a certain age
-and a set exposure, washout, and observation periods
-calcualted onwards from this age. It can simply be created
-by creating a S4 study object.
-\item The second one considers all individuals at a set time
+\item \code{forward} considers individuals of a certain age.
+It calculates the exposure, washout, and observation period
+onwards from this age.
+\item \code{backward} considers all individuals at a set time
 point. The observation and washout period are calcualted
-backwards from this time point. The exposure period will be
-different for each individual depending on their birth date.
-This setup can be created, using the function
-\code{\link{get_backward_study}}.
+backwards from this time point.
 }
 
 \itemize{
-\item The study setup consists of an exposure window,
-a washout period, and a prediction period. See function
-\code{\link{calc_study_time}}.
+\item The study setup consists of an exposure period,
+a washout period, and a observation period.
 \item Eligible individuals cannot have missing data in the
 column for the endpoint of interest. See function
 \code{\link{filter_missing_endpt_data}}.
-\item Eligible individuals cannot have the
-selected endpoint of interest inside the endpoint free
-period. The endpoint free interval is the period from birth
-until the prediction period begins. See function
-\code{\link{filter_early_endpt}}.
-\item Individuals where the endpoint onset date is after the
-observation has ended are considered controls in this setup.
+\item Eligible individuals cannot have the endpoint of interest
+inside the endpoint free period. The endpoint free interval
+ranges from birth until the observation period begins.
+See function \code{\link{filter_early_endpt}}.
+\item Individuals where the endpoint diagnosis date is after the
+study has ended, are considered controls.
 }
 }
 \author{

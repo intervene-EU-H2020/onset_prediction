@@ -18,7 +18,13 @@ get_study_file_name <- function(study) {
     return(file_name)
 }   
 
+#' Creates file name describing the exposure, wash, and observation period.
+#' 
+#' @inheritParams set_study_dates
+#' 
 #' @export 
+#' 
+#' @author Kira E. Detrois
 get_ewo_file_name <- function(study_type,
                               exp_len,
                               wash_len,
@@ -40,10 +46,7 @@ get_ewo_file_name <- function(study_type,
 #' 
 #' Prints to console if something goes wrong.
 #' 
-#' @param study@study_data A tibble with the information for the eligible 
-#'                  individuals that should be written to the file.
-#' @inheritParams get_study_file_name
-#' @inheritParams get_study_study@study_data
+#' @param study An S4 study object. The current study setup.
 #' 
 #' @author Kira E. Detrois
 write_res_files <- function(study) {
@@ -53,7 +56,7 @@ write_res_files <- function(study) {
 
 #' Writes results to a tab-delim file
 #' 
-#' @inheritParams write_res_files
+#' @param study An S4 study object. The current study setup.
 #' 
 #' @author Kira E. Detrois
 write_res_file <- function(study) {
@@ -113,7 +116,8 @@ write_log_file <- function(study) {
 #' 
 #' If the directory does not exists tries to create it, recursively.
 #' 
-#' @inheritParams write_res_files
+#' @param write_res A boolean. Whether to write log files.
+#' @param res_dir A character. The path to the results directory.
 #' 
 #' @return A boolean. Whether to write the results to the `res_dir`.
 #' 

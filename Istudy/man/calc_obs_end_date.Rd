@@ -7,6 +7,16 @@ individual}
 \usage{
 calc_obs_end_date(study_data, study_type, obs_len, obs_end_date)
 }
+\arguments{
+\item{study_data}{A tibble. The data on all study individuals.}
+
+\item{study_type}{A character. Can be either \code{forward} or \code{backward}.}
+
+\item{obs_len}{An integer. Length of the observation period
+(in years).}
+
+\item{obs_end_date}{A Date. The end of the observation period.}
+}
 \value{
 A vector of Dates. The start date of the observation period
 for each individual.

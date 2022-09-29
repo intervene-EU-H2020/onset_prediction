@@ -1,33 +1,36 @@
 #' An S4 class representing the study setup
 #' 
 #' @slot study_type A character. Can be either `forward` or `backward`. 
-#'              `forward` considers individuals of a certain age 
-#'              and a set exposure, washout, and observation periods 
-#'              calcualted onwards from this age. It can simply be created
-#'              by creating a S4 study object.
-#'              `backward` considers all individuals at a set time
-#'              point. The observation and washout period are calcualted 
-#'              backwards from this time point. The exposure period will be 
-#'              different for each individual depending on their birth date. 
-#'              This setup can be created, using the function 
-#'              \code{\link{get_backward_study}}.
+#'                  `forward` considers individuals of a certain age.
+#'                  It calculates the exposure, washout, and observation 
+#'                  period onwards from this age.
+#'                  `backward` considers all individuals at a set time
+#'                  point. The observation and washout period are calcualted 
+#'                  backwards from this time point.
+#' @slot study_data A tibble. The data on all study individuals.
 #' @slot endpt A character. The column name of the current endpoint of 
 #'             interest. 
 #' @slot exp_age An integer. Age at which exposure period starts 
 #'              (in years).
 #' @slot exp_len An integer. Length of the exposure period (in years).
-#' @slot exp_ids A character (vector). The IDs for the exposure lengths,
-#'                   if they differ between individuals.
 #' @slot wash_len An integer. Length of the washout period (in years).
 #' @slot obs_len  An integer. Length of the observation period (in years).
-#' @slot obs_end A Date. The end of the observation period.
+#' @slot obs_end_date A Date. The end of the observation period.
 #' @slot down_fctr An integer. Defines how many controls there
 #'                                   should be for every case.
 #'                                   Default is NA, which means no
 #'                                   downsampling is performed.
 #' @slot ancs A character (vector). The ancestries to consider.
+#' @slot max_age A numeric. The maximum age for individuals in the study. 
+#'                          Individuals are censored, once they reach the maximum age. 
+#' @slot filter_1998 A boolean. Whether to filter out individuals where the
+#'                               the exposure period starts before year 1998.
+#' @slot write_res A boolean. Whether to write log files.
+#' @slot res_dir A character. The path to the results directory.
+#' 
 #' @importFrom methods new
 #' @importFrom lubridate %--%
+#' 
 #' @export
 #' 
 #' @author Kira E. Detrois
@@ -77,7 +80,7 @@ setMethod("initialize", "study", function(.Object, ...) {
                                         paste0(.Object@endpt, "_DATE"),
                                         END_OF_FOLLOWUP,
                                         dplyr::starts_with("PC"))
-    .Object@study_data <- set_study_data_dates(study_data=.Object@study_data,
+    .Object@study_data <- set_study_dates(study_data=.Object@study_data,
                                     study_type=.Object@study_type,
                                     exp_age=.Object@exp_age,
                                     exp_len=.Object@exp_len,

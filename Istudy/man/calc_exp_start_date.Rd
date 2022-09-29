@@ -14,6 +14,23 @@ calc_exp_start_date(
   obs_end_date
 )
 }
+\arguments{
+\item{study_data}{A tibble. The data on all study individuals.}
+
+\item{study_type}{A character. Can be either \code{forward} or \code{backward}.}
+
+\item{exp_age}{An integer. Age at which exposure period starts
+(in years).}
+
+\item{exp_len}{An integer. Length of the exposure period (in years).}
+
+\item{wash_len}{An integer. Length of the washout period (in years).}
+
+\item{obs_len}{An integer. Length of the observation period
+(in years).}
+
+\item{obs_end_date}{A Date. The end of the observation period.}
+}
 \value{
 A vector of Dates. The end of the observation period for
 each individual.

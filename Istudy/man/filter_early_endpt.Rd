@@ -7,10 +7,9 @@
 filter_early_endpt(study_data, endpt)
 }
 \arguments{
-\item{study_data}{A data.frame with at least columns \code{ENDPT_FREE}
-and i.e. \code{J10_ASTHMA_DATE} where the columns are the study
-endpoint and date, which will differ depending on the input
-variable \code{endpt}.}
+\item{study_data}{A data.frame with at least columns \code{ENDPT_FREE_PERIOD}
+and i.e. \code{J10_ASTHMA_DATE}, the study endpoint date,
+which will differ depending on the input variable \code{endpt}.}
 
 \item{endpt}{A character. The column name of the current endpoint of
 interest.}
@@ -22,15 +21,6 @@ endpoint occured before the prediction period.
 \description{
 Filters out individuals where the endpoint occured before the
 observation period begins.
-}
-\details{
-The endpoint free interval is the period from birth until the
-observation period begins. Thus, the contains the exposure and
-washout period. See function \code{\link{calc_endpt_free_time}}.
-
-To create the endpoint free intervals, use either the
-function \code{\link{calc_endpt_free_time}} directly or
-\code{\link{add_study_interval_cols}}.
 }
 \author{
 Kira E. Detrois

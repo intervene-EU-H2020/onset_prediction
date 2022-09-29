@@ -12,16 +12,14 @@ An S4 class representing the study setup
 
 \describe{
 \item{\code{study_type}}{A character. Can be either \code{forward} or \code{backward}.
-\code{forward} considers individuals of a certain age
-and a set exposure, washout, and observation periods
-calcualted onwards from this age. It can simply be created
-by creating a S4 study object.
+\code{forward} considers individuals of a certain age.
+It calculates the exposure, washout, and observation
+period onwards from this age.
 \code{backward} considers all individuals at a set time
 point. The observation and washout period are calcualted
-backwards from this time point. The exposure period will be
-different for each individual depending on their birth date.
-This setup can be created, using the function
-\code{\link{get_backward_study}}.}
+backwards from this time point.}
+
+\item{\code{study_data}}{A tibble. The data on all study individuals.}
 
 \item{\code{endpt}}{A character. The column name of the current endpoint of
 interest.}
@@ -31,21 +29,28 @@ interest.}
 
 \item{\code{exp_len}}{An integer. Length of the exposure period (in years).}
 
-\item{\code{exp_ids}}{A character (vector). The IDs for the exposure lengths,
-if they differ between individuals.}
-
 \item{\code{wash_len}}{An integer. Length of the washout period (in years).}
 
 \item{\code{obs_len}}{An integer. Length of the observation period (in years).}
 
-\item{\code{obs_end}}{A Date. The end of the observation period.}
+\item{\code{obs_end_date}}{A Date. The end of the observation period.}
 
-\item{\code{downsample_fctr}}{An integer. Defines how many controls there
+\item{\code{down_fctr}}{An integer. Defines how many controls there
 should be for every case.
 Default is NA, which means no
 downsampling is performed.}
 
 \item{\code{ancs}}{A character (vector). The ancestries to consider.}
+
+\item{\code{max_age}}{A numeric. The maximum age for individuals in the study.
+Individuals are censored, once they reach the maximum age.}
+
+\item{\code{filter_1998}}{A boolean. Whether to filter out individuals where the
+the exposure period starts before year 1998.}
+
+\item{\code{write_res}}{A boolean. Whether to write log files.}
+
+\item{\code{res_dir}}{A character. The path to the results directory.}
 }}
 
 \author{

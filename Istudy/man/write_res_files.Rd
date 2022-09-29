@@ -8,9 +8,6 @@ write_res_files(study)
 }
 \arguments{
 \item{study}{An S4 study object. The current study setup.}
-
-\item{study@study_data}{A tibble with the information for the eligible
-individuals that should be written to the file.}
 }
 \description{
 Prints to console if something goes wrong.

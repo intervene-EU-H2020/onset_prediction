@@ -6,7 +6,6 @@
 \usage{
 filter_too_old_and_young(
   study_data,
-  obs_end_date,
   study_type,
   max_age = 200,
   filter_1998 = FALSE
@@ -15,21 +14,24 @@ filter_too_old_and_young(
 \arguments{
 \item{study_data}{A data.frame with at least column \code{EXP_END}.}
 
-\item{max_age}{A numeric. The maximum length of the exposure period.}
+\item{study_type}{A character. Can be either \code{forward} or \code{backward}.}
+
+\item{max_age}{A numeric. The maximum age for individuals in the study.
+Individuals are censored, once they reach the maximum age.}
+
+\item{filter_1998}{A boolean. Whether to filter out individuals where the
+the exposure period starts before year 1998.}
 }
 \description{
 This is mainly needed for studies that consider variable exposure lengths for
 individuals selected at a given time point.
 Here the exposure length will be the time from birth until the time point
 considered and should be provided in the S4 study object in slot \code{EXP_END}
-in the same order as the individuals in the data.frame. A study setup like
-this can be created using the function \code{\link{get_backward_study}}.
+in the same order as the individuals in the data.frame.
 }
 \details{
 It might be that the birth of an individual is after the selected time point
 so their exposure lengths are negative. These individuals are always removed.
-Additionally, individuals are filtered out based on some maximum exposure
-length which can be set using the input variable \code{max_age}.
 }
 \author{
 Kira E. Detrois

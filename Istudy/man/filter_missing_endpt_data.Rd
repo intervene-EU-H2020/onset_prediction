@@ -7,7 +7,7 @@
 filter_missing_endpt_data(study_data, endpt)
 }
 \arguments{
-\item{study_data}{A data.frame with at least the columns:
+\item{study_data}{A data.frame with at least columns:
 i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_DATE} where
 the columns are the study endpoint and date,
 which will differ depending on the input variable
@@ -23,7 +23,7 @@ on the endpoint of interest.
 \description{
 Filters out individuals with missing information about the
 endpoint of interest, defined by variable \code{endpt}.
-Missing information is defined by either no recorded endpoint
+Missing information is defined as either no recorded endpoint
 (endpt: NA), or for cases no recorded date of endpoint (endpt: 1,
 endpt_date: NA).
 }

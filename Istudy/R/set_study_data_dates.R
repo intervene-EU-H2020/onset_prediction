@@ -4,19 +4,26 @@
 #' `WASH_END_DATE`, `OBS_END_DATE`, `ENDPT_FREE_PERIOD`, `STUDY_TIME`.
 #' For each individuals depending on the selected study setup.
 #' 
-#' @param study The S4 study object.
-#' 
+#' @param study_data A tibble. The data on all study individuals.
+#' @inheritParams filter_too_old_and_young
+#' @param exp_age An integer. Age at which exposure period starts 
+#'                            (in years).
+#' @param exp_len An integer. Length of the exposure period (in years).
+#' @param wash_len An integer. Length of the washout period (in years).
+#' @param obs_len An integer. Length of the observation period 
+#'                            (in years).
+#' @param obs_end_date A Date. The end of the observation period.
 #' @return The S4 study object with the `study_data` tibble updated
 #' with the date columns.
 #' 
 #' @author Kira E. Detrois
-set_study_data_dates <- function(study_data,
-                                 study_type="forward",
-                                 exp_age=NA_integer_,
-                                 exp_len=NA_integer_,
-                                 wash_len=2,
-                                 obs_len=8,
-                                 obs_end_date=as.Date("2021/01/01")) {
+set_study_dates <- function(study_data,
+                            study_type="forward",
+                            exp_age=NA_integer_,
+                            exp_len=NA_integer_,
+                            wash_len=2,
+                            obs_len=8,
+                            obs_end_date=as.Date("2021/01/01")) {
     study_data$YEAR_OF_BIRTH <- lubridate::year(study_data$DATE_OF_BIRTH)
     study_data$EXP_START_DATE <- calc_exp_start_date(
                                                 study_data=study_data,
@@ -55,7 +62,7 @@ set_study_data_dates <- function(study_data,
 #' Calcualtes the start date of the observation period for each 
 #' individual, depending on the selected study setup.
 #' 
-#' @inheritParams set_study_data_dates
+#' @inheritParams set_study_dates
 #' 
 #' @return A vector of Dates. The start date of the observation period 
 #' for each individual.
@@ -78,7 +85,7 @@ calc_obs_end_date <- function(study_data,
 #' Calcualtes the end date of the washout period for each individual,
 #' depending on the selected study setup.
 #' 
-#' @inheritParams set_study_data_dates
+#' @inheritParams set_study_dates
 #' 
 #' @return A vector of Dates. The end of the washout period for
 #' each individual.
@@ -104,7 +111,7 @@ calc_wash_end_date <- function(study_data,
 #' Calcualtes the end date of the exposure period for each individual,
 #' depending on the selected study setup.
 #' 
-#' @inheritParams set_study_data_dates
+#' @inheritParams set_study_dates
 #' 
 #' @return A vector of Dates. The end of the exposure period for
 #' each individual.
@@ -131,7 +138,7 @@ calc_exp_end_date <- function(study_data,
 #' Calcualtes the end date of the exposure period for each individual,
 #' depending on the selected study setup.
 #' 
-#' @inheritParams set_study_data_dates
+#' @inheritParams set_study_dates
 #' 
 #' @return A vector of Dates. The end of the observation period for
 #' each individual.

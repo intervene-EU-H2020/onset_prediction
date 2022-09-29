@@ -1,6 +1,6 @@
 #' Gets only the individuals from the specified ancestries
 #' 
-#' @inheritParams get_study_elig_indv
+#' @inheritParams adj_case_cntrl_status
 #' @param ancs A character (vector). The ancestries to select.
 #' 
 #' @return The filtered data.frame.

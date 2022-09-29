@@ -4,16 +4,17 @@
 #' individuals selected at a given time point. 
 #' Here the exposure length will be the time from birth until the time point
 #' considered and should be provided in the S4 study object in slot `EXP_END`
-#' in the same order as the individuals in the data.frame. A study setup like
-#' this can be created using the function \code{\link{get_backward_study}}.
+#' in the same order as the individuals in the data.frame.
 #' 
 #' It might be that the birth of an individual is after the selected time point
 #' so their exposure lengths are negative. These individuals are always removed.
-#' Additionally, individuals are filtered out based on some maximum exposure 
-#' length which can be set using the input variable `max_age`.
 #' 
 #' @param study_data A data.frame with at least column `EXP_END`.
-#' @param max_age A numeric. The maximum length of the exposure period.
+#' @param study_type A character. Can be either `forward` or `backward`. 
+#' @param max_age A numeric. The maximum age for individuals in the study. 
+#'                           Individuals are censored, once they reach the maximum age. 
+#' @param filter_1998 A boolean. Whether to filter out individuals where the
+#'                               the exposure period starts before year 1998.
 #' 
 #' @export 
 #' 
@@ -33,9 +34,7 @@ filter_too_old_and_young <- function(study_data,
                                     DATE_OF_BIRTH <= EXP_START_DATE)
     }
     # Too old
-
-    study_data <- dplyr::filter(study_data, 
-                    lubridate::time_length(DATE_OF_BIRTH %--% OBS_END_DATE, "years") < max_age)
+    study_data <- censor_old_age(study_data, max_age)
     if(filter_1998) {
         study_data <- dplyr::filter(study_data, 
                         lubridate::year(EXP_START_DATE) >= 1998)
@@ -50,9 +49,12 @@ filter_too_old_and_young <- function(study_data,
 }
 
 #' Censors individuals once they reach the maximum age
+#' 
+#' @inheritParams filter_too_old_and_young
 censor_old_age <- function(study_data,
                            max_age=200) {
-    reach_max_age <- (lubridate::time_length(study_data$DATE_OF_BIRTH %--% study_data$OBS_END_DATE, "years") > max_age) & (study_data$OBS_END_DATE < study_data$END_OF_FOLLOWUP | is.na(study_data$END_OF_FOLLOWUP))
+    reach_max_age <- (lubridate::time_length(study_data$DATE_OF_BIRTH %--% study_data$OBS_END_DATE, "years") > max_age) & 
+                        (study_data$OBS_END_DATE < study_data$END_OF_FOLLOWUP | is.na(study_data$END_OF_FOLLOWUP))
     study_data[reach_max_age,]$END_OF_FOLLOWUP <- study_data[reach_max_age,]$OBS_END_DATE
     return(study_data)
 }

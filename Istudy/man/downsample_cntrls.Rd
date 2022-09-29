@@ -4,21 +4,30 @@
 \alias{downsample_cntrls}
 \title{Downsamples the number of controls in the data}
 \usage{
-downsample_cntrls(study_data, endpt, downsample_fctr)
+downsample_cntrls(study_data, endpt, down_fctr)
 }
 \arguments{
-\item{study_data}{A data.frame with at least the column defined in \code{endpt}.}
+\item{study_data}{A data.frame with at least columns \code{STUDY_TIME}
+and i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_DATE}
+where the columns are the study endpoint and
+date, which will differ depending on the input
+variable \code{endpt}.}
 
 \item{endpt}{A character. The column name of the current endpoint of
 interest.}
+
+\item{down_fctr}{An integer. Defines how many controls there
+should be for every case.
+Default is NA, which means no
+downsampling is performed.}
 }
 \value{
 The downsampled data.frame.
 }
 \description{
-Given the same number of cases and the same indices
-will always sample the same individuals as controls.
-This allows reproducibility of the study selection.
+Given the same selectionf of cases will always sample
+the same individuals as controls, to allow reproducibility
+of the study selection.
 }
 \author{
 Kira E. Detrois

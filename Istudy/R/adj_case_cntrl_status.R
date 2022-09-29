@@ -1,7 +1,7 @@
-#' Adjusts the case status of individuals with late onset endpoints
+#' Adjusts the case status of individuals with late diagnosed endpoints
 #'
-#' Those individuals where the endpoint onset date is after the 
-#' observation has ended are considered controls in this setup.
+#' Those individuals where the endpoint diagnosis date is after the 
+#' study has ended, are considered controls.
 #' 
 #' @param study_data A data.frame with at least columns `STUDY_TIME`
 #'                   and i.e. `J10_ASTHMA`, and `J10_ASTHMA_DATE` 

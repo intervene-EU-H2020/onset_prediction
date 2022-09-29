@@ -7,6 +7,12 @@
 filter_ancestry(study_data, ancs = "EUR")
 }
 \arguments{
+\item{study_data}{A data.frame with at least columns \code{STUDY_TIME}
+and i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_DATE}
+where the columns are the study endpoint and
+date, which will differ depending on the input
+variable \code{endpt}.}
+
 \item{ancs}{A character (vector). The ancestries to select.}
 }
 \value{
