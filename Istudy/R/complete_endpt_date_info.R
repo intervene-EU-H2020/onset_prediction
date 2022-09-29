@@ -12,9 +12,7 @@
 #' @inheritParams adj_case_cntrl_status
 #' 
 #' @return The data.frame. For example for endpoint `J10_ASTHMA`, 
-#'             the data.frame will have and added column `J10_ASTHMA_AGE`, 
-#'             and for controls the column `J10_ASTHMA_DATE` now contains
-#'             the study end date.
+#'             the data.frame will have updated column`J10_ASTHMA_DATE`.
 #' 
 #' @export
 #' 

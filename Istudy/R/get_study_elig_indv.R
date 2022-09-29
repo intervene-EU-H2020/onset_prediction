@@ -52,6 +52,9 @@ get_study_elig_indv <- function(study) {
     study@study_data <- complete_endpt_date_info(
                                 study_data=study@study_data,
                                 endpt=study@endpt)
+    study@study_data <- add_baseline_surv_age(
+                                study_data=study@study_data,
+                                endpt=study@endpt)
     study@study_data <- filter_ancestry(study@study_data, 
                                         study@ancs)
     write_res_files(study=study)
