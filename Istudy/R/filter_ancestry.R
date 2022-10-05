@@ -4,6 +4,7 @@
 #' @param ancs A character (vector). The ancestries to select.
 #' 
 #' @return The filtered data.frame.
+#' @export 
 #' 
 #' @author Kira E. Detrois
 filter_ancestry <- function(study_data,

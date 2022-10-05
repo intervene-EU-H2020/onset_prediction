@@ -51,6 +51,8 @@ filter_too_old_and_young <- function(study_data,
 #' Censors individuals once they reach the maximum age
 #' 
 #' @inheritParams filter_too_old_and_young
+#' 
+#' @export 
 censor_old_age <- function(study_data,
                            max_age=200) {
     reach_max_age <- (lubridate::time_length(study_data$DATE_OF_BIRTH %--% study_data$OBS_END_DATE, "years") > max_age) & 

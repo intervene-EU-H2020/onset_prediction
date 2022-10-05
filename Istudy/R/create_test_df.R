@@ -41,7 +41,8 @@ create_test_df <- function(n_indv=10) {
         I9_VTE_DATE=vte_samples$dates,
         J10_ASTHMA=asthma_samples$draws,
         J10_ASTHMA_DATE=asthma_samples$dates,
-        PC1=10
+        PC1=0.2,
+        PC2=0.01
     )
 
     study_data <- adjust_followup_time(study_data)

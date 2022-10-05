@@ -32,12 +32,7 @@ get_ewo_file_name <- function(study_type,
     if(study_type == "forward") {
         file_name <- paste0("e", exp_len, "_w", wash_len, "_o", obs_len)
     } else {
-        if(length(exp_len) != 1) {
-            file_name <- paste0("o", obs_len, "_w", wash_len)
-        }
-        else {
-            file_name <- paste0("o", obs_len, "_w", wash_len, "_e", exp_len)
-        }
+        file_name <- paste0("o", obs_len, "_w", wash_len, "_e", exp_len)
     }
     return(file_name)
 }
@@ -57,6 +52,8 @@ write_res_files <- function(study) {
 #' Writes results to a tab-delim file
 #' 
 #' @param study An S4 study object. The current study setup.
+#' 
+#' @export 
 #' 
 #' @author Kira E. Detrois
 write_res_file <- function(study) {
@@ -80,6 +77,8 @@ write_res_file <- function(study) {
 #' 
 #' @return The log message character string
 #' 
+#' @export 
+#' 
 #' @author Kira E. Detrois
 log_msg_string <- function(study) {
     n_cases <- get_n_cases(study@study_data, study@endpt)
@@ -97,6 +96,8 @@ log_msg_string <- function(study) {
 #' Writes study setup to a file
 #' 
 #' @inheritParams write_res_files
+#' 
+#' @export 
 #' 
 #' @author Kira E. Detrois
 write_log_file <- function(study) {

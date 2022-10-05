@@ -16,6 +16,8 @@
 #' @return The S4 study object with the `study_data` tibble updated
 #' with the date columns.
 #' 
+#' @export 
+#' 
 #' @author Kira E. Detrois
 set_study_dates <- function(study_data,
                             study_type="forward",
@@ -67,6 +69,8 @@ set_study_dates <- function(study_data,
 #' @return A vector of Dates. The start date of the observation period 
 #' for each individual.
 #' 
+#' @export 
+#' 
 #' @author Kira E. Detrois
 calc_obs_end_date <- function(study_data,
                               study_type,
@@ -91,6 +95,8 @@ calc_obs_end_date <- function(study_data,
 #' each individual.
 #' 
 #' @importFrom lubridate %m-%
+#' 
+#' @export 
 #' 
 #' @author Kira E. Detrois
 calc_wash_end_date <- function(study_data,
@@ -117,6 +123,8 @@ calc_wash_end_date <- function(study_data,
 #' each individual.
 #' 
 #' @importFrom lubridate %m-%
+#' 
+#' @export 
 #' 
 #' @author Kira E. Detrois
 calc_exp_end_date <- function(study_data,
@@ -145,6 +153,8 @@ calc_exp_end_date <- function(study_data,
 #' 
 #' @importFrom lubridate %m+%
 #' @importFrom lubridate %m+%
+#' 
+#' @export 
 #' 
 #' @author Kira E. Detrois
 calc_exp_start_date <- function(study_data,
