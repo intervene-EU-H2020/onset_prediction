@@ -23,8 +23,6 @@
 #' @slot ancs A character (vector). The ancestries to consider.
 #' @slot max_age A numeric. The maximum age for individuals in the study. 
 #'                          Individuals are censored, once they reach the maximum age. 
-#' @slot filter_1998 A boolean. Whether to filter out individuals where the
-#'                               the exposure period starts before year 1998.
 #' @slot write_res A boolean. Whether to write log files.
 #' @slot res_dir A character. The path to the results directory.
 #' 
@@ -46,7 +44,6 @@ study <- methods::setClass("study",
                                       down_fctr="numeric",
                                       ancs="character",
                                       max_age="numeric",
-                                      filter_1998="logical",
                                       write_res="logical",
                                       res_dir="character"),
                            prototype=list(study_type="forward",
@@ -59,7 +56,6 @@ study <- methods::setClass("study",
                                           down_fctr=NA_real_,
                                           ancs=NA_character_,
                                           max_age=200,
-                                          filter_1998=FALSE,
                                           write_res=FALSE,
                                           res_dir=NA_character_))
 #' @importFrom methods callNextMethod
@@ -67,6 +63,8 @@ study <- methods::setClass("study",
 setMethod("initialize", "study", function(.Object, ...) {
     .Object <- callNextMethod()
     check_cols_exist(.Object@study_data, .Object@endpt, "initialize")
+    .Object@study_data <- apply_endpt_filter(.Object@study_data,
+                                             .Object@endpt)
     .Object@study_data <- dplyr::select(.Object@study_data,
                                         ID, 
                                         SEX, 
@@ -79,7 +77,10 @@ setMethod("initialize", "study", function(.Object, ...) {
                                         .Object@endpt,  
                                         paste0(.Object@endpt, "_DATE"),
                                         END_OF_FOLLOWUP,
-                                        dplyr::starts_with("PC"))
+                                        dplyr::starts_with("PC"),
+                                        BATCH,
+                                        EDU)
+    .Object@study_data <- process_edu(.Object@study_data)
     .Object@study_data <- set_study_dates(study_data=.Object@study_data,
                                     study_type=.Object@study_type,
                                     exp_age=.Object@exp_age,
@@ -92,12 +93,45 @@ setMethod("initialize", "study", function(.Object, ...) {
     return(.Object)
 })
 
+process_edu <- function(study_data) {
+    study_data$EDU <- as.integer(stringr::str_extract(study_data$EDU, "[0-9]"))
+    return(study_data)
+}
+
+#' Filters out cohorts that were used to train the 
+#' 
+#' @export 
+#' 
+#' @author Kira E. Detrois
+apply_endpt_filter <- function(study_data,
+                               endpt) {
+    if(endpt %in% c("I9_CHD", "I9_AF")) {
+        study_data <- dplyr::filter(study_data,
+                                     COHORT != "THL BIOBANK COROGENE")
+    } else if(endpt == "J10_ASTHMA") {
+        study_data <- dplyr::filter(study_data, 
+                                    !stringr::str_detect(COHORT, "FINRISK") &
+                                    COHORT != "THL BIOBANK HEALTH 2000")
+    } else if(endpt == "C3_COLORECTAL") {
+        study_data <- dplyr::filter(study_data,
+                                    !(CHIP %in% c("Illumina_Human670_Human610", "Illumina_Human610-Quadv1_B")))
+    } else if(endpt %in% c("ILD", "C3_BRONCHUS_LUNG")) {
+        study_data <- dplyr::filter(study_data,
+                                    !R3)
+    }
+    return(study_data)
+}
+
 setValidity("study", function(object) {
     msg <- ""
     msg <- test_integer_correct(msg, object@wash_len, "wash_len", TRUE)
     msg <- test_integer_correct(msg, object@obs_len, "obs_len", TRUE)
     msg <- test_integer_correct(msg, object@down_fctr, "down_fctr")
     msg <- test_endpt_input_correct(msg, object@endpt)
+    msg <- ifelse(!object@study_type %in% c("backward", "forward"),
+                  paste0(object@study_type, " is not a valid study type. Can be either `backward`, or `forward`"),
+                  ""
+    )
     if(msg != "") {
         return(msg)
     } else {

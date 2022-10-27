@@ -12,5 +12,5 @@ test_that("get_study_elig_indv with only observation time works", {
                         wash_len=0,
                         obs_len=100)
  # Expect no error
- expect_equal(nrow(get_study_elig_indv(study)), 25)
+ expect_equal(nrow(get_study_elig_indv(study)), 7)
 })

@@ -34,8 +34,7 @@ get_study_elig_indv <- function(study) {
     study@study_data <- filter_too_old_and_young(
                                 study_data=study@study_data,
                                 study_type=study@study_type,
-                                max_age=study@max_age,
-                                filter_1998=study@filter_1998)
+                                max_age=study@max_age)
     study@study_data <- filter_missing_endpt_data(
                                 study_data=study@study_data, 
                                 endpt=study@endpt)

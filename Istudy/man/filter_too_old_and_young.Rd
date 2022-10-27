@@ -4,12 +4,7 @@
 \alias{filter_too_old_and_young}
 \title{Filters out individuals that are too old or young for the study}
 \usage{
-filter_too_old_and_young(
-  study_data,
-  study_type,
-  max_age = 200,
-  filter_1998 = FALSE
-)
+filter_too_old_and_young(study_data, study_type, max_age = 200)
 }
 \arguments{
 \item{study_data}{A data.frame with at least column \code{EXP_END}.}
@@ -18,9 +13,6 @@ filter_too_old_and_young(
 
 \item{max_age}{A numeric. The maximum age for individuals in the study.
 Individuals are censored, once they reach the maximum age.}
-
-\item{filter_1998}{A boolean. Whether to filter out individuals where the
-the exposure period starts before year 1998.}
 }
 \description{
 This is mainly needed for studies that consider variable exposure lengths for

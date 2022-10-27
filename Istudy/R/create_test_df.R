@@ -42,11 +42,24 @@ create_test_df <- function(n_indv=10) {
         J10_ASTHMA=asthma_samples$draws,
         J10_ASTHMA_DATE=asthma_samples$dates,
         PC1=0.2,
-        PC2=0.01
+        PC2=0.01,
+        EDU=create_edu_data(n_indv),
+        COHORT="TODO",
+        CHIP="TODO",
+        BATCH="TODO",
+        R3=0
     )
 
     study_data <- adjust_followup_time(study_data)
     return(study_data)
+}
+
+create_edu_data <- function(n_indv) {
+    edu_samples <- sample(3:6, n_indv, replace=TRUE)
+    edu_samples <- paste0("ISCED ", edu_samples)
+    na_samples <- sample(1:n_indv, (n_indv*0.1), replace=FALSE)
+    edu_samples[na_samples] <- NA_character_
+    return(edu_samples)
 }
 
 adjust_followup_time <- function(study_data) {

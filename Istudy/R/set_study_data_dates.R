@@ -81,6 +81,7 @@ calc_obs_end_date <- function(study_data,
     } else if(study_type == "backward") {
         obs_end_date <- obs_end_date
     }
+
     return(obs_end_date)
 }
 
@@ -138,6 +139,7 @@ calc_exp_end_date <- function(study_data,
     } else if(study_type == "backward") {
         exp_end_date <- obs_end_date %m-% lubridate::years(obs_len + wash_len)
     }
+
     return(exp_end_date)
 }
 

@@ -45,9 +45,6 @@ downsampling is performed.}
 \item{\code{max_age}}{A numeric. The maximum age for individuals in the study.
 Individuals are censored, once they reach the maximum age.}
 
-\item{\code{filter_1998}}{A boolean. Whether to filter out individuals where the
-the exposure period starts before year 1998.}
-
 \item{\code{write_res}}{A boolean. Whether to write log files.}
 
 \item{\code{res_dir}}{A character. The path to the results directory.}
