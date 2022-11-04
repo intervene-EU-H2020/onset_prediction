@@ -11,11 +11,9 @@ get_down_dir <- function(down_fctr) {
 
 #' Adds downsampling and filter information to results directory path
 get_full_res_path <- function(res_dir,
-                              down_fctr,
-                              filter_1998) {
+                              down_fctr) {
     paste0(res_dir, 
-           get_down_dir(down_fctr), 
-           ifelse(filter_1998, "f1998/", "all/"))
+           get_down_dir(down_fctr))
 }
 
 #' Creats the file directory and name for the different result types
@@ -30,7 +28,7 @@ check_and_get_file_path <- function(ana_details,
     if(ana_details$write_res) {
         # Results type specific folder
         curnt_res_dir <- paste0(ana_details$res_dir,
-                                paste0(res_type, "/", ana_details$study_type, "/"))
+                                paste0(ana_details$study_type, "/", res_type, "/"))
         if(res_type == "HR") {
             curnt_res_dir <- paste0(curnt_res_dir, 
                                     get_preds_file_name(ana_details$preds), 
@@ -84,6 +82,8 @@ get_preds_file_name <- function(preds) {
     preds <- stringr::str_replace_all(preds, " ", "_")
     preds <- stringr::str_replace_all(preds, "[*]", "i")
     preds <- stringr::str_replace_all(preds, "YEAR_OF_BIRTH", "YOB")
+    preds <- stringr::str_replace_all(preds,  "EDU", "Edu")
+
     n_pcs <- sum(stringr::str_count(preds, "PC"))
     if(n_pcs > 1) {
         preds <- preds[!stringr::str_detect(preds, "PC")]

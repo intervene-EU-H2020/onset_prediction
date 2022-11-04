@@ -17,7 +17,9 @@ get_surv_descr <- function(preds) {
 
 #' Reformats predictors for plots
 reformat_preds_pretty <- function(preds) {
-    preds <- stringr::str_replace(preds, "YEAR_OF_BIRTH", "Year of birth")
+    preds <- stringr::str_replace(preds, "YEAR_OF_BIRTH", "YoB")
+    preds <- stringr::str_replace(preds, "BATCH", "Batch")        
+    preds <- stringr::str_replace(preds, "EDU", "Edu")
     preds <- stringr::str_replace(preds, "SEX", "Sex")        
     n_pcs <- sum(stringr::str_count(preds, "PC"))
     if(n_pcs > 1) {

@@ -5,10 +5,10 @@
 \title{Plot the HR from the Cox-PH model}
 \usage{
 plot_hrs(
-  coxph_hrs,
-  surv_ana,
+  coxph_hrs = NULL,
+  surv_ana = NULL,
   from_file = FALSE,
-  file_dir = "",
+  file_path = "",
   plot_preds = ""
 )
 }

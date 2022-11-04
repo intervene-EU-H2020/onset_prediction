@@ -11,10 +11,14 @@
 #' 
 #' @author Kira E. Detrois
 get_study_CCI_data <- function(elig_indv,
-                               icd_data) {
+                               icd_data,
+                               score_type) {
+    print(score_type)
     cci_data <- ICCI::calc_cci(icd_data,
                                exp_start=calc_exp_start_age(elig_indv),
-                               exp_end=calc_exp_end_age(elig_indv)) 
+                               exp_end=calc_exp_end_age(elig_indv),
+                               score_type=ifelse(score_type == "CCI", "charlson", "elixhauser"))  
+    
     return(cci_data)
 }
 

@@ -14,10 +14,9 @@ create_endpt_study_obj(
   wash_len = 2,
   obs_len = 8,
   obs_end_date = as.Date("2021/01/01"),
-  downsample_fctr = NA_integer_,
+  down_fctr = NA_integer_,
   ancs = c("EAS"),
   max_age = 200,
-  filter_1998 = FALSE,
   write_res = FALSE,
   res_dir = NA_character_
 )
@@ -54,7 +53,7 @@ of interest.}
 for \code{backward} studies. If not set the end will
 be the most recent date across the diagnosis columns.}
 
-\item{downsample_fctr}{A numeric. Defines how many controls there
+\item{down_fctr}{A numeric. Defines how many controls there
 should be for every case.
 Default is NA, which means no
 downsampling is performed.}

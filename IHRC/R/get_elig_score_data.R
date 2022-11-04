@@ -30,13 +30,14 @@ get_elig_score_data  <- function(score_type,
     n_cases <- Istudy::get_n_cases(study_data, endpt)
     n_cntrls <- Istudy::get_n_cntrls(study_data, endpt)
     if(n_cases > min_indvs & n_cntrls > min_indvs) {
-        if(any(stringr::str_detect(score_type, "[CCI|PRS]"))) {
+        if(any(stringr::str_detect(score_type, "[CCI|PRS|EI]"))) {
             score_data <- preprocess_score_data(score_type=score_type, 
                                                 study_data=study_data,
                                                 icd_data=icd_data, 
                                                 atc_data=atc_data,
                                                 prs_data=prs_data,
                                                 endpt=endpt)
+            print(colnames(score_data))
             elig_score_data <- join_dfs(study_data=study_data,
                                         score_data=score_data,
                                         score_type=score_type,

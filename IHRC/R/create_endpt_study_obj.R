@@ -23,11 +23,10 @@ create_endpt_study_obj <- function(study_data,
                                    down_fctr=NA_integer_,
                                    ancs=c("EAS"),
                                    max_age=200,
-                                   filter_1998=FALSE,
                                    write_res=FALSE,
                                    res_dir=NA_character_) {
     if(!is.na(res_dir)) {
-        res_dir <- paste0(res_dir, "logs/", study_type, "/", get_preds_file_name(preds), "_logs/")
+        res_dir <- paste0(res_dir, study_type, "/logs/", get_preds_file_name(preds), "_logs/")
     }
     if(study_type == "backward") {
         if(!is.null(exp_len)) {
@@ -36,7 +35,6 @@ create_endpt_study_obj <- function(study_data,
             exp_len <- NA_integer_
         }
     }
-
     study <- methods::new("study",
                           study_data=study_data,
                           study_type=study_type,
@@ -49,7 +47,6 @@ create_endpt_study_obj <- function(study_data,
                           down_fctr=down_fctr,
                           ancs=ancs,
                           max_age=max_age,
-                          filter_1998=filter_1998,
                           write_res=write_res,
                           res_dir=res_dir)
     return(study)

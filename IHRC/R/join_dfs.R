@@ -20,6 +20,8 @@ join_dfs <- function(study_data,
                                         by="ID")
     if("CCI" %in% score_type) {
         elig_score_data$CCI[is.na(elig_score_data$CCI)] <- 0
-    }
+    } else if("EI" %in% score_type) {
+        elig_score_data$EI[is.na(elig_score_data$EI)] <- 0
+    } 
     return(elig_score_data)
 }

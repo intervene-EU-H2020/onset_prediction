@@ -24,7 +24,7 @@ get_coxph_mdl <- function(surv_ana,
   
         for(pred in surv_ana@preds) {
             if(pred %in% colnames(surv_ana@elig_score_data)) {
-                if(pred %in% c("PRS", "CCI", "YEAR_OF_BIRTH", "MI")) {
+                if(pred %in% c("PRS", "CCI", "EI", "YEAR_OF_BIRTH", "MI", "EDU")) {
                     surv_ana@elig_score_data[,pred] <- scale(surv_ana@elig_score_data[,pred])
                 } else if(pred %in% c("SEX", "ANCESTRY")) {
                     surv_ana@elig_score_data <- dplyr::mutate_at(surv_ana@elig_score_data, 

@@ -31,7 +31,7 @@ get_coxph_formula <- function(surv_ana) {
     pred_string <- paste0(surv_ana@preds, collapse="+")
     stats::as.formula(paste0("survival::Surv(", surv_ana@study@endpt, "_AGE, ",  surv_ana@study@endpt, ") ~ ",  pred_string))
 }
-^
+
 #' Creates a survival object for the selected endpoint
 #' 
 #' Creates a survival object for the selected endpoint. With time

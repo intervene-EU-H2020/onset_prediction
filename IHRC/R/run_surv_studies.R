@@ -42,8 +42,6 @@
 #' @param ancs A character (vector). The ancestries to consider.
 #' @param max_age A numeric. The maximum age at the end of the exposure
 #'                  window of individuals.
-#' @param filter_1998 A boolean. Whether to filter out individuals
-#'                      where the exposure period is before 1998.
 #' @param covs A vector of characters. The column names of the covariates 
 #'              to add to the predictor of the Cox-PH model.
 #' @param bin_cut A numeric. The binary cutoff value for classifying high
@@ -76,7 +74,6 @@ run_surv_studies <- function(pheno_data,
                              down_fctr=NA_integer_,
                              ancs=NA_character_,
                              max_age=90,
-                             filter_1998=FALSE,
                              covs=c("SEX", "YEAR_OF_BIRTH"),
                              bin_cut=1,
                              min_indvs=5,
@@ -84,7 +81,7 @@ run_surv_studies <- function(pheno_data,
                              res_dir=NULL) {
 
     if(write_res) {
-        res_dir <- get_full_res_path(res_dir, down_fctr, filter_1998)
+        res_dir <- get_full_res_path(res_dir, down_fctr)
     }
     all_age_hrs_tib <- create_empty_endpt_hrs_tib() 
     all_age_cidxs_tib <- create_empty_cidx_tib()
@@ -102,7 +99,6 @@ run_surv_studies <- function(pheno_data,
                                             down_fctr=down_fctr,
                                             ancs=ancs,
                                             max_age=max_age,
-                                            filter_1998=filter_1998,
                                             write_res=write_res,
                                             res_dir=res_dir)
             elig_score_data <- get_elig_score_data(score_type=score_type, 

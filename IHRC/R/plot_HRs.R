@@ -16,33 +16,32 @@
 plot_hrs <- function(coxph_hrs=NULL,
                      surv_ana=NULL,
                      from_file=FALSE,
-                     file_path="",
-                     plot_preds="") {
+                     ana_details,
+                     fig_height=NULL,
+                     fig_width=NULL) {
     if(!from_file) {
         ana_details <- get_ana_details_from_surv_ana(surv_ana)
-    } else {
-        coxph_hrs <- readr::read_delim(file_path, delim="\t")
-        ana_details <- parse_file_path(file_path)
-        ana_details$plot_preds <- plot_preds
-        ana_details$write_res <- TRUE
-    }
-    
+    } 
     coxph_hrs <- filter_out_missing_hrs(coxph_hrs)
-    coxph_hrs <- set_plot_preds_fctr(coxph_hrs,
-                                     ana_details$plot_preds)
+    coxph_hrs <- filter_plot_preds_fctr(coxph_hrs,
+                                        ana_details$plot_preds)
     curnt_coxph_hrs <- dplyr::filter(coxph_hrs, GROUP == "no groups")
     if(nrow(curnt_coxph_hrs) > 0) {
         if(ana_details$study_type == "forward") {
             plt <- plot_age_sd_hrs(curnt_coxph_hrs, 
                                    ana_details)
         } else {
-            plt <- plot_endpt_sd_hr(curnt_coxph_hrs, 
-                                    ana_details)
+            plt <- plot_endpt_sd_hr(coxph_hrs=curnt_coxph_hrs, 
+                                    ana_details=ana_details,
+                                    fig_height=fig_height,
+                                    fig_width=fig_width)
+            return(plt)
+
         }
     }
 }
 
-set_plot_preds_fctr <- function(coxph_hrs,
+filter_plot_preds_fctr <- function(coxph_hrs,
                                 plot_preds) {
     plot_preds <- stringr::str_replace_all(plot_preds, "[*]", ":")
     coxph_hrs <- dplyr::filter(coxph_hrs, VAR %in% plot_preds)
@@ -61,7 +60,9 @@ set_plot_preds_fctr <- function(coxph_hrs,
 #' 
 #' @author Kira E. Detrois
 plot_endpt_sd_hr <- function(coxph_hrs,
-                             ana_details) {
+                             ana_details,
+                             fig_height,
+                             fig_width) {
     max_x <- min(max(c(2, round(coxph_hrs$CI_POS)), na.rm=TRUE), 10)
     min_x <- min(c(0.5, round(coxph_hrs$CI_NEG)), na.rm=TRUE)
     plt <- get_endpt_sd_hr_ggplot(coxph_hrs=coxph_hrs,
@@ -69,18 +70,22 @@ plot_endpt_sd_hr <- function(coxph_hrs,
                                   min_x=min_x,
                                   max_x=max_x)
     file_path <- check_and_get_file_path(ana_details, res_type="HR")
-    save_plt(file_path=file_path,
-             plt=plt,
-             width=12,
-             height=get_endpt_fig_height(coxph_hrs$VAR))
+    if(ana_details$write_res) {
+        save_plt(file_path=file_path,
+                 plt=plt,
+                 width=ifelse(!is.null(fig_width), fig_width, 14),
+                 height=ifelse(!is.null(fig_height), fig_height, get_endpt_fig_height(coxph_hrs$VAR)))
+    }
+    return(plt)
     
 }
 
 get_endpt_fig_height <- function(coxph_vars) {
     n_preds <- length(unique(coxph_vars))
     dplyr::case_when(
-        n_preds == 2 ~ 7,
-        n_preds == 3 ~ 9,
+        n_preds == 1 ~ 10,
+        n_preds == 2 ~ 10,
+        n_preds == 3 ~ 10,
         n_preds == 4 ~ 11,
         n_preds == 5 ~ 14,
     )

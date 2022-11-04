@@ -7,7 +7,7 @@ library(IHRC)
 
 set.seed(919923)
 pheno_data <- Istudysetup::create_test_df(10000)
-icd_data <- IUtils::create_test_df_multi_icd_ver(n_icd10=50000, 
+icd_data <- ICCI::create_test_df_multi_icd_ver(n_icd10=50000, 
                                                          icd10_indv=pheno_data$ID)  
 
 phenocols <- c("J10_ASTHMA", "I9_VTE")
@@ -147,4 +147,19 @@ res <- calc_endpt_hrs(pheno_data,
                             obs_len=8,
                             downsample_fctr=4,
                             res_dir="results/")
+```
+
+```{r}
+library(IHRC)
+file_path <- "/home/kira/duni/helsinki/DSGE/results/backward/down_4/2019-01-01_o8_w2_e10_CCI_PRS_SEX_YOB_BATCH_PCs_coxph.tsv"
+ana_details <- IHRC::parse_file_path(file_path)
+ana_details$write_res <- FALSE
+
+ana_details$plot_preds <- c("PRS")
+file_path <- "/home/kira/duni/helsinki/DSGE/results/2019-01-01_o8_w2_e10_CCI_PRS_SEX_YOB_BATCH_PCs_coxph.tsv"
+
+coxph_hrs <- readr::read_delim(file_path, delim="\t")
+
+IHRC::plot_hrs(from_file=TRUE, coxph_hrs=coxph_hrs, ana_details=ana_details)
+ana_details
 ```

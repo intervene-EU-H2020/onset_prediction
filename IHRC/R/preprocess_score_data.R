@@ -5,9 +5,10 @@ preprocess_score_data <- function(score_type,
                                   prs_data=NULL,
                                   endpt=NULL) {
     score_data = NULL
-    if("CCI" %in% score_type) {
+    if("CCI" %in% score_type | "EI" %in% score_type) {
         score_data <- get_study_CCI_data(study_data,
-                                           icd_data)  
+                                         icd_data,
+                                         score_type)  
     } 
     # Adding PRS column
     if("PRS" %in% score_type) {
