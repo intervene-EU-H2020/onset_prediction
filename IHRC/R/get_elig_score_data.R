@@ -37,7 +37,6 @@ get_elig_score_data  <- function(score_type,
                                                 atc_data=atc_data,
                                                 prs_data=prs_data,
                                                 endpt=endpt)
-            print(colnames(score_data))
             elig_score_data <- join_dfs(study_data=study_data,
                                         score_data=score_data,
                                         score_type=score_type,

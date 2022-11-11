@@ -5,6 +5,8 @@
 #' `covs = c("SEX", "YEAR_OF_BIRTH")` the model would be 
 #' `Surv(J10_ASTHMA_AGE_DAYS, J10_ASTHMA) ~ SCORE + SEX +
 #' YEAR_OF_BIRTH`.
+#' 
+#' @inheritParams get_coxph_mdl
 #'  
 #' @return A tibble with columns `Endpoint`, `Score`, `Group`, 
 #'          `N_controls`, `N_cases`, `beta`, `SE`, `p_val`, `HR`, 
@@ -14,9 +16,12 @@
 #' @export 
 #' 
 #' @author Kira E. Detrois
-calc_endpt_study_cidx <- function(surv_ana) {
+calc_endpt_study_cidx <- function(surv_ana,
+                                  coxph_mdl=NULL) {
     set.seed(923)
-    coxph_mdl <- get_coxph_mdl(surv_ana)
+    if(is.null(coxph_mdl)) {
+        coxph_mdl <- get_coxph_mdl(surv_ana)
+    }
     if(!is.null(coxph_mdl)) {
         # Risk and survival have opposite directions
         preds <- (-1)*predict(coxph_mdl, 

@@ -124,7 +124,8 @@ run_surv_studies <- function(pheno_data,
                                     endpt_hrs_tib=all_age_hrs_tib,
                                     coxph_mdl=coxph_mdl,
                                     surv_ana=surv_ana)
-            c_idx_res <- calc_endpt_study_cidx(surv_ana)
+            c_idx_res <- calc_endpt_study_cidx(surv_ana,
+                                               coxph_mdl)
             all_age_cidxs_tib <- add_cidx_res_row(
                                     endpt_c_idxs_tib=all_age_cidxs_tib, 
                                     c_idx_res=c_idx_res, 
