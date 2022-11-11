@@ -6,7 +6,7 @@
 
 Creates a single plot with the different endpoints}
 \usage{
-plot_endpt_sd_hr(coxph_hrs, ana_details)
+plot_endpt_sd_hr(coxph_hrs, ana_details, sort_hrs, fig_height, fig_width)
 }
 \arguments{
 \item{coxph_hrs}{A tibble. The Cox-PH HR results. Needs

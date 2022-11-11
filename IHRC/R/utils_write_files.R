@@ -15,8 +15,8 @@ write_res_files <- function(endpt_hrs_tib,
                                               res_type="cidx")
 
     if(!is.null(file_path_coxph)) {
-        endpt_hrs_tib <- dplyr::filter(endpt_hrs_tib, 
-                                      !stringr::str_detect("[BATCH|PC]", endpt_hrs_tib$VAR))
+        endpt_hrs_tib <- dplyr::filter(endpt_hrs_tib, !stringr::str_detect(VAR, "PC"))
+        endpt_hrs_tib <- dplyr::filter(endpt_hrs_tib, !stringr::str_detect(VAR, "BATCH"))
         readr::write_delim(x=endpt_hrs_tib, 
                            file=file_path_coxph, 
                            delim="\t")

@@ -28,15 +28,15 @@ test_that("calc_endpt_studies_hrs works", {
                          write_res=TRUE,
                          res_dir="/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/"), regexp=NA)
 
-      elig_test <- readr::read_delim("/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/down_4/forward/logs/CCI_SEX_YOB_logs/elig_indv/I9_VTE_a20_e10_w2_o8_elig_indv.tsv", delim="\t")
+      elig_test <- readr::read_delim("/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/down_4/forward/logs/CCI_SEX_YOB_logs/elig_indv/I9_VTE_a20_e10_w2_o8_elig_indv.tsv", delim="\t", show_col_types = FALSE)
       elig_true_vte <- readr::read_delim("/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/true_results/I9_VTE_a20_e10_w2_o8_elig_indv.tsv", delim="\t", show_col_types = FALSE)
       expect_equal(elig_test$ID, elig_true_vte$ID)
 
-      elig_test <- readr::read_delim("/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/down_4/forward/logs/CCI_SEX_YOB_logs/elig_indv/C3_BREAST_a20_e10_w2_o8_elig_indv.tsv", delim="\t")
+      elig_test <- readr::read_delim("/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/down_4/forward/logs/CCI_SEX_YOB_logs/elig_indv/C3_BREAST_a20_e10_w2_o8_elig_indv.tsv", delim="\t", show_col_types = FALSE)
       elig_true_breast <- readr::read_delim("/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/true_results/C3_BREAST_a20_e10_w2_o8_elig_indv.tsv", delim="\t", show_col_types = FALSE)
       expect_equal(elig_test$ID, elig_true_breast$ID)
 
-      elig_test <- readr::read_delim("/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/down_4/forward/logs/CCI_SEX_YOB_logs/elig_indv/J10_ASTHMA_a20_e10_w2_o8_elig_indv.tsv", delim="\t", )
+      elig_test <- readr::read_delim("/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/down_4/forward/logs/CCI_SEX_YOB_logs/elig_indv/J10_ASTHMA_a20_e10_w2_o8_elig_indv.tsv", delim="\t", show_col_types = FALSE)
       elig_true_asth <- readr::read_delim("/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/true_results/J10_ASTHMA_a20_e10_w2_o8_elig_indv.tsv", delim="\t", show_col_types = FALSE)
       expect_equal(elig_test$ID, elig_true_asth$ID)
    } else {
@@ -67,12 +67,12 @@ test_that("calc_endpt_studies_hrs works", {
                          wash_len=2,
                          obs_len=8,
                          ancs=NA_character_,
-                         covs=c("SEX", "YEAR_OF_BIRTH"),
+                         covs=c("SEX", "YEAR_OF_BIRTH", "PC1", "PC2"),
                          bin_cut=1,
                          write_res=TRUE,
                          res_dir="/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/"), regexp=NA)
  
    } else {
-      message("Could not run tests, because ICCI is not available.")
+      message("Could not rudn tests, because ICCI is not available.")
    }
 })

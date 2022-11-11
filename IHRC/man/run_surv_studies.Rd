@@ -80,9 +80,6 @@ downsampling is performed.}
 \item{max_age}{A numeric. The maximum age at the end of the exposure
 window of individuals.}
 
-\item{filter_1998}{A boolean. Whether to filter out individuals
-where the exposure period is before 1998.}
-
 \item{covs}{A vector of characters. The column names of the covariates
 to add to the predictor of the Cox-PH model.}
 

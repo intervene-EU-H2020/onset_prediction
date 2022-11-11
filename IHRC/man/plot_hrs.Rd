@@ -8,8 +8,10 @@ plot_hrs(
   coxph_hrs = NULL,
   surv_ana = NULL,
   from_file = FALSE,
-  file_path = "",
-  plot_preds = ""
+  ana_details,
+  sort_hrs = FALSE,
+  fig_height = NULL,
+  fig_width = NULL
 )
 }
 \arguments{

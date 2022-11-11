@@ -34,6 +34,9 @@ check_and_get_file_path <- function(ana_details,
                                     get_preds_file_name(ana_details$preds), 
                                     "/")
         }
+        if("res_dir" %in% names(ana_details)) {
+            curnt_res_dir <- ana_details$res_dir
+        }
         # Make the folder if it doesn't exist yet
         if(Istudy::check_res_dir(ana_details$write_res, curnt_res_dir)) {
             res_file_end <- dplyr::case_when(
@@ -41,8 +44,12 @@ check_and_get_file_path <- function(ana_details,
                                 res_type == "coxph" ~ "_coxph.tsv",
                                 res_type == "cidx" ~ "_cidx.tsv"
                             )
-            file_name <- get_file_name(ana_details,
-                                       res_type)
+            if("res_file_name" %in% names(ana_details)) {
+                file_name <- ana_details$res_file_name
+            } else {
+                file_name <- get_file_name(ana_details,
+                                           res_type)
+            }
             file_path <- paste0(curnt_res_dir, 
                                 file_name, 
                                 res_file_end)

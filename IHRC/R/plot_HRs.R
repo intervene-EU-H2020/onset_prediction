@@ -17,6 +17,7 @@ plot_hrs <- function(coxph_hrs=NULL,
                      surv_ana=NULL,
                      from_file=FALSE,
                      ana_details,
+                     sort_hrs=FALSE,
                      fig_height=NULL,
                      fig_width=NULL) {
     if(!from_file) {
@@ -33,10 +34,10 @@ plot_hrs <- function(coxph_hrs=NULL,
         } else {
             plt <- plot_endpt_sd_hr(coxph_hrs=curnt_coxph_hrs, 
                                     ana_details=ana_details,
+                                    sort_hrs=sort_hrs,
                                     fig_height=fig_height,
                                     fig_width=fig_width)
             return(plt)
-
         }
     }
 }
@@ -61,23 +62,25 @@ filter_plot_preds_fctr <- function(coxph_hrs,
 #' @author Kira E. Detrois
 plot_endpt_sd_hr <- function(coxph_hrs,
                              ana_details,
+                             sort_hrs,
                              fig_height,
                              fig_width) {
     max_x <- min(max(c(2, round(coxph_hrs$CI_POS)), na.rm=TRUE), 10)
     min_x <- min(c(0.5, round(coxph_hrs$CI_NEG)), na.rm=TRUE)
     plt <- get_endpt_sd_hr_ggplot(coxph_hrs=coxph_hrs,
                                   ana_details=ana_details,
+                                  sort_hrs=sort_hrs,
                                   min_x=min_x,
                                   max_x=max_x)
-    file_path <- check_and_get_file_path(ana_details, res_type="HR")
     if(ana_details$write_res) {
+        file_path <- check_and_get_file_path(ana_details, res_type="HR")
+
         save_plt(file_path=file_path,
                  plt=plt,
                  width=ifelse(!is.null(fig_width), fig_width, 14),
                  height=ifelse(!is.null(fig_height), fig_height, get_endpt_fig_height(coxph_hrs$VAR)))
     }
     return(plt)
-    
 }
 
 get_endpt_fig_height <- function(coxph_vars) {
@@ -177,19 +180,34 @@ get_age_sd_hr_ggplot <- function(coxph_hrs,
 #' @import ggplot2
 get_endpt_sd_hr_ggplot <- function(coxph_hrs,
                                    ana_details,
+                                   sort_hrs,
                                    min_x,
                                    max_x) {
-        plt <- ggplot2::ggplot(coxph_hrs,
-                      # Plot basics
-                      aes(y=ENDPOINT, x=HR, color=VAR)) +
-                      # Axis settings
-                      coord_cartesian(xlim=c(min_x, max_x)) +
-                      geom_vline(xintercept=1.0) +
-                      # Legends and labels
-                      labs(title=get_sd_title(coxph_hrs$VAR),
-                           caption=get_caption(ana_details),
-                           x="Hazard Ratio (95%)",
-                           y="")
+        if(!sort_hrs) {
+            plt <- ggplot2::ggplot(coxph_hrs,
+                        # Plot basics
+                        aes(y=ENDPOINT, x=HR, color=VAR)) +
+                        # Axis settings
+                        coord_cartesian(xlim=c(min_x, max_x)) +
+                        geom_vline(xintercept=1.0) +
+                        # Legends and labels
+                        labs(title=get_sd_title(coxph_hrs$VAR),
+                            caption=get_caption(ana_details),
+                            x="Hazard Ratio (95%)",
+                            y="")
+        } else {
+            plt <- ggplot2::ggplot(coxph_hrs,
+                        # Plot basics
+                        aes(y=reorder(ENDPOINT, HR), x=HR, color=VAR)) +
+                        # Axis settings
+                        coord_cartesian(xlim=c(min_x, max_x)) +
+                        geom_vline(xintercept=1.0) +
+                        # Legends and labels
+                        labs(title=get_sd_title(coxph_hrs$VAR),
+                            caption=get_caption(ana_details),
+                            x="Hazard Ratio (95%)",
+                            y="")
+        }
         plt <- ggplot_set_general_settings(plt, coxph_hrs$VAR)
         plt <- ggplot_points_and_errors(plt, 
                                         coxph_vars=coxph_hrs$VAR, 

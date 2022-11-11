@@ -151,15 +151,25 @@ res <- calc_endpt_hrs(pheno_data,
 
 ```{r}
 library(IHRC)
-file_path <- "/home/kira/duni/helsinki/DSGE/results/backward/down_4/2019-01-01_o8_w2_e10_CCI_PRS_SEX_YOB_BATCH_PCs_coxph.tsv"
-ana_details <- IHRC::parse_file_path(file_path)
-ana_details$write_res <- FALSE
-
-ana_details$plot_preds <- c("PRS")
-file_path <- "/home/kira/duni/helsinki/DSGE/results/2019-01-01_o8_w2_e10_CCI_PRS_SEX_YOB_BATCH_PCs_coxph.tsv"
-
+file_path <- "/home/kira/duni/helsinki/DSGE/results/down_coxph_10_28_22/2019-01-01_o8_w2_e10_PRS_PRSiYOB_SEX_YOB_BATCH_PCs_coxph.tsv"
+ana_details <- list()
+ana_details$res_dir <- "/home/kira/duni/helsinki/DSGE/results/down_coxph_10_28_22/"
+ana_details$res_file_name <- "2019-01-01_o8_w2_e10_PRS_PRSiYOB_sorted_HRs.png"
+ana_details$down_fctr <- 4
+ana_details$study_type <- "backward"
+ana_details$obs_end_date <- as.Date("2019/01/01")
+ana_details$endpt <- NA
+ana_details$exp_len <- 10
+ana_details$wash_len <- 2
+ana_details$obs_len <- 8
+ana_details$preds <- c("PRS", "PRS*YEAR_OF_BIRTH", "SEX", "YEAR_OF_BIRTH")
+ana_details$plot_preds <- c("PRS", "PRS*YEAR_OF_BIRTH")
+ana_details$write_res <- TRUE
+ana_details
 coxph_hrs <- readr::read_delim(file_path, delim="\t")
-
-IHRC::plot_hrs(from_file=TRUE, coxph_hrs=coxph_hrs, ana_details=ana_details)
+coxph_hrs
+plt <- IHRC::plot_hrs(from_file=TRUE, coxph_hrs=coxph_hrs, ana_details=ana_details, sort_hrs=TRUE)
+plt
+print(plt)
 ana_details
 ```
