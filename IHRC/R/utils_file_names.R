@@ -27,16 +27,18 @@ check_and_get_file_path <- function(ana_details,
                                     res_type) {
     if(ana_details$write_res) {
         # Results type specific folder
-        curnt_res_dir <- paste0(ana_details$res_dir,
-                                paste0(ana_details$study_type, "/", res_type, "/"))
-        if(res_type == "HR") {
-            curnt_res_dir <- paste0(curnt_res_dir, 
-                                    get_preds_file_name(ana_details$preds), 
-                                    "/")
+        if(!("full_res_dir" %in% names(ana_details))) {
+            curnt_res_dir <- paste0(ana_details$res_dir,
+                                    paste0(ana_details$study_type, "/", res_type, "/"))
+            if(res_type == "HR") {
+                curnt_res_dir <- paste0(curnt_res_dir, 
+                                        get_preds_file_name(ana_details$preds), 
+                                        "/")
+            }
+        } else {
+            curnt_res_dir <- ana_details$full_res_dir
         }
-        if("res_dir" %in% names(ana_details)) {
-            curnt_res_dir <- ana_details$res_dir
-        }
+
         # Make the folder if it doesn't exist yet
         if(Istudy::check_res_dir(ana_details$write_res, curnt_res_dir)) {
             res_file_end <- dplyr::case_when(
@@ -52,6 +54,7 @@ check_and_get_file_path <- function(ana_details,
             }
             file_path <- paste0(curnt_res_dir, 
                                 file_name, 
+                                ifelse(ana_details$double_time, "_dt_", ""),
                                 res_file_end)
         }
         return(file_path)
