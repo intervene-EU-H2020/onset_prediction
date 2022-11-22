@@ -29,7 +29,7 @@ make_covs_fctrs <- function(elig_score_data,
 #' @return A character. The formula string for the Cox-PH model.
 get_coxph_formula <- function(surv_ana) {
     pred_string <- paste0(surv_ana@preds, collapse="+")
-    stats::as.formula(paste0("survival::Surv(", surv_ana@study@endpt, "_AGE, ",  surv_ana@study@endpt, ") ~ ",  pred_string))
+    stats::as.formula(paste0("survival::Surv(", surv_ana@study@endpt, "_AGE_FROM_BASE, ",  surv_ana@study@endpt, ") ~ ",  pred_string))
 }
 
 #' Creates a survival object for the selected endpoint
@@ -48,7 +48,7 @@ get_surv_obj <- function(elig_score_data,
                          endpt) {
     
     survival::Surv(time=dplyr::pull(elig_score_data, 
-                                    paste0(endpt, "_AGE")),
+                                    paste0(endpt, "_AGE_FROM_BASE")),
                    event=dplyr::pull(elig_score_data, 
                                      endpt))
 }
