@@ -1,0 +1,19 @@
+Endpoint	ENDPOINT	ENDPT_ORDER
+Prostate Cancer	C3_PROSTATE	1
+T2D	T2D	2
+Colorectal Cancer	C3_COLORECTAL	3
+Breast Cancer	C3_BREAST	4
+Rheumatoid Arthritis	RHEUMA_SEROPOS_OTH	5
+Gout	GOUT	6
+Atrial Fibrillation	I9_AF	7
+CHD	I9_CHD	8
+Hip Osteoarthritis	COX_ARTHROSIS	9
+Melanoma	C3_MELANOMA_SKIN	10
+ILD	ILD	11
+Knee Osteoarthritis	KNEE_ARTHROSIS	12
+Asthma	J10_ASTHMA	13
+Lung Cancer	C3_BRONCHUS_LUNG	14
+MDD	F5_DEPRESSIO	16
+AllCancers	C3_CANCER	17
+Appendicitis	K11_APPENDACUT	18
+Epilepsy	G6_EPLEPSY	19

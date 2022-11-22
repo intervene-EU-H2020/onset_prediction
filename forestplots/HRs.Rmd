@@ -1,0 +1,223 @@
+# Packages
+
+```{r}
+library(forestploter)
+library(tidyverse)
+library(grid)
+source("utils.R")
+```
+
+
+# PRS + CCI
+
+```{r}
+file_path_endpt_order <- "/home/kira/duni/helsinki/DSGE/Code/onset_prediction/forestplots/endpt_order.tsv"
+endpt_order <- readr::read_delim(file_path_endpt_order, delim="\t")
+
+file_path_coxph <- "/home/kira/duni/helsinki/DSGE/results/down_coxph_11_17_22/2019-01-01_o8_w2_e10_CCI_PRS_SEX_YOB_BATCH_PCs_coxph.tsv"
+coxph_hrs <- readr::read_delim(file_path_coxph, delim="\t")
+coxph_hrs <- tib_by_endpt_order(coxph_hrs, endpt_order)
+prs_hrs <- dplyr::filter(coxph_hrs, VAR == "PRS")
+cci_hrs <- dplyr::filter(coxph_hrs, VAR == "CCI")
+
+endpt_order$`HRs for 1-SD Increment` <- paste(rep(" ", 35), collapse = " ")
+```
+
+```{r}
+tm <- forest_theme(base_size = 15,
+                   ci_Theight=0.2,
+                   refline_lty = "solid",
+                   ci_pch = c(19,19),
+                   ci_col = c("#224767", "#D5694F"),
+                   legend_name = "Predictor",
+                   legend_value = c("PRS", "CCI"))
+g <- forest(endpt_order[-(2:3)],
+       est=list(prs_hrs$HR, cci_hrs$HR),
+       lower=list(prs_hrs$CI_NEG, cci_hrs$CI_NEG),
+       upper=list(prs_hrs$CI_POS, cci_hrs$CI_POS),
+       ci_column=2,
+       ref_line=1,
+       sizes=0.7,
+       xlim=c(0.8,2.2),
+       ticks_at=c(1,1.5,2),
+       vert_line=c(1,1.5,2),
+       xlab="                                                  HR (95% CI)",
+       theme=tm)
+g
+plt_marked_good <- forestplotter_edit_stripes(g, c(6,7,8,13,19), "#FCF4F2")
+plt_marked_cancer <- forestplotter_edit_stripes(plt_marked_good, c(1,3,4,10,14,16), "#EDEDED", skip_white = TRUE)
+
+plt_marked_cancer
+```
+
+```{r}
+common_path <- "/home/kira/duni/helsinki/DSGE/results/forestplots/HR/2019-01-01_o8_w2_e10_PRS_CCI_fp"
+save_forestplotter(paste0(common_path, "_striped.png"), g)
+save_forestplotter(paste0(common_path, "_marked_good.png"), plt_marked_good)
+save_forestplotter(paste0(common_path, "_marked_cancer.png"), plt_marked_cancer)
+```
+
+# PRS + CCI + EDU
+
+```{r}
+file_path_endpt_order <- "/home/kira/duni/helsinki/DSGE/Code/onset_prediction/forestplots/HR/endpt_order.tsv"
+endpt_order <- readr::read_delim(file_path_endpt_order, delim="\t")
+endpt_order$`HRs for 1-SD Increment` <- paste(rep(" ", 35), collapse = " ")
+
+file_path_coxph <- "/home/kira/duni/helsinki/DSGE/results/down_coxph_11_17_22/2019-01-01_o8_w2_e10_CCI_PRS_Edu_SEX_YOB_BATCH_PCs_coxph.tsv"
+coxph_hrs <- readr::read_delim(file_path_coxph, delim="\t")
+coxph_hrs <- tib_by_endpt_order(coxph_hrs, endpt_order)
+prs_hrs <- dplyr::filter(coxph_hrs, VAR == "PRS")
+cci_hrs <- dplyr::filter(coxph_hrs, VAR == "CCI")
+edu_hrs <- dplyr::filter(coxph_hrs, VAR == "EDU")
+edu_hrs <- dplyr::mutate(edu_hrs, HR=1+(1-HR), CI_NEG=1+(1-CI_NEG), CI_POS=1+(1-CI_POS))
+```
+
+```{r}
+tm <- forest_theme(base_size = 15,
+                   ci_Theight=0.2,
+                   refline_lty = "solid",
+                   ci_pch = c(19,19),
+                   ci_col = c("#224767", "#D5694F", "#EAB034"),
+                   legend_name = "Predictor",
+                   legend_value = c("PRS", "CCI", "Edu"))
+g <- forest(endpt_order[-(2:3)],
+       est=list(prs_hrs$HR, cci_hrs$HR, edu_hrs$HR),
+       lower=list(prs_hrs$CI_NEG, cci_hrs$CI_NEG, edu_hrs$CI_POS),
+       upper=list(prs_hrs$CI_POS, cci_hrs$CI_POS, edu_hrs$CI_NEG),
+       ci_column=2,
+       ref_line=1,
+       sizes=0.7,
+       xlim=c(0.8,2.2),
+       ticks_at=c(1,1.5,2),
+       vert_line=c(1,1.5,2),
+       xlab="                                                  HR (95% CI)",
+       theme=tm)
+g
+plt_marked_cancer <- forestplotter_edit_stripes(g, c(1,3,4,10,14,17), "#EDEDED", skip_white = FALSE)
+plt_marked_cancer
+
+plt_marked <- forestplotter_edit_stripes(g, c(1,2,12), "#FDF9F0")
+plt_marked <- forestplotter_edit_stripes(plt_marked, c(6,10), "#FCF4F2", skip_white=TRUE)
+
+plt_marked
+```
+
+```{r}
+common_path <- "/home/kira/duni/helsinki/DSGE/results/forestplots/HR/2019-01-01_o8_w2_e10_PRS_CCI_Edu_fp"
+save_forestplotter(paste0(common_path, "_striped.png"), g)
+save_forestplotter(paste0(common_path, "_marked.png"), plt_marked)
+save_forestplotter(paste0(common_path, "_marked_cancer.png"), plt_marked_cancer)
+```
+
+# PRS + CCI + MED
+
+```{r}
+file_path_endpt_order <- "/home/kira/duni/helsinki/DSGE/Code/onset_prediction/forestplots/HR/endpt_order.tsv"
+endpt_order <- readr::read_delim(file_path_endpt_order, delim="\t")
+endpt_order$`HRs for 1-SD Increment` <- paste(rep(" ", 35), collapse = " ")
+
+file_path_coxph <- "/home/kira/duni/helsinki/DSGE/results/down_coxph_11_17_22/2019-01-01_o8_w2_e10_CCI_PRS_MI_SEX_YOB_BATCH_PCs_coxph.tsv"
+coxph_hrs <- readr::read_delim(file_path_coxph, delim="\t")
+coxph_hrs <- tib_by_endpt_order(coxph_hrs, endpt_order)
+prs_hrs <- dplyr::filter(coxph_hrs, VAR == "PRS")
+cci_hrs <- dplyr::filter(coxph_hrs, VAR == "CCI")
+med_hrs <- dplyr::filter(coxph_hrs, VAR == "MI")
+```
+
+```{r}
+tm <- forest_theme(base_size = 15,
+                   ci_Theight=0.2,
+                   refline_lty = "solid",
+                   ci_pch = c(19,19),
+                   ci_col = c("#224767", "#D5694F", "#EAB034"),
+                   legend_name = "Predictor",
+                   legend_value = c("PRS", "CCI", "MED"))
+g <- forest(endpt_order[-(2:3)],
+       est=list(prs_hrs$HR, cci_hrs$HR, med_hrs$HR),
+       lower=list(prs_hrs$CI_NEG, cci_hrs$CI_NEG, med_hrs$CI_NEG),
+       upper=list(prs_hrs$CI_POS, cci_hrs$CI_POS, med_hrs$CI_POS),
+       ci_column=2,
+       ref_line=1,
+       sizes=0.7,
+       xlim=c(0.8,2.2),
+       ticks_at=c(1,1.5,2),
+       vert_line=c(1,1.5,2),
+       xlab="                                                  HR (95% CI)",
+       theme=tm)
+g
+
+plt_marked <- forestplotter_edit_stripes(g, c(2,6, 7, 9, 12, 13, 15, 18), "#FDF9F0")
+plt_marked_prs <- forestplotter_edit_stripes(g, c(13, 15, 18), "#FDF9F0") 
+plt_marked_prs
+```
+
+```{r}
+common_path <- "/home/kira/duni/helsinki/DSGE/results/forestplots/HR/2019-01-01_o8_w2_e10_PRS_CCI_MED_fp"
+save_forestplotter(paste0(common_path, "_striped.png"), g)
+save_forestplotter(paste0(common_path, "_marked.png"), plt_marked)
+save_forestplotter(paste0(common_path, "_marked_prs.png"), plt_marked_prs)
+```
+
+# CCI + CCI*YOB
+
+## PRS and PRSiYoB
+
+```{r}
+file_path_endpt_order <- "/home/kira/duni/helsinki/DSGE/Code/onset_prediction/forestplots/endpt_order.tsv"
+endpt_order <- readr::read_delim(file_path_endpt_order, delim="\t")
+endpt_order$`HRs for 1-SD Increment` <- paste(rep(" ", 40), collapse = " ")
+```
+
+```{r}
+file_path_coxph <- "/home/kira/duni/helsinki/DSGE/results/down_coxph_11_17_22/2019-01-01_o8_w2_e10_CCI_SEX_YOB_coxph.tsv"
+coxph_hrs <- readr::read_delim(file_path_coxph, delim="\t")
+cci_hrs_1 <- dplyr::filter(coxph_hrs, VAR == "CCI")
+cci_hrs_1 <- tib_by_endpt_order(cci_hrs_1, endpt_order)
+cci_hrs_1
+
+file_path_coxph <- "/home/kira/duni/helsinki/DSGE/results/down_coxph_11_17_22/2019-01-01_o8_w2_e10_CCI_CCIiYOB_SEX_YOB_coxph.tsv"
+coxph_hrs <- readr::read_delim(file_path_coxph, delim="\t")
+cci_hrs <- dplyr::filter(coxph_hrs, VAR == "CCI")
+cci_hrs <- tib_by_endpt_order(cci_hrs, endpt_order)
+
+cciiyob_hrs <- dplyr::filter(coxph_hrs, VAR == "CCI:YEAR_OF_BIRTH")
+cciiyob_hrs <- tib_by_endpt_order(cciiyob_hrs, endpt_order)
+cciiyob_hrs
+```
+
+```{r}
+cciiyob_hrs
+```
+
+```{r}
+tm <- forest_theme(base_size = 15,
+                   ci_Theight=0.2,
+                   refline_lty = "solid",
+                   ci_pch = c(19,19),
+                   ci_col = c("#224767", "#D5694F", "#748AAA"),
+                   legend_name = "Predictor",
+                   legend_value = c("CCI", "CCI (Interaction Model)", "CCI*Year of Birth"))
+g <- forest(endpt_order[-(2:3)],
+       est=list(cci_hrs_1$HR, cci_hrs$HR, cciiyob_hrs$HR),
+       lower=list(cci_hrs_1$CI_NEG, cci_hrs$CI_NEG, cciiyob_hrs$CI_NEG),
+       upper=list(cci_hrs_1$CI_POS, cci_hrs$CI_POS, cciiyob_hrs$CI_POS),
+       ci_column=2,
+       ref_line=1,
+       sizes=0.7,
+       xlim=c(0.8,2.2),
+       ticks_at=c(1,1.5,2),
+       vert_line=c(1,1.5,2),
+       xlab="                                                  HR (95% CI)",
+       theme=tm)
+g
+plt_marked <- forestplotter_edit_stripes(g, c(2,5,6,7,8,9, 11, 12, 15), "#EBF2F8")
+
+plt_marked
+```
+
+```{r}
+common_path <- "/home/kira/duni/helsinki/DSGE/results/forestplots/HR/2019-01-01_o8_w2_e10_CCI_CCIiYOB_fp"
+save_forestplotter(paste0(common_path, "_striped.png"), g)
+save_forestplotter(paste0(common_path, "_marked.png"), plt_marked)
+```

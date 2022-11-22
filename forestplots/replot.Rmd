@@ -1,0 +1,44 @@
+
+```{r}
+library(ggplot2)
+library(forestploter)
+source("utils.R")
+library(grid)
+
+file_path <- "/home/kira/duni/helsinki/DSGE/results/down_coxph_11_17_22/2019-01-01_o8_w2_e10_PRS_SEX_YOB_BATCH_PCs_coxph.tsv"
+coxph_hrs <- readr::read_delim(file_path, delim="\t")
+# Create confidence interval column to display
+coxph_hrs$`PRS 1-SD Increment` <- paste(rep(" ", 20), collapse = " ")
+coxph_hrs$`HR (95% CI)` <- sprintf("%.2f (%.2f - %.2f)",
+                                     coxph_hrs$HR, coxph_hrs$CI_NEG, coxph_hrs$CI_POS)
+coxph_hrs <- dplyr::arrange(coxph_hrs, desc(HR))
+coxph_hrs <- dplyr::filter(coxph_hrs, VAR == "PRS")
+
+file_path_endpt_order <- "/home/kira/duni/helsinki/DSGE/Code/onset_prediction/forestplots/endpt_order.tsv"
+endpt_order <- readr::read_delim(file_path_endpt_order, delim="\t")
+coxph_hrs <- dplyr::left_join(coxph_hrs, endpt_order, by="ENDPOINT")
+coxph_hrs <- dplyr::filter(coxph_hrs, ENDPOINT != "I9_SAH")
+
+tm <- forest_theme(base_size = 15,
+                   ci_Theight=0.2,
+                   refline_lty = "solid")
+plot_hrs <- dplyr::select(coxph_hrs, Endpoint, N_CASES, N_CONTROLS,`PRS 1-SD Increment`,  `HR (95% CI)`)
+colnames(plot_hrs) <- c("Endpoint", "#Cases", "#Controls", "PRS 1-SD Increment", "HR (95% CI)")
+g <- forest(plot_hrs,
+       est=coxph_hrs$HR,
+       lower=coxph_hrs$CI_NEG,
+       upper=coxph_hrs$CI_POS,
+       ci_column=4,
+       ref_line=1,
+       sizes=0.7,
+       xlim=c(1,2),
+       ticks_at=c(1,1.5,2),
+       vert_line=c(1,1.5,2),
+       xlab="                                           HR (95% CI)",
+       theme=tm)
+g
+```
+
+```{r}
+save_forestplotter("/home/kira/duni/helsinki/DSGE/results/forestplots/HR/2019-01-01_o8_w2_e10_PRS_fp.png", g)
+```
