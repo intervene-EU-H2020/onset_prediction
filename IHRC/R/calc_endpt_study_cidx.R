@@ -1,5 +1,4 @@
-#' Calcualtes HR from a Cox-PH model for the current survival analysis 
-#' setup
+#' Calcualtes the concordance index 
 #' 
 #' For i.e. a study with endpoint `J10_ASTHMA` and 
 #' `covs = c("SEX", "YEAR_OF_BIRTH")` the model would be 

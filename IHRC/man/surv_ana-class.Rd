@@ -4,9 +4,9 @@
 \name{surv_ana-class}
 \alias{surv_ana-class}
 \alias{surv_ana}
-\title{An S4 class representing the study setup}
+\title{An S4 class representing the survival analysis}
 \description{
-An S4 class representing the study setup
+An S4 class representing the survival analysis
 }
 \section{Slots}{
 

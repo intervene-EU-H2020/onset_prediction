@@ -245,12 +245,12 @@ ggplot_points_and_errors <- function(plt,
         if(study_type == "forward") {
             plt <- plt + geom_errorbar(aes(ymin=CI_NEG, ymax=CI_POS, color=VAR),
                                        position=position_dodge(width=pos_dodge),
-                                       size=size, 
+                                       linewidth=size, 
                                        width=width)
         } else {
             plt <- plt + geom_errorbar(aes(xmin=CI_NEG, xmax=CI_POS, color=VAR),
                                        position=position_dodge(width=pos_dodge),
-                                       size=size, 
+                                       linewidth=size, 
                                        width=width)
         }
     } else {
@@ -260,11 +260,11 @@ ggplot_points_and_errors <- function(plt,
                theme(legend.position = "none")
         if(study_type == "forward") {
             plt <- plt + geom_errorbar(aes(ymin=CI_NEG, ymax=CI_POS),
-                                       size=size, 
+                                       linewidth=size, 
                                        width=width)
         } else {
             plt <- plt + geom_errorbar(aes(xmin=CI_NEG, xmax=CI_POS),
-                                       size=size, 
+                                       linewidth=size, 
                                        width=width)
         }
     }

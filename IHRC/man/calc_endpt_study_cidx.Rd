@@ -7,6 +7,9 @@ setup}
 \usage{
 calc_endpt_study_cidx(surv_ana)
 }
+\arguments{
+\item{surv_ana}{An S4 object. The current survival analysis.}
+}
 \value{
 A tibble with columns \code{Endpoint}, \code{Score}, \code{Group},
 \code{N_controls}, \code{N_cases}, \code{beta}, \code{SE}, \code{p_val}, \code{HR},

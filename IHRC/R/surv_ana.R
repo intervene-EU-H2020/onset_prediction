@@ -1,4 +1,4 @@
-#' An S4 class representing the study setup
+#' An S4 class representing the survival analysis
 #' 
 #' @slot pheno_data A data.frame with at least the columns: 
 #'                   `ID`, the columns specified in `covs` and 
