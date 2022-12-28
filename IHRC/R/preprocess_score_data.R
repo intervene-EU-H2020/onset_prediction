@@ -3,6 +3,7 @@ preprocess_score_data <- function(score_type,
                                   icd_data=NULL,
                                   atc_data=NULL,
                                   prs_data=NULL,
+                                  phers_data=NULL,
                                   endpt=NULL) {
     score_data = NULL
     if("CCI" %in% score_type) {
@@ -32,6 +33,18 @@ preprocess_score_data <- function(score_type,
                                            by="ID")
         } else {
             score_data <- PRS_data
+        }
+    }
+    # Adding PheRS column
+    if("PheRS" %in% score_type) {
+        PheRS_data <- get_phers_endpt_scores(score_data=phers_data,
+                                             endpt=endpt)
+        if(!is.null(score_data)) {
+            score_data <- dplyr::left_join(score_data, 
+                                           PheRS_data, 
+                                           by="ID")
+        } else {
+            score_data <- PheRS_data
         }
     }
     if("MI" %in% score_type) {

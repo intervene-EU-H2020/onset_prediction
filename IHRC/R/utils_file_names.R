@@ -54,7 +54,6 @@ check_and_get_file_path <- function(ana_details,
             }
             file_path <- paste0(curnt_res_dir, 
                                 file_name, 
-                                ifelse(ana_details$double_time, "_dt_", ""),
                                 res_file_end)
         }
         return(file_path)
@@ -80,6 +79,7 @@ get_file_name <- function(ana_details,
                                                                   ana_details$exp_len,
                                                                   ana_details$wash_len,
                                                                   ana_details$obs_len))
+    file_name <- paste0(file_name, "_", paste0(ana_details$obs_age_range, collapse="_"))
     if(res_type == "HR") {
         file_name <- paste0(file_name,  "_", get_preds_file_name(ana_details$plot_preds))
     } else {
@@ -99,6 +99,7 @@ get_preds_file_name <- function(preds) {
         preds <- preds[!stringr::str_detect(preds, "PC")]
         preds <- c(preds, "PCs")
     } 
+    preds <- preds[order(preds)]
     file_name <- paste0(preds, collapse="_")
     return(file_name)
 }

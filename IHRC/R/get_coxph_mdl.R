@@ -22,17 +22,8 @@ get_coxph_mdl <- function(surv_ana,
 
         build_mdl <- TRUE
   
-        for(pred in surv_ana@preds) {
-            if(pred %in% colnames(surv_ana@elig_score_data)) {
-                if(pred %in% c("PRS", "CCI", "EI", "YEAR_OF_BIRTH", "MI", "EDU")) {
-                    surv_ana@elig_score_data[,pred] <- scale(surv_ana@elig_score_data[,pred])
-                } else if(pred %in% c("SEX", "ANCESTRY")) {
-                    surv_ana@elig_score_data <- dplyr::mutate_at(surv_ana@elig_score_data, 
-                                                                 {{ pred }},
-                                                                 as.factor)
-                }
-            }
-        }
+        surv_ana@elig_score_data <- scale_preds(surv_ana@plot_preds,
+                                                surv_ana@elig_score_data)
         if(build_mdl) {
             test_data <- surv_ana@elig_score_data
             if(!is.null(test_idxs)) {
@@ -50,4 +41,19 @@ get_coxph_mdl <- function(surv_ana,
         } 
     }
     return(coxph_mdl)
+}
+
+#' @export 
+scale_preds <- function(preds,
+                        score_data) {
+    for(pred in preds) {
+        if(pred %in% colnames(score_data)) {
+            if(pred %in% c("PRS", "CCI", "EI", "YEAR_OF_BIRTH", "MI", "EDU", "PheRS")) {
+                score_data[,pred] <- scale(score_data[,pred])
+            } else if(pred %in% c("SEX", "ANCESTRY")) {
+                score_data <- dplyr::mutate_at(score_data, {{ pred }}, as.factor)
+            }
+        }
+    }
+    return(score_data)
 }

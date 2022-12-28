@@ -22,7 +22,7 @@ create_endpt_study_obj <- function(study_data,
                                    obs_end_date=as.Date("2021/01/01"),
                                    down_fctr=NA_integer_,
                                    ancs=c("EAS"),
-                                   max_age=200,
+                                   obs_age_range=c(0,200),
                                    write_res=FALSE,
                                    res_dir=NA_character_) {
     if(!is.na(res_dir)) {
@@ -46,7 +46,7 @@ create_endpt_study_obj <- function(study_data,
                           obs_end_date=obs_end_date,
                           down_fctr=down_fctr,
                           ancs=ancs,
-                          max_age=max_age,
+                          obs_age_range=obs_age_range,
                           write_res=write_res,
                           res_dir=res_dir)
     return(study)

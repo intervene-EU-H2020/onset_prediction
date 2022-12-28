@@ -9,6 +9,7 @@ run_surv_studies(
   icd_data = NULL,
   atc_data = NULL,
   prs_data = NULL,
+  phers_data = NULL,
   score_type,
   plot_preds = NULL,
   study_type = "forward",
@@ -20,7 +21,7 @@ run_surv_studies(
   obs_end_date = as.Date("2021/01/01"),
   down_fctr = NA_integer_,
   ancs = NA_character_,
-  max_age = 90,
+  obs_age_range = c(32, 80),
   covs = c("SEX", "YEAR_OF_BIRTH"),
   bin_cut = 1,
   min_indvs = 5,
@@ -77,8 +78,8 @@ downsampling is performed.}
 
 \item{ancs}{A character (vector). The ancestries to consider.}
 
-\item{max_age}{A numeric. The maximum age at the end of the exposure
-window of individuals.}
+\item{obs_age_range}{A numeric. The age range of individuals in the observation
+period. Inclusive interval.}
 
 \item{covs}{A vector of characters. The column names of the covariates
 to add to the predictor of the Cox-PH model.}

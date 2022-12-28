@@ -2,13 +2,9 @@
 % Please edit documentation in R/calc_endpt_study_cidx.R
 \name{calc_endpt_study_cidx}
 \alias{calc_endpt_study_cidx}
-\title{Calcualtes HR from a Cox-PH model for the current survival analysis
-setup}
+\title{Calcualtes the concordance index}
 \usage{
-calc_endpt_study_cidx(surv_ana)
-}
-\arguments{
-\item{surv_ana}{An S4 object. The current survival analysis.}
+calc_endpt_study_cidx(surv_ana, coxph_mdl = NULL)
 }
 \value{
 A tibble with columns \code{Endpoint}, \code{Score}, \code{Group},

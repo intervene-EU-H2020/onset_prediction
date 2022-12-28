@@ -28,7 +28,6 @@ filter_missing_endpt_data <- function(study_data,
     check_cols_exist(study_data,
                      c(endpt, paste0(endpt, "_DATE")),
                      "filter_missing_endpt_data")
-
     dplyr::filter(study_data, 
                   !is.na(get(endpt)),
                   !((get(endpt) == 1) & is.na(get(paste0(endpt, "_DATE")))))

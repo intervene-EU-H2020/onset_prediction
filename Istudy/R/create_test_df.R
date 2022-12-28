@@ -55,10 +55,7 @@ create_test_df <- function(n_indv=10) {
 }
 
 create_edu_data <- function(n_indv) {
-    edu_samples <- sample(3:6, n_indv, replace=TRUE)
-    edu_samples <- paste0("ISCED ", edu_samples)
-    na_samples <- sample(1:n_indv, (n_indv*0.1), replace=FALSE)
-    edu_samples[na_samples] <- NA_character_
+    edu_samples <- sample(c(16,19,23, 24, 26, 32), n_indv, replace=TRUE)
     return(edu_samples)
 }
 

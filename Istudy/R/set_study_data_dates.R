@@ -17,6 +17,7 @@
 #' with the date columns.
 #' 
 #' @export 
+#' @importFrom lubridate %m-%
 #' 
 #' @author Kira E. Detrois
 set_study_dates <- function(study_data,
@@ -35,19 +36,21 @@ set_study_dates <- function(study_data,
                                                 wash_len=wash_len,
                                                 obs_len=obs_len,
                                                 obs_end_date=obs_end_date)
-    study_data$EXP_END_DATE <- calc_exp_end_date(
+    study_data$WASH_START_DATE <- calc_wash_start_date(
                                                 study_data=study_data,
                                                 study_type=study_type,
                                                 exp_len=exp_len,
                                                 wash_len=wash_len,
                                                 obs_len=obs_len,
                                                 obs_end_date=obs_end_date)
-    study_data$WASH_END_DATE <- calc_wash_end_date(
+    study_data$EXP_END_DATE <- calc_exp_end_date(study_data, exp_len)
+    study_data$OBS_START_DATE <- calc_obs_start_date(
                                                 study_data=study_data,
                                                 study_type=study_type,
                                                 wash_len=wash_len,
                                                 obs_len=obs_len,
                                                 obs_end_date=obs_end_date)
+    study_data$WASH_END_DATE <- calc_wash_end_date(study_data, wash_len)
     study_data$OBS_END_DATE <- calc_obs_end_date(study_data=study_data,
                                                  study_type=study_type,
                                                  obs_len=obs_len,
@@ -56,6 +59,24 @@ set_study_dates <- function(study_data,
     study_data$STUDY_TIME <- study_data$EXP_START_DATE %--% study_data$OBS_END_DATE
 
     return(study_data)
+}
+
+calc_wash_end_date <- function(study_data,
+                               wash_len) {
+    if(wash_len != 0)
+        wash_end_date <- study_data$OBS_START_DATE %m-% lubridate::days(1)
+    else 
+        wash_end_date <- study_data$WASH_START_DATE
+    return(wash_end_date)
+}
+
+calc_exp_end_date <- function(study_data, 
+                              exp_len) {
+    if(exp_len != 0 | is.na(exp_len))
+        exp_end_date <- study_data$WASH_START_DATE %m-% lubridate::days(1)
+    else 
+        exp_end_date <- study_data$EXP_START_DATE
+    return(exp_end_date)
 }
 
 #' Calcualtes the start date of the observation period for each 
@@ -77,7 +98,7 @@ calc_obs_end_date <- function(study_data,
                               obs_len,
                               obs_end_date) {
     if(study_type == "forward") {
-        obs_end_date <- study_data$WASH_END_DATE %m+% lubridate::years(obs_len)
+        obs_end_date <- study_data$OBS_START_DATE %m+% lubridate::years(obs_len)
     } else if(study_type == "backward") {
         obs_end_date <- obs_end_date
     }
@@ -100,13 +121,13 @@ calc_obs_end_date <- function(study_data,
 #' @export 
 #' 
 #' @author Kira E. Detrois
-calc_wash_end_date <- function(study_data,
+calc_obs_start_date <- function(study_data,
                                study_type,
                                wash_len,
                                obs_len,
                                obs_end_date) {
     if(study_type == "forward") {
-        wash_end_date <- study_data$EXP_END_DATE %m+% lubridate::years(wash_len)
+        wash_end_date <- study_data$WASH_START_DATE %m+% lubridate::years(wash_len)
     } else if(study_type == "backward") {
         wash_end_date <- obs_end_date %m-% lubridate::years(obs_len)
     }
@@ -128,7 +149,7 @@ calc_wash_end_date <- function(study_data,
 #' @export 
 #' 
 #' @author Kira E. Detrois
-calc_exp_end_date <- function(study_data,
+calc_wash_start_date <- function(study_data,
                               study_type,
                               exp_len,
                               wash_len,

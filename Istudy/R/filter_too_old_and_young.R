@@ -11,35 +11,48 @@
 #' 
 #' @param study_data A data.frame with at least column `EXP_END`.
 #' @param study_type A character. Can be either `forward` or `backward`. 
-#' @param max_age A numeric. The maximum age for individuals in the study. 
-#'                           Individuals are censored, once they reach the maximum age. 
+#' @param obs_age_range A numeric. The age range of individuals in the observation
+#'                                 period. Inclusive interval. 
 #' 
 #' @export 
 #' 
 #' @author Kira E. Detrois
 filter_too_old_and_young <- function(study_data,
                                      study_type,
-                                     max_age=200) {
+                                     obs_age_range=c(0,200),
+                                     exp_f1998=TRUE) {
     check_cols_exist(study_data, 
                      c("DATE_OF_BIRTH", "EXP_START_DATE", 
                      "OBS_END_DATE", "END_OF_FOLLOWUP"),
                      "filter_too_old_and_young")
-    # Too young
+    study_data <- filter_young_age(study_data, study_type, obs_age_range[1])
+    study_data <- filter_old_age(study_data, obs_age_range[2])
+
+    if(exp_f1998)
+        study_data <- dplyr::filter(study_data, 
+                                    lubridate::year(EXP_START_DATE) >= 1998)
+
+    # End of followup is either last day indv known to be alive or death date
+    # Has to be non-censored at least at the end of the wash-out period
+    study_data <- dplyr::filter(study_data, 
+                                END_OF_FOLLOWUP > WASH_END_DATE | 
+                                is.na(END_OF_FOLLOWUP))
+    return(study_data)
+}
+
+filter_young_age <- function(study_data,
+                             study_type,
+                             min_obs_age) {
+   
     if(study_type == "backward") {
         study_data <- dplyr::filter(study_data, 
                                     EXP_START_DATE <= OBS_END_DATE & 
                                     DATE_OF_BIRTH <= EXP_START_DATE)
     }
-    # Too old
-    study_data <- filter_old_age(study_data, max_age)
-    study_data <- dplyr::filter(study_data, 
-                                   lubridate::year(EXP_START_DATE) >= 1998)
-
-    # End of followup is either last day indv known to be alive or death date
-    # Has to be non-censored at least at the end of the wash-out period
-    study_data <- dplyr::filter(study_data, END_OF_FOLLOWUP > WASH_END_DATE | 
-                                    is.na(END_OF_FOLLOWUP))
-
+    if(min_obs_age != 0) {
+        study_data <- dplyr::filter(study_data, 
+                                    AGE_AT_BASE >= min_obs_age)
+    }
     return(study_data)
 }
 
@@ -49,10 +62,8 @@ filter_too_old_and_young <- function(study_data,
 #' 
 #' @export 
 filter_old_age <- function(study_data,
-                           max_age=200) {
-    study_data <- dplyr::mutate(study_data, 
-                                OBS_END_AGE=lubridate::time_length(study_data$DATE_OF_BIRTH %--% study_data$OBS_END_DATE, "years"))
-
-    study_data <- dplyr::filter(study_data, OBS_END_AGE < max_age)
+                           max_obs_age) {
+    study_data <- dplyr::filter(study_data, 
+                                AGE_AT_END <= max_obs_age)
     return(study_data)
 }

@@ -22,6 +22,10 @@ endpoint occured before the prediction period.
 Filters out individuals where the endpoint occured before the
 observation period begins.
 }
+\details{
+Note lubridate intervals are inclusive. So the end dates of the
+endpoint free period are also included.
+}
 \author{
 Kira E. Detrois
 }

@@ -10,6 +10,7 @@ get_elig_score_data(
   icd_data = NULL,
   atc_data = NULL,
   prs_data = NULL,
+  phers_data = NULL,
   endpt = NULL,
   min_indvs = 5
 )

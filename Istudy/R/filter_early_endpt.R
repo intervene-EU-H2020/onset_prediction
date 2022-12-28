@@ -3,6 +3,8 @@
 #' Filters out individuals where the endpoint occured before the 
 #' observation period begins.
 #' 
+#' Note lubridate intervals are inclusive. So the end dates of the
+#' endpoint free period are also included. 
 #' 
 #' @param study_data A data.frame with at least columns `ENDPT_FREE_PERIOD`
 #'                   and i.e. `J10_ASTHMA_DATE`, the study endpoint date,

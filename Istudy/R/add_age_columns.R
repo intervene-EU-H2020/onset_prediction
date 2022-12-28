@@ -16,10 +16,26 @@
 #' @export
 #' 
 #' @author Kira E. Detrois
-add_age_columns <- function(study_data, 
-                         endpt) {
+add_age_obs_cols <- function(study_data) {
     check_cols_exist(study_data, 
-                     c(endpt, paste0(endpt, "_DATE"), "WASH_END_DATE"),
+                     c("OBS_START_DATE", "OBS_END_DATE", "DATE_OF_BIRTH"),
+                     "add_age_obs_cols")  
+
+    age_base_interval <- study_data$DATE_OF_BIRTH %--% study_data$OBS_START_DATE
+    age_base <- lubridate::time_length(age_base_interval, "years")
+    study_data[,"AGE_AT_BASE"] <- age_base
+
+    age_end_interval <- study_data$DATE_OF_BIRTH %--% study_data$OBS_END_DATE
+    age_end <- lubridate::time_length(age_end_interval, "years")
+    study_data[,"AGE_AT_END"] <- age_end
+
+    return(study_data)
+}
+
+add_age_event_cols <- function(study_data, 
+                               endpt) {
+    check_cols_exist(study_data, 
+                     c(endpt, paste0(endpt, "_DATE"), "WASH_END_DATE", "DATE_OF_BIRTH"),
                      "add_age_columns")  
 
     surv_interval <- study_data$WASH_END_DATE %--% dplyr::pull(study_data, get(paste0(endpt, "_DATE")))
@@ -30,12 +46,5 @@ add_age_columns <- function(study_data,
     surv_age <- lubridate::time_length(surv_age_interval, "years")
     study_data[,paste0(endpt, "_AGE_AT_EVENT")] <- surv_age
 
-    age_interval <- study_data$DATE_OF_BIRTH %--% study_data$WASH_END_DATE
-    age <- lubridate::time_length(age_interval, "years")
-    study_data[,"AGE_AT_BASE"] <- age
-
-    age_strata <- as.character(study_data[,"AGE_AT_BASE"])
-    print(age_strata)
-
     return(study_data)
-}
+} 

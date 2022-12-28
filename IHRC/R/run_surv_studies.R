@@ -40,8 +40,8 @@
 #'                                   Default is NA, which means no
 #'                                   downsampling is performed.
 #' @param ancs A character (vector). The ancestries to consider.
-#' @param max_age A numeric. The maximum age at the end of the exposure
-#'                  window of individuals.
+#' @param obs_age_range A numeric. The age range of individuals in the observation
+#'                                 period. Inclusive interval. 
 #' @param covs A vector of characters. The column names of the covariates 
 #'              to add to the predictor of the Cox-PH model.
 #' @param bin_cut A numeric. The binary cutoff value for classifying high
@@ -59,9 +59,11 @@
 #' 
 #' @author Kira E. Detrois
 run_surv_studies <- function(pheno_data, 
+                             endpt_indvs_mat,
                              icd_data=NULL,
                              atc_data=NULL,
                              prs_data=NULL,
+                             phers_data=NULL,
                              score_type,
                              plot_preds=NULL,
                              study_type="forward",
@@ -73,10 +75,11 @@ run_surv_studies <- function(pheno_data,
                              obs_end_date=as.Date("2021/01/01"),
                              down_fctr=NA_integer_,
                              ancs=NA_character_,
-                             max_age=90,
+                             obs_age_range=c(32,80),
                              covs=c("SEX", "YEAR_OF_BIRTH"),
                              bin_cut=1,
                              min_indvs=5,
+                             res_descr="",
                              write_res=FALSE,
                              res_dir=NULL) {
 
@@ -86,8 +89,12 @@ run_surv_studies <- function(pheno_data,
     all_age_hrs_tib <- create_empty_endpt_hrs_tib() 
     all_age_cidxs_tib <- create_empty_cidx_tib()
     for(endpt in endpts) {
+        endpt_ids <- get_endpt_ids(endpt_indvs, endpt)
+        phers_test_ids <- get_phers_test_ids(pheno_data,
+                                             phers_data,
+                                             endpt)
         for(exp_age in exp_ages) {
-            study <- create_endpt_study_obj(study_data=pheno_data,
+            study <- create_endpt_study_obj(study_data=dplyr::filter(pheno_data, ID %in% endpt_ids),
                                             study_type=study_type,
                                             preds=c(score_type, covs),
                                             endpt=endpt, 
@@ -98,7 +105,7 @@ run_surv_studies <- function(pheno_data,
                                             obs_end_date=obs_end_date,
                                             down_fctr=down_fctr,
                                             ancs=ancs,
-                                            max_age=max_age,
+                                            obs_age_range=obs_age_range,
                                             write_res=write_res,
                                             res_dir=res_dir)
             elig_score_data <- get_elig_score_data(score_type=score_type, 
@@ -106,30 +113,33 @@ run_surv_studies <- function(pheno_data,
                                                    icd_data=icd_data, 
                                                    atc_data=atc_data,
                                                    prs_data=prs_data,
+                                                   phers_data=phers_data,
                                                    endpt=endpt,
                                                    min_indvs=min_indvs)
-            if(is.null(plot_preds))
-                plot_preds <- score_type
-            surv_ana <- methods::new("surv_ana",
-                                     study=study,
-                                     elig_score_data=elig_score_data,
-                                     min_indvs=min_indvs,
-                                     preds=c(score_type, covs),
-                                     plot_preds=plot_preds,
-                                     bin_cut=bin_cut,
-                                     write_res=write_res,
-                                     res_dir=res_dir)
-            coxph_mdl <- get_coxph_mdl(surv_ana=surv_ana)
-            all_age_hrs_tib <- add_coxph_res_row(
-                                    endpt_hrs_tib=all_age_hrs_tib,
-                                    coxph_mdl=coxph_mdl,
-                                    surv_ana=surv_ana)
-            c_idx_res <- calc_endpt_study_cidx(surv_ana,
-                                               coxph_mdl)
-            all_age_cidxs_tib <- add_cidx_res_row(
-                                    endpt_c_idxs_tib=all_age_cidxs_tib, 
-                                    c_idx_res=c_idx_res, 
-                                    surv_ana=surv_ana)
+            if(!is.null(elig_score_data)) {
+                if(is.null(plot_preds))
+                    plot_preds <- score_type
+                surv_ana <- methods::new("surv_ana",
+                                        study=study,
+                                        elig_score_data=elig_score_data,
+                                        min_indvs=min_indvs,
+                                        preds=c(score_type, covs),
+                                        plot_preds=plot_preds,
+                                        bin_cut=bin_cut,
+                                        write_res=write_res,
+                                        res_dir=res_dir)
+                coxph_mdl <- get_coxph_mdl(surv_ana=surv_ana)
+                all_age_hrs_tib <- add_coxph_res_row(
+                                        endpt_hrs_tib=all_age_hrs_tib,
+                                        coxph_mdl=coxph_mdl,
+                                        surv_ana=surv_ana)
+                c_idx_res <- calc_endpt_study_cidx(surv_ana,
+                                                coxph_mdl)
+                all_age_cidxs_tib <- add_cidx_res_row(
+                                        endpt_c_idxs_tib=all_age_cidxs_tib, 
+                                        c_idx_res=c_idx_res, 
+                                        surv_ana=surv_ana)
+            }
         }
     }
     if(nrow(all_age_hrs_tib) > 0 | nrow(all_age_hrs_tib) > 0) {
@@ -141,5 +151,13 @@ run_surv_studies <- function(pheno_data,
     }
 }
 
-
-
+#' Some documentation
+#' 
+#' @export 
+get_endpt_ids <- function(endpt_indvs_mat,
+                          endpt) {
+   endpt_ids <- dplyr::filter(endpt_indvs_mat, 
+                              endpt == 1) %>%
+                dplyr::pull(ID)
+    return(endpt_ids)
+}

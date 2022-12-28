@@ -16,7 +16,7 @@ create_endpt_study_obj(
   obs_end_date = as.Date("2021/01/01"),
   down_fctr = NA_integer_,
   ancs = c("EAS"),
-  max_age = 200,
+  obs_age_range = c(0, 200),
   write_res = FALSE,
   res_dir = NA_character_
 )
@@ -60,8 +60,8 @@ downsampling is performed.}
 
 \item{ancs}{A character (vector). The ancestries to consider.}
 
-\item{max_age}{A numeric. The maximum age at the end of the exposure
-window of individuals.}
+\item{obs_age_range}{A numeric. The age range of individuals in the observation
+period. Inclusive interval.}
 
 \item{write_res}{A boolean. Defines whether to save the results to
 files.}

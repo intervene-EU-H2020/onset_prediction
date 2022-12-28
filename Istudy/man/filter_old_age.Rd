@@ -4,13 +4,10 @@
 \alias{filter_old_age}
 \title{Censors individuals once they reach the maximum age}
 \usage{
-filter_old_age(study_data, max_age = 200)
+filter_old_age(study_data, max_obs_age)
 }
 \arguments{
 \item{study_data}{A data.frame with at least column \code{EXP_END}.}
-
-\item{max_age}{A numeric. The maximum age for individuals in the study.
-Individuals are censored, once they reach the maximum age.}
 }
 \description{
 Censors individuals once they reach the maximum age

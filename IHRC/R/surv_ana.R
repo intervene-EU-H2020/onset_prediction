@@ -16,8 +16,8 @@
 #'                  rest of the data.
 #' @slot score_type A character. The score type. At the moment the two
 #'                      options are `CCI`, and `PRS`.
-#' @slot max_age A numeric. The maximum age at the end of the exposure
-#'                  window of individuals.
+#' @slot obs_age_range A numeric. The age range of individuals in the observation
+#'                                 period. Inclusive interval. 
 #' @slot study A S4 study object. The current study setups for on whicht
 #'              the eligible indiviuals are selected.
 #' @slot covs A vector of characters. The column names of the covariates 

@@ -40,6 +40,7 @@ get_ana_details_from_surv_ana <- function(surv_ana) {
     ana_details$obs_end_date <- surv_ana@study@obs_end_date
     ana_details$preds <- surv_ana@preds
     ana_details$plot_preds <- surv_ana@plot_preds
+    ana_details$obs_age_range <- surv_ana@study@obs_age_range
     ana_details$write_res <- surv_ana@write_res
     ana_details$res_dir <- surv_ana@res_dir
     return(ana_details)

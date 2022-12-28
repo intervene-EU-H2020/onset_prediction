@@ -42,8 +42,8 @@ downsampling is performed.}
 
 \item{\code{ancs}}{A character (vector). The ancestries to consider.}
 
-\item{\code{max_age}}{A numeric. The maximum age for individuals in the study.
-Individuals are censored, once they reach the maximum age.}
+\item{\code{obs_age_range}}{A numeric. The age range of individuals in the observation
+period. Inclusive interval.}
 
 \item{\code{write_res}}{A boolean. Whether to write log files.}
 

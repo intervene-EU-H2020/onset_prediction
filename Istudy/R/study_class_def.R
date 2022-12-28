@@ -21,8 +21,8 @@
 #'                                   Default is NA, which means no
 #'                                   downsampling is performed.
 #' @slot ancs A character (vector). The ancestries to consider.
-#' @slot max_age A numeric. The maximum age for individuals in the study. 
-#'                          Individuals are censored, once they reach the maximum age. 
+#' @slot obs_age_range A numeric. The age range of individuals in the observation
+#'                                 period. Inclusive interval. 
 #' @slot write_res A boolean. Whether to write log files.
 #' @slot res_dir A character. The path to the results directory.
 #' 
@@ -42,8 +42,9 @@ study <- methods::setClass("study",
                                       obs_len="numeric",
                                       obs_end_date="Date",
                                       down_fctr="numeric",
+                                      exp_f1998="logical",
                                       ancs="character",
-                                      max_age="numeric",
+                                      obs_age_range="numeric",
                                       write_res="logical",
                                       res_dir="character"),
                            prototype=list(study_type="forward",
@@ -52,10 +53,11 @@ study <- methods::setClass("study",
                                           exp_len=NA_integer_,
                                           wash_len=NA_integer_,
                                           obs_len=NA_integer_,
-                                          obs_end_date=as.Date("2021/01/01"),
+                                          obs_end_date=as.Date("2019/01/01"),
                                           down_fctr=NA_real_,
+                                          exp_f1998=TRUE,
                                           ancs=NA_character_,
-                                          max_age=200,
+                                          obs_age_range=c(0,200),
                                           write_res=FALSE,
                                           res_dir=NA_character_))
 #' @importFrom methods callNextMethod
@@ -88,6 +90,7 @@ setMethod("initialize", "study", function(.Object, ...) {
                                     wash_len=.Object@wash_len,
                                     obs_len=.Object@obs_len,
                                     obs_end_date=.Object@obs_end_date)
+    .Object@study_data <- add_age_obs_cols(study_data=.Object@study_data)
     .Object@study_data <- get_study_elig_indv(study=.Object)
 
     return(.Object)

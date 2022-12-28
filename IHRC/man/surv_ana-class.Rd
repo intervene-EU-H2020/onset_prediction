@@ -31,8 +31,8 @@ rest of the data.}
 \item{\code{score_type}}{A character. The score type. At the moment the two
 options are \code{CCI}, and \code{PRS}.}
 
-\item{\code{max_age}}{A numeric. The maximum age at the end of the exposure
-window of individuals.}
+\item{\code{obs_age_range}}{A numeric. The age range of individuals in the observation
+period. Inclusive interval.}
 
 \item{\code{study}}{A S4 study object. The current study setups for on whicht
 the eligible indiviuals are selected.}
