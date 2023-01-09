@@ -6,6 +6,7 @@
 \usage{
 run_surv_studies(
   pheno_data,
+  endpt_indvs_mat = NULL,
   icd_data = NULL,
   atc_data = NULL,
   prs_data = NULL,
@@ -25,6 +26,7 @@ run_surv_studies(
   covs = c("SEX", "YEAR_OF_BIRTH"),
   bin_cut = 1,
   min_indvs = 5,
+  res_descr = "",
   write_res = FALSE,
   res_dir = NULL
 )

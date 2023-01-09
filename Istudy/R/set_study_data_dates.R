@@ -61,6 +61,16 @@ set_study_dates <- function(study_data,
     return(study_data)
 }
 
+#' Calcualtes the end date of the washout period for each 
+#' individual
+#' 
+#' @inheritParams set_study_dates
+#' 
+#' @return A vector of Dates.
+#' 
+#' @export 
+#' 
+#' @author Kira E. Detrois
 calc_wash_end_date <- function(study_data,
                                wash_len) {
     if(wash_len != 0)
@@ -70,6 +80,15 @@ calc_wash_end_date <- function(study_data,
     return(wash_end_date)
 }
 
+#' Calcualtes the end date of the exposure period
+#' 
+#' @inheritParams set_study_dates
+#' 
+#' @return A vector of Dates.
+#' 
+#' @export 
+#' 
+#' @author Kira E. Detrois
 calc_exp_end_date <- function(study_data, 
                               exp_len) {
     if(exp_len != 0 | is.na(exp_len))
@@ -127,11 +146,27 @@ calc_obs_start_date <- function(study_data,
                                obs_len,
                                obs_end_date) {
     if(study_type == "forward") {
-        wash_end_date <- study_data$WASH_START_DATE %m+% lubridate::years(wash_len)
+        obs_start_date <- study_data$WASH_START_DATE %m+% lubridate::years(wash_len)
     } else if(study_type == "backward") {
-        wash_end_date <- obs_end_date %m-% lubridate::years(obs_len)
+        obs_start_date <- calc_backward_obs_start_date(obs_end_date, obs_len)
     }
-    return(wash_end_date)
+    return(obs_start_date)
+}
+
+#' Calcualtes the start date of the observation period for a backward study setup
+#' 
+#' @inheritParams set_study_dates
+#' 
+#' @return A Date
+#' 
+#' @importFrom lubridate %m-%
+
+#' @export 
+#' 
+#' @author Kira E. Detrois
+calc_backward_obs_start_date <- function(obs_end_date, 
+                                         obs_len) {
+    obs_end_date %m-% lubridate::years(obs_len)
 }
 
 #' Calcualtes the end date of the exposure period for each individual
@@ -156,13 +191,34 @@ calc_wash_start_date <- function(study_data,
                               obs_len,
                               obs_end_date) {
     if(study_type == "forward") {
-        exp_end_date <- study_data$EXP_START_DATE %m+% lubridate::years(exp_len)
+        wash_start_date <- study_data$EXP_START_DATE %m+% lubridate::years(exp_len)
     } else if(study_type == "backward") {
-        exp_end_date <- obs_end_date %m-% lubridate::years(obs_len + wash_len)
+        wash_start_date <- calc_backward_wash_start_date(obs_end_date,
+                                                         wash_len,
+                                                         obs_len)
     }
 
-    return(exp_end_date)
+    return(wash_start_date)
 }
+
+
+#' Calcualtes the start date of the washout period for a backward study setup
+#' 
+#' @inheritParams set_study_dates
+#' 
+#' @return A Date
+#' 
+#' @importFrom lubridate %m-%
+
+#' @export 
+#' 
+#' @author Kira E. Detrois
+calc_backward_wash_start_date <- function(obs_end_date, 
+                                          wash_len,
+                                          obs_len) {
+    obs_end_date %m-% lubridate::years(obs_len + wash_len)
+}
+
 
 #' Calcualtes the end date of the exposure period for each individual
 #' 
@@ -174,7 +230,6 @@ calc_wash_start_date <- function(study_data,
 #' @return A vector of Dates. The end of the observation period for
 #' each individual.
 #' 
-#' @importFrom lubridate %m+%
 #' @importFrom lubridate %m+%
 #' 
 #' @export 
@@ -193,8 +248,29 @@ calc_exp_start_date <- function(study_data,
         if(!is.na(exp_age)) {
             exp_start_date <- study_data$DATE_OF_BIRTH
         } else {
-            exp_start_date <- obs_end_date %m-% lubridate::years(obs_len + wash_len + exp_len) 
+            exp_start_date <- calc_backward_exp_start_date(obs_end_date,
+                                                           exp_len,
+                                                           wash_len,
+                                                           obs_len)
         }
     }
     return(exp_start_date)
+}
+
+#' Calcualtes the end date of the exposure period for a backward study setup
+#' 
+#' @inheritParams set_study_dates
+#' 
+#' @return A Date
+#' 
+#' @importFrom lubridate %m-%
+
+#' @export 
+#' 
+#' @author Kira E. Detrois
+calc_backward_exp_start_date <- function(obs_end_date,
+                                         exp_len,
+                                         wash_len,
+                                         obs_len) {
+    obs_end_date %m-% lubridate::years(obs_len + wash_len + exp_len) 
 }
