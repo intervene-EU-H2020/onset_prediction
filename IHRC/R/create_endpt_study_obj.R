@@ -26,7 +26,7 @@ create_endpt_study_obj <- function(study_data,
                                    write_res=FALSE,
                                    res_dir=NA_character_) {
     if(!is.na(res_dir)) {
-        res_dir <- paste0(res_dir, study_type, "/logs/", get_preds_file_name(preds), "_logs/")
+        res_dir <- paste0(res_dir, "logs/", get_preds_file_name(preds), "_logs/")
     }
     if(study_type == "backward") {
         if(!is.null(exp_len)) {
