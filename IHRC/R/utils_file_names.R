@@ -10,10 +10,15 @@ get_down_dir <- function(down_fctr) {
 }
 
 #' Adds downsampling and filter information to results directory path
-get_full_res_path <- function(res_dir,
-                              down_fctr) {
-    paste0(res_dir, 
-           get_down_dir(down_fctr))
+get_full_res_path <- function(write_res,
+                              res_dir,
+                              down_fctr,
+                              study_type) {
+    if(write_res) {
+        res_dir <- paste0(res_dir, study_type, "/", get_down_dir(down_fctr))
+    } else {
+        res_dir <- NULL
+    }
 }
 
 #' Creats the file directory and name for the different result types
@@ -28,13 +33,7 @@ check_and_get_file_path <- function(ana_details,
     if(ana_details$write_res) {
         # Results type specific folder
         if(!("full_res_dir" %in% names(ana_details))) {
-            curnt_res_dir <- paste0(ana_details$res_dir,
-                                    paste0(ana_details$study_type, "/", res_type, "/"))
-            if(res_type == "HR") {
-                curnt_res_dir <- paste0(curnt_res_dir, 
-                                        get_preds_file_name(ana_details$preds), 
-                                        "/")
-            }
+            curnt_res_dir <- paste0(ana_details$res_dir, res_type, "/")
         } else {
             curnt_res_dir <- ana_details$full_res_dir
         }
@@ -82,8 +81,14 @@ get_file_name <- function(ana_details,
     file_name <- paste0(file_name, "_", paste0(ana_details$obs_age_range, collapse="_"))
     if(res_type == "HR") {
         file_name <- paste0(file_name,  "_", get_preds_file_name(ana_details$plot_preds))
+        if(!(length(ana_details$plot_preds) == length(ana_details$preds))) {
+            file_name <- paste0(file_name, "_p_", get_preds_file_name(setdiff(ana_details$preds, ana_details$plot_preds)))
+        }
     } else {
         file_name <- paste0(file_name,  "_", get_preds_file_name(ana_details$preds))
+    }
+    if(ana_details$res_descr != "") {
+        file_name <- paste0(file_name, "_", ana_details$res_descr)
     }
     return(file_name)
 }
@@ -99,7 +104,6 @@ get_preds_file_name <- function(preds) {
         preds <- preds[!stringr::str_detect(preds, "PC")]
         preds <- c(preds, "PCs")
     } 
-    preds <- preds[order(preds)]
     file_name <- paste0(preds, collapse="_")
     return(file_name)
 }
