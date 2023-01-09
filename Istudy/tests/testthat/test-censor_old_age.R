@@ -2,10 +2,10 @@ test_that("filter_old_age works", {
   set.seed(1923)
   test_df <- create_test_df(10)
   test_df$OBS_END_DATE <- as.Date("2019/01/01")
-  test_df$AGE_AT_END <- lubridate::time_length(test_df$DATE_OF_BIRTH %--% test_df$OBS_END_DATE, "years")
+  test_df$AGE_AT_BASE <- lubridate::time_length(test_df$DATE_OF_BIRTH %--% test_df$OBS_END_DATE, "years")
   censored <- filter_old_age(test_df, 70)
   expect_oe_age <- c(0.4, 38.1, 33.6, 63.4, 13.5, 66.9)
-  expect_equal(round(censored$AGE_AT_END, 1), expect_oe_age)
+  expect_equal(round(censored$AGE_AT_BASE, 1), expect_oe_age)
 })
 
 test_that("filter_young_age works", {

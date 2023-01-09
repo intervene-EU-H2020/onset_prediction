@@ -64,6 +64,6 @@ filter_young_age <- function(study_data,
 filter_old_age <- function(study_data,
                            max_obs_age) {
     study_data <- dplyr::filter(study_data, 
-                                AGE_AT_END <= max_obs_age)
+                                AGE_AT_BASE <= max_obs_age)
     return(study_data)
 }

@@ -8,7 +8,6 @@
 #'                   where the columns are the study endpoint and 
 #'                   date, which will differ depending on the input 
 #'                   variable `endpt`.
-#' @inheritParams adj_case_cntrl_status
 #' 
 #' @return The data.frame. For example for endpoint `J10_ASTHMA`, 
 #'             the data.frame will have updated column`J10_ASTHMA_DATE`.
