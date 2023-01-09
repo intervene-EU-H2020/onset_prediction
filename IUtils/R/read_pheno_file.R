@@ -23,7 +23,7 @@ read_pheno_file <- function(file_path,
         endpts <- get_endpts()
     }
     expect_cols <- c("ID", "SEX", "DATE_OF_BIRTH", paste0("PC", 1:10), "ANCESTRY", "START_OF_FOLLOWUP", "END_OF_FOLLOWUP", endpts, paste0(endpts, "_DATE"), "ISCED_2011")
-    #colnames(pheno_data) <- check_cols(expect_cols, colnames(pheno_data), file_path)
+    check_cols(expect_cols, colnames(pheno_data), file_path)
 
     return(pheno_data)
 }

@@ -34,6 +34,13 @@ calc_endpt_study_cidx <- function(surv_ana,
     return(c_idx)
 }
 
+#' Gets only those rows where all predictors are not NA
+#' 
+#' @inheritParams calc_endpt_study_cidx
+#' 
+#' @author Kira E. Detrois
+#' 
+#' @export 
 get_non_na_pred_rows <- function(surv_ana) {
     score_data <- surv_ana@elig_score_data
     for(pred in surv_ana@preds) {

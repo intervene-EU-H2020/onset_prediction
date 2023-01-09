@@ -22,7 +22,7 @@ read_icd_file <- function(file_path) {
         warning(paste0("Warning. ICD-file contained no entries. Given path: ", file_path))
     }
     expect_cols <- c("ID", "Event_age", "ICD_version", "primary_ICD")
-    #colnames(icd_data) <- check_cols(expect_cols, colnames(icd_data), file_path)
+    check_cols(expect_cols, colnames(icd_data), file_path)
 
     return(icd_data)
 }

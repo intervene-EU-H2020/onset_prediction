@@ -1,38 +1,26 @@
-#' Checks the column names of a file against the expected columns
+#' Check Column Names
 #' 
-#' Replaces the columns names and throws a warning for largely differing names.
+#' Checks if certain columns with specific names are present in a data frame, 
+#' and if they are not present, print a warning message indicating that the column is missing.
 #' 
 #' @param expect_cols A character (vector). The expected column names
-#' @param cols A character (vector). The received column name.
+#' @param cols A character (vector). The actual column name.
 #' @param file_path A character (vector). The file from which the column names come from.
 #' 
-#' @return The expected column names.
-#' 
+#' @return A modified vector of column names with the expected column names.
+#'  
 #' @export 
 #' 
 #' @author Kira E. Detrois
-check_cols <- function(expect_cols,
-                       cols,
+check_cols <- function(expect_cols, 
+                       cols, 
                        file_path) {
-    cols_letters <- unify_strs(cols)
-    for(expect_col in expect_cols) {
-        expect_col_letters <- unify_strs(expect_col)
-        detect_bin <- stringr::str_detect(cols_letters, paste0("(", expect_col_letters, ")"))
-        if(sum(detect_bin) == 0) {
-            warning(paste0("Warning. Column named ", expect_col, " is missing. Please change the file structure.\n Given file path: ", file_path))
-        }
-        cols[detect_bin] <- expect_col
-    }
-    return(cols)
-}
-
-#' Casts columns names to lower charachter and removes all special signs
-#' 
-#' @param str A character. The string to be cast
-#' 
-#' @export 
-#' 
-#' @author Kira E. Detrois
-unify_strs <- function(str) {
-    return(stringr::str_to_lower(stringr::str_replace_all(str, "[[:punct:]]", " ")))
+  # Check for exact match of expected column names
+  cols_regex <- paste0("(", paste0(cols, collapse=")|("), ")")
+  detect_bins <- stringr::str_detect(expect_cols, cols_regex)
+  # Print warning message for missing columns
+  missing_columns <- expect_cols[!detect_bins]
+  if(length(missing_columns) > 0) {
+    warning(paste0("Warning. Columns named: ", paste(missing_columns, collapse = ", "), " are missing. Please change the file: ", file_path))
+  }
 }

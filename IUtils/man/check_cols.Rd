@@ -2,22 +2,23 @@
 % Please edit documentation in R/check_cols.R
 \name{check_cols}
 \alias{check_cols}
-\title{Checks the column names of a file against the expected columns}
+\title{Check Column Names}
 \usage{
 check_cols(expect_cols, cols, file_path)
 }
 \arguments{
 \item{expect_cols}{A character (vector). The expected column names}
 
-\item{cols}{A character (vector). The received column name.}
+\item{cols}{A character (vector). The actual column name.}
 
 \item{file_path}{A character (vector). The file from which the column names come from.}
 }
 \value{
-The expected column names.
+A modified vector of column names with the expected column names.
 }
 \description{
-Replaces the columns names and throws a warning for largely differing names.
+Checks if certain columns with specific names are present in a data frame,
+and if they are not present, print a warning message indicating that the column is missing.
 }
 \author{
 Kira E. Detrois
