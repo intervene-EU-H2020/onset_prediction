@@ -32,7 +32,7 @@ get_elig_score_data  <- function(score_type,
     n_cases <- Istudy::get_n_cases(study_data, endpt)
     n_cntrls <- Istudy::get_n_cntrls(study_data, endpt)
     if(n_cases > min_indvs & n_cntrls > min_indvs) {
-        if(any(stringr::str_detect(score_type, "(CCI)|(PRS)|(EI)|(PheRS)"))) {
+        if(any(stringr::str_detect(score_type, "(CCI)|(PRS)|(EI)|(PheRS)|(MED)"))) {
             score_data <- preprocess_score_data(score_type=score_type, 
                                                 study_data=study_data,
                                                 icd_data=icd_data, 
@@ -41,7 +41,6 @@ get_elig_score_data  <- function(score_type,
                                                 phers_data=phers_data,
                                                 endpt=endpt)
             if(is.null(score_data)) {
-                print(paste0("Not all score types are in the data ", score_type))
                 return(NULL)
             }
             elig_score_data <- join_dfs(study_data=study_data,

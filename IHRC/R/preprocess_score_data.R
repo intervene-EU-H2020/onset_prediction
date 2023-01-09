@@ -47,13 +47,14 @@ preprocess_score_data <- function(score_type,
             score_data <- PheRS_data
         }
     }
-    if("MI" %in% score_type) {
-        MI_data <- get_study_mi_data(study_data, atc_data)
+    if("MED" %in% score_type) {
+        med_data <- get_study_med_data(study_data, atc_data)
         if(!is.null(score_data)) {
             score_data <- dplyr::left_join(score_data,
-                                           MI_data)
+                                           med_data,
+                                           by="ID")
         } else {
-            score_data <- MI_data
+            score_data <- med_data
         }
     }
 

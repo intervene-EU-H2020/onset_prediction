@@ -10,10 +10,10 @@
 #' @return A data.frame with columns `ID`, and `SCORE`.
 #' 
 #' @author Kira E. Detrois
-get_study_mi_data <- function(elig_indv,
-                              atc_data) {
-    mi_data <- ICCI::calc_mi(atc_data,
-                             exp_start=calc_exp_start_age(elig_indv),
-                             exp_end=calc_exp_end_age(elig_indv)) 
-    return(mi_data)
+get_study_med_data <- function(elig_indv,
+                               atc_data) {
+    med_data <- ICCI::calc_med(atc_data,
+                               exp_start=calc_exp_start_age(elig_indv),
+                               exp_end=calc_exp_end_age(elig_indv)) 
+    return(med_data)
 }

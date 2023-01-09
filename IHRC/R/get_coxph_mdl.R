@@ -48,7 +48,7 @@ scale_preds <- function(preds,
                         score_data) {
     for(pred in preds) {
         if(pred %in% colnames(score_data)) {
-            if(pred %in% c("PRS", "CCI", "EI", "YEAR_OF_BIRTH", "MI", "EDU", "PheRS")) {
+            if(pred %in% c("PRS", "CCI", "EI", "YEAR_OF_BIRTH", "MED", "EDU", "PheRS")) {
                 score_data[,pred] <- scale(score_data[,pred])
             } else if(pred %in% c("SEX", "ANCESTRY")) {
                 score_data <- dplyr::mutate_at(score_data, {{ pred }}, as.factor)
