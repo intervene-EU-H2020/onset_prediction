@@ -65,8 +65,6 @@ study <- methods::setClass("study",
 setMethod("initialize", "study", function(.Object, ...) {
     .Object <- callNextMethod()
     check_cols_exist(.Object@study_data, .Object@endpt, "initialize")
-    .Object@study_data <- apply_endpt_filter(.Object@study_data,
-                                             .Object@endpt)
     .Object@study_data <- dplyr::select(.Object@study_data,
                                         ID, 
                                         SEX, 
@@ -81,8 +79,8 @@ setMethod("initialize", "study", function(.Object, ...) {
                                         END_OF_FOLLOWUP,
                                         dplyr::starts_with("PC"),
                                         BATCH,
-                                        EDU)
-    .Object@study_data <- process_edu(.Object@study_data)
+                                        ISCED_2011)
+    .Object@study_data <- process_ISCED_2011(.Object@study_data)
     .Object@study_data <- set_study_dates(study_data=.Object@study_data,
                                     study_type=.Object@study_type,
                                     exp_age=.Object@exp_age,
@@ -96,32 +94,8 @@ setMethod("initialize", "study", function(.Object, ...) {
     return(.Object)
 })
 
-process_edu <- function(study_data) {
-    study_data$EDU <- as.integer(stringr::str_extract(study_data$EDU, "[0-9]"))
-    return(study_data)
-}
-
-#' Filters out cohorts that were used to train the 
-#' 
-#' @export 
-#' 
-#' @author Kira E. Detrois
-apply_endpt_filter <- function(study_data,
-                               endpt) {
-    if(endpt %in% c("I9_CHD", "I9_AF")) {
-        study_data <- dplyr::filter(study_data,
-                                     COHORT != "THL BIOBANK COROGENE")
-    } else if(endpt == "J10_ASTHMA") {
-        study_data <- dplyr::filter(study_data, 
-                                    !stringr::str_detect(COHORT, "FINRISK") &
-                                    COHORT != "THL BIOBANK HEALTH 2000")
-    } else if(endpt == "C3_COLORECTAL") {
-        study_data <- dplyr::filter(study_data,
-                                    !(CHIP %in% c("Illumina_Human670_Human610", "Illumina_Human610-Quadv1_B")))
-    } else if(endpt %in% c("ILD", "C3_BRONCHUS_LUNG")) {
-        study_data <- dplyr::filter(study_data,
-                                    !R3)
-    }
+process_ISCED_2011 <- function(study_data) {
+    study_data$ISCED_2011 <- as.integer(stringr::str_extract(study_data$ISCED_2011, "[0-9]"))
     return(study_data)
 }
 
