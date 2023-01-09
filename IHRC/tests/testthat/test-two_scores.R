@@ -55,18 +55,17 @@ test_that("PRS + CCI backwards works", {
                                                 n_icd10=50000, 
                                                 icd10_indv=pheno_data$ID)
     prs_data <- create_prs_test(length(pheno_data$ID), pheno_data$ID)
-    exp_ages <- c(20,30,40)
     expect_error(run_surv_studies(
                          pheno_data=pheno_data, 
                          icd_data=icd_data,
                          prs_data=prs_data,
-                         score_type=c("CCI", "PRS"),
+                         score_type=c("PRS", "CCI"),
                          study_type="backward",
                          endpts=c("J10_ASTHMA", 
                                   "I9_VTE",
                                   "C3_BREAST", 
                                   "COVHOSP"),
-                         exp_age=0,
+                         exp_len=10,
                          wash_len=2,
                          obs_len=8,
                          ancs=NA_character_,
@@ -90,7 +89,6 @@ test_that("PRS * CCI works", {
                                                 n_icd10=50000, 
                                                 icd10_indv=pheno_data$ID)
     prs_data <- create_prs_test(length(pheno_data$ID), pheno_data$ID)
-    exp_ages <- c(20,30,40)
     expect_error(run_surv_studies(
                          pheno_data=pheno_data, 
                          icd_data=icd_data,
@@ -110,12 +108,4 @@ test_that("PRS * CCI works", {
    } else {
       message("Could not run tests, because ICCI is not available.")
    }
-})
-
-
-test_that("plot_HR from file works", {
-  file_path <- "/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/no_downcoxph/backward/2021-01-01_o8_w2_e10_CCI_PRS_CCIiPRS_CCIiYOB_SEX_YOB_coxph.tsv"
-  ana_details$plot_preds<-c("CCI", "PRS", "CCI*PRS", "CCI*YEAR_OF_BIRTH")
-  plot_hrs(from_file=TRUE, file_path = file_path)
-  ana_details <- parse_file_path(file_path)
 })

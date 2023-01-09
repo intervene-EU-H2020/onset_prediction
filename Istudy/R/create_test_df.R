@@ -43,7 +43,7 @@ create_test_df <- function(n_indv=10) {
         J10_ASTHMA_DATE=asthma_samples$dates,
         PC1=0.2,
         PC2=0.01,
-        EDU=create_edu_data(n_indv),
+        ISCED_2011=create_ISCED_2011_data(n_indv),
         COHORT="TODO",
         CHIP="TODO",
         BATCH="TODO",
@@ -54,9 +54,9 @@ create_test_df <- function(n_indv=10) {
     return(study_data)
 }
 
-create_edu_data <- function(n_indv) {
-    edu_samples <- sample(c(16,19,23, 24, 26, 32), n_indv, replace=TRUE)
-    return(edu_samples)
+create_ISCED_2011_data <- function(n_indv) {
+    ISCED_2011_samples <- sample(c(16,19,23, 24, 26, 32), n_indv, replace=TRUE)
+    return(ISCED_2011_samples)
 }
 
 adjust_followup_time <- function(study_data) {
