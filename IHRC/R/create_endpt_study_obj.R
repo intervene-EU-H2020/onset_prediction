@@ -1,5 +1,10 @@
 #' Creates an S4 study object
 #' 
+#' This function creates a study object for a survival analysis, which includes 
+#' the data, endpoints, and other parameters needed to perform the analysis. 
+#' The study object can be passed to other functions to perform various 
+#' calculations and analyses.
+#' 
 #' @inheritParams run_surv_studies
 #' @inheritParams get_n_group_cases
 #' @param exp_age An integer. Age at which exposure period starts
@@ -25,16 +30,20 @@ create_endpt_study_obj <- function(study_data,
                                    obs_age_range=c(0,200),
                                    write_res=FALSE,
                                    res_dir=NA_character_) {
+
+    # Check if the study type is "backward" and set the exp_age and exp_len values accordingly
+    if (study_type == "backward") {
+        if (!is.null(exp_len)) {
+        exp_age <- NA_integer_
+        } else {
+        exp_len <- NA_integer_
+        }
+    }
+    # Set the results directory, if provided
     if(!is.na(res_dir)) {
         res_dir <- paste0(res_dir, "logs/", get_preds_file_name(preds), "_logs/")
     }
-    if(study_type == "backward") {
-        if(!is.null(exp_len)) {
-            exp_age <- NA_integer_
-        } else {
-            exp_len <- NA_integer_
-        }
-    }
+
     study <- methods::new("study",
                           study_data=study_data,
                           study_type=study_type,

@@ -2,9 +2,9 @@
 % Please edit documentation in R/get_coxph_mdl.R
 \name{get_coxph_mdl}
 \alias{get_coxph_mdl}
-\title{Fits the Cox-PH model for a survival analysis setup}
+\title{Fit a Cox Proportional Hazards Model}
 \usage{
-get_coxph_mdl(surv_ana, test_idxs = NULL)
+get_coxph_mdl(surv_ana)
 }
 \arguments{
 \item{test_idxs}{An integer (vector). The indices of the test data
@@ -15,6 +15,10 @@ is used for fitting.}
 A Cox-PH model object or \code{NULL} if the model couldn't be fit.
 }
 \description{
+This function fits a Cox Proportional Hazards Model for a
+given surivival analysis setup, using the \link[survival:coxph]{survival::coxph} function.
+}
+\details{
 For i.e. \code{endpt = "J10_ASTHMA"} and \code{covs = c("SEX", "YEAR_OF_BIRTH")}
 the model would be
 \code{Surv(J10_ASTHMA_AGE_DAYS, J10_ASTHMA) ~ PRS + SEX + YEAR_OF_BIRTH}.

@@ -2,17 +2,24 @@
 % Please edit documentation in R/calc_endpt_study_cidx.R
 \name{calc_endpt_study_cidx}
 \alias{calc_endpt_study_cidx}
-\title{Calcualtes the concordance index}
+\title{Calculate the c-index
+
+This function calculates the c-index, also known as the concordance index
+or Harrell's C, for a Cox-PH model fit to survival data. The c-index is a
+measure of the predictive accuracy of the model and ranges from 0 to 1,
+with higher values indicating better predictive accuracy.}
 \usage{
 calc_endpt_study_cidx(surv_ana, coxph_mdl = NULL)
 }
 \value{
-A tibble with columns \code{Endpoint}, \code{Score}, \code{Group},
-\code{N_controls}, \code{N_cases}, \code{beta}, \code{SE}, \code{p_val}, \code{HR},
-\code{CI_pos}, \code{CI_neg}. The Cox-PH analysis results for all
-selected endpoints.
+A numeric value representing the c-index for the survival analysis.
 }
 \description{
+The c-index is calculated using the \code{Hmisc::rcorr.cens} function. For more
+information on the elements of the output, see the documentation for
+\link[Hmisc:rcorr.cens]{Hmisc::rcorr.cens}.
+}
+\details{
 For i.e. a study with endpoint \code{J10_ASTHMA} and
 \code{covs = c("SEX", "YEAR_OF_BIRTH")} the model would be
 \code{Surv(J10_ASTHMA_AGE_DAYS, J10_ASTHMA) ~ SCORE + SEX + YEAR_OF_BIRTH}.

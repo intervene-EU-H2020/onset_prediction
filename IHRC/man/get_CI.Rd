@@ -2,20 +2,22 @@
 % Please edit documentation in R/extract_coxph_res.R
 \name{get_CI}
 \alias{get_CI}
-\title{95\% confidence interval given the ML estimator and SE}
+\title{Calculate 95\% Confidence Interval}
 \usage{
 get_CI(ML, SE)
 }
 \arguments{
-\item{ML}{maximum likelihood estimator of the parameter}
+\item{ML}{A numeric vector of estimates.}
 
-\item{SE}{standard error of the ML estimator}
+\item{SE}{A numeric vector of standard errors.}
 }
 \value{
-\code{c(neg, pos)} the upper and lower bounds of the CI.
+A list with two elements, \code{neg} (negative limits of the confidence interval) and
+\code{pos} (positive limits of the confidence interval).
 }
 \description{
-95\% confidence interval given the ML estimator and SE
+This function calculates the 95\% confidence interval for a set of
+estimates using the standard error of the estimates.
 }
 \author{
 Kira E. Detrois

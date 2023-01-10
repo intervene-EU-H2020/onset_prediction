@@ -1,3 +1,35 @@
+#' Get All Preds Sorted
+#' 
+#' Returns a sorted character vector of all predictors being used in the survival 
+#' analysis. Interaction predictors are sorted separately from non-interaction 
+#' predictors.
+#' 
+#' @inheritParams run_surv_studies
+#' 
+#' @return A character vector of all predictors being used in the survival analysis, 
+#' sorted by predictor name.
+#' 
+#' @export 
+#' 
+#' @author Kira E. Detrois
+get_all_preds_sorted <- function(score_type, 
+                                 covs) {
+    interact_preds <- score_type[stringr::str_detect(score_type, "[*]")]
+
+    if(length(interact_preds) > 0) {
+        non_interact_preds <- score_type[!stringr::str_detect(score_type, "[*]")]
+        non_interact_preds <- non_interact_preds[order(non_interact_preds)]
+        interact_preds <- interact_preds[order(interact_preds)]
+        score_type <- c(non_interact_preds, interact_preds)
+    } else {            
+        score_type <- score_type[order(score_type)]
+    }
+    covs <- covs[order(covs)]
+    all_preds <- c(score_type, covs)
+    return(all_preds)
+}
+
+
 #' Creates directory name for the downsampling factor
 #' 
 #' @inheritParams run_surv_studies

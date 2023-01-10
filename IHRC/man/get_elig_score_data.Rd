@@ -20,22 +20,20 @@ The data.frame with the score data for all eligible individuals
 under the study setup of the current survival analysis setup.
 }
 \description{
-Should be run before any analyis on the survival setup is run.
+This function returns a data frame of individuals that are eligible
+for the survival analysis.
 }
 \details{
-For \code{CCI} calculates the CCI score based on the ICD-data.
-Also, renames the score column to \code{SCORE} and filters out NAs.
-For the PRS data the score columsn have names in the
-form of \code{J10_ASTHMA_PRS}. The function renames the
-current PRS column of interest to \code{SCORE}. Then it
-filters out all NAs in the column. See function
-\code{\link{get_prs_endpt_scores}}.
+If score type includes \code{CCI}, \code{PRS}, \code{EI}, \code{PheRS}, or \code{MED}, it also
+calls \link{preprocess_score_data} to generate a data frame with the required
+score data, and then joins the resulting score data with the phenotypic data
+on the eligible individuals, using the function \link{join_dfs}.
 
-Joins the resulting score data with the phenotypic data
-on the eligible individuals.
+It filters the study data to include only endpoints with both
+cases and controls that have at least a minimum number of individuals.
 
-Checks wether there are enough individuals in the case
-and control groups. Otherwise returns an empty data.frame.
+Otherwise returns NULL. Also returns NULL if there is something wrong with
+the \code{score_data}.
 }
 \author{
 Kira E. Detrois

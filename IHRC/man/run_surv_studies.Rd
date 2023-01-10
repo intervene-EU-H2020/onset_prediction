@@ -13,7 +13,7 @@ run_surv_studies(
   phers_data = NULL,
   score_type,
   plot_preds = NULL,
-  study_type = "forward",
+  study_type = "backward",
   endpts = c("J10_ASTHMA"),
   exp_ages = 0,
   exp_len = NULL,
@@ -39,8 +39,9 @@ the columns are the study endpoint and date, which
 will differ depending on the chosen \code{endpts}.
 The phenotypic data on the individuals.}
 
-\item{score_type}{A character. The score type. At the moment the two
-options are \code{CCI}, and \code{PRS}.}
+\item{score_type}{A character. The score types used in the Cox-PH model.}
+
+\item{plot_preds}{A characte. The predictors to use when plotting HR.}
 
 \item{study_type}{A character. Can be either \code{forward} or \code{backward}.
 \code{forward} considers individuals of a certain age
@@ -105,7 +106,10 @@ i.e. \code{J10_ASTHMA_PRS} for endpoint \code{J10_ASTHMA}
 and score type \code{PRS}.}
 }
 \description{
-Calcualtes HR from a Cox-PH model for each exposure age and endpoint
+This function runs survival studies for a given endpoint and the ages
+at exposure. It fits a Cox proportional hazards model to the data and
+calculates the C-index. The results are written to two files: one for
+the hazard ratios and one for the C-index.
 }
 \author{
 Kira E. Detrois

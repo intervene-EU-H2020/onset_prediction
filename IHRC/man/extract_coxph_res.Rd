@@ -2,21 +2,32 @@
 % Please edit documentation in R/extract_coxph_res.R
 \name{extract_coxph_res}
 \alias{extract_coxph_res}
-\title{Extracts the relevant results from the Cox-PH model}
+\title{Extract relevant results from the Cox-PH model}
 \usage{
 extract_coxph_res(coxph_mdl, score_type)
 }
 \arguments{
 \item{coxph_mdl}{A Cox-PH model.}
 
-\item{score_type}{A character. The score type. At the moment the two
-options are \code{CCI}, and \code{PRS}.}
+\item{score_type}{A character. The score types used in the Cox-PH model.}
 }
 \value{
-A list(\code{beta}, \code{std_err}, \code{p_val}, \code{HR}, \code{CI}, \code{groups}).
+A list with elements
+\itemize{
+\item beta: Estimated regression coefficients
+\item std_err: Standard errors of the coefficients
+\item p_val: P-values of the coefficients
+\item HR: Hazard ratios
+\item CI_neg: Negative confidence interval limits for the hazard ratios
+\item CI_pos: Positive confidence interval limits for the hazard ratios
+\item groups: Groupings for the predictors
+\item preds: Predictor names
+}
 }
 \description{
-Extracts the relevant results from the Cox-PH model
+This function extracts the results of a Cox proportional hazards model
+fit and returns them in a list. If the model is NULL, an empty list is
+returned.
 }
 \author{
 Kira E. Detrois

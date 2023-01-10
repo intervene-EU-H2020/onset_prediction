@@ -1,23 +1,25 @@
-#' Gets the full score and phenotype data on the eligible individuals 
+#' Extract Eligibility Score Data 
 #' 
-#' Should be run before any analyis on the survival setup is run.
+#' Extract the score and phenotype data of eligible cases and controls for 
+#' the Cox-PH analysis of a given endpoint.
 #' 
-#' For `CCI` calculates the CCI score based on the ICD-data.
-#' Also, renames the score column to `SCORE` and filters out NAs.
-#' For the PRS data the score columsn have names in the
-#' form of `J10_ASTHMA_PRS`. The function renames the
-#' current PRS column of interest to `SCORE`. Then it
-#' filters out all NAs in the column. See function 
-#' \code{\link{get_prs_endpt_scores}}.
-#' 
-#' Joins the resulting score data with the phenotypic data
-#' on the eligible individuals.
-#' 
-#' Checks wether there are enough individuals in the case
-#' and control groups. Otherwise returns an empty data.frame. 
+#' If score type includes `CCI`, `PRS`, `EI`, `PheRS`, or `MED`, it also 
+#' calls [IHRC::preprocess_score_data] to generate a data frame with the required 
+#' score data, and then joins the resulting score data with the phenotypic data
+#' on the eligible individuals, using the function [IHRC::join_dfs].
 #'  
+#' It filters the study data to include only endpoints with both
+#' cases and controls that have at least a minimum number of individuals. 
+#' 
+#' 
 #' @return The data.frame with the score data for all eligible individuals
 #'          under the study setup of the current survival analysis setup.
+#'          Otherwise returns NULL. Also returns NULL if there is something 
+#'          wrong with the `score_data`.
+#' 
+#' @examples
+#' get_elig_score_data("CCI", pheno_data, icd_data, endpt="J10_ASTHMA")
+#' 
 #' @export 
 #' 
 #' @author Kira E. Detrois
@@ -29,10 +31,14 @@ get_elig_score_data  <- function(score_type,
                                  phers_data=NULL,
                                  endpt=NULL,
                                  min_indvs=5) {
+
     n_cases <- Istudy::get_n_cases(study_data, endpt)
     n_cntrls <- Istudy::get_n_cntrls(study_data, endpt)
+
+    # Minimum number of indvs for both case and controls available
     if(n_cases > min_indvs & n_cntrls > min_indvs) {
-        if(any(stringr::str_detect(score_type, "(CCI)|(PRS)|(EI)|(PheRS)|(MED)"))) {
+        # Need to preprocess score data for these score types
+        if(any(stringr::str_detect(score_type, "(CCI)|(PRS)|(EI)|(PheRS)|(MED)|(EDU)"))) {
             score_data <- preprocess_score_data(score_type=score_type, 
                                                 study_data=study_data,
                                                 icd_data=icd_data, 
@@ -41,17 +47,21 @@ get_elig_score_data  <- function(score_type,
                                                 phers_data=phers_data,
                                                 endpt=endpt)
             if(is.null(score_data)) {
-                return(NULL)
+                elig_score_data <- NULL
+            # Joining score data with phenotypic data
+            } else {
+                elig_score_data <- join_dfs(study_data=study_data,
+                                            score_data=score_data,
+                                            score_type=score_type,
+                                            endpt=endpt)
             }
-            elig_score_data <- join_dfs(study_data=study_data,
-                                        score_data=score_data,
-                                        score_type=score_type,
-                                        endpt=endpt)
+        # Otherwise only using the phenotypic data
         } else {
             elig_score_data <- study_data
         }
-        return(elig_score_data)
     } else {
-        return(tibble::tibble())
+        elig_score_data <- NULL
     }
+    
+    return(elig_score_data)
 }

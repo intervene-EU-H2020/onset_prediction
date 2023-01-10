@@ -73,7 +73,10 @@ log to.}
 An S4 study object.
 }
 \description{
-Creates an S4 study object
+This function creates a study object for a survival analysis, which includes
+the data, endpoints, and other parameters needed to perform the analysis.
+The study object can be passed to other functions to perform various
+calculations and analyses.
 }
 \author{
 Kira E. Detrois

@@ -1,0 +1,40 @@
+#' Maps ISCED 2011 codes to age modes
+#' 
+#' Maps the ISCED 2011 standard codes to the age modes better suited for the 
+#' downstream analysis by joining with a provided mapping data and renaming 
+#' the variable. Returns a single variable data frame with ID and the mapped 
+#' education level average ages.
+#' 
+#' The average ages are based on FinnGen R10. For more details see:
+#' `/finngen/red/detrois/scoio_processed/` in the SES Sandbox.
+#'
+#' @param study_data A tibble containing a column `ISCED_2011` 
+#' 
+#' @return A tibble containing columns `ID` and `EDU`
+#' 
+#' @references The International Standard Classification of Education (ISCED) 2011 
+#'              is a framework developed by UNESCO for classifying and comparing education 
+#'              levels and programmes. For more information see: 
+#'              https://uis.unesco.org/en/topic/international-standard-classification-education-isced
+#' @examples
+#' 
+#' study_data <- tibble(ID = 1:7, ISCED_2011 = c("1", "2", "3", "4", "5", "6", "7"))
+#' get_study_edu_data(study_data)
+#' 
+#' @param study_data A data frame containing columns `ID` and `ISCED_2011`
+#' @export
+get_study_edu_data <- function(study_data) {
+    # Read in ISCED 2011 mapping
+    file_path <- system.file("data", "finngen_age_modes.tsv", package = "IHRC")
+    isced_map <- vroom::vroom(file_path, delim="\t")
+
+    # Add age mode based on Finngen R10 to the data
+    edu_data <- dplyr::left_join(study_data, 
+                                 isced_map,
+                                 by="ISCED_2011")
+    edu_data <- dplyr::rename(edu_data, EDU=FIN_AGE_MODE) %>% 
+                    dplyr::select(ID, EDU)
+    print(edu_data)
+
+    return(edu_data)
+}

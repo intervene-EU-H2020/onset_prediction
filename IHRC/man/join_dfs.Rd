@@ -11,8 +11,7 @@ join_dfs(study_data, score_data, score_type = "CCI", endpt = NULL)
 i.e. \code{J10_ASTHMA_PRS} for endpoint \code{J10_ASTHMA}
 and score type \code{PRS}.}
 
-\item{score_type}{A character. The score type. At the moment the two
-options are \code{CCI}, and \code{PRS}.}
+\item{score_type}{A character. The score types used in the Cox-PH model.}
 
 \item{endpt}{A character. The column name of the current endpoint
 of interest.}

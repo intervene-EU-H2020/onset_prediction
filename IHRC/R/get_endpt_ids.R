@@ -1,18 +1,22 @@
-#' Gets the individuals that are part of each study
+#' Gets the individuals for a given endpoint study
 #' 
 #' This is mostly relevant for FinnGen where we have some overalp for 
 #' the PRS studies and training and testing sets. However, it could
 #' also be relevant for the training and testing of the PheRS.
 #' 
-#' @param endpt_indvs_mat A data.frame. Contains at least column `ID`,
-#'                          and the current endpt. The endpoint column
-#'                          has either 1 or 0, depending on whether
-#'                          the individual is part of the study for
-#'                          this endpoint.
-#' @inheritParams run_surv_studies
-#' @param all_ids A character (vector). The ids of all individuals.
+#' @param endpt_indvs_mat A dataframe. Contains a column of individual 
+#'                        IDs and a binary column for each endpoint.
+#' @param endpt A character. The endpoint of interest, 
+#'                must match a column name in `endpt_indvs_mat`
+#' @param all_ids A character (vector). The IDs of all individuals.
+#' 
+#' @examples
+#' endpt_indvs_mat <- data.frame(ID = c(1, 2, 3), J10_ASTHMA = c(1, 0, 1))
+#' get_endpt_ids(endpt_indvs_mat, "J10_ASTHMA", c(1, 2, 3))
 #' 
 #' @export 
+#' 
+#' @author Kira E. Detrois
 get_endpt_ids <- function(endpt_indvs_mat,
                           endpt,
                           all_ids) {

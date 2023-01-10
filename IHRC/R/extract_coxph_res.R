@@ -1,9 +1,23 @@
-#' Extracts the relevant results from the Cox-PH model
+#' Extract relevant results from the Cox-PH model
+#' 
+#' This function extracts the results of a Cox proportional hazards model 
+#' fit and returns them in a list. If the model is NULL, an empty list is 
+#' returned.
 #' 
 #' @inheritParams add_coxph_res_row
 #' @inheritParams run_surv_studies
 #' 
-#' @return A list(`beta`, `std_err`, `p_val`, `HR`, `CI`, `groups`).
+#' @return A list with elements 
+#' \itemize{
+#' \item beta: Estimated regression coefficients
+#' \item std_err: Standard errors of the coefficients
+#' \item p_val: P-values of the coefficients
+#' \item HR: Hazard ratios
+#' \item CI_neg: Negative confidence interval limits for the hazard ratios
+#' \item CI_pos: Positive confidence interval limits for the hazard ratios
+#' \item groups: Groupings for the predictors
+#' \item preds: Predictor names
+#' }
 #' 
 #' @export 
 #' 
@@ -24,12 +38,18 @@ extract_coxph_res <- function(coxph_mdl,
     }
 }
 
-#' 95% confidence interval given the ML estimator and SE
+#' Calculate 95% Confidence Interval
+#'
+#' This function calculates the 95% confidence interval for a set of 
+#' estimates using the standard error of the estimates.
+#'
+#' @param ML A numeric vector of estimates.
+#' @param SE A numeric vector of standard errors.
+#' @return A list with two elements, `neg` (negative limits of the confidence interval) and 
+#' `pos` (positive limits of the confidence interval).
 #' 
-#' @param ML maximum likelihood estimator of the parameter
-#' @param SE standard error of the ML estimator
+#' @export 
 #' 
-#' @return `c(neg, pos)` the upper and lower bounds of the CI.
 #' @author Kira E. Detrois
 get_CI <- function(ML, SE) {
     CIneg <- ML-1.96*SE

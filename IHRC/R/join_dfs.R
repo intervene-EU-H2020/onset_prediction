@@ -1,13 +1,15 @@
-#' Joins the two data.frames 
+#' Joins the phenotypic and score data
 #' 
-#' Joins the two data.frames and removes any individuals without
-#' a score available.
+#' Joins the dataframes `study_data`, and `score_data` using
+#' the ID variable.
+#' 
+#' Sets missing values for the `CCI`, or `EI` to 0.
 #' 
 #' @inheritParams run_surv_studies
 #' @inheritParams get_n_group_cases
 #' 
-#' @return The joined data.frame
-#' 
+#' @return A dataframe containing the merged study and score data.
+#'  
 #' @export 
 #' 
 #' @author Kira E. Detrois

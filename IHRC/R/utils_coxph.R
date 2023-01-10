@@ -20,6 +20,28 @@ make_covs_fctrs <- function(elig_score_data,
     return(elig_score_data)
 }
 
+#' Scales the given variables in the score data
+#'
+#' @param preds A character vector of the variables to be scaled
+#' @param score_data A data frame with the variables to be scaled
+#'
+#' @return A data frame with the scaled variables
+#'
+#' @export
+scale_preds <- function(preds,
+                        score_data) {
+    for(pred in preds) {
+        if(pred %in% colnames(score_data)) {
+            if(pred %in% c("PRS", "CCI", "EI", "YEAR_OF_BIRTH", "MED", "EDU", "PheRS")) {
+                score_data[,pred] <- scale(score_data[,pred])
+            } else if(pred %in% c("SEX", "ANCESTRY")) {
+                score_data <- dplyr::mutate_at(score_data, {{ pred }}, as.factor)
+            }
+        }
+    }
+    return(score_data)
+}
+
 #' Creates the forumla string for the Cox-PH model
 #' 
 #' @inheritParams get_coxph_mdl

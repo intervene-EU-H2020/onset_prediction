@@ -1,38 +1,22 @@
 #' An S4 class representing the survival analysis
 #' 
-#' @slot pheno_data A data.frame with at least the columns: 
-#'                   `ID`, the columns specified in `covs` and 
-#'                   i.e. `J10_ASTHMA`, and `J10_ASTHMA_AGE_DAYS` where 
-#'                   the columns are the study endpoint and date, which 
-#'                   will differ depending on the chosen `endpts`.
-#'                   The phenotypic data on the individuals.
-#' @slot elig_indv A data.frame with all eligible individuals under the
-#'                  chosen study setup. This will be created when
-#'                  the object is initialized based on the rest of
-#'                  the data.
-#' @slot elig_score_data A data.frame with all eligible individuals under 
-#'                  the chosen study setup and their scores. This will be 
-#'                  created when the object is initialized based on the 
-#'                  rest of the data.
-#' @slot score_type A character. The score type. At the moment the two
-#'                      options are `CCI`, and `PRS`.
-#' @slot obs_age_range A numeric. The age range of individuals in the observation
-#'                                 period. Inclusive interval. 
 #' @slot study A S4 study object. The current study setups for on whicht
 #'              the eligible indiviuals are selected.
-#' @slot covs A vector of characters. The column names of the covariates 
-#'              to add to the predictor of the Cox-PH model.
-#' @slot bin_cut A numeric. The binary cutoff value for classifying high
-#'                  and low score individuals. Currently only in use if
-#'                  the `score_type == CCI`.
+#' @slot elig_score_data A dataframe with the phenotypic and score data
+#'                          of all eligible individuals under 
+#'                          the current study setup and their scores. 
 #' @slot min_indvs An integer. The minimum number of individuals each 
-#'                  group in the analyses needs to have. This is important 
-#'                  for being able to export data from the FinnGen Sanbdox.
-
+#'                  group in the analyses needs to have. 
+#' @slot preds A character (vector). The names of the covariates 
+#'              to use in the Cox-PH model.
+#' @slot plot_preds A character (vector). 
+#'                      The predictors to use when plotting the HRs.
+#' @slot res_descr A character. An additional descriptive that can be 
+#'                  used for distinguishing the results files. 
 #' @slot write_res A boolean. Defines whether to save the results to 
-#'                             files.
+#'                             files. Default: FALSE.
 #' @slot res_dir A character. The directory to write the results and
-#'                             log to.
+#'                             logs to. Default: NA.
 #' 
 #' @importFrom methods new
 #' @export
@@ -44,7 +28,6 @@ surv_ana <- methods::setClass("surv_ana",
                            min_indvs="numeric",
                            preds="character",
                            plot_preds="character",
-                           bin_cut="numeric",
                            res_descr="character",
                            write_res="logical",
                            res_dir="character"),
@@ -52,7 +35,6 @@ surv_ana <- methods::setClass("surv_ana",
                                min_indvs=5,
                                preds=c("SEX", "YEAR_OF_BIRTH"),
                                plot_preds=NA_character_,
-                               bin_cut=1,
                                res_descr="",
                                write_res=FALSE,
                                res_dir=NA_character_))

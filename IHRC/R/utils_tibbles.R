@@ -1,7 +1,20 @@
-#' Creates an empty tibble for the Cox-PH HR results
+#' Creates an empty tibble for endpoints hazard ratios
 #' 
-#' @return An empty tibble with all relevant columns for the final 
-#'            results.
+#' @return An empty tibble with the following columns:
+#' \itemize{
+#'   \item ENDPOINT: endpoint name
+#'   \item EXP_AGE: exposure age
+#'   \item VAR: predictor variable
+#'   \item GROUP: group
+#'   \item N_CONTROLS: number of controls
+#'   \item N_CASES: number of cases
+#'   \item BETA: beta coefficient
+#'   \item SE: standard error
+#'   \item P_VAL: p-value
+#'   \item HR: hazard ratio
+#'   \item CI_NEG: negative bound of the 95% confidence interval
+#'   \item CI_POS: positive bound of the 95% confidence interval
+#' }
 #' 
 #' @export 
 #' 
@@ -21,10 +34,22 @@ create_empty_endpt_hrs_tib <- function() {
                    CI_POS=numeric())
 }
 
-#' Creates an empty tibble for the C-index results
+#' Creates an empty tibble for the c-index results
 #' 
-#' @return An empty tibble with all relevant columns for the final 
-#'            results.
+#' @return An empty tibble with the following columns:
+#' \itemize{
+#'   \item ENDPOINT: endpoint name
+#'   \item EXP_AGE: exposure age
+#'   \item SURV_MODEL: a character describing the the survival model
+#'   \item N_CASES: a numeric column for the number of cases
+#'   \item N_CONTROLS: a numeric column for the number of controls
+#'   \item C_IDX: a numeric column for the c-index
+#'   \item SE: a numeric column for the standard error of the c-index
+#'   \item C_IDX_CI_NEG: a numeric column for the lower bound of the 
+#'                          c-index's confidence interval
+#'   \item C_IDX_CI_POS: a numeric column for the upper bound of the 
+#'                         c-index's confidence interval
+#' }
 #' 
 #' @export 
 #' 
@@ -45,11 +70,16 @@ create_empty_cidx_tib <- function() {
 
 #' Adds a row to the Cox-PH HR results tibble
 #' 
-#' @param endpt_hrs_tib A tibble with the results for previous endpts.
-#' @param coxph_mdl A Cox-PH model. 
+#' @param endpt_hrs_tib A tibble with the results for previous endpts, 
+#'                        with columns: `ENDPOINT`, `EXP_AGE`, `VAR`, 
+#'                        `GROUP`, `N_CONTROLS`, `N_CASES`, `BETA`, 
+#'                        `SE`, `P_VAL`, `HR`, `CI_NEG`, `CI_POS`
+#' @inheritParams plot_hrs 
 #' 
-#' @return A tibble. The updated `endpt_hrs_tib` with the added results for
-#'          the current endpoint.
+#' @return A tibble. The updated `endpt_hrs_tib` with the added row for
+#'          the HRs of the current endpoint.
+#' 
+#' @export 
 #'                        
 #' @author Kira E. Detrois 
 add_coxph_res_row <- function(endpt_hrs_tib,
