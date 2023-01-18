@@ -6,8 +6,7 @@
 #' different endpoints.
 #' 
 #' It then filters out any missing HRs and filters the coxph_hrs tibble 
-#' to only include the variables that are specified in the 
-#' ana_details$plot_preds.
+#' to only include the variables that are specified in the `plot_preds`
 #'  
 #' @param coxph_hrs A tibble. The Cox-PH HR results. Needs
 #'                      to at least contain the columns `ENDPOINT`,
@@ -19,8 +18,6 @@
 #'                   See function [IHRC::get_ana_details_from_surv_ana]. 
 #' @param sort_hrs A logical. Should the HRs be sorted for the backward 
 #'                            study plot. Default: FALSE.
-#' @param fig_height A numeric. The height of the plot.
-#' @param fig_width A numeric. The width of the plot.
 #'  
 #' @return A ggplot object with the HRs.
 #' @export 
@@ -29,31 +26,23 @@
 #' 
 #' @author Kira E. Detrois
 plot_hrs <- function(coxph_hrs=NULL,
-                     surv_ana=NULL,
-                     from_file=FALSE,
-                     ana_details,
-                     sort_hrs=FALSE,
-                     fig_height=NULL,
-                     fig_width=NULL) {
-    if(!from_file) {
-        ana_details <- get_ana_details_from_surv_ana(surv_ana)
-    } 
+                     study,
+                     surv_ana) {
     coxph_hrs <- filter_out_missing_hrs(coxph_hrs)
     # filter out variables that are not in the plot_preds list
     coxph_hrs <- filter_plot_preds_fctr(coxph_hrs,
-                                        ana_details$plot_preds)
-    curnt_coxph_hrs <- dplyr::filter(coxph_hrs, GROUP == "no groups")
+                                        surv_ana@plot_preds)
+    crnt_coxph_hrs <- dplyr::filter(coxph_hrs, GROUP == "no groups")
 
-    if(nrow(curnt_coxph_hrs) > 0) {
-        if(ana_details$study_type == "forward") {
-            plt <- plot_age_sd_hrs(curnt_coxph_hrs, 
-                                   ana_details)
+    if(nrow(crnt_coxph_hrs) > 0) {
+        if(study@study_setup@study_type == "forward") {
+            plt <- plot_age_sd_hrs(coxph_hrs=crnt_coxph_hrs, 
+                                   study=study,
+                                   surv_ana=surv_ana)
         } else {
-            plt <- plot_endpt_sd_hr(coxph_hrs=curnt_coxph_hrs, 
-                                    ana_details=ana_details,
-                                    sort_hrs=sort_hrs,
-                                    fig_height=fig_height,
-                                    fig_width=fig_width)
+            plt <- plot_endpt_sd_hr(coxph_hrs=crnt_coxph_hrs, 
+                                    study=study,
+                                    surv_ana=surv_ana)
             return(plt)
         }
     }
@@ -69,22 +58,23 @@ plot_hrs <- function(coxph_hrs=NULL,
 #' 
 #' @author Kira E. Detrois
 plot_endpt_sd_hr <- function(coxph_hrs,
-                             ana_details,
-                             sort_hrs,
-                             fig_height,
-                             fig_width) {
+                             study,
+                             surv_ana) {
 
     plt <- get_endpt_sd_hr_ggplot(coxph_hrs=coxph_hrs,
-                                  ana_details=ana_details,
-                                  sort_hrs=sort_hrs)
+                                  study_setup=study@study_setup,
+                                  preds=surv_ana@preds)
     # Saving resulting plot to file
-    if(ana_details$write_res) {
-        file_path <- check_and_get_file_path(ana_details, res_type="HR")
+    if(surv_ana@write_res) {
+        file_path <- check_and_get_file_path(res_type="HR",
+                                             study_setup=study@study_setup,
+                                             endpt=study@endpt,
+                                             surv_ana=surv_ana)
 
         save_plt(file_path=file_path,
                  plt=plt,
-                 width=ifelse(!is.null(fig_width), fig_width, 14),
-                 height=ifelse(!is.null(fig_height), fig_height, get_endpt_fig_height(coxph_hrs$VAR)))
+                 width=14,
+                 height=get_endpt_fig_height(coxph_hrs$VAR))
     }
     return(plt)
 }
@@ -100,7 +90,8 @@ plot_endpt_sd_hr <- function(coxph_hrs,
 #' 
 #' @author Kira E. Detrois
 plot_age_sd_hrs <- function(coxph_hrs,
-                            ana_details) {
+                            study,
+                            surv_ana) {
     # Want all plots created for the same setup to have same axis limits
     max_y <- min(max(c(2, round(coxph_hrs$CI_POS+0.5)), na.rm=TRUE), 10)
     min_y <- min(c(0, round(coxph_hrs$CI_NEG-0.5)), na.rm=TRUE)
@@ -111,16 +102,21 @@ plot_age_sd_hrs <- function(coxph_hrs,
         # Getting current endpoint HR data
         endpt_coxph_hrs <- dplyr::filter(coxph_hrs, 
                                          ENDPOINT == endpt)
-        ana_details$endpt <- endpt
+        study@endpt <- endpt
         # Plotting
         if(nrow(endpt_coxph_hrs) > 0) {
             plt <- get_age_sd_hr_ggplot(coxph_hrs=endpt_coxph_hrs,
-                                        ana_details=ana_details,
+                                        study_setup=study@study_setup,
+                                        preds=surv_ana@preds,
+                                        endpt=study@endpt,
                                         min_y=min_y,
                                         max_y=max_y)
             # Saving resulting plot to file
-            if(ana_details$write_res) {
-                file_path <- check_and_get_file_path(ana_details, res_type="HR")
+            if(surv_ana@write_res) {
+                file_path <- check_and_get_file_path(res_type="HR", 
+                                                     study_setup=study_setup,
+                                                     endpt=endpt, 
+                                                     surv_ana=surv_ana)
                 save_plt(file_path=file_path,
                          plt=plt,
                          width=7,

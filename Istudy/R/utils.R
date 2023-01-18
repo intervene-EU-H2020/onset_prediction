@@ -77,3 +77,42 @@ get_n_cntrls <- function(study_data,
     sum(study_data[[endpt]] == 0, na.rm=TRUE)
 }
 
+#' Creates a file name for the current study setup
+#' 
+#' @param study An S4 study object. The current study setup.
+#' 
+#' @export 
+#' 
+#' @author Kira E. Detrois
+get_study_file_name <- function(study) {
+    if(study@study_setup@study_type == "forward") {
+        file_name <- paste0(study@endpt, "_a", study@study_setup@exp_age)
+    } else {
+        file_name <- paste0(study@endpt, "_", study@study_setup@obs_end_date)
+    }
+    file_name <- paste0(file_name, "_", get_ewo_file_name(study@study_setup@study_type,
+                                                          study@study_setup@exp_len,
+                                                          study@study_setup@wash_len,
+                                                          study@study_setup@obs_len))
+    return(file_name)
+}   
+
+#' Creates file name describing the exposure, wash, and observation period.
+#' 
+#' @inheritParams set_study_dates
+#' 
+#' @export 
+#' 
+#' @author Kira E. Detrois
+get_ewo_file_name <- function(study_type,
+                              exp_len,
+                              wash_len,
+                              obs_len) {
+    if(study_type == "forward") {
+        file_name <- paste0("e", exp_len, "_w", wash_len, "_o", obs_len)
+    } else {
+        file_name <- paste0("o", obs_len, "_w", wash_len, "_e", exp_len)
+    }
+    return(file_name)
+}
+

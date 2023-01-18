@@ -21,7 +21,6 @@ downsample_cntrls <- function(study_data,
     if(!is.na(down_fctr)) {
         n_cases <- get_n_cases(study_data, endpt)
         n_cntrls <- down_fctr*n_cases 
-
         cntrl_idxs <- which(study_data[[endpt]] == 0)
         case_idxs <- which(study_data[[endpt]] == 1)
 

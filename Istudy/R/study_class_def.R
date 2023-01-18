@@ -7,9 +7,6 @@
 #'                  `backward` considers all individuals at a set time
 #'                  point. The observation and washout period are calcualted 
 #'                  backwards from this time point.
-#' @slot study_data A tibble. The data on all study individuals.
-#' @slot endpt A character. The column name of the current endpoint of 
-#'             interest. 
 #' @slot exp_age An integer. Age at which exposure period starts 
 #'              (in years).
 #' @slot exp_len An integer. Length of the exposure period (in years).
@@ -23,8 +20,6 @@
 #' @slot ancs A character (vector). The ancestries to consider.
 #' @slot obs_age_range A numeric. The age range of individuals in the observation
 #'                                 period. Inclusive interval. 
-#' @slot write_res A boolean. Whether to write log files.
-#' @slot res_dir A character. The path to the results directory.
 #' 
 #' @importFrom methods new
 #' @importFrom lubridate %--%
@@ -32,10 +27,8 @@
 #' @export
 #' 
 #' @author Kira E. Detrois
-study <- methods::setClass("study", 
+study_setup <- methods::setClass("study_setup", 
                            slots=list(study_type="character",
-                                      study_data="data.frame",
-                                      endpt="character",
                                       exp_age="numeric",
                                       exp_len="numeric",
                                       wash_len="numeric",
@@ -44,11 +37,8 @@ study <- methods::setClass("study",
                                       down_fctr="numeric",
                                       exp_f1998="logical",
                                       ancs="character",
-                                      obs_age_range="numeric",
-                                      write_res="logical",
-                                      res_dir="character"),
+                                      obs_age_range="numeric"),
                            prototype=list(study_type="forward",
-                                          endpt=NA_character_,
                                           exp_age=NA_integer_,
                                           exp_len=NA_integer_,
                                           wash_len=NA_integer_,
@@ -57,37 +47,54 @@ study <- methods::setClass("study",
                                           down_fctr=NA_real_,
                                           exp_f1998=TRUE,
                                           ancs=NA_character_,
-                                          obs_age_range=c(0,200),
-                                          write_res=FALSE,
-                                          res_dir=NA_character_))
+                                          obs_age_range=c(0,200)))
+
 #' @importFrom methods callNextMethod
+setMethod("initialize", "study_setup", function(.Object, ...) {
+    # Check if the study type is "backward" and set the exp_age and exp_len values accordingly
+    if (.Object@study_type == "backward") {
+        if (!all(is.na(.Object@exp_len))) {
+            .Object@exp_age <- NA_integer_
+        } else {
+            print("Warning: Carefuly the exposure length was not set. ")
+            .Object@exp_len <- NA_integer_
+        }
+    }
+    .Object <- callNextMethod()
+})
+
+#' An S4 class representing the study setup
+#' 
+#' @slot study_type A character. Can be either `forward` or `backward`. 
+#'                  `forward` considers individuals of a certain age.
+#'                  It calculates the exposure, washout, and observation 
+#'                  period onwards from this age.
+#'                  `backward` considers all individuals at a set time
+#'                  point. The observation and washout period are calcualted 
+#'                  backwards from this time point.
+#' @slot study_data A tibble. The data on all study individuals.
+#' @slot endpt A character. The column name of the current endpoint of 
+#'             interest. 
+#' @importFrom methods new
 #' @importFrom lubridate %--%
+#' 
+#' @export
+#' 
+#' @author Kira E. Detrois
+study <- methods::setClass("study", 
+                           representation(study_setup="study_setup",
+                                          study_data="data.frame",
+                                          endpt="character"),
+                           contains="study_setup")
+
+
+#' @importFrom methods callNextMethod
 setMethod("initialize", "study", function(.Object, ...) {
     .Object <- callNextMethod()
     check_cols_exist(.Object@study_data, .Object@endpt, "initialize")
-    .Object@study_data <- dplyr::select(.Object@study_data,
-                                        ID, 
-                                        SEX, 
-                                        DATE_OF_BIRTH, 
-                                        ANCESTRY, 
-                                        # Otherwise dplyr will throw error. 
-                                        # test_endpt_input_correct already 
-                                        # checks that this is only a single 
-                                        # string and not a vector.
-                                        .Object@endpt,  
-                                        paste0(.Object@endpt, "_DATE"),
-                                        END_OF_FOLLOWUP,
-                                        dplyr::starts_with("PC"),
-                                        BATCH,
-                                        ISCED_2011)
     .Object@study_data <- process_ISCED_2011(.Object@study_data)
     .Object@study_data <- set_study_dates(study_data=.Object@study_data,
-                                    study_type=.Object@study_type,
-                                    exp_age=.Object@exp_age,
-                                    exp_len=.Object@exp_len,
-                                    wash_len=.Object@wash_len,
-                                    obs_len=.Object@obs_len,
-                                    obs_end_date=.Object@obs_end_date)
+                                          study_setup=.Object@study_setup)
     .Object@study_data <- add_age_obs_cols(study_data=.Object@study_data)
     .Object@study_data <- get_study_elig_indv(study=.Object)
 
@@ -99,15 +106,14 @@ process_ISCED_2011 <- function(study_data) {
     return(study_data)
 }
 
-setValidity("study", function(object) {
+setValidity("study_setup", function(object) {
     msg <- ""
     msg <- test_integer_correct(msg, object@wash_len, "wash_len", TRUE)
     msg <- test_integer_correct(msg, object@obs_len, "obs_len", TRUE)
     msg <- test_integer_correct(msg, object@down_fctr, "down_fctr")
-    msg <- test_endpt_input_correct(msg, object@endpt)
     msg <- ifelse(!object@study_type %in% c("backward", "forward"),
-                  paste0(object@study_type, " is not a valid study type. Can be either `backward`, or `forward`"),
-                  ""
+        paste0(object@study_type, " is not a valid study type. Can be either `backward`, or `forward`"),
+        ""
     )
     if(msg != "") {
         return(msg)
@@ -130,36 +136,50 @@ test_integer_correct <- function(msg, var, var_name, not_na=FALSE) {
     }
     return(msg)
 }
-
-test_endpt_input_correct <- function(msg, endpt) {
-    if(!(length(endpt) == 1)) {
-        msg <- paste0(msg, "The variable endpt needs to be a character string and not a vector of characters.")
-    } else if(is.na(endpt)) {
-        msg <- paste0(msg, "Endpoint needs to be provided for a valid study setup.")
-    }   
-     
-    return(msg)
-}
-
 #' Sets `endpt` of the S4 study object to a new value
 #' 
-#' @param theObject The S4 study object.
+#' @param .Object The S4 study object.
 #' @param endpt A character. The new endpoint.
 setGeneric(name="setEndpt",
-           def=function(theObject, endpt) { standardGeneric("setEndpt") } 
+           def=function(.Object, endpt) { standardGeneric("setEndpt") } 
 )
 
 #' Sets `endpt` of the S4 study object to a new value
 #' 
-#' @param theObject The S4 study object.
+#' @param .Object The S4 study object.
 #' @param endpt A character. The new endpoint.
 #' 
 #' @export 
 setMethod(f="setEndpt",
           signature="study",
-          definition=function(theObject,endpt) {
-                              theObject@endpt <- endpt
-                              methods::validObject(theObject)
-                              return(theObject)
+          definition=function(.Object,endpt) {
+                              .Object@endpt <- endpt
+                              methods::validObject(.Object)
+                              return(.Object)
+                      }
+)
+
+#' Sets `endpt` of the S4 study object to a new value
+#' 
+#' @param .Object The S4 study object.
+#' @param endpt A character. The new endpoint.
+#' 
+#' @export 
+setGeneric(name="updateStudyData",
+           def=function(.Object, study_data) { standardGeneric("updateStudyData") } 
+)
+
+#' Sets `endpt` of the S4 study object to a new value
+#' 
+#' @param .Object The S4 study object.
+#' @param endpt A character. The new endpoint.
+#' 
+#' @export 
+setMethod(f="updateStudyData",
+          signature="study",
+          definition=function(.Object, study_data) {
+                              .Object@study_data <- study_data
+                              methods::validObject(.Object)
+                              return(.Object)
                       }
 )

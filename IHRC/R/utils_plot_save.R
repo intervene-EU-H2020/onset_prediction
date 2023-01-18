@@ -28,7 +28,7 @@ save_plt <- function(file_path,
 
 #' Get the height of the plot depending on number of predictor variables
 #'
-#' @inheritParams
+#' @inheritParams get_sd_title
 #' 
 #' @return An integer indicating the height of the plot
 #' @export

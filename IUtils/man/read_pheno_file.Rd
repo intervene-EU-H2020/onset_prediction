@@ -4,7 +4,7 @@
 \alias{read_pheno_file}
 \title{Reads in the phenotype file according to INTERVENE standard}
 \usage{
-read_pheno_file(file_path, endpts = NULL)
+read_pheno_file(file_path = "", endpts = NULL)
 }
 \arguments{
 \item{file_path}{A character (string). The path to the file.}

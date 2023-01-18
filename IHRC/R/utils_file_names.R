@@ -12,20 +12,26 @@
 #' @export 
 #' 
 #' @author Kira E. Detrois
-get_all_preds_sorted <- function(score_type, 
+get_all_preds_sorted <- function(score_type="", 
                                  covs) {
     interact_preds <- score_type[stringr::str_detect(score_type, "[*]")]
 
-    if(length(interact_preds) > 0) {
-        non_interact_preds <- score_type[!stringr::str_detect(score_type, "[*]")]
-        non_interact_preds <- non_interact_preds[order(non_interact_preds)]
-        interact_preds <- interact_preds[order(interact_preds)]
-        score_type <- c(non_interact_preds, interact_preds)
-    } else {            
-        score_type <- score_type[order(score_type)]
+    if(all(score_type != "")) {
+        if(length(interact_preds) > 0) {
+            non_interact_preds <- score_type[!stringr::str_detect(score_type, "[*]")]
+            non_interact_preds <- non_interact_preds[order(non_interact_preds)]
+            interact_preds <- interact_preds[order(interact_preds)]
+            score_type <- c(non_interact_preds, interact_preds)
+        } else {            
+            score_type <- score_type[order(score_type)]
+        }
     }
     covs <- covs[order(covs)]
-    all_preds <- c(score_type, covs)
+    if(all(score_type != "")) {
+        all_preds <- c(score_type, covs)
+    } else {
+        all_preds <- covs
+    }
     return(all_preds)
 }
 
@@ -45,9 +51,12 @@ get_down_dir <- function(down_fctr) {
 get_full_res_path <- function(write_res,
                               res_dir,
                               down_fctr,
-                              study_type) {
+                              study_type,
+                              score_type) {
+    score_type_dir_name <- get_score_type_dir_name(score_type)
+
     if(write_res) {
-        res_dir <- paste0(res_dir, study_type, "/", get_down_dir(down_fctr))
+        res_dir <- paste0(res_dir, study_type, "/", get_down_dir(down_fctr), score_type_dir_name, "/")
     } else {
         res_dir <- NULL
     }
@@ -60,33 +69,29 @@ get_full_res_path <- function(write_res,
 #' @return A character. The file name.
 #' 
 #' @author Kira E. Detrois
-check_and_get_file_path <- function(ana_details,
-                                    res_type) {
-    if(ana_details$write_res) {
-        # Results type specific folder
-        if(!("full_res_dir" %in% names(ana_details))) {
-            curnt_res_dir <- paste0(ana_details$res_dir, res_type, "/")
-        } else {
-            curnt_res_dir <- ana_details$full_res_dir
-        }
-
+check_and_get_file_path <- function(res_type,
+                                    study_setup,
+                                    endpt,
+                                    surv_ana) {
+    if(surv_ana@write_res) {
+        crnt_res_dir <- paste0(surv_ana@res_dir, res_type, "/")
         # Make the folder if it doesn't exist yet
-        if(Istudy::check_res_dir(ana_details$write_res, curnt_res_dir)) {
+        if(check_res_dir(surv_ana@write_res, crnt_res_dir)) {
             res_file_end <- dplyr::case_when(
                                 res_type == "HR" ~ "_HRs.png",
                                 res_type == "coxph" ~ "_coxph.tsv",
-                                res_type == "cidx" ~ "_cidx.tsv"
+                                res_type == "cidx" ~ "_cidx.tsv",
+                                res_type == "pheno_score" ~ "_elig_indv.tsv",
+                                res_type == "log" ~ "_log.txt"
                             )
-            if("res_file_name" %in% names(ana_details)) {
-                file_name <- ana_details$res_file_name
-            } else {
-                file_name <- get_file_name(ana_details,
-                                           res_type)
-            }
-            file_path <- paste0(curnt_res_dir, 
+            file_name <- get_file_name(res_type=res_type,
+                                       study_setup=study_setup,
+                                       endpt=endpt,
+                                       surv_ana=surv_ana)
+            file_path <- paste0(crnt_res_dir,
                                 file_name, 
                                 res_file_end)
-        }
+        }        
         return(file_path)
     }
     return(NA_character_)
@@ -99,28 +104,42 @@ check_and_get_file_path <- function(ana_details,
 #' @export 
 #' 
 #' @author Kira E. Detrois
-get_file_name <- function(ana_details,
-                          res_type) {
-    if(ana_details$study_type == "forward") {
-        file_name <- ana_details$endpt
+get_file_name <- function(res_type,
+                          study_setup,
+                          endpt,
+                          surv_ana) {
+    # Add date or endpoint infor
+    if(study_setup@study_type == "forward" | 
+            res_type %in% c("log", "pheno_score")) {
+        file_name <- endpt
     } else {
-        file_name <- ana_details$obs_end_date
+        file_name <- study_setup@obs_end_date
     }
-    file_name <- paste0(file_name, "_", Istudy::get_ewo_file_name(ana_details$study_type,
-                                                                  ana_details$exp_len,
-                                                                  ana_details$wash_len,
-                                                                  ana_details$obs_len))
-    file_name <- paste0(file_name, "_", paste0(ana_details$obs_age_range, collapse="_"))
+
+    # Add study setup info
+    file_name <- paste0(file_name, "_", Istudy::get_ewo_file_name(
+                                                study_setup@study_type,
+                                                study_setup@exp_len,
+                                                study_setup@wash_len,
+                                                study_setup@obs_len))
+
+    # Add age range info
+    file_name <- paste0(file_name, "_", 
+                        paste0(study_setup@obs_age_range, collapse="_"))
+
+    # Add Predictors
     if(res_type == "HR") {
-        file_name <- paste0(file_name,  "_", get_preds_file_name(ana_details$plot_preds))
-        if(!(length(ana_details$plot_preds) == length(ana_details$preds))) {
-            file_name <- paste0(file_name, "_p_", get_preds_file_name(setdiff(ana_details$preds, ana_details$plot_preds)))
+        file_name <- paste0(file_name,  "_", get_preds_file_name(surv_ana@plot_preds))
+        if(!(length(surv_ana@plot_preds) == length(surv_ana@preds))) {
+            file_name <- paste0(file_name, "_p_", get_preds_file_name(setdiff(surv_ana@preds, surv_ana@plot_preds)))
         }
     } else {
-        file_name <- paste0(file_name,  "_", get_preds_file_name(ana_details$preds))
+        file_name <- paste0(file_name,  "_", get_preds_file_name(surv_ana@preds))
     }
-    if(ana_details$res_descr != "") {
-        file_name <- paste0(file_name, "_", ana_details$res_descr)
+
+    # Add extra predictors
+    if(surv_ana@res_descr != "") {
+        file_name <- paste0(file_name, "_", surv_ana@res_descr)
     }
     return(file_name)
 }

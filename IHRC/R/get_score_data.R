@@ -68,14 +68,15 @@ get_phers_endpt_data <- function(score_data,
 #' @return A data.frame with columns `ID`, and `SCORE`.
 #' 
 #' @author Kira E. Detrois
-get_study_cci_data <- function(elig_indv,
+get_study_cci_data <- function(pheno_data,
                                icd_data,
-                               score_type) {
+                               score_type,
+                               study_setup) {
+    pheno_data <- Istudy::set_study_dates(pheno_data, study_setup)
     cci_data <- ICCI::calc_cci(icd_data,
-                               exp_start=calc_exp_start_age(elig_indv),
-                               exp_end=calc_exp_end_age(elig_indv),
+                               exp_start=calc_exp_start_age(pheno_data),
+                               exp_end=calc_exp_end_age(pheno_data),
                                score_type=ifelse(score_type == "CCI", "charlson", "elixhauser"))  
-    
     return(cci_data)
 }
 

@@ -37,6 +37,7 @@ filter_too_old_and_young <- function(study_data,
     study_data <- dplyr::filter(study_data, 
                                 END_OF_FOLLOWUP > WASH_END_DATE | 
                                 is.na(END_OF_FOLLOWUP))
+
     return(study_data)
 }
 

@@ -4,10 +4,13 @@
 \alias{write_res_files}
 \title{Writes model results to a tab-delim file}
 \usage{
-write_res_files(endpt_hrs_tib, endpt_c_idxs_tib, ana_details)
+write_res_files(endpt_hr_res, endpt_c_idxs_tib, study, surv_ana)
 }
 \arguments{
-\item{endpt_hrs_tib}{A tibble with the results for previous endpts.}
+\item{endpt_hr_res}{A tibble with the results for previous endpts,
+with columns: \code{ENDPOINT}, \code{EXP_AGE}, \code{VAR},
+\code{GROUP}, \code{N_CONTROLS}, \code{N_CASES}, \code{BETA},
+\code{SE}, \code{P_VAL}, \code{HR}, \code{CI_NEG}, \code{CI_POS}}
 
 \item{endpt_c_idxs_tib}{A tibble with the results for previous endpts.}
 }

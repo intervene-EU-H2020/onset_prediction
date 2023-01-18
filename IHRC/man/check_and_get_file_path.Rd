@@ -4,7 +4,7 @@
 \alias{check_and_get_file_path}
 \title{Creats the file directory and name for the different result types}
 \usage{
-check_and_get_file_path(ana_details, res_type)
+check_and_get_file_path(res_type, study_setup, endpt, surv_ana)
 }
 \arguments{
 \item{res_type}{A character. The results type.}

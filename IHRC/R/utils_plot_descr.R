@@ -84,6 +84,7 @@ filter_plot_preds_fctr <- function(coxph_hrs,
                                 plot_preds) {
     plot_preds <- stringr::str_replace_all(plot_preds, "[*]", ":")
     coxph_hrs <- dplyr::filter(coxph_hrs, VAR %in% plot_preds)
+    print(plot_preds)
     coxph_hrs$VAR <- factor(coxph_hrs$VAR, levels=plot_preds)
 
     return(coxph_hrs)
@@ -91,7 +92,7 @@ filter_plot_preds_fctr <- function(coxph_hrs,
 
 #' Creates a subtitle for a plot based on the current study setup
 #' 
-#' @param study An S4 class representing the study setup.
+#' @param study_setup An S4 class representing the study setup.
 #'  
 #' @return A character. The subtitle describing the study setup.
 #' 
@@ -99,11 +100,11 @@ filter_plot_preds_fctr <- function(coxph_hrs,
 #' @export 
 #' 
 #' @author Kira E. Detrois
-get_study_subtitle <- function(study) {
-    if(study@obs_end_date == as.Date("3000/01/01")) {
-        study_sub <- paste0("Age: ", study@exp_age, " Exp: ", study@exp_len, " Wash: ", study@wash_len, " Obs: ", study@obs_len, " Years")
+get_study_subtitle <- function(study_setup) {
+    if(study_setup@obs_end_date == as.Date("3000/01/01")) {
+        study_sub <- paste0("Age: ", study_setup@exp_age, " Exp: ", study_setup@exp_len, " Wash: ", study_setup@wash_len, " Obs: ", study_setup@obs_len, " Years")
     } else {
-        exp_end <- study@obs_end_date %m-% lubridate::years(study@wash_len + study@obs_len)
+        exp_end <- study_setup@obs_end_date %m-% lubridate::years(study_setup@wash_len + study_setup@obs_len)
         study_sub <- paste0("Exp from Birth until ", exp_end)
     }
     return(study_sub)
@@ -122,22 +123,23 @@ get_study_subtitle <- function(study) {
 #' @export 
 #' 
 #' @author Kira E. Detrois
-get_caption <- function(ana_details) {
-    if(ana_details$study_type == "backward") {
-        study_caption <- paste0("Obs: ", ana_details$obs_len, 
-                                " Years until ", ana_details$obs_end_date, 
-                                " Wash: ", ana_details$wash_len)
-        if(!all(is.na(ana_details$exp_len))) {
+get_caption <- function(study_setup,
+                        preds) {
+    if(study_setup@study_type == "backward") {
+        study_caption <- paste0("Obs: ", study_setup@obs_len, 
+                                " Years until ", study_setup@obs_end_date, 
+                                " Wash: ", study_setup@wash_len)
+        if(!all(is.na(study_setup@exp_len))) {
             study_caption <- paste0(study_caption, 
-                                    " Exp: ", ana_details$exp_len)
+                                    " Exp: ", study_setup@exp_len)
         }
         study_caption <- paste0(study_caption, " Years")
     } else {
-        study_caption <- paste0("Exp: ", ana_details$exp_len, 
-                                " Wash: ", ana_details$wash_len, 
-                                " Obs: ",  ana_details$obs_len, " Years")
+        study_caption <- paste0("Exp: ", study_setup@exp_len, 
+                                " Wash: ", study_setup@wash_len, 
+                                " Obs: ",  study_setup@obs_len, " Years")
     }
-    caption <- paste0(study_caption, get_surv_descr(ana_details$preds))
+    caption <- paste0(study_caption, get_surv_descr(preds))
     return(caption)
 }
 
@@ -156,10 +158,10 @@ get_caption <- function(ana_details) {
 #'
 #' @author Kira E. Detrois
 get_obs_age_period_str <- function(coxph_hrs,
-                                ana_details) {
-    paste0(unique(coxph_hrs$EXP_AGE)+ana_details$exp_len+ana_details$wash_len, 
+                                   study_setup) {
+    paste0(unique(coxph_hrs$EXP_AGE)+study_setup@exp_len+study_setup@wash_len, 
            "-", 
-           unique(coxph_hrs$EXP_AGE+ana_details$exp_len)+ana_details$wash_len+ana_details$obs_len)
+           unique(coxph_hrs$EXP_AGE+study_setup@exp_len)+study_setup@wash_len+study_setup@obs_len)
 }
 
 #' Gets the title for a plot of HRs for each 1-SD increment

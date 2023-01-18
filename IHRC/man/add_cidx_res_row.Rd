@@ -4,7 +4,7 @@
 \alias{add_cidx_res_row}
 \title{Adds a row to the C-index results tibble}
 \usage{
-add_cidx_res_row(endpt_c_idxs_tib, c_idx_res, surv_ana)
+add_cidx_res_row(endpt_c_idxs_tib, c_idx_res, surv_ana, study)
 }
 \arguments{
 \item{endpt_c_idxs_tib}{A tibble with the results for previous endpts.}

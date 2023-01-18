@@ -4,10 +4,10 @@
 \alias{get_surv_obj}
 \title{Creates a survival object for the selected endpoint}
 \usage{
-get_surv_obj(elig_score_data, endpt)
+get_surv_obj(study_data, endpt)
 }
 \arguments{
-\item{elig_score_data}{A data.frame with all eligible individuals under
+\item{study_data}{A data.frame with all eligible individuals under
 the chosen study setup and their scores. Needs at
 least the columns defines in \code{covs}.}
 

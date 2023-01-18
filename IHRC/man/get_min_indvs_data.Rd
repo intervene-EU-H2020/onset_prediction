@@ -5,10 +5,7 @@
 \title{Get's the Cox-PH model results for runs where each group has at
 least 5 controls and cases in each group}
 \usage{
-get_min_indvs_data(coxph_mdl, surv_ana, var)
-}
-\arguments{
-\item{coxph_mdl}{A Cox-PH model.}
+get_min_indvs_data(coxph_mdl, study, var)
 }
 \value{
 A list. The filtered results.

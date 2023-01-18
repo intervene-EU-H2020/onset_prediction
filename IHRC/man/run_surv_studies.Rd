@@ -2,16 +2,17 @@
 % Please edit documentation in R/run_surv_studies.R
 \name{run_surv_studies}
 \alias{run_surv_studies}
-\title{Calcualtes HR from a Cox-PH model for each exposure age and endpoint}
+\title{Fits a Cox-PH model for each endpoint}
 \usage{
 run_surv_studies(
   pheno_data,
-  endpt_indvs_mat = NULL,
+  endpts_indvs_mat = NULL,
   icd_data = NULL,
   atc_data = NULL,
   prs_data = NULL,
   phers_data = NULL,
   score_type,
+  create_score_combos = FALSE,
   plot_preds = NULL,
   study_type = "backward",
   endpts = c("J10_ASTHMA"),
@@ -24,7 +25,6 @@ run_surv_studies(
   ancs = NA_character_,
   obs_age_range = c(32, 80),
   covs = c("SEX", "YEAR_OF_BIRTH"),
-  bin_cut = 1,
   min_indvs = 5,
   res_descr = "",
   write_res = FALSE,
@@ -32,16 +32,34 @@ run_surv_studies(
 )
 }
 \arguments{
-\item{pheno_data}{A data.frame with at least the columns:
+\item{pheno_data}{A data.frame with the phenotypic data on the individuals.
+Should at least contain the columns:
 \code{ID}, the columns specified in \code{covs} and
-i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_AGE_DAYS} where
-the columns are the study endpoint and date, which
-will differ depending on the chosen \code{endpts}.
-The phenotypic data on the individuals.}
+i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_AGE_FROM_BASE} where
+the columns are the study endpoint and the age
+from baseline, which will differ depending on the chosen
+\code{endpts}.}
 
-\item{score_type}{A character. The score types used in the Cox-PH model.}
+\item{endpts_indvs_mat}{A data.frame. A matrix with the individuals that can
+be used for each endpoint.}
 
-\item{plot_preds}{A characte. The predictors to use when plotting HR.}
+\item{icd_data}{A data.frame. A data.frame with the ICD codes of the
+individuals.}
+
+\item{atc_data}{A data.frame. A data.frame with the ATC codes of the
+individuals.}
+
+\item{prs_data}{A data.frame. A data.frame with the PRS scores of the
+individuals.}
+
+\item{phers_data}{A data.frame. A data.frame with the PheRS scores of the
+individuals.}
+
+\item{score_type}{A character (vector).
+The score types used in the Cox-PH model.}
+
+\item{plot_preds}{A character (vector).
+The predictors to use when plotting HR.}
 
 \item{study_type}{A character. Can be either \code{forward} or \code{backward}.
 \code{forward} considers individuals of a certain age
@@ -87,10 +105,6 @@ period. Inclusive interval.}
 \item{covs}{A vector of characters. The column names of the covariates
 to add to the predictor of the Cox-PH model.}
 
-\item{bin_cut}{A numeric. The binary cutoff value for classifying high
-and low score individuals. Currently only in use if
-the \code{score_type == CCI}.}
-
 \item{min_indvs}{An integer. The minimum number of individuals each
 group in the analyses needs to have. This is important
 for being able to export data from the FinnGen Sanbdox.}
@@ -101,16 +115,13 @@ files.}
 \item{res_dir}{A character. The directory to write the results and
 log to.}
 
-\item{score_data}{A data.frame with at least columns \code{SCORE}, or
-i.e. \code{J10_ASTHMA_PRS} for endpoint \code{J10_ASTHMA}
-and score type \code{PRS}.}
+\item{score_type_combos}{A boolean, whether or not to create all possible
+score type combinations from the score_type vector.
+see function \link[IUtils:get_all_possible_score_type_combs]{IUtils::get_all_possible_score_type_combs}.}
 }
 \description{
-This function runs survival studies for a given endpoint and the ages
-at exposure. It fits a Cox proportional hazards model to the data and
-calculates the C-index. The results are written to two files: one for
-the hazard ratios and one for the C-index.
-}
-\author{
-Kira E. Detrois
+This function runs survival studies for a given endpoint.It fits a
+Cox proportional hazards model to the data and
+calculates the C-index. The resulting HRs and c-indices are written
+to files if wanted.
 }

@@ -4,7 +4,7 @@
 \alias{get_coxph_formula}
 \title{Creates the forumla string for the Cox-PH model}
 \usage{
-get_coxph_formula(surv_ana)
+get_coxph_formula(preds, endpt)
 }
 \value{
 A character. The formula string for the Cox-PH model.

@@ -9,7 +9,13 @@ test_that("set_study_dates forward works", {
                                                  as.Date("1978/08/06") %--% as.Date("2000/08/05")),
                                     STUDY_TIME=c(as.Date("2003/01/01") %--% as.Date("2023/01/01"),
                                                  as.Date("1988/08/06") %--% as.Date("2008/08/06")))
-  res_df <- set_study_dates(test_df, study_type="forward", exp_age=10, exp_len=10)
+  study_setup <- methods::new("study_setup",
+                              study_type="forward",
+                              wash_len=2,
+                              obs_len=8,
+                              exp_age=10,
+                              exp_len=10)
+  res_df <- set_study_dates(test_df, study_setup)
 
   expect_equal(res_df$ENDPT_FREE_PERIOD, expect_res$ENDPT_FREE_PERIOD)
   expect_equal(res_df$STUDY_TIME, expect_res$STUDY_TIME)
@@ -25,7 +31,13 @@ test_that("set_study_dates backwards works", {
                                                  as.Date("1978/08/06") %--% as.Date("2010/12/31")),
                                     STUDY_TIME=c(as.Date("1999/01/01") %--% as.Date("2019/01/01"),
                                                  as.Date("1999/01/01") %--% as.Date("2019/01/01")))
-  res_df <- set_study_dates(test_df, study_type="backward", exp_len=10, obs_end_date=as.Date("2019/01/01"))
+  study_setup <- methods::new("study_setup",
+                              study_type="backward",
+                              wash_len=2,
+                              obs_len=8,
+                              obs_end_date=as.Date("2019/01/01"),
+                              exp_len=10)
+  res_df <- set_study_dates(test_df, study_setup)
 
   expect_equal(res_df$ENDPT_FREE_PERIOD, expect_res$ENDPT_FREE_PERIOD)
   expect_equal(res_df$STUDY_TIME, expect_res$STUDY_TIME)
@@ -41,7 +53,13 @@ test_that("set_study_dates backwards detailed works", {
                     EXP_START_DATE=as.Date("1999/01/01"), EXP_END_DATE=as.Date("2008/12/31"),
                     WASH_START_DATE=as.Date("2009/01/01"), WASH_END_DATE=as.Date("2010/12/31"),
                     OBS_START_DATE=as.Date("2011/01/01"), OBS_END_DATE=as.Date("2019/01/01"))
-  res_df <- set_study_dates(test_df, study_type="backward", exp_len=10, obs_end_date=as.Date("2019/01/01"))
+  study_setup <- methods::new("study_setup",
+                              study_type="backward",
+                              wash_len=2,
+                              obs_len=8,
+                              obs_end_date=as.Date("2019/01/01"),
+                              exp_len=10)
+  res_df <- set_study_dates(test_df, study_setup)
 
   dates_unique <- dplyr::select(res_df,
                                 EXP_START_DATE, EXP_END_DATE,

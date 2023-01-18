@@ -16,11 +16,14 @@ check_cols <- function(expect_cols,
                        cols, 
                        file_path) {
   # Check for exact match of expected column names
-  cols_regex <- paste0("(", paste0(cols, collapse=")|("), ")")
-  detect_bins <- stringr::str_detect(expect_cols, cols_regex)
+  missing_columns <- c()
+  for(expect_col in expect_cols) {
+    if(!any(stringr::str_detect(cols, expect_col))) {
+      missing_columns <- c(missing_columns, expect_col)
+    }
+  }
   # Print warning message for missing columns
-  missing_columns <- expect_cols[!detect_bins]
   if(length(missing_columns) > 0) {
-    warning(paste0("Warning. Columns named: ", paste(missing_columns, collapse = ", "), " are missing. Please change the file: ", file_path))
+    warning(paste0("Warning. Columns named: ", paste(missing_columns, collapse = ", "), " are missing. \nHave columns: ", paste0(cols, collapse=", "), "\nPlease change the file: ", file_path))
   }
 }

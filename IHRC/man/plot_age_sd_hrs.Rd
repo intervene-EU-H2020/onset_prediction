@@ -7,12 +7,14 @@
 Creates separate plots for each endpoint for the different age studies.
 Plots both the risk group stratified and continuous HRs.}
 \usage{
-plot_age_sd_hrs(coxph_hrs, ana_details)
+plot_age_sd_hrs(coxph_hrs, study, surv_ana)
 }
 \arguments{
 \item{coxph_hrs}{A tibble. The Cox-PH HR results. Needs
 to at least contain the columns \code{ENDPOINT},
 \code{HR}, \code{CI_NEG}, \code{CI_POS}, and \code{GROUP}.}
+
+\item{surv_ana}{A S4 surv_ana object. The analysis setup.}
 }
 \description{
 Plots the HR from the Cox-PH model of a forward study

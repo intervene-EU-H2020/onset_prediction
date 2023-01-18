@@ -9,10 +9,11 @@ or Harrell's C, for a Cox-PH model fit to survival data. The c-index is a
 measure of the predictive accuracy of the model and ranges from 0 to 1,
 with higher values indicating better predictive accuracy.}
 \usage{
-calc_endpt_study_cidx(surv_ana, coxph_mdl = NULL)
+calc_endpt_study_cidx(surv_ana, study, coxph_mdl = NULL)
 }
 \value{
-A numeric value representing the c-index for the survival analysis.
+A numeric value representing the c-index for the survival
+analysis.
 }
 \description{
 The c-index is calculated using the \code{Hmisc::rcorr.cens} function. For more

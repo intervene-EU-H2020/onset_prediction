@@ -4,7 +4,7 @@
 \alias{get_non_na_pred_rows}
 \title{Exclude rows with missing values from a data frame}
 \usage{
-get_non_na_pred_rows(surv_ana)
+get_non_na_pred_rows(surv_ana, study)
 }
 \value{
 A data frame with rows containing missing values in the specified

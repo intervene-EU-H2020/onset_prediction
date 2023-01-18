@@ -4,20 +4,10 @@
 \alias{set_study_dates}
 \title{Sets the important dates for the study individuals}
 \usage{
-set_study_dates(
-  study_data,
-  study_type = "forward",
-  exp_age = NA_integer_,
-  exp_len = NA_integer_,
-  wash_len = 2,
-  obs_len = 8,
-  obs_end_date = as.Date("2021/01/01")
-)
+set_study_dates(study_data, study_setup)
 }
 \arguments{
 \item{study_data}{A tibble. The data on all study individuals.}
-
-\item{study_type}{A character. Can be either \code{forward} or \code{backward}.}
 
 \item{exp_age}{An integer. Age at which exposure period starts
 (in years).}

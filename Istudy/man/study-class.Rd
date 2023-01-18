@@ -23,31 +23,6 @@ backwards from this time point.}
 
 \item{\code{endpt}}{A character. The column name of the current endpoint of
 interest.}
-
-\item{\code{exp_age}}{An integer. Age at which exposure period starts
-(in years).}
-
-\item{\code{exp_len}}{An integer. Length of the exposure period (in years).}
-
-\item{\code{wash_len}}{An integer. Length of the washout period (in years).}
-
-\item{\code{obs_len}}{An integer. Length of the observation period (in years).}
-
-\item{\code{obs_end_date}}{A Date. The end of the observation period.}
-
-\item{\code{down_fctr}}{An integer. Defines how many controls there
-should be for every case.
-Default is NA, which means no
-downsampling is performed.}
-
-\item{\code{ancs}}{A character (vector). The ancestries to consider.}
-
-\item{\code{obs_age_range}}{A numeric. The age range of individuals in the observation
-period. Inclusive interval.}
-
-\item{\code{write_res}}{A boolean. Whether to write log files.}
-
-\item{\code{res_dir}}{A character. The path to the results directory.}
 }}
 
 \author{

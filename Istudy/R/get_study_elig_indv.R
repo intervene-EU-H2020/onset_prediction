@@ -31,11 +31,12 @@
 #' 
 #' @author Kira E. Detrois
 get_study_elig_indv <- function(study) {
+    print("Gettin elig")
     study@study_data <- filter_too_old_and_young(
                                 study_data=study@study_data,
-                                study_type=study@study_type,
-                                obs_age_range=study@obs_age_range,
-                                exp_f1998=study@exp_f1998)
+                                study_type=study@study_setup@study_type,
+                                obs_age_range=study@study_setup@obs_age_range,
+                                exp_f1998=study@study_setup@exp_f1998)
     study@study_data <- filter_missing_endpt_data(
                                 study_data=study@study_data, 
                                 endpt=study@endpt)
@@ -45,19 +46,18 @@ get_study_elig_indv <- function(study) {
     study@study_data <- adj_case_cntrl_status(
                                 study_data=study@study_data, 
                                 endpt=study@endpt)
+    study@study_data <- filter_ancestry(study@study_data, 
+                                        study@study_setup@ancs)
     study@study_data <- downsample_cntrls(
                                 study_data=study@study_data,
                                 endpt=study@endpt,
-                                down_fctr=study@down_fctr)
+                                down_fctr=study@study_setup@down_fctr)
     study@study_data <- complete_endpt_date_info(
                                 study_data=study@study_data,
                                 endpt=study@endpt)
     study@study_data <- add_age_event_cols(study_data=study@study_data,
                                            endpt=study@endpt)
-    study@study_data <- filter_ancestry(study@study_data, 
-                                        study@ancs)
-
-    write_res_files(study=study)
+    print("Got elig")
 
     return(study@study_data)
 }

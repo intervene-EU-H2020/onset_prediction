@@ -4,12 +4,12 @@
 \alias{scale_preds}
 \title{Scales the given variables in the score data}
 \usage{
-scale_preds(preds, score_data)
+scale_preds(preds, study_data)
 }
 \arguments{
 \item{preds}{A character vector of the variables to be scaled}
 
-\item{score_data}{A data frame with the variables to be scaled}
+\item{study_data}{A data frame with the variables to be scaled}
 }
 \value{
 A data frame with the scaled variables

@@ -12,7 +12,7 @@
 #' 
 #' @export
 #' 
-#' @example 
+#' @examples
 #' # Create a ggplot object
 #' plt <- ggplot(data = my_data, aes(x = x_var, y = y_var)) + 
 #'         geom_point()
@@ -46,8 +46,8 @@ ggplot_add_color_and_theme <- function(plt,
 #' 
 #' @export 
 ggplot_add_points_and_errors <- function(plt,
-                                     coxph_vars,
-                                     study_type) {
+                                         coxph_vars,
+                                         study_type) {
     pos_dodge=0.5
     size=1
     width=0.1

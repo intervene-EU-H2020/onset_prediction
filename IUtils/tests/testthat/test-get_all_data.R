@@ -22,24 +22,32 @@ test_that("get_all_data works", {
                         pheno_file_path=pheno_file_path,
                         icd_file_path=icd_file_path,
                         prs_dir_path=prs_dir_path,
-                        prs_endpt_descr=c("Asthma", "Prostate_Cancer"),
+                        prs_endpts_map=tibble::tibble(endpt=c("J10_ASTHMA", "C3_PROSTATE"),
+                                               prs=c("Asthma", "Prostate_Cancer")),
                         phers_dir_path=phers_dir_path)
-
     expect_equal(colnames(res$pheno), pheno_expect_cols)
     expect_equal(res$icd, icd_expect)
     expect_equal(res$prs, prs_expect)
     expect_equal(res$phers, phers_expect)
 })
 
-test_that("get_all_data works", {
+test_that("get_all_data throws error for missing path", {
     pheno_file_path <- "../data/pheno_data.tsv"
     icd_file_path <- "../data/icd_file_correct.tsv"
     phers_dir_path <- "../data/PheRS_R8/"
 
-    expect_warning(get_all_data(score_type=c("CCI", "PRS", "PheRS"),
+    expect_error(get_all_data(score_type=c("CCI", "PRS", "PheRS"),
                         endpts=c("J10_ASTHMA", "C3_PROSTATE"),
                         pheno_file_path=pheno_file_path,
                         icd_file_path=icd_file_path,
                         phers_dir_path=phers_dir_path))
+})
+
+test_that("get_all_data EDU works", {
+    pheno_file_path <- "../data/pheno_data.tsv"
+
+    expect_error(get_all_data(score_type=c("EDU"),
+                                endpts=c("J10_ASTHMA", "C3_PROSTATE"),
+                                pheno_file_path=pheno_file_path), NA)
 })
 

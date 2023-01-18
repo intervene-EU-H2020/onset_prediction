@@ -1,6 +1,6 @@
 #' Joins the phenotypic and score data
 #' 
-#' Joins the dataframes `study_data`, and `score_data` using
+#' Joins the dataframes `pheno_data`, and `score_data` using
 #' the ID variable.
 #' 
 #' Sets missing values for the `CCI`, or `EI` to 0.
@@ -13,18 +13,20 @@
 #' @export 
 #' 
 #' @author Kira E. Detrois
-join_dfs <- function(study_data,
+join_dfs <- function(pheno_data,
                      score_data,
-                     score_type="CCI",
-                     endpt=NULL) {
-    elig_score_data <- dplyr::left_join(x=study_data,
-                                        y=score_data,
-                                        by="ID")
+                     score_type="CCI") {
+    writeLines(paste0("pheno data ", nrow(pheno_data)))
+    writeLines(paste0("score data ", nrow(score_data)))
+    study_data <- dplyr::inner_join(pheno_data,
+                                    score_data,
+                                    by="ID")
+    writeLines(paste0("joined data ", nrow(study_data)))
     if("CCI" %in% score_type) {
-        elig_score_data$CCI[is.na(elig_score_data$CCI)] <- 0
+        study_data$CCI[is.na(study_data$CCI)] <- 0
     } 
     if("EI" %in% score_type) {
-        elig_score_data$EI[is.na(elig_score_data$EI)] <- 0
+        study_data$EI[is.na(study_data$EI)] <- 0
     } 
-    return(elig_score_data)
+    return(study_data)
 }

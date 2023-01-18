@@ -2,28 +2,38 @@
 % Please edit documentation in R/plot_HRs.R
 \name{plot_hrs}
 \alias{plot_hrs}
-\title{Plot the HR from the Cox-PH model}
+\title{Plots the HR from the Cox-PH model}
 \usage{
-plot_hrs(
-  coxph_hrs = NULL,
-  surv_ana = NULL,
-  from_file = FALSE,
-  ana_details,
-  sort_hrs = FALSE,
-  fig_height = NULL,
-  fig_width = NULL
-)
+plot_hrs(coxph_hrs = NULL, study, surv_ana)
 }
 \arguments{
 \item{coxph_hrs}{A tibble. The Cox-PH HR results. Needs
 to at least contain the columns \code{ENDPOINT},
 \code{HR}, \code{CI_NEG}, \code{CI_POS}, and \code{GROUP}.}
+
+\item{surv_ana}{A S4 surv_ana object. The analysis setup.}
+
+\item{from_file}{A logical, denotes whether the results are from a
+file or not. Default: FALSE.}
+
+\item{ana_details}{A list. The analysis details for the study.
+See function \link{get_ana_details_from_surv_ana}.}
+
+\item{sort_hrs}{A logical. Should the HRs be sorted for the backward
+study plot. Default: FALSE.}
+}
+\value{
+A ggplot object with the HRs.
 }
 \description{
 For forward study creates separate plots for each
 endpoint for the different age studies. For
 the backward study creates a single plot with the
 different endpoints.
+}
+\details{
+It then filters out any missing HRs and filters the coxph_hrs tibble
+to only include the variables that are specified in the \code{plot_preds}
 }
 \author{
 Kira E. Detrois

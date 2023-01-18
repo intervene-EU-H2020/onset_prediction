@@ -27,27 +27,25 @@
 #' 
 #' @export 
 read_prs_files <- function(dir_path,
-                           endpts=NULL,
-                           prs_endpt_descr=NULL) {
-    if(is.null(endpts)) {
+                           prs_endpts_map=NULL) {
+    if(is.null(prs_endpts_map)) {
         endpts <- get_endpts()
+        prs_endpt_descr <- get_prs_endpt_descr()  
+        prs_endpts_map <- tibble::tibble(endpt=endpts, 
+                                         prs=prs_endpt_descr)
     }
-    if(is.null(prs_endpt_descr)) {
-        prs_endpt_descr <- get_prs_endpt_descr()
-    }
-    col_map <- tibble::tibble(endpt=endpts, 
-                              prs=prs_endpt_descr)
-
     prs_data <- tibble::tibble(ID=character())
 
     file_names <- list.files(dir_path)
-    for(file_name in file_names) {
-        file_path <- paste0(dir_path, "/", file_name)
+     for(file_name in file_names) {
+
+        file_path <- paste0(dir_path, file_name)
         disease <- sub("(.*)(_PRS_hm3.sscore)$", "\\1", file_name)
-        if(disease %in% col_map$prs) {
-            prs_data <- add_prs_col(file_path, disease, col_map, prs_data)
+        if(disease %in% prs_endpts_map$prs) {
+            prs_data <- add_prs_col(file_path, disease, prs_endpts_map, prs_data)
         }
     }
+    print(prs_data)
     return(prs_data)
 }
 
@@ -68,7 +66,7 @@ add_prs_col <- function(file_path,
                         disease,
                         col_map,
                         prs_data) {
-    crnt_prs <- vroom::vroom(file_path, delim="\t", show_col_types = FALSE)
+    crnt_prs <- readr::read_delim(file_path, delim="\t", show_col_types=FALSE)
     endpt <- col_map[col_map$prs == disease,]$endpt
     crnt_prs <- dplyr::rename(crnt_prs, ID=IID) %>%
                     dplyr::select(ID, SCORE1_AVG)

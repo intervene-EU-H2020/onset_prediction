@@ -26,15 +26,13 @@
 get_study_edu_data <- function(study_data) {
     # Read in ISCED 2011 mapping
     file_path <- system.file("data", "finngen_age_modes.tsv", package = "IHRC")
-    isced_map <- vroom::vroom(file_path, delim="\t")
+    isced_map <- readr::read_delim(file_path, delim="\t", show_col_types=FALSE)
 
     # Add age mode based on Finngen R10 to the data
-    edu_data <- dplyr::left_join(study_data, 
-                                 isced_map,
+    edu_data <- dplyr::inner_join(study_data, 
+                                  isced_map,
                                  by="ISCED_2011")
     edu_data <- dplyr::rename(edu_data, EDU=FIN_AGE_MODE) %>% 
                     dplyr::select(ID, EDU)
-    print(edu_data)
-
     return(edu_data)
 }

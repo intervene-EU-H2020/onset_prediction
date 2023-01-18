@@ -4,7 +4,7 @@
 \alias{get_file_name}
 \title{Creats the file name for the HR plots with continuous scores}
 \usage{
-get_file_name(ana_details, res_type)
+get_file_name(res_type, study_setup, endpt, surv_ana)
 }
 \value{
 A character. The file name.

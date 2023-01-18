@@ -2,26 +2,31 @@
 % Please edit documentation in R/join_dfs.R
 \name{join_dfs}
 \alias{join_dfs}
-\title{Joins the two data.frames}
+\title{Joins the phenotypic and score data}
 \usage{
-join_dfs(study_data, score_data, score_type = "CCI", endpt = NULL)
+join_dfs(pheno_data, score_data, score_type = "CCI")
 }
 \arguments{
-\item{score_data}{A data.frame with at least columns \code{SCORE}, or
-i.e. \code{J10_ASTHMA_PRS} for endpoint \code{J10_ASTHMA}
-and score type \code{PRS}.}
+\item{pheno_data}{A data.frame with the phenotypic data on the individuals.
+Should at least contain the columns:
+\code{ID}, the columns specified in \code{covs} and
+i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_AGE_FROM_BASE} where
+the columns are the study endpoint and the age
+from baseline, which will differ depending on the chosen
+\code{endpts}.}
 
-\item{score_type}{A character. The score types used in the Cox-PH model.}
-
-\item{endpt}{A character. The column name of the current endpoint
-of interest.}
+\item{score_type}{A character (vector).
+The score types used in the Cox-PH model.}
 }
 \value{
-The joined data.frame
+A dataframe containing the merged study and score data.
 }
 \description{
-Joins the two data.frames and removes any individuals without
-a score available.
+Joins the dataframes \code{pheno_data}, and \code{score_data} using
+the ID variable.
+}
+\details{
+Sets missing values for the \code{CCI}, or \code{EI} to 0.
 }
 \author{
 Kira E. Detrois

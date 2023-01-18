@@ -2,21 +2,23 @@
 % Please edit documentation in R/plot_HRs.R
 \name{plot_endpt_sd_hr}
 \alias{plot_endpt_sd_hr}
-\title{Plots the HR from the Cox-PH model of a backwards study.
+\title{Plots the HR from the Cox-PH model of a backwards study
 
-Creates a single plot with the different endpoints}
+Creates a single ggplot with the different endpoints HRs.}
 \usage{
-plot_endpt_sd_hr(coxph_hrs, ana_details, sort_hrs, fig_height, fig_width)
+plot_endpt_sd_hr(coxph_hrs, study, surv_ana)
 }
 \arguments{
 \item{coxph_hrs}{A tibble. The Cox-PH HR results. Needs
 to at least contain the columns \code{ENDPOINT},
 \code{HR}, \code{CI_NEG}, \code{CI_POS}, and \code{GROUP}.}
+
+\item{surv_ana}{A S4 surv_ana object. The analysis setup.}
 }
 \description{
-Plots the HR from the Cox-PH model of a backwards study.
+Plots the HR from the Cox-PH model of a backwards study
 
-Creates a single plot with the different endpoints
+Creates a single ggplot with the different endpoints HRs.
 }
 \author{
 Kira E. Detrois

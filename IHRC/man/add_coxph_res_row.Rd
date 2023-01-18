@@ -4,16 +4,17 @@
 \alias{add_coxph_res_row}
 \title{Adds a row to the Cox-PH HR results tibble}
 \usage{
-add_coxph_res_row(endpt_hrs_tib, coxph_mdl, surv_ana)
+add_coxph_res_row(endpt_hr_res, coxph_mdl, study)
 }
 \arguments{
-\item{endpt_hrs_tib}{A tibble with the results for previous endpts.}
-
-\item{coxph_mdl}{A Cox-PH model.}
+\item{endpt_hr_res}{A tibble with the results for previous endpts,
+with columns: \code{ENDPOINT}, \code{EXP_AGE}, \code{VAR},
+\code{GROUP}, \code{N_CONTROLS}, \code{N_CASES}, \code{BETA},
+\code{SE}, \code{P_VAL}, \code{HR}, \code{CI_NEG}, \code{CI_POS}}
 }
 \value{
-A tibble. The updated \code{endpt_hrs_tib} with the added results for
-the current endpoint.
+A tibble. The updated \code{endpt_hr_res} with the added row for
+the HRs of the current endpoint.
 }
 \description{
 Adds a row to the Cox-PH HR results tibble

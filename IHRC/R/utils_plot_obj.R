@@ -17,7 +17,9 @@
 #' 
 #' @author Kira E. Detrois
 get_age_sd_hr_ggplot <- function(coxph_hrs,
-                                 ana_details,
+                                 study_setup,
+                                 preds,
+                                 endpt,
                                  min_y,
                                  max_y) {
     plt <- ggplot2::ggplot(coxph_hrs, 
@@ -28,11 +30,11 @@ get_age_sd_hr_ggplot <- function(coxph_hrs,
                   coord_cartesian(ylim=c(min_y,max_y)) +
                   scale_x_discrete(breaks=unique(coxph_hrs$EXP_AGE),
                                    labels=get_obs_age_period_str(coxph_hrs, 
-                                                                 ana_details)) +
+                                                                 study_setup)) +
                   # Labels and titles
-                  labs(title=ana_details$endpt,
+                  labs(title=endpt,
                        subtitle=get_sd_title(coxph_hrs$VAR),
-                       caption=get_caption(ana_details),
+                       caption=get_caption(study_setup, preds),
                        x="Observation Age",
                        y="Hazard Ratio (95% CI)") +
                   # Grid setting
@@ -41,7 +43,7 @@ get_age_sd_hr_ggplot <- function(coxph_hrs,
     plt <- ggplot_add_color_and_theme(plt, "Predictor", coxph_hrs$VAR)
     plt <- ggplot_add_points_and_errors(plt, 
                                     coxph_vars=coxph_hrs$VAR, 
-                                    study_type=ana_details$study_type)
+                                    study_type=study_setup@study_type)
     
 }
 
@@ -66,32 +68,26 @@ get_age_sd_hr_ggplot <- function(coxph_hrs,
 #' 
 #' @author Kira E. Detrois
 get_endpt_sd_hr_ggplot <- function(coxph_hrs,
-                                   ana_details,
-                                   sort_hrs) {
+                                   study_setup,
+                                   preds) {
     max_x <- min(max(c(2, round(coxph_hrs$CI_POS)), na.rm=TRUE), 10)
     min_x <- min(c(0.5, round(coxph_hrs$CI_NEG)), na.rm=TRUE)
-    if(!sort_hrs) {
-        plt <- ggplot2::ggplot(coxph_hrs,
-                               # Plot basics
-                               aes(y=ENDPOINT, x=HR, color=VAR))
-    } else {
-        plt <- ggplot2::ggplot(coxph_hrs,
-                               # Plot basics
-                               aes(y=reorder(ENDPOINT, HR), x=HR, color=VAR))
-    }
+    plt <- ggplot2::ggplot(coxph_hrs,
+                           # Plot basics
+                           aes(y=ENDPOINT, x=HR, color=VAR))
     plt <-  plt + 
             # Axis settings
             coord_cartesian(xlim=c(min_x, max_x)) +
             geom_vline(xintercept=1.0) +
             # Legends and labels
             labs(title=get_sd_title(coxph_hrs$VAR),
-                 caption=get_caption(ana_details),
+                 caption=get_caption(study_setup, preds),
                  x="Hazard Ratio (95%)",
                  y="")
     plt <- ggplot_add_color_and_theme(plt, "Predictor", levels(coxph_hrs$VAR))
     plt <- ggplot_add_points_and_errors(plt, 
-                                    coxph_vars=coxph_hrs$VAR, 
-                                    study_type=ana_details$study_type)
+                                        coxph_vars=coxph_hrs$VAR, 
+                                        study_type=study_setup@study_type)
 
         return(plt)
 }

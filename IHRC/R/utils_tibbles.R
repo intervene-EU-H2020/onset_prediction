@@ -19,7 +19,7 @@
 #' @export 
 #' 
 #' @author Kira E. Detrois 
-create_empty_endpt_hrs_tib <- function() {
+create_empty_endpt_hr_res <- function() {
     tibble::tibble(ENDPOINT=character(),
                    EXP_AGE=numeric(),
                    VAR=character(),
@@ -54,7 +54,7 @@ create_empty_endpt_hrs_tib <- function() {
 #' @export 
 #' 
 #' @author Kira E. Detrois 
-create_empty_cidx_tib <- function() {
+create_empty_cidx_res <- function() {
     tibble::tibble(
         ENDPOINT = character(),
         EXP_AGE = numeric(),
@@ -70,30 +70,30 @@ create_empty_cidx_tib <- function() {
 
 #' Adds a row to the Cox-PH HR results tibble
 #' 
-#' @param endpt_hrs_tib A tibble with the results for previous endpts, 
+#' @param endpt_hr_res A tibble with the results for previous endpts, 
 #'                        with columns: `ENDPOINT`, `EXP_AGE`, `VAR`, 
 #'                        `GROUP`, `N_CONTROLS`, `N_CASES`, `BETA`, 
 #'                        `SE`, `P_VAL`, `HR`, `CI_NEG`, `CI_POS`
 #' @inheritParams plot_hrs 
 #' 
-#' @return A tibble. The updated `endpt_hrs_tib` with the added row for
+#' @return A tibble. The updated `endpt_hr_res` with the added row for
 #'          the HRs of the current endpoint.
 #' 
 #' @export 
 #'                        
 #' @author Kira E. Detrois 
-add_coxph_res_row <- function(endpt_hrs_tib,
+add_coxph_res_row <- function(endpt_hr_res,
                               coxph_mdl,
-                              surv_ana) {
+                              study) {
     if(!is.null(coxph_mdl)) {
         coxph_res_list <- get_min_indvs_data(coxph_mdl=coxph_mdl,
-                                             surv_ana=surv_ana,
+                                             study=study,
                                              var="SEX")
          if(!is.null(coxph_res_list)) {
-            endpt_hrs_tib <- tibble::add_row(
-                                            endpt_hrs_tib, 
-                                            ENDPOINT=surv_ana@study@endpt,
-                                            EXP_AGE=surv_ana@study@exp_age,
+            endpt_hr_res <- tibble::add_row(
+                                            endpt_hr_res, 
+                                            ENDPOINT=study@endpt,
+                                            EXP_AGE=study@exp_age,
                                             VAR=coxph_res_list$preds,
                                             GROUP=coxph_res_list$groups,
                                             N_CONTROLS=coxph_res_list$n_cntrl,
@@ -106,7 +106,7 @@ add_coxph_res_row <- function(endpt_hrs_tib,
                                             CI_POS=coxph_res_list$CI_pos)
             }
     } 
-    return(endpt_hrs_tib)
+    return(endpt_hr_res)
 }
 
 #' Get's the Cox-PH model results for runs where each group has at
@@ -118,11 +118,11 @@ add_coxph_res_row <- function(endpt_hrs_tib,
 #' 
 #' @author Kira E. Detrois
 get_min_indvs_data <- function(coxph_mdl,
-                               surv_ana,
+                               study,
                                var) {
     coxph_res_list <- extract_coxph_res(coxph_mdl)
-    coxph_res_list$n_case <- Istudy::get_n_cases(surv_ana@study@study_data, surv_ana@study@endpt)
-    coxph_res_list$n_cntrl <- Istudy::get_n_cntrls(surv_ana@study@study_data, surv_ana@study@endpt)
+    coxph_res_list$n_case <- Istudy::get_n_cases(study@study_data, study@endpt)
+    coxph_res_list$n_cntrl <- Istudy::get_n_cntrls(study@study_data, study@endpt)
     return(coxph_res_list)
 }
 
@@ -137,18 +137,19 @@ get_min_indvs_data <- function(coxph_mdl,
 #' @author Kira E. Detrois 
 add_cidx_res_row <- function(endpt_c_idxs_tib,
                              c_idx_res,
-                             surv_ana) {
+                             surv_ana,
+                             study) {
     if(!is.null(c_idx_res)) {
         surv_descr=get_surv_descr(surv_ana@preds)  
         # In docu it says to use se=sd/2
         c_idx_ci <- get_CI(c_idx_res["C Index"], c_idx_res["S.D."]/2)
         endpt_c_idxs_tib <- tibble::add_row(
                             endpt_c_idxs_tib,
-                            ENDPOINT=surv_ana@study@endpt,
-                            EXP_AGE=surv_ana@study@exp_age,
+                            ENDPOINT=study@endpt,
+                            EXP_AGE=study@exp_age,
                             SURV_MODEL=surv_descr,
-                            N_CASES=Istudy::get_n_cases(surv_ana@study@study_data, surv_ana@study@endpt),
-                            N_CONTROLS=Istudy::get_n_cntrls(surv_ana@study@study_data, surv_ana@study@endpt),
+                            N_CASES=Istudy::get_n_cases(study@study_data, study@endpt),
+                            N_CONTROLS=Istudy::get_n_cntrls(study@study_data, study@endpt),
                             SE=c_idx_res["S.D."]/2,
                             C_IDX=c_idx_res["C Index"],
                             C_IDX_CI_NEG=c_idx_ci[[1]],

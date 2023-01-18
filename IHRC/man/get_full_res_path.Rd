@@ -4,7 +4,7 @@
 \alias{get_full_res_path}
 \title{Adds downsampling and filter information to results directory path}
 \usage{
-get_full_res_path(write_res, res_dir, down_fctr, study_type)
+get_full_res_path(write_res, res_dir, down_fctr, study_type, score_type)
 }
 \description{
 Adds downsampling and filter information to results directory path

@@ -4,7 +4,7 @@
 \alias{get_coxph_mdl}
 \title{Fit a Cox Proportional Hazards Model}
 \usage{
-get_coxph_mdl(surv_ana)
+get_coxph_mdl(surv_ana, study)
 }
 \arguments{
 \item{test_idxs}{An integer (vector). The indices of the test data
@@ -21,7 +21,7 @@ given surivival analysis setup, using the \link[survival:coxph]{survival::coxph}
 \details{
 For i.e. \code{endpt = "J10_ASTHMA"} and \code{covs = c("SEX", "YEAR_OF_BIRTH")}
 the model would be
-\code{Surv(J10_ASTHMA_AGE_DAYS, J10_ASTHMA) ~ PRS + SEX + YEAR_OF_BIRTH}.
+\code{Surv(J10_ASTHMA_AGE_FROM_BASE, J10_ASTHMA) ~ PRS + SEX + YEAR_OF_BIRTH}.
 }
 \author{
 Kira E. Detrois

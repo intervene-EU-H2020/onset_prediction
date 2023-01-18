@@ -17,19 +17,21 @@
 #' @export 
 #' 
 #' @author Kira E. Detrois
-get_coxph_mdl <- function(surv_ana) {
+get_coxph_mdl <- function(surv_ana,
+                          study) {
     coxph_mdl <- NULL
-    if(nrow(surv_ana@elig_score_data) > 0) {
-        coxph_formula <- get_coxph_formula(surv_ana)  
-        scaled_data <- scale_preds(surv_ana@plot_preds,
-                                                surv_ana@elig_score_data)
-        coxph_mdl <- suppressWarnings(
-                            survival::coxph(formula=coxph_formula, 
-                                            data=scaled_data,
+    if(nrow(study@study_data) > 0) {
+        coxph_formula <- get_coxph_formula(preds=surv_ana@preds, endpt=study@endpt)  
+        scaled_study_data <- scale_preds(preds=surv_ana@plot_preds,
+                                        study_data=study@study_data)
+        writeLines("starting model fit")
+        coxph_mdl <- survival::coxph(formula=coxph_formula, 
+                                            data=scaled_study_data,
                                             # Larger fit object but no need for
                                             # other functions to reconstruct
                                             # which fails in this setup
-                                            model=TRUE))
+                                            model=TRUE)
+        writeLines("ending model fit")
     }
     return(coxph_mdl)
 }

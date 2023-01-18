@@ -4,10 +4,10 @@
 \alias{make_covs_fctrs}
 \title{Makes all character covariates a factor}
 \usage{
-make_covs_fctrs(elig_score_data, covs)
+make_covs_fctrs(study_data, covs)
 }
 \arguments{
-\item{elig_score_data}{A data.frame with all eligible individuals under
+\item{study_data}{A data.frame with all eligible individuals under
 the chosen study setup and their scores. Needs at
 least the columns defines in \code{covs}.}
 

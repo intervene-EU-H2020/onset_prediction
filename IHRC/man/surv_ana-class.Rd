@@ -11,48 +11,30 @@ An S4 class representing the survival analysis
 \section{Slots}{
 
 \describe{
-\item{\code{pheno_data}}{A data.frame with at least the columns:
-\code{ID}, the columns specified in \code{covs} and
-i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_AGE_DAYS} where
-the columns are the study endpoint and date, which
-will differ depending on the chosen \code{endpts}.
-The phenotypic data on the individuals.}
-
-\item{\code{elig_indv}}{A data.frame with all eligible individuals under the
-chosen study setup. This will be created when
-the object is initialized based on the rest of
-the data.}
-
-\item{\code{elig_score_data}}{A data.frame with all eligible individuals under
-the chosen study setup and their scores. This will be
-created when the object is initialized based on the
-rest of the data.}
-
-\item{\code{score_type}}{A character. The score type. At the moment the two
-options are \code{CCI}, and \code{PRS}.}
-
-\item{\code{obs_age_range}}{A numeric. The age range of individuals in the observation
-period. Inclusive interval.}
-
 \item{\code{study}}{A S4 study object. The current study setups for on whicht
 the eligible indiviuals are selected.}
 
-\item{\code{covs}}{A vector of characters. The column names of the covariates
-to add to the predictor of the Cox-PH model.}
-
-\item{\code{bin_cut}}{A numeric. The binary cutoff value for classifying high
-and low score individuals. Currently only in use if
-the \code{score_type == CCI}.}
+\item{\code{study_data}}{A dataframe with the phenotypic and score data
+of all eligible individuals under
+the current study setup and their scores.}
 
 \item{\code{min_indvs}}{An integer. The minimum number of individuals each
-group in the analyses needs to have. This is important
-for being able to export data from the FinnGen Sanbdox.}
+group in the analyses needs to have.}
+
+\item{\code{preds}}{A character (vector). The names of the covariates
+to use in the Cox-PH model.}
+
+\item{\code{plot_preds}}{A character (vector).
+The predictors to use when plotting the HRs.}
+
+\item{\code{res_descr}}{A character. An additional descriptive that can be
+used for distinguishing the results files.}
 
 \item{\code{write_res}}{A boolean. Defines whether to save the results to
-files.}
+files. Default: FALSE.}
 
 \item{\code{res_dir}}{A character. The directory to write the results and
-log to.}
+logs to. Default: NA.}
 }}
 
 \author{

@@ -4,10 +4,11 @@
 \alias{get_all_preds_sorted}
 \title{Get All Preds Sorted}
 \usage{
-get_all_preds_sorted(score_type, covs)
+get_all_preds_sorted(score_type = "", covs)
 }
 \arguments{
-\item{score_type}{A character. The score types used in the Cox-PH model.}
+\item{score_type}{A character (vector).
+The score types used in the Cox-PH model.}
 
 \item{covs}{A vector of characters. The column names of the covariates
 to add to the predictor of the Cox-PH model.}

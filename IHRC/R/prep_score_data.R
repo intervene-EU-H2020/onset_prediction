@@ -11,8 +11,8 @@
 #'                      - "PheRS" for PheWAS results score, 
 #'                      - "MED" for medication data, and 
 #'                      - "EDU" for educational level. The column for this needs to be
-#'                               called ISCED_2011 in the `study_data`.
-#' @param study_data A dataframe containing phenotypic data.
+#'                               called ISCED_2011 in the `pheno_data`.
+#' @param pheno_data A dataframe containing phenotypic data.
 #' @param icd_data A dataframe containing ICD data. 
 #'                  Required if "CCI" or "EI" is present in `score_type`
 #' @param atc_data A dataframe containing ATC data. 
@@ -31,24 +31,29 @@
 #'
 #' @author Kira E. Detrois
 preprocess_score_data <- function(score_type,
-                                  study_data,
+                                  pheno_data,
                                   icd_data=NULL,
                                   atc_data=NULL,
                                   prs_data=NULL,
                                   phers_data=NULL,
-                                  endpt=NULL) {
+                                  endpt=NULL,
+                                  study_setup=NULL) {
+    writeLines("Starting prep")
     score_data = NULL
     if("CCI" %in% score_type) {
-        score_data <- get_study_cci_data(study_data,
+        writeLines("Getting CCI")
+        score_data <- get_study_cci_data(pheno_data,
                                          icd_data,
-                                         score_type="CCI")  
+                                         score_type="CCI",
+                                         study_setup)  
     } 
     if("EI" %in% score_type) {
-        ei_data <- get_study_cci_data(study_data,
-                                      icd_data,
-                                      score_type="EI")  
+        score_data <- get_study_cci_data(pheno_data,
+                                         icd_data,
+                                         score_type="CCI",
+                                         study_setup)  
         if(!is.null(score_data)) {
-            score_data <- dplyr::left_join(score_data, 
+            score_data <- dplyr::inner_join(score_data, 
                                            ei_data, 
                                            by="ID")
         } else {
@@ -57,45 +62,51 @@ preprocess_score_data <- function(score_type,
     }
     # Adding PRS column
     if("PRS" %in% score_type) {
+        writeLines("Getting PRS")
         PRS_data <- get_prs_endpt_data(score_data=prs_data,
-                                               endpt=endpt)
+                                       endpt=endpt)
+        PRS_data <- na.omit(PRS_data)
         if(!is.null(score_data)) {
-            score_data <- dplyr::left_join(score_data, 
-                                           PRS_data, 
-                                           by="ID")
+            score_data <- dplyr::inner_join(PRS_data, 
+                                            score_data, 
+                                            by="ID")
         } else {
             score_data <- PRS_data
         }
     }
     # Adding PheRS column
     if("PheRS" %in% score_type) {
+        writeLines("Getting PheRS")
         PheRS_data <- get_phers_endpt_data(score_data=phers_data,
                                              endpt=endpt)
+        PheRS_data <- na.omit(PheRS_data)
         if(!is.null(score_data)) {
-            score_data <- dplyr::left_join(score_data, 
-                                           PheRS_data, 
-                                           by="ID")
+            score_data <- dplyr::inner_join(PheRS_data, 
+                                            score_data, 
+                                            by="ID")
         } else {
             score_data <- PheRS_data
         }
     }
     if("MED" %in% score_type) {
-        med_data <- get_study_med_data(study_data, atc_data)
+        med_data <- get_study_med_data(pheno_data, atc_data)
         if(!is.null(score_data)) {
-            score_data <- dplyr::left_join(score_data,
-                                           med_data,
-                                           by="ID")
+            score_data <- dplyr::inner_join(score_data,
+                                            med_data,
+                                            by="ID")
         } else {
             score_data <- med_data
         }
     }
     #' The education data comes from the phenotypic file
     if("EDU" %in% score_type) {
-        edu_data <- get_study_edu_data(study_data)
+        writeLines("Getting Edu")
+        edu_data <- get_study_edu_data(pheno_data)
+        edu_data <- na.omit(edu_data)
         if(!is.null(score_data)) {
-            score_data <- dplyr::left_join(score_data,
-                                           edu_data,
-                                           by="ID")
+            score_data <- dplyr::inner_join(edu_data,
+                                            score_data,
+                                            by="ID")
         } else {
             score_data <- edu_data
         }

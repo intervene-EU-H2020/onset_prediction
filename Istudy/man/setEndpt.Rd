@@ -4,10 +4,10 @@
 \alias{setEndpt}
 \title{Sets \code{endpt} of the S4 study object to a new value}
 \usage{
-setEndpt(theObject, endpt)
+setEndpt(.Object, endpt)
 }
 \arguments{
-\item{theObject}{The S4 study object.}
+\item{.Object}{The S4 study object.}
 
 \item{endpt}{A character. The new endpoint.}
 }

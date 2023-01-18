@@ -4,10 +4,10 @@
 \alias{setEndpt,study-method}
 \title{Sets \code{endpt} of the S4 study object to a new value}
 \usage{
-\S4method{setEndpt}{study}(theObject, endpt)
+\S4method{setEndpt}{study}(.Object, endpt)
 }
 \arguments{
-\item{theObject}{The S4 study object.}
+\item{.Object}{The S4 study object.}
 
 \item{endpt}{A character. The new endpoint.}
 }

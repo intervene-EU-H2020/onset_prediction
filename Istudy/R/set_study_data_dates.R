@@ -21,42 +21,27 @@
 #' 
 #' @author Kira E. Detrois
 set_study_dates <- function(study_data,
-                            study_type="forward",
-                            exp_age=NA_integer_,
-                            exp_len=NA_integer_,
-                            wash_len=2,
-                            obs_len=8,
-                            obs_end_date=as.Date("2021/01/01")) {
+                            study_setup) {
+    cols <- c("EXP_START_DATE", "WASH_START_DATE", "EXP_END_DATE", "OBS_START_DATE", 
+              "WASH_END_DATE", "OBS_END_DATE", "ENDPT_FREE_PERIOD", "STUDY_TIME",
+              "YEAR_OF_BIRTH")
     study_data$YEAR_OF_BIRTH <- lubridate::year(study_data$DATE_OF_BIRTH)
     study_data$EXP_START_DATE <- calc_exp_start_date(
-                                                study_data=study_data,
-                                                study_type=study_type,
-                                                exp_age=exp_age,
-                                                exp_len=exp_len,
-                                                wash_len=wash_len,
-                                                obs_len=obs_len,
-                                                obs_end_date=obs_end_date)
-    study_data$WASH_START_DATE <- calc_wash_start_date(
-                                                study_data=study_data,
-                                                study_type=study_type,
-                                                exp_len=exp_len,
-                                                wash_len=wash_len,
-                                                obs_len=obs_len,
-                                                obs_end_date=obs_end_date)
-    study_data$EXP_END_DATE <- calc_exp_end_date(study_data, exp_len)
-    study_data$OBS_START_DATE <- calc_obs_start_date(
-                                                study_data=study_data,
-                                                study_type=study_type,
-                                                wash_len=wash_len,
-                                                obs_len=obs_len,
-                                                obs_end_date=obs_end_date)
-    study_data$WASH_END_DATE <- calc_wash_end_date(study_data, wash_len)
-    study_data$OBS_END_DATE <- calc_obs_end_date(study_data=study_data,
-                                                 study_type=study_type,
-                                                 obs_len=obs_len,
-                                                 obs_end_date=obs_end_date)
-    study_data$ENDPT_FREE_PERIOD <- study_data$DATE_OF_BIRTH %--% study_data$WASH_END_DATE
-    study_data$STUDY_TIME <- study_data$EXP_START_DATE %--% study_data$OBS_END_DATE
+                                                    study_data=study_data,
+                                                    study_setup=study_setup)
+        study_data$WASH_START_DATE <- calc_wash_start_date(
+                                                    study_data=study_data,
+                                                    study_setup=study_setup)
+        study_data$EXP_END_DATE <- calc_exp_end_date(study_data, study_setup@exp_len)
+        study_data$OBS_START_DATE <- calc_obs_start_date(
+                                                    study_data=study_data,
+                                                    study_setup=study_setup)
+        study_data$WASH_END_DATE <- calc_wash_end_date(study_data, study_setup@wash_len)
+        study_data$OBS_END_DATE <- calc_obs_end_date(study_data=study_data,
+                                                    study_setup=study_setup)
+        study_data$ENDPT_FREE_PERIOD <- study_data$DATE_OF_BIRTH %--% study_data$WASH_END_DATE
+        study_data$STUDY_TIME <- study_data$EXP_START_DATE %--% study_data$OBS_END_DATE
+    
 
     return(study_data)
 }
@@ -113,13 +98,11 @@ calc_exp_end_date <- function(study_data,
 #' 
 #' @author Kira E. Detrois
 calc_obs_end_date <- function(study_data,
-                              study_type,
-                              obs_len,
-                              obs_end_date) {
-    if(study_type == "forward") {
-        obs_end_date <- study_data$OBS_START_DATE %m+% lubridate::years(obs_len)
-    } else if(study_type == "backward") {
-        obs_end_date <- obs_end_date
+                              study_setup) {
+    if(study_setup@study_type == "forward") {
+        obs_end_date <- study_data$OBS_START_DATE %m+% lubridate::years(study_setup@obs_len)
+    } else if(study_setup@study_type == "backward") {
+        obs_end_date <- study_setup@obs_end_date
     }
 
     return(obs_end_date)
@@ -141,14 +124,12 @@ calc_obs_end_date <- function(study_data,
 #' 
 #' @author Kira E. Detrois
 calc_obs_start_date <- function(study_data,
-                               study_type,
-                               wash_len,
-                               obs_len,
-                               obs_end_date) {
-    if(study_type == "forward") {
-        obs_start_date <- study_data$WASH_START_DATE %m+% lubridate::years(wash_len)
-    } else if(study_type == "backward") {
-        obs_start_date <- calc_backward_obs_start_date(obs_end_date, obs_len)
+                                study_setup) {
+    if(study_setup@study_type == "forward") {
+        obs_start_date <- study_data$WASH_START_DATE %m+% lubridate::years(study_setup@wash_len)
+    } else if(study_setup@study_type == "backward") {
+        obs_start_date <- calc_backward_obs_start_date(study_setup@obs_end_date,
+                                                       study_setup@obs_len)
     }
     return(obs_start_date)
 }
@@ -185,17 +166,13 @@ calc_backward_obs_start_date <- function(obs_end_date,
 #' 
 #' @author Kira E. Detrois
 calc_wash_start_date <- function(study_data,
-                              study_type,
-                              exp_len,
-                              wash_len,
-                              obs_len,
-                              obs_end_date) {
-    if(study_type == "forward") {
-        wash_start_date <- study_data$EXP_START_DATE %m+% lubridate::years(exp_len)
-    } else if(study_type == "backward") {
-        wash_start_date <- calc_backward_wash_start_date(obs_end_date,
-                                                         wash_len,
-                                                         obs_len)
+                                 study_setup) {
+    if(study_setup@study_type == "forward") {
+        wash_start_date <- study_data$EXP_START_DATE %m+% lubridate::years(study_setup@exp_len)
+    } else if(study_setup@study_type == "backward") {
+        wash_start_date <- calc_backward_wash_start_date(study_setup@obs_end_date,
+                                                         study_setup@wash_len,
+                                                         study_setup@obs_len)
     }
 
     return(wash_start_date)
@@ -236,22 +213,17 @@ calc_backward_wash_start_date <- function(obs_end_date,
 #' 
 #' @author Kira E. Detrois
 calc_exp_start_date <- function(study_data,
-                                study_type,
-                                exp_age,
-                                exp_len,
-                                wash_len,
-                                obs_len,
-                                obs_end_date) {
-    if(study_type == "forward") {
-        exp_start_date <- study_data$DATE_OF_BIRTH %m+% lubridate::years(exp_age)
-    } else if(study_type == "backward") {
-        if(!is.na(exp_age)) {
+                                study_setup) {
+    if(study_setup@study_type == "forward") {
+        exp_start_date <- study_data$DATE_OF_BIRTH %m+% lubridate::years(study_setup@exp_age)
+    } else if(study_setup@study_type == "backward") {
+        if(!all(is.na(study_setup@exp_age))) {
             exp_start_date <- study_data$DATE_OF_BIRTH
         } else {
-            exp_start_date <- calc_backward_exp_start_date(obs_end_date,
-                                                           exp_len,
-                                                           wash_len,
-                                                           obs_len)
+            exp_start_date <- calc_backward_exp_start_date(study_setup@obs_end_date,
+                                                           study_setup@exp_len,
+                                                           study_setup@wash_len,
+                                                           study_setup@obs_len)
         }
     }
     return(exp_start_date)

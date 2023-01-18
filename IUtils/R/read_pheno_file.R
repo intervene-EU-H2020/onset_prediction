@@ -9,12 +9,15 @@
 #' @export 
 #' 
 #' @author Kira E. Detrois
-read_pheno_file <- function(file_path,
+read_pheno_file <- function(file_path="",
                             endpts=NULL) {
-    pheno_data <- vroom::vroom(file_path, 
-                               delim="\t", 
-                               col_types=list(SEX="f", DATE_OF_BIRTH="D", END_OF_FOLLOWUP="D", ANCESTRY="f", ISCED_2011="f"),
-                               show_col_types = FALSE)
+    assertthat::assert_that(file_path != "", 
+                            msg="Error. Phenotype file path needs to always be provided.")
+
+    pheno_data <- readr::read_delim(file_path, 
+                                    delim="\t", 
+                                    col_types=list(SEX="f", DATE_OF_BIRTH="D", END_OF_FOLLOWUP="D", ANCESTRY="f", ISCED_2011="d"),
+                                    show_col_types = FALSE)
     if(nrow(pheno_data) == 0) {
         warning(paste0("Warning. Phenotype file contained no entries. Given path: ", file_path))
     }
@@ -27,4 +30,5 @@ read_pheno_file <- function(file_path,
 
     return(pheno_data)
 }
+
 

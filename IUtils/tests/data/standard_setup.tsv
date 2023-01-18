@@ -1,0 +1,19 @@
+study_type	backward
+endpts	NULL
+exp_len	10
+wash_len	2
+obs_len	8
+obs_end_date	2019/01/01
+down_fctr	4
+exp_f1998	TRUE
+ancs	EUR
+obs_age_range	32, 70
+score_type	PRS, CCI, PheRS, EDU
+covs	SEX, YEAR_OF_BIRTH, PC1, PC2, PC3, PC4, PC5, PC6, PC7, PC8, PC9, PC10, BATCH
+min_indvs	50
+write_res	TRUE
+res_dir	/finngen/red/detrois/onset_pred/results/
+pheno_file_path	/finngen/red/detrois/onset_pred/data/INTERVENE_pheno_file_added_info_R8.tsv
+icd_file_path	/finngen/red/detrois/onset_pred/data/finngen_R8_detailed_longitudinal_INTERVENE_format_noprim.txt
+prs_dir_path	/finngen/red/detrois/onset_pred/data/PRS_R8
+phers_dir_path	/finngen/red/thartone/INTERVENE_pheRS/results_231122/

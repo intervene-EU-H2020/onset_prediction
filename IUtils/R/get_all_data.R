@@ -6,7 +6,7 @@ get_all_data <- function(score_type,
                          pheno_file_path="",
                          icd_file_path="",
                          prs_dir_path="",
-                         prs_endpt_descr=NULL,
+                         prs_endpts_map=NULL,
                          phers_dir_path="",
                          phers_study_descr=NULL) {
     if(is.null(endpts)) {
@@ -17,23 +17,21 @@ get_all_data <- function(score_type,
     prs_data <- NULL
     phers_data <- NULL
 
-    if(any(stringr::str_detect(score_type, "[(CCI)|(EI)]"))) {
+    if(any(stringr::str_detect(score_type, "CCI|EI"))) {
         if(file.exists(icd_file_path)) {
             icd_data <- read_icd_file(icd_file_path)
         } else {
-            warning(paste0("\nWarning. CCI or EI selected as predictors, selected: ",
+            stop(paste0("\nError. CCI or EI selected as predictors, selected: ",
             paste0(score_type, collapse=", "),
             "\nHowever, the icd_file_path is not provided or incorrect.\n", icd_file_path))
+            stop()
         }
     }
     if(any(stringr::str_detect(score_type, "PRS"))) {
         if(dir.exists(prs_dir_path)) {
-            if(is.null(prs_endpt_descr)) {
-                prs_endpt_descr <- get_prs_endpt_descr()
-            }
-            prs_data <- read_prs_files(prs_dir_path, endpts, prs_endpt_descr)
+            prs_data <- read_prs_files(prs_dir_path, prs_endpts_map)
         } else {
-            warning(paste0("Warning. PRS selected as predictor, selected: ",
+            stop(paste0("nError. PRS selected as predictor, selected: ",
             paste0(score_type, collapse=", "),
             "\nHowever, the prs_dir_path is not provided or incorrect.\n", prs_dir_path))
         }
@@ -45,7 +43,7 @@ get_all_data <- function(score_type,
             }
             phers_data <- read_phers_files(phers_dir_path, phers_study_descr, endpts)
         } else {
-            warning(paste0("Warning. PheRS selected as predictor, selected: ",
+            stop(paste0("Error. PheRS selected as predictor, selected: ",
             paste0(score_type, collapse=", "),
             "\nHowever, the phers_dir_path is not provided or incorrect.\n", phers_dir_path))
         }

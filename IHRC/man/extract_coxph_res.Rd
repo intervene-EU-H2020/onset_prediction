@@ -7,9 +7,8 @@
 extract_coxph_res(coxph_mdl, score_type)
 }
 \arguments{
-\item{coxph_mdl}{A Cox-PH model.}
-
-\item{score_type}{A character. The score types used in the Cox-PH model.}
+\item{score_type}{A character (vector).
+The score types used in the Cox-PH model.}
 }
 \value{
 A list with elements
