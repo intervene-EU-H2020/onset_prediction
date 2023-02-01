@@ -1,6 +1,6 @@
 #' Gets the study setup file description for the PheRS folders 
 #' 
-#' @param study_type A character. Currently only "backward" possible.
+#' @param study_type A string. Currently only "backward" possible.
 #' @param obs_end_date A Date. The end of the observation period.
 #' @param exp_len An integer. Length of the exposure period (in years).
 #' @param wash_len An integer. Length of the washout period (in years).

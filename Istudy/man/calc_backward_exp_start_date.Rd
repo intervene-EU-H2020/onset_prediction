@@ -7,14 +7,13 @@
 calc_backward_exp_start_date(obs_end_date, exp_len, wash_len, obs_len)
 }
 \arguments{
-\item{obs_end_date}{A Date. The end of the observation period.}
-
 \item{exp_len}{An integer. Length of the exposure period (in years).}
 
 \item{wash_len}{An integer. Length of the washout period (in years).}
 
-\item{obs_len}{An integer. Length of the observation period
-(in years).}
+\item{obs_len}{An integer. Length of the prediction period (in years).}
+
+\item{obs_end_data}{A Date. The end of the observation period.}
 }
 \value{
 A Date

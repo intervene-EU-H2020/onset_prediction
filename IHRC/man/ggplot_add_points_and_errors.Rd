@@ -20,8 +20,7 @@ by creating a S4 study object.
 point. The observation and washout period are calcualted
 backwards from this time point. The exposure period will
 be different for each individual depending on their birth
-date. This setup can be created, using the function
-\code{\link{get_backward_study}}.}
+date.}
 }
 \value{
 The modified ggplot object with points and error bars added.

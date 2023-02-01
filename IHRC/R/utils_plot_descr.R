@@ -16,7 +16,7 @@ filter_out_missing_hrs <- function(coxph_hrs) {
 
 #' Returns the description of the survival analysis for use in plots
 #'
-#' @param preds A character (vector). The predictor variables 
+#' @param preds A string (vector). The predictor variables 
 #'              for the survival analysis
 #'
 #' @return A string with the description of the survival analysis 
@@ -39,9 +39,9 @@ get_surv_descr <- function(preds) {
 #' 
 #' The function also groups all PCs together if there are more than one.
 #'
-#' @param preds A character (vector). 
+#' @param preds A string (vector). 
 #'              The predictors to be reformatted.
-#' @return A character vector with the reformatted predictors.
+#' @return A string vector with the reformatted predictors.
 #' 
 #' @export
 #' 
@@ -67,7 +67,7 @@ reformat_preds_pretty <- function(preds) {
 #' 
 #' @inheritParams run_surv_studies
 #' 
-#' @return A character vector of predictors to use when plotting hazard ratios.
+#' @return A string vector of predictors to use when plotting hazard ratios.
 #' 
 #' @export
 #' 
@@ -84,7 +84,6 @@ filter_plot_preds_fctr <- function(coxph_hrs,
                                 plot_preds) {
     plot_preds <- stringr::str_replace_all(plot_preds, "[*]", ":")
     coxph_hrs <- dplyr::filter(coxph_hrs, VAR %in% plot_preds)
-    print(plot_preds)
     coxph_hrs$VAR <- factor(coxph_hrs$VAR, levels=plot_preds)
 
     return(coxph_hrs)
@@ -92,9 +91,10 @@ filter_plot_preds_fctr <- function(coxph_hrs,
 
 #' Creates a subtitle for a plot based on the current study setup
 #' 
-#' @param study_setup An S4 class representing the study setup.
-#'  
-#' @return A character. The subtitle describing the study setup.
+#' @param study_setup An S4 `study_setup` object. The current study setup. 
+#'                      See class definition [Istudy::study_setup].
+#'   
+#' @return A string. The subtitle describing the study setup.
 #' 
 #' @importFrom lubridate %m-%
 #' @export 
@@ -115,9 +115,10 @@ get_study_subtitle <- function(study_setup) {
 #' The function generates a caption that describes the study setup 
 #' and the predictor variables used in the Cox-PH model.
 #'
-#' @param ana_details A list. Details of the survival analysis including
-#'                    `study_type`, `obs_len`, `wash_len`, `exp_len`, `preds`.
-#'
+#' @param study_setup An S4 `study_setup` object. The current study setup. 
+#'                      See class definition [Istudy::study_setup].
+#' @param preds A string (vector). The predictors of the analysis.
+#' 
 #' @return A string. The plot caption.
 #'
 #' @export 
@@ -149,9 +150,10 @@ get_caption <- function(study_setup,
 #'
 #' @param coxph_hrs A tibble. The Cox-PH HR results. 
 #'                   Needs to at least contain the columns `EXP_AGE`-
-#' @param ana_details A list. contains the values of `exp_len`,
-#'                      `wash_len`, `obs_len`.
-#' @return A character vector with the observation period strings
+#' @param study_setup An S4 `study_setup` object. The current study setup. 
+#'                      See class definition [Istudy::study_setup].
+#'  
+#' @return A string vector with the observation period strings
 #' for each age group for the axis labels of the plot.
 #'
 #' @export
@@ -170,7 +172,7 @@ get_obs_age_period_str <- function(coxph_hrs,
 #' depending on the number of unique variables returns a string 
 #' "1-SD Increment" or "`Variable_name` 1-SD Increment".
 #' 
-#' @param coxph_vars A character(vector). The variables used in the Cox-PH model.
+#' @param coxph_vars A string(vector). The variables used in the Cox-PH model.
 #'  
 #' @return The title of the plot.
 #' @export

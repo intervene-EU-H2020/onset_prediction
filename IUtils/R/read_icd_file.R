@@ -5,7 +5,7 @@
 #' The needed columns are at least `ID`, `EVENT_AGE`, `ICD_VERSION`, 
 #' `PRIMARY_ICD`, 
 #' 
-#' @param file_path A character (string). The path to the file.
+#' @param file_path A string (string). The path to the file.
 #' 
 #' @export 
 #' 

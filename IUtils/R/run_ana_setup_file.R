@@ -1,93 +1,83 @@
-#' Runs standard setup survival model
+#' Runs analysis defined in a setup file
 #' 
-#' Depending on the score types selected sets the covariants. All models
-#' use the covariates sex and year of birth. Analyses with `PRS´, 
-#' additionally use the PCs, and Batch. 
+#' Reads in all the data, using function [IUtils::get_all_data] and then runs function 
+#' [IHRC::run_surv_studies].
 #' 
-#' The exposure period is always 10 years, if washout is selected the 
-#' period is 2 years and the observation period 8 years. Otherwise, the 
-#' observation period is 10 years. 
-#' 
-#' If `PheRS` selected as a score, also gets the test individuals matrix 
-#' for each endpoints. 
-#' 
-#' @param score_type 
+#' @param setup_file_path A string. The path to the setup file.
 #' 
 #' @author Kira E. Detrois
+#' 
+#' @export 
 run_ana_setup_file <- function(setup_file_path) {
-    setup <- read_setup_file(setup_file_path)
-    print(as.Date(setup$obs_end_date))
-    data <- IUtils::get_all_data(score_type=setup$score_type,
-                                endpts=setup$endpts,
-                                pheno_file_path=setup$pheno_file_path,
-                                icd_file_path=setup$icd_file_path,
-                                prs_dir_path=setup$prs_dir_path,
-                                phers_dir_path=setup$phers_dir_path,
-                                phers_study_descr=get_phers_file_descr(study_type=setup$study_type,
-                                                                       obs_end_date=as.Date(setup$obs_end_date),
-                                                                       exp_len=setup$exp_len,
-                                                                       wash_len=setup$wash_len,
-                                                                       obs_len=setup$obs_len))
-    covs <- get_crnt_covs(setup$score_type, setup$covs)
-    if(FinnGen %in% names(setup) & any(stringr::str_detect(score_type, "PRS"))) {
-        print("oh dear")
-        #endpt_indvs_mat <- create_endpt_indvs_mat(data$pheno, endpts, setup$FinnGen)
+    setup <- get_setup(setup_file_path)
+    if(!setup$read_pheno_score_files) {
+        data <- IUtils::get_all_data(score_type=setup$score_type,
+                                     endpts=setup$endpts,
+                                     pheno_file_path=setup$pheno_file_path,
+                                     icd_file_path=setup$icd_file_path,
+                                     atc_file_path=setup$atc_file_path,
+                                     prs_dir_path=setup$prs_dir_path,
+                                     phers_dir_path=setup$phers_dir_path,
+                                     phers_study_descr=get_phers_file_descr(
+                                                                    study_type=setup$study_type,
+                                                                    obs_end_date=setup$obs_end_date,
+                                                                    exp_len=setup$exp_len,
+                                                                    wash_len=setup$wash_len,
+                                                                    obs_len=setup$obs_len),
+                                     zip_dir_path=setup$zip_dir_path)
     }
-    if(any(stringr::str_detect(score_type, "PheRS"))) {
-        endpt_indvs_mat <-  IUtils::read_phers_endpt_indvs_mat(
-                                                phers_dir_path,
-                                                indvs_ids=data$pheno$ID,
-                                                endpts=setup$endpts,
-                                                prev_endpt_idnvs_mat=endpt_indvs_mat)
-    }
-
-    # }
-    # res <- IHRC::run_surv_studies(pheno_data=data$pheno, 
-    #                               endpt_indvs_mat=endpt_indvs_mat,
-    #                               icd_data=data$icd,
-    #                               prs_data=data$prs,
-    #                               phers_data=data$phers,
-    #                               score_type=score_type,
-    #                               study_type="backward",
-    #                               endpts=endpts,
-    #                               exp_len=10,
-    #                               wash_len=2,
-    #                               obs_len=8,
-    #                               obs_end=obs_end_date,
-    #                               down_fctr=down_fctr,
-    #                               ancs="EUR",
-    #                               obs_age_range=c(32,70),
-    #                               covs=crnt_covs,
-    #                               write_res=TRUE)
+    res <- IHRC::run_surv_studies(pheno_data=data$pheno, 
+                                  endpts_indvs_mat=get_endpts_indvs_mat(setup, data$pheno),
+                                  icd_data=data$icd,
+                                  atc_data=data$atc,
+                                  prs_data=data$prs,
+                                  phers_data=data$phers,
+                                  zip_data=data$zip,
+                                  score_type=setup$score_type,
+                                  create_score_combos=setup$create_score_combos,
+                                  study_type=setup$study_type,
+                                  endpts=setup$endpts,
+                                  exp_len=setup$exp_len,
+                                  wash_len=setup$wash_len,
+                                  obs_len=setup$obs_len,
+                                  obs_end_date=setup$obs_end_date,
+                                  down_fctr=setup$down_fctr,
+                                  ancs=setup$ancs,
+                                  obs_age_range=setup$obs_age_range,
+                                  covs=setup$covs,
+                                  filter_1998=setup$filter_1998,
+                                  min_indvs=setup$min_indvs,
+                                  write_res=TRUE,
+                                  res_dir=setup$res_dir,
+                                  res_descr=setup$res_descr,
+                                  read_pheno_score_files=setup$read_pheno_score_files)
 } 
 
-get_crnt_covs <- function(score_type, covs) {
-    if(is.null(covs)) {
-        if(any(string::str_detect(score_type, "PRS"))) {
-            covs <- c("SEX", "YEAR_OF_BIRTH", paste0("PC", 1:10), "BATCH")
-        } else {
-            covs <- c("SEX", "YEAR_OF_BIRTH")
-    } 
-    return(covs)
-}
-
-read_setup_file <- function(setup_file_path) {
-    setup_tib <- readr::read_delim(setup_file_path, col_names=FALSE, show_col_types=FALSE)
-    setup <- as.list(setup_tib$X2)
-    names(setup) <- setup_tib$X1
-
-    for(elem_name in names(setup)) {
-        if(setup[elem_name] == "NULL") {
-            setup[elem_name] <- NULL
-        } else if(stringr::str_detect(setup[[elem_name]], ", ")) {
-            setup[elem_name] <- as.vector(stringr::str_split(setup[[elem_name]], pattern=", "))
-        } else if(stringr::str_detect(setup[[elem_name]], ",")) {
-            setup[elem_name] <- as.vector(stringr::str_split(setup[[elem_name]], pattern=","))
-        } else if(!stringr::str_detect(setup[[elem_name]], "\\D")) {
-            setup[elem_name] <- as.numeric(setup[[elem_name]])
-        } else if(stringr::str_detect(setup[[elem_name]], "^(TRUE|FALSE)$")) {
-            setup[elem_name] <- as.logical(setup[[elem_name]])
-        }
+#' Reads in the endpoint individuals selection files
+#' 
+#' @param setup A list. The setup information from the setup file.
+#' @param pheno_data A data.frame. The phenotype data. Needs at least column `ID`.
+#' 
+#' @return A data.frame with the individuals that can be used for each endpoint. 
+#'          Contains a column of individual IDs and a binary column for each endpoint.
+#' 
+#' @author Kira E. Detrois
+#' 
+#' @export 
+get_endpts_indvs_mat <- function(setup,
+                                 pheno_data) {
+    endpts_indvs_mat <- NULL
+    if("FinnGen" %in% names(setup) & any(stringr::str_detect(setup$score_type, "PRS"))) {
+        endpts_indvs_mat <- read_finngen_endpts_indvs_mat(pheno_data, setup$endpts, setup$FinnGen)
     }
-    return(setup)
+    if(any(stringr::str_detect(setup$score_type, "PheRS"))) {
+       endpts_indvs_mat <-  IUtils::read_phers_endpts_indvs_mat(
+                                               setup$phers_dir_path,
+                                               indvs_ids=pheno_data$ID,
+                                               set_nas_true = TRUE,
+                                               endpts=setup$endpts,
+                                               study_descr=setup$phers_study_descr,
+                                               prev_endpts_indvs_mat=endpts_indvs_mat)
+    }
+    return(endpts_indvs_mat)
 }

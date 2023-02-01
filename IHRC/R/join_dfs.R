@@ -1,14 +1,16 @@
-#' Joins the phenotypic and score data
+#' Joins phenotype and score data
 #' 
-#' Joins the dataframes `pheno_data`, and `score_data` using
-#' the ID variable.
+#' Joins the data.frames `pheno_data`, and `score_data` using
+#' the `ID` variable.
 #' 
 #' Sets missing values for the `CCI`, or `EI` to 0.
 #' 
-#' @inheritParams run_surv_studies
-#' @inheritParams get_n_group_cases
+#' @param pheno_data A data.frame. The phenotype data. Needs at least column `ID`.
+#' @param score_data A data.frame. The score data. Needs at least column `ID` and 
+#'                   if `score_type` contains `CCI` or `EI` then the selected columns.
+#' @param score_type A string (vector). The score types used in the analysis.
 #' 
-#' @return A dataframe containing the merged study and score data.
+#' @return A tibble containing the merged phenotype and score data.
 #'  
 #' @export 
 #' 
@@ -16,12 +18,9 @@
 join_dfs <- function(pheno_data,
                      score_data,
                      score_type="CCI") {
-    writeLines(paste0("pheno data ", nrow(pheno_data)))
-    writeLines(paste0("score data ", nrow(score_data)))
-    study_data <- dplyr::inner_join(pheno_data,
-                                    score_data,
-                                    by="ID")
-    writeLines(paste0("joined data ", nrow(study_data)))
+    study_data <- dplyr::full_join(pheno_data,
+                                   score_data,
+                                   by="ID")
     if("CCI" %in% score_type) {
         study_data$CCI[is.na(study_data$CCI)] <- 0
     } 

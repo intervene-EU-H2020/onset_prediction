@@ -1,14 +1,15 @@
 #' Reads the PheRS files for the endpoints from a common directory
 #' 
-#' @param dir_path A character (string). The path to the directory.
-#' @param endpts A character (vector). The endpoint names. If not provided
+#' @param dir_path A string (string). The path to the directory.
+#' @param study_descr A string. The study description in the PheRS files. If not 
+#'                      provided uses standard call to [IUtils::get_phers_file_descr].
+#' @param endpts A string (vector). The endpoint names. If not provided
 #'                  uses default endpoints from function [IUtils::get_endpts()].
-#' @param prs_endpt_descr A character (vector). The PRS files endpoint 
-#'                         descriptions. If not provided, uses default endpoints
-#'                         from function [IUtils::prs_endpt_descr()].
 #'
 #' @return A tibble with columns `ID` and a column for each selected endpoint
 #'          named `endpt_PRS` i.e. `J10_ASTHMA_PRS`.
+#' 
+#' @importFrom dplyr %>% 
 #' 
 #' @author Kira E. Detrois
 #' 
@@ -42,4 +43,5 @@ read_phers_files <- function(dir_path,
     }
     return(phers_data)
 }
+
 

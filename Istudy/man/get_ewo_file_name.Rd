@@ -6,14 +6,6 @@
 \usage{
 get_ewo_file_name(study_type, exp_len, wash_len, obs_len)
 }
-\arguments{
-\item{exp_len}{An integer. Length of the exposure period (in years).}
-
-\item{wash_len}{An integer. Length of the washout period (in years).}
-
-\item{obs_len}{An integer. Length of the observation period
-(in years).}
-}
 \description{
 Creates file name describing the exposure, wash, and observation period.
 }

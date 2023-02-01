@@ -10,8 +10,8 @@ get_obs_age_period_str(coxph_hrs, study_setup)
 \item{coxph_hrs}{A tibble. The Cox-PH HR results.
 Needs to at least contain the columns \code{EXP_AGE}-}
 
-\item{ana_details}{A list. contains the values of \code{exp_len},
-\code{wash_len}, \code{obs_len}.}
+\item{study_setup}{An S4 \code{study_setup} object. The current study setup.
+See class definition \link[Istudy:study_setup-class]{Istudy::study_setup}.}
 }
 \value{
 A character vector with the observation period strings

@@ -7,7 +7,8 @@
 get_study_subtitle(study_setup)
 }
 \arguments{
-\item{study_setup}{An S4 class representing the study setup.}
+\item{study_setup}{An S4 \code{study_setup} object. The current study setup.
+See class definition \link[Istudy:study_setup-class]{Istudy::study_setup}.}
 }
 \value{
 A character. The subtitle describing the study setup.

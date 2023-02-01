@@ -2,43 +2,90 @@
 % Please edit documentation in R/get_study_data.R
 \name{get_pheno_score_data}
 \alias{get_pheno_score_data}
-\title{Extract Eligibility Score Data}
+\title{Get Phenotype and Score Data}
 \usage{
 get_pheno_score_data(
   score_type,
   pheno_data,
   study_setup,
-  endpts_indvs_mat,
+  endpts_indvs_mat = NULL,
   icd_data = NULL,
   atc_data = NULL,
   prs_data = NULL,
   phers_data = NULL,
+  zip_data = NULL,
   endpt = NULL,
-  min_indvs = 5
+  min_indvs = 5,
+  error_file = NULL
 )
 }
+\arguments{
+\item{score_type}{a character (vector). The score types in the analysis.
+Available options include:
+\itemize{
+\item \code{CCI} for Charlson comorbidity index,
+\item \code{EI} for Elixhauser index,
+\item \code{PRS} for polygenic risk score,
+\item \code{PheRS} for PheRS results score,
+\item \code{MED} for medication data, and
+\item \code{EDU} for educational level. The column for this needs to
+be called \code{ISCED_2011} in the \code{pheno_data}.
+\item \code{ZIP} for zip scores,
+}}
+
+\item{pheno_data}{A data.frame. The phenotypic data on the individuals.
+Should at least contain the columns as described  in
+\link{get_relevant_pheno_data_cols}.}
+
+\item{study_setup}{An S4 \code{study_setup} object. The current study setup.
+See class definition \link[Istudy:study_setup-class]{Istudy::study_setup}.}
+
+\item{endpts_indvs_mat}{A data.frame. A matrix with the individuals that can
+be used for each endpoint. Contains a column of individual
+IDs and a binary column for each endpoint.}
+
+\item{icd_data}{A data.frame. The ICD codes of the individuals. Needs at least the
+columns as described in \link{get_study_cci_data}.}
+
+\item{atc_data}{A data.frame. The ATC codes of the individuals. Needs at least the
+columns as described in \link{get_study_med_data}.}
+
+\item{prs_data}{A data.frame. The PRS scores of the individuals. Needs at least the
+columns as described in \link{get_prs_endpt_data}.}
+
+\item{phers_data}{A data.frame. The PheRS scores of the individuals. Needs at least
+the columns as described in \link{get_phers_endpt_data}.}
+
+\item{zip_data}{A data.frame. The ZIP scores of the individuals. Needs at least the
+columns as described in \link{get_zip_data}.}
+
+\item{endpt}{A charcter. The current endpoint.}
+
+\item{min_indvs}{An integer. The minimum number of individuals each
+group in the analyses needs to have. This is important
+for being able to export data from the FinnGen Sanbdox.}
+
+\item{error_file}{A character. The path to the error file.}
+}
 \value{
-The data.frame with the score data for all eligible individuals
-under the study setup of the current survival analysis setup.
-Otherwise returns NULL. Also returns NULL if there is something
-wrong with the \code{score_data}.
+A tibble with the phenotype and score data for all eligible individuals
+under the current study and  survival analysis setup.
+Returns \code{NULL} if there is not enough eligible individuals defined
+by \code{min_indvs} and if there is something wrong with the \code{score_data}.
 }
 \description{
-Extract the score and phenotype data of eligible cases and controls for
-the Cox-PH analysis of a given endpoint.
+Extract the phenotype and score data of eligible cases and controls for
+the Cox-PH analysis of a given study.
 }
 \details{
-If score type includes \code{CCI}, \code{PRS}, \code{EI}, \code{PheRS}, or \code{MED}, it also
-calls \link{preprocess_score_data} to generate a data frame with the required
+If score type includes \code{CCI}, \code{PRS}, \code{EI}, \code{PheRS}, or \code{MED}, uses
+function \link{preprocess_score_data} to generate a data.frame with the required
 score data, and then joins the resulting score data with the phenotypic data
 on the eligible individuals, using the function \link{join_dfs}.
 
 It filters the study data to include only endpoints with both
 cases and controls that have at least a minimum number of individuals.
-}
-\examples{
-get_pheno_score_data("CCI", pheno_data, icd_data, endpt="J10_ASTHMA")
-
+Defined in the \code{surv_ana} object.
 }
 \author{
 Kira E. Detrois

@@ -7,7 +7,7 @@
 calc_exp_start_age(elig_indv)
 }
 \arguments{
-\item{elig_indv}{A dataframe of individuals with columns
+\item{elig_indv}{A data.frame of individuals with columns
 \code{ID}, \code{DATE_OF_BIRTH}, and \code{EXP_START_DATE}.}
 }
 \value{

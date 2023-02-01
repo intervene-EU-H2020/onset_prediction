@@ -7,13 +7,14 @@
 get_down_dir(down_fctr)
 }
 \arguments{
-\item{down_fctr}{A numeric. Defines how many controls there
-should be for every case.
-Default is NA, which means no
-downsampling is performed.}
+\item{down_fctr}{A numeric. Defines how many controls there should be for every case.}
+}
+\value{
+A character. The directory name describing the downsampling factor used.
 }
 \description{
-Creates directory name for the downsampling factor
+If the downsampling factor is NA then the direcotry is
+named \code{no_down}.
 }
 \author{
 Kira E. Detrois

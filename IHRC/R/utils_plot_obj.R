@@ -4,10 +4,13 @@
 #' Creates the ggplot for the HRs vs. observation age for an endpoint 
 #' in a forward study.
 #'
-#' @param coxph_hrs A dataframe. The results of the Cox-PH model for 
+#' @param coxph_hrs A data.frame. The results of the Cox-PH model for 
 #'                  the current endpoint.
-#' @param ana_details A list. Details of the current analysis such as 
-#'                      study type, predictors, etc.
+#' @param study_setup An S4 `study_setup` object. The current study setup. 
+#'                      See class definition [Istudy::study_setup].
+#' @param preds A string (vector). The predictors of the analysis 
+#'               for the caption.
+#' @param endpt A string. The current endpoint.
 #' @param min_y A numeric. Minimum value for the y-axis.
 #' @param max_y A numeric. Maximum value for the y-axis.
 #' 
@@ -55,10 +58,9 @@ get_age_sd_hr_ggplot <- function(coxph_hrs,
 #' @param coxph_hrs A tibble. The Cox-PH HR results. 
 #'                      Needs to at least contain the columns `ENDPOINT`, `HR`, 
 #'                      `CI_NEG`, `CI_POS`, `VAR`
-#' @param ana_details A list. A list of parameters for the analysis. 
-#'                       It should contain the following fields: `study_type`, 
-#'                      `preds`, `exp_len`, `wash_len`, `obs_len`, `obs_end_date`.
-#' @param sort_hrs A logical.  If `True`, the endpoints are sorted by HR.
+#' @param study_setup An S4 `study_setup` object. The current study setup. 
+#'                      See class definition [Istudy::study_setup].
+#' @param preds A string (vector). The predictors of the analysis.
 #' 
 #' @return A ggplot object
 #' 

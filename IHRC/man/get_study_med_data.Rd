@@ -2,24 +2,26 @@
 % Please edit documentation in R/get_score_data.R
 \name{get_study_med_data}
 \alias{get_study_med_data}
-\title{Calcualtes the MI score on the exposure window}
+\title{Gets the CCI score on the exposure window from ICD data}
 \usage{
-get_study_med_data(elig_indv, atc_data)
+get_study_med_data(pheno_data, study_setup, atc_data)
 }
 \arguments{
-\item{elig_indv}{A data.frame. The individuals which were eligble under
-the current study setup. Needs to at least
-contain the column defined in \code{ID}, \code{DATE_OF_BIRTH},
-and \code{EXP_END_PERIOD}.}
+\item{pheno_data}{A data.frame. The phenotype data. Needs at least columns \code{ID}
+and \code{DATE_OF_BIRTH}.}
 
-\item{icd_data}{A data.frame with at least columns \code{ID}, \code{Event_age},
-and \code{PRIMARY_ICD}.}
+\item{study_setup}{An S4 \code{study_setup} object. The current study setup.
+See class definition \link[Istudy:study_setup-class]{Istudy::study_setup}.}
+
+\item{atc_data}{A data.frame. The ATC codes. Needs at least columns
+\code{ID}, \code{ATC}, and \code{WEIGHT}.}
 }
 \value{
-A data.frame with columns \code{ID}, and \code{SCORE}.
+A tibble with columns \code{ID} and \code{MED}. Contains the weighted medication
+scores for each individual.
 }
 \description{
-Calcualtes the MI score on the exposure window
+Gets the CCI score on the exposure window from ICD data
 }
 \author{
 Kira E. Detrois

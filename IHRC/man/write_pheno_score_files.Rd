@@ -7,7 +7,16 @@
 write_pheno_score_files(pheno_score_data, study_setup, endpt, surv_ana)
 }
 \arguments{
-\item{surv_ana}{An S4 study object. The current survival analysis.}
+\item{pheno_score_data}{A data.frame. The phenotype-score data to be
+written to file.}
+
+\item{study_setup}{An S4 \code{study_setup} object. The current study setup.
+See class definition \link[Istudy:study_setup-class]{Istudy::study_setup}.}
+
+\item{endpt}{A character. The current endpoint.}
+
+\item{surv_ana}{An S4 \code{surv_ana} object. The current survival analysis setup.
+See class definition \link{surv_ana}.}
 }
 \description{
 Prints to console if something goes wrong.

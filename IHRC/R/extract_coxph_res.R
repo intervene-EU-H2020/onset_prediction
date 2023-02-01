@@ -1,11 +1,10 @@
 #' Extract relevant results from the Cox-PH model
 #' 
 #' This function extracts the results of a Cox proportional hazards model 
-#' fit and returns them in a list. If the model is NULL, an empty list is 
-#' returned.
+#' fit and returns them in a list.
 #' 
-#' @inheritParams add_coxph_res_row
-#' @inheritParams run_surv_studies
+#' @param coxph_mdl A `coxph` object. See function [survival::coxph].
+#' @param score_type A string (vector). The score types used in the analysis.
 #' 
 #' @return A list with elements 
 #' \itemize{
@@ -18,6 +17,7 @@
 #' \item groups: Groupings for the predictors
 #' \item preds: Predictor names
 #' }
+#' If the model is NULL, an empty list is returned
 #' 
 #' @export 
 #' 

@@ -26,14 +26,6 @@ A ggplot object with added color and theme settings
 \description{
 Adds custom color settings and theme settings to a ggplot object
 }
-\examples{
-# Create a ggplot object
-plt <- ggplot(data = my_data, aes(x = x_var, y = y_var)) + 
-        geom_point()
-# Add color scale and theme to the plot
-plt <- ggplot_add_color_and_theme(plt, color_labels = my_data$color_var)
-
-}
 \author{
 Kira E. Detrois
 }

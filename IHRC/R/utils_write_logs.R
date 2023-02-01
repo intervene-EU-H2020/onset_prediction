@@ -3,21 +3,25 @@
 #' 
 #' Prints to console if something goes wrong.
 #' 
-#' @param surv_ana An S4 study object. The current survival analysis.
+#' @param pheno_score_data A data.frame. The phenotype-score data to be
+#'                          written to file.
+#' @param study_setup An S4 `study_setup` object. The current study setup. 
+#'                      See class definition [Istudy::study_setup].
+#' @param endpt A string. The current endpoint.
+#' @param surv_ana An S4 `surv_ana` object. The current survival analysis setup. 
+#'                      See class definition [IHRC::surv_ana].
 #' 
 #' @author Kira E. Detrois
 write_pheno_score_files <- function(pheno_score_data,
                                     study_setup,
                                     endpt,
                                     surv_ana) {
-    if(check_res_dir(surv_ana@write_res, surv_ana@res_dir)) {
-        file_path <- check_and_get_file_path(res_type="pheno_score",
+    if(check_res_dir(surv_ana@write_res, surv_ana@res_dir) & 
+        !is.null(pheno_score_data)) {
+        file_path <- get_full_file_name_path(res_type="pheno_score",
                                              study_setup=study_setup,
                                              endpt=endpt,
                                              surv_ana=surv_ana)
-        print(file_path)
-        print(colnames(pheno_score_data))
-        print(pheno_score_data)
         readr::write_delim(x=pheno_score_data,
                            file=file_path,
                            delim="\t")
@@ -25,23 +29,11 @@ write_pheno_score_files <- function(pheno_score_data,
 
 }
 
-
-write_log_file <- function(study,
-                           surv_ana) {
-    if(check_res_dir(surv_ana@write_res, surv_ana@res_dir)) {
-
-        file_path <- check_and_get_file_path(res_type="log",
-                                            study_setup=study@study_setup,
-                                            endpt=study@endpt,
-                                            surv_ana=surv_ana)
-        readr::write_file(log_msg_string(study), file_path)
-    }
-}
-
 #' Creates a string of the current study setup
 #' 
-#' @inheritParams write_pheno_score_files
-#' 
+#' @param study An S4 `study` object. The current study. 
+#'                  See class definition [Istudy::study].
+#'  
 #' @return The log message character string
 #' 
 #' @export 
@@ -63,8 +55,8 @@ log_msg_string <- function(study) {
 append_log_file <- function(coxph_mdl,
                             study,
                             surv_ana) {
-    if(check_res_dir(surv_ana@write_res, surv_ana@res_dir)) {
-        file_path <- check_and_get_file_path(res_type="log",
+    if(check_res_dir(surv_ana@write_res, surv_ana@res_dir) & !is.null(coxph_mdl)) {
+        file_path <- get_full_file_name_path(res_type="log",
                                              study_setup=study@study_setup,
                                              endpt=study@endpt,
                                              surv_ana=surv_ana)
@@ -83,24 +75,24 @@ append_log_file <- function(coxph_mdl,
 #' If the directory does not exists tries to create it, recursively.
 #' 
 #' @param write_res A boolean. Whether to write log files.
-#' @param res_dir A character. The path to the results directory.
+#' @param res_dir A string. The path to the results directory.
 #' 
 #' @return A boolean. Whether to write the results to the `res_dir`.
 #' 
 #' @export 
 #' 
 #' @author Kira E. Detrois
-check_res_dir <- function(write_res=NULL,
-                          res_dir=NULL) { 
+check_res_dir <- function(write_res,
+                          res_dir) { 
    if(write_res) {
         if(is.na(res_dir)) {
-            message("Variable write_res was set to TRUE but res_dir was not provided. Cannot write results to file.")
+            writeLines("Variable write_res was set to TRUE but res_dir was not provided. Cannot write results to file.")
             return(FALSE)
         } else {
             if(!dir.exists(res_dir)) {
-                message(paste0("The file directory ", res_dir, " does not exist. Trying to create it."))
+                writeLines(paste0("The file directory ", res_dir, " does not exist. Trying to create it."))
                 dir.create(res_dir, recursive=TRUE)
-            } 
+            }
             return(TRUE)
         }
     } else {

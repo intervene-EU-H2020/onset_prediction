@@ -7,21 +7,22 @@
 get_coxph_mdl(surv_ana, study)
 }
 \arguments{
-\item{test_idxs}{An integer (vector). The indices of the test data
-subset. Default is \code{NULL}, meaning the whole data
-is used for fitting.}
+\item{surv_ana}{An S4 \code{surv_ana} object. The current survival analysis setup.
+See class definition \link{surv_ana}.}
+
+\item{study}{An S4 study object. The current study.}
 }
 \value{
 A Cox-PH model object or \code{NULL} if the model couldn't be fit.
 }
 \description{
 This function fits a Cox Proportional Hazards Model for a
-given surivival analysis setup, using the \link[survival:coxph]{survival::coxph} function.
+given surivival analysis setup and study, using the \link[survival:coxph]{survival::coxph} function.
 }
 \details{
-For i.e. \code{endpt = "J10_ASTHMA"} and \code{covs = c("SEX", "YEAR_OF_BIRTH")}
-the model would be
-\code{Surv(J10_ASTHMA_AGE_FROM_BASE, J10_ASTHMA) ~ PRS + SEX + YEAR_OF_BIRTH}.
+For i.e. a \code{study} with endpoint \code{J10_ASTHMA} and \code{surv_ana} with covs
+\code{covs = c("SEX", "YEAR_OF_BIRTH")} the model would be
+\code{Surv(J10_ASTHMA_AGE_DAYS, J10_ASTHMA) ~ SCORE + SEX + YEAR_OF_BIRTH}.
 }
 \author{
 Kira E. Detrois

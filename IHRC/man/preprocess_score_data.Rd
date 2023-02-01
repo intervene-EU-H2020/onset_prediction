@@ -11,46 +11,61 @@ preprocess_score_data(
   atc_data = NULL,
   prs_data = NULL,
   phers_data = NULL,
-  endpt = NULL
+  zip_data = NULL,
+  endpt = NULL,
+  study_setup = NULL,
+  error_file = NULL
 )
 }
 \arguments{
-\item{score_type}{a character (vector). The types of scores to be preprocessed.
+\item{score_type}{a character (vector). The score types in the analysis.
 Available options include:
-- "CCI" for Charlson comorbidity index,
-- "EI" for Elixhauser index,
-- "PRS" for polygenic risk score,
-- "PheRS" for PheWAS results score,
-- "MED" for medication data, and
-- "EDU" for educational level. The column for this needs to be
-called ISCED_2011 in the \code{pheno_data}.}
+\itemize{
+\item \code{CCI} for Charlson comorbidity index,
+\item \code{EI} for Elixhauser index,
+\item \code{PRS} for polygenic risk score,
+\item \code{PheRS} for PheRS results score,
+\item \code{MED} for medication data, and
+\item \code{EDU} for educational level. The column for this needs to
+be called \code{ISCED_2011} in the \code{pheno_data}.
+\item \code{ZIP} for zip scores,
+}}
 
-\item{pheno_data}{A dataframe containing phenotypic data.}
+\item{pheno_data}{A data.frame. The phenotypic data on the individuals.
+Should at least contain the columns as described  in
+\link{get_relevant_pheno_data_cols}.}
 
-\item{icd_data}{A dataframe containing ICD data.
-Required if "CCI" or "EI" is present in \code{score_type}}
+\item{icd_data}{A data.frame. The ICD codes of the individuals. Needs at least the
+columns as described in \link{get_study_cci_data}.}
 
-\item{atc_data}{A dataframe containing ATC data.
-Required if "MED" is present in \code{score_type}}
+\item{atc_data}{A data.frame. The ATC codes of the individuals. Needs at least the
+columns as described in \link{get_study_med_data}.}
 
-\item{prs_data}{A dataframe containing PRS data.
-Required if "PRS" is present in \code{score_type}}
+\item{prs_data}{A data.frame. The PRS scores of the individuals. Needs at least the
+columns as described in \link{get_prs_endpt_data}.}
 
-\item{phers_data}{A dataframe containing PheRS data.
-Required if "PheRS" is present in \code{score_type}}
+\item{phers_data}{A data.frame. The PheRS scores of the individuals. Needs at least
+the columns as described in \link{get_phers_endpt_data}.}
+
+\item{zip_data}{A data.frame. The ZIP scores of the individuals. Needs at least the
+columns as described in \link{get_zip_data}.}
 
 \item{endpt}{A character. The current endpoint.
-Required if "PRS" or "PheRS" is present in \code{score_type}}
+Required if \code{PRS} or \code{PheRS} is present in \code{score_type}.}
+
+\item{study_setup}{An S4 \code{study_setup} object. The current study setup.
+See class definition \link[Istudy:study_setup-class]{Istudy::study_setup}.}
+
+\item{error_file}{A character. The path to the error file.}
 }
 \value{
-A dataframe containing all the preprocessed scores specified in
+A data.frame containing all the preprocessed scores specified in
 \code{score_type}.
 }
 \description{
 Preprocesses different score data, based
-on the selected scores and the current endpoint.
+on the selected score types and the current endpoint.
 }
 \author{
 Kira E. Detrois
-The education data comes from the phenotypic file
 }

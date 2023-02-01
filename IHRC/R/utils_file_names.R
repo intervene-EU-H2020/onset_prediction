@@ -6,14 +6,14 @@
 #' 
 #' @inheritParams run_surv_studies
 #' 
-#' @return A character vector of all predictors being used in the survival analysis, 
+#' @return A string vector of all predictors being used in the survival analysis, 
 #' sorted by predictor name.
 #' 
 #' @export 
 #' 
 #' @author Kira E. Detrois
-get_all_preds_sorted <- function(score_type="", 
-                                 covs) {
+get_all_preds_sorted <- function(score_type, 
+                                 covs=NULL) {
     interact_preds <- score_type[stringr::str_detect(score_type, "[*]")]
 
     if(all(score_type != "")) {
@@ -26,19 +26,60 @@ get_all_preds_sorted <- function(score_type="",
             score_type <- score_type[order(score_type)]
         }
     }
-    covs <- covs[order(covs)]
-    if(all(score_type != "")) {
-        all_preds <- c(score_type, covs)
-    } else {
-        all_preds <- covs
-    }
-    return(all_preds)
+    if(!is.null(covs)) {
+        covs <- covs[order(covs)]
+        if(all(score_type != "")) {
+            score_type <- c(score_type, covs)
+        } else {
+            score_type <- covs
+        }
+    }  
+    return(score_type)
 }
 
+#' Adds downsampling and filter information to results directory path
+#' 
+#' @param write_res A boolean. Defines whether to save the results to files.
+#' @param res_dir A string. The directory to write the results and log to.
+#' @param down_fctr A numeric. Defines how many controls there should be for every case.
+#' @param study_type A string. Can be either `forward` or `backward`. 
+#' @param score_type A string (vector). The score types used in the analysis.
+#' @param res_descr A string. An addition to add to the results directory.
+#' 
+#' @return A string. The updated results directory path.
+#' 
+#' @author Kira E. Detrois
+#' 
+#' @export 
+get_full_res_path <- function(write_res,
+                              res_dir,
+                              down_fctr,
+                              study_type,
+                              score_type,
+                              res_descr) {
+ 
+    if(write_res) {
+        if(all(score_type != "")) {
+            score_type_dir_name <- get_score_type_dir_name(score_type, res_descr)
+        } else {
+            score_type_dir_name <- "baseline"
+        }
+        res_dir <- paste0(res_dir, study_type, "/", get_down_dir(down_fctr), score_type_dir_name, "/")
+    } else {
+        res_dir <- NULL
+    }
+}
 
 #' Creates directory name for the downsampling factor
 #' 
-#' @inheritParams run_surv_studies
+#' If the downsampling factor is NA then the direcotry is 
+#' named `no_down`.
+#' 
+#' @param down_fctr A numeric. Defines how many controls there should be for every case.
+#' 
+#' @return A string. The directory name describing the downsampling factor used.
+#' 
+#' @export 
 #' 
 #' @author Kira E. Detrois
 get_down_dir <- function(down_fctr) {
@@ -47,70 +88,84 @@ get_down_dir <- function(down_fctr) {
            paste0("down_", down_fctr, "/")) 
 }
 
-#' Adds downsampling and filter information to results directory path
-get_full_res_path <- function(write_res,
-                              res_dir,
-                              down_fctr,
-                              study_type,
-                              score_type) {
-    score_type_dir_name <- get_score_type_dir_name(score_type)
-
-    if(write_res) {
-        res_dir <- paste0(res_dir, study_type, "/", get_down_dir(down_fctr), score_type_dir_name, "/")
-    } else {
-        res_dir <- NULL
+#' Turns the score types and results description into a directory name
+#' 
+#' @param score_type A string (vector). The score types used in the analysis.
+#' @param res_descr A string. An addition to add to the results directory.
+#' 
+#' @return A string. The directory name.
+#' 
+#' @export 
+#' 
+#' @author Kira E. Detrois
+get_score_type_dir_name <- function(score_type, res_descr=NULL) {
+    dir_name <- paste0(score_type[order(score_type)], collapse="_")
+    if(!is.null(res_descr)) {
+        dir_name <- paste0(dir_name, "_", res_descr)
     }
+    return(dir_name)
 }
+
 
 #' Creats the file directory and name for the different result types
 #' 
-#' @param res_type A character. The results type.
+#' @param res_type A string. The results type.
+#' @param study_setup An S4 `study_setup` object. The current study setup. 
+#'                      See class definition [Istudy::study_setup].
+#' @param endpt A string. The current endpoint.
+#' @param surv_ana An S4 `surv_ana` object. The current survival analysis setup. 
+#'                      See class definition [IHRC::surv_ana].
 #' 
-#' @return A character. The file name.
+#' @return A string. The file name.
+#' 
+#' @export 
 #' 
 #' @author Kira E. Detrois
-check_and_get_file_path <- function(res_type,
+get_full_file_name_path <- function(res_type,
                                     study_setup,
-                                    endpt,
+                                    endpt=NULL,
                                     surv_ana) {
-    if(surv_ana@write_res) {
-        crnt_res_dir <- paste0(surv_ana@res_dir, res_type, "/")
-        # Make the folder if it doesn't exist yet
-        if(check_res_dir(surv_ana@write_res, crnt_res_dir)) {
-            res_file_end <- dplyr::case_when(
+    crnt_res_dir <- paste0(surv_ana@res_dir, res_type, "/")
+    check_res_dir(surv_ana@write_res, crnt_res_dir)
+
+    # Make the folder if it doesn't exist yet
+    res_file_end <- dplyr::case_when(
                                 res_type == "HR" ~ "_HRs.png",
                                 res_type == "coxph" ~ "_coxph.tsv",
                                 res_type == "cidx" ~ "_cidx.tsv",
                                 res_type == "pheno_score" ~ "_elig_indv.tsv",
                                 res_type == "log" ~ "_log.txt"
                             )
-            file_name <- get_file_name(res_type=res_type,
-                                       study_setup=study_setup,
-                                       endpt=endpt,
-                                       surv_ana=surv_ana)
-            file_path <- paste0(crnt_res_dir,
-                                file_name, 
-                                res_file_end)
-        }        
-        return(file_path)
-    }
-    return(NA_character_)
+    file_name <- get_file_name(res_type=res_type,
+                               study_setup=study_setup,
+                               endpt=endpt,
+                               surv_ana=surv_ana)
+    file_path <- paste0(crnt_res_dir,
+                        file_name, 
+                        res_file_end)
+    return(file_path)
 }
 
 #' Creats the file name for the HR plots with continuous scores
 #' 
-#' @return A character. The file name.
+#' @param res_type A string. The results type.
+#' @param study_setup An S4 `study_setup` object. The current study setup. 
+#'                      See class definition [Istudy::study_setup].
+#' @param endpt A string. The current endpoint.
+#' @param surv_ana An S4 `surv_ana` object. The current survival analysis setup. 
+#'                      See class definition [IHRC::surv_ana].
+#'  
+#' @return A string. The file name.
 #' 
 #' @export 
 #' 
 #' @author Kira E. Detrois
 get_file_name <- function(res_type,
                           study_setup,
-                          endpt,
+                          endpt=NULL,
                           surv_ana) {
     # Add date or endpoint infor
-    if(study_setup@study_type == "forward" | 
-            res_type %in% c("log", "pheno_score")) {
+    if(study_setup@study_type == "forward" | res_type %in% c("log", "pheno_score")) {
         file_name <- endpt
     } else {
         file_name <- study_setup@obs_end_date
@@ -137,13 +192,18 @@ get_file_name <- function(res_type,
         file_name <- paste0(file_name,  "_", get_preds_file_name(surv_ana@preds))
     }
 
-    # Add extra predictors
-    if(surv_ana@res_descr != "") {
-        file_name <- paste0(file_name, "_", surv_ana@res_descr)
-    }
     return(file_name)
 }
 
+#' Renames predictors for nicer files names and creates file name
+#' 
+#' @param preds A string (vector). The predictors to rename.
+#' 
+#' @return A string. The file name.
+#' 
+#' @author Kira E. Detrois
+#' 
+#' @export 
 get_preds_file_name <- function(preds) {
     preds <- stringr::str_replace_all(preds, " ", "_")
     preds <- stringr::str_replace_all(preds, "[*]", "i")

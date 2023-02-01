@@ -3,7 +3,7 @@
 #'
 #' Save a ggplot object as an png image file
 #'
-#' @param file_path A character. The file path to save the plot to.
+#' @param file_path A string. The file path to save the plot to.
 #' @param plt ggplot object. The plot to be saved.
 #' @param width numeric. The width of the image file.
 #' @param height numeric. The height of the image file.

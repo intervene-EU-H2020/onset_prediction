@@ -4,16 +4,23 @@
 \alias{get_crnt_endpt_data}
 \title{Gets the data of individuals for a given endpoint study}
 \usage{
-get_crnt_endpt_data(endpts_indvs_mat = NULL, endpt, pheno_data)
+get_crnt_endpt_data(
+  endpts_indvs_mat = NULL,
+  endpt,
+  pheno_data,
+  error_file = NULL
+)
 }
 \arguments{
-\item{endpts_indvs_mat}{A dataframe. Contains a column of individual
+\item{endpts_indvs_mat}{A data.frame. Contains a column of individual
 IDs and a binary column for each endpoint.}
 
 \item{endpt}{A character. The endpoint of interest,
-must match a column name in \code{endpts_indvs_mat}}
+must match a column name in \code{endpts_indvs_mat}.}
 
-\item{all_ids}{A character (vector). The IDs of all individuals.}
+\item{pheno_data}{A data.frame. The phenotype data. Needs at least column \code{ID}.}
+
+\item{error_file}{A character. The path to the error file.}
 }
 \value{
 A data.frame that contains the data for individuals that can be used

@@ -7,11 +7,11 @@
 check_cols(expect_cols, cols, file_path)
 }
 \arguments{
-\item{expect_cols}{A character (vector). The expected column names}
+\item{expect_cols}{A string (vector). The expected column names}
 
-\item{cols}{A character (vector). The actual column name.}
+\item{cols}{A string (vector). The actual column name.}
 
-\item{file_path}{A character (vector). The file from which the column names come from.}
+\item{file_path}{A string (vector). The file from which the column names come from.}
 }
 \value{
 A modified vector of column names with the expected column names.

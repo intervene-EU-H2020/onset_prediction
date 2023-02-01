@@ -4,11 +4,16 @@
 \alias{get_non_na_pred_rows}
 \title{Exclude rows with missing values from a data frame}
 \usage{
-get_non_na_pred_rows(surv_ana, study)
+get_non_na_pred_rows(surv_ana, study_data)
+}
+\arguments{
+\item{surv_ana}{An S4 \code{surv_ana} object. The current survival analysis setup.
+See class definition \link{surv_ana}.}
+
+\item{study_data}{A data.frame. The data for the Cox-PH model.}
 }
 \value{
-A data frame with rows containing missing values in the specified
-columns excluded.
+A data frame with rows containing missing values in the predictors excluded.
 }
 \description{
 This function filters a data frame to exclude rows with missing values

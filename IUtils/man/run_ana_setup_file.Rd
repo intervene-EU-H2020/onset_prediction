@@ -2,25 +2,16 @@
 % Please edit documentation in R/run_ana_setup_file.R
 \name{run_ana_setup_file}
 \alias{run_ana_setup_file}
-\title{Runs standard setup survival model}
+\title{Runs analysis defined in a setup file}
 \usage{
-run_ana_setup_file()
+run_ana_setup_file(setup_file_path)
 }
 \arguments{
-\item{score_type}{}
+\item{setup_file_path}{A string. The path to the setup file.}
 }
 \description{
-Depending on the score types selected sets the covariants. All models
-use the covariates sex and year of birth. Analyses with `PRS´,
-additionally use the PCs, and Batch.
-}
-\details{
-The exposure period is always 10 years, if washout is selected the
-period is 2 years and the observation period 8 years. Otherwise, the
-observation period is 10 years.
-
-If \code{PheRS} selected as a score, also gets the test individuals matrix
-for each endpoints.
+Reads in all the data, using function \link{get_all_data} and then runs function
+\link[IHRC:run_surv_studies]{IHRC::run_surv_studies}.
 }
 \author{
 Kira E. Detrois

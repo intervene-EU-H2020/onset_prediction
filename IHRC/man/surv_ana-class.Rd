@@ -6,35 +6,38 @@
 \alias{surv_ana}
 \title{An S4 class representing the survival analysis}
 \description{
-An S4 class representing the survival analysis
+Contains information about the score types
 }
 \section{Slots}{
 
 \describe{
-\item{\code{study}}{A S4 study object. The current study setups for on whicht
-the eligible indiviuals are selected.}
-
-\item{\code{study_data}}{A dataframe with the phenotypic and score data
-of all eligible individuals under
-the current study setup and their scores.}
-
 \item{\code{min_indvs}}{An integer. The minimum number of individuals each
 group in the analyses needs to have.}
 
-\item{\code{preds}}{A character (vector). The names of the covariates
-to use in the Cox-PH model.}
+\item{\code{score_types}}{A character (vector). The score types used in the analysis.}
 
-\item{\code{plot_preds}}{A character (vector).
-The predictors to use when plotting the HRs.}
+\item{\code{covs}}{A character (vector). The added covariates for the Cox-PH model
+additional to the \code{score_types}.}
 
-\item{\code{res_descr}}{A character. An additional descriptive that can be
-used for distinguishing the results files.}
+\item{\code{create_score_combos}}{A boolean, whether or not to create all possible
+score type combinations from the score_type vector.
+see function \link[IUtils:get_all_possible_score_type_combs]{IUtils::get_all_possible_score_type_combs}.}
+
+\item{\code{score_combos}}{A list. The score type combinations to be run in the
+analyses.}
+
+\item{\code{preds}}{A character (vector). The names of the all predictors to
+be used in the Cox-PH model.}
+
+\item{\code{plot_preds}}{A character (vector). The predictors to use when plotting the HRs.}
 
 \item{\code{write_res}}{A boolean. Defines whether to save the results to
-files. Default: FALSE.}
+files.}
 
 \item{\code{res_dir}}{A character. The directory to write the results and
-logs to. Default: NA.}
+logs to.}
+
+\item{\code{error_file}}{A character. The file path to the error file.}
 }}
 
 \author{

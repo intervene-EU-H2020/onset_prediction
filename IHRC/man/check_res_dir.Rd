@@ -4,7 +4,7 @@
 \alias{check_res_dir}
 \title{Checks whether to write a results file and if the directory exists}
 \usage{
-check_res_dir(write_res = NULL, res_dir = NULL)
+check_res_dir(write_res, res_dir)
 }
 \arguments{
 \item{write_res}{A boolean. Whether to write log files.}

@@ -2,26 +2,35 @@
 % Please edit documentation in R/calc_endpt_study_cidx.R
 \name{calc_endpt_study_cidx}
 \alias{calc_endpt_study_cidx}
-\title{Calculate the c-index
-
-This function calculates the c-index, also known as the concordance index
-or Harrell's C, for a Cox-PH model fit to survival data. The c-index is a
-measure of the predictive accuracy of the model and ranges from 0 to 1,
-with higher values indicating better predictive accuracy.}
+\title{Calculates the c-index}
 \usage{
 calc_endpt_study_cidx(surv_ana, study, coxph_mdl = NULL)
 }
+\arguments{
+\item{surv_ana}{An S4 \code{surv_ana} object. The current survival analysis setup.
+See class definition \link{surv_ana}.}
+
+\item{study}{An S4 \code{study} object. The current study.
+See class definition \link[Istudy:study-class]{Istudy::study}.}
+
+\item{coxph_mdl}{A \code{coxph} object. See function \link[survival:coxph]{survival::coxph}. If \code{NULL}
+creates a new object from the \code{surv_ana} and \code{study} information.}
+}
 \value{
-A numeric value representing the c-index for the survival
-analysis.
+The c-index object from the Hmisc::rcorr.cens function
 }
 \description{
+This function calculates the c-index, also known as the concordance index
+or Harrell's C, for a Cox-PH model fit to survival data. The c-index is a
+measure of the predictive accuracy of the model and ranges from 0 to 1,
+with higher values indicating better predictive accuracy.
+}
+\details{
 The c-index is calculated using the \code{Hmisc::rcorr.cens} function. For more
 information on the elements of the output, see the documentation for
 \link[Hmisc:rcorr.cens]{Hmisc::rcorr.cens}.
-}
-\details{
-For i.e. a study with endpoint \code{J10_ASTHMA} and
+
+For i.e. a \code{study} with endpoint \code{J10_ASTHMA} and \code{surv_ana} with covs
 \code{covs = c("SEX", "YEAR_OF_BIRTH")} the model would be
 \code{Surv(J10_ASTHMA_AGE_DAYS, J10_ASTHMA) ~ SCORE + SEX + YEAR_OF_BIRTH}.
 }

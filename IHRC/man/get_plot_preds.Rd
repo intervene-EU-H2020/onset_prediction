@@ -10,8 +10,18 @@ get_plot_preds(plot_preds, score_type)
 \item{plot_preds}{A character (vector).
 The predictors to use when plotting HR.}
 
-\item{score_type}{A character (vector).
-The score types used in the Cox-PH model.}
+\item{score_type}{a character (vector). The score types in the analysis.
+Available options include:
+\itemize{
+\item \code{CCI} for Charlson comorbidity index,
+\item \code{EI} for Elixhauser index,
+\item \code{PRS} for polygenic risk score,
+\item \code{PheRS} for PheRS results score,
+\item \code{MED} for medication data, and
+\item \code{EDU} for educational level. The column for this needs to
+be called \code{ISCED_2011} in the \code{pheno_data}.
+\item \code{ZIP} for zip scores,
+}}
 }
 \value{
 A character vector of predictors to use when plotting hazard ratios.

@@ -4,15 +4,18 @@
 \alias{write_res_files}
 \title{Writes model results to a tab-delim file}
 \usage{
-write_res_files(endpt_hr_res, endpt_c_idxs_tib, study, surv_ana)
+write_res_files(hr_res, c_idxs_res, study_setup, surv_ana)
 }
 \arguments{
-\item{endpt_hr_res}{A tibble with the results for previous endpts,
-with columns: \code{ENDPOINT}, \code{EXP_AGE}, \code{VAR},
-\code{GROUP}, \code{N_CONTROLS}, \code{N_CASES}, \code{BETA},
-\code{SE}, \code{P_VAL}, \code{HR}, \code{CI_NEG}, \code{CI_POS}}
+\item{hr_res}{A tibble containing the hazard ratios for each exposure age.}
 
-\item{endpt_c_idxs_tib}{A tibble with the results for previous endpts.}
+\item{c_idxs_res}{A data.frame. The c-index results.}
+
+\item{study_setup}{An S4 \code{study_setup} object. The current study setup.
+See class definition \link[Istudy:study_setup-class]{Istudy::study_setup}.}
+
+\item{surv_ana}{An S4 \code{surv_ana} object. The current survival analysis setup.
+See class definition \link{surv_ana}.}
 }
 \description{
 Writes model results to a tab-delim file

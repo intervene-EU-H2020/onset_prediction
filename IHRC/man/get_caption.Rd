@@ -7,8 +7,10 @@
 get_caption(study_setup, preds)
 }
 \arguments{
-\item{ana_details}{A list. Details of the survival analysis including
-\code{study_type}, \code{obs_len}, \code{wash_len}, \code{exp_len}, \code{preds}.}
+\item{study_setup}{An S4 \code{study_setup} object. The current study setup.
+See class definition \link[Istudy:study_setup-class]{Istudy::study_setup}.}
+
+\item{preds}{A character (vector). The predictors of the analysis.}
 }
 \value{
 A string. The plot caption.

@@ -6,14 +6,16 @@
 \usage{
 run_surv_studies(
   pheno_data,
+  score_type,
+  create_score_combos = FALSE,
+  plot_preds = NULL,
+  covs = c("SEX", "YEAR_OF_BIRTH"),
   endpts_indvs_mat = NULL,
   icd_data = NULL,
   atc_data = NULL,
   prs_data = NULL,
   phers_data = NULL,
-  score_type,
-  create_score_combos = FALSE,
-  plot_preds = NULL,
+  zip_data = NULL,
   study_type = "backward",
   endpts = c("J10_ASTHMA"),
   exp_ages = 0,
@@ -21,45 +23,63 @@ run_surv_studies(
   wash_len = 2,
   obs_len = 8,
   obs_end_date = as.Date("2021/01/01"),
+  obs_age_range = c(32, 80),
   down_fctr = NA_integer_,
   ancs = NA_character_,
-  obs_age_range = c(32, 80),
-  covs = c("SEX", "YEAR_OF_BIRTH"),
   min_indvs = 5,
-  res_descr = "",
+  filter_1998 = FALSE,
+  res_descr = NULL,
   write_res = FALSE,
-  res_dir = NULL
+  res_dir = NULL,
+  read_pheno_score_files = FALSE
 )
 }
 \arguments{
-\item{pheno_data}{A data.frame with the phenotypic data on the individuals.
-Should at least contain the columns:
-\code{ID}, the columns specified in \code{covs} and
-i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_AGE_FROM_BASE} where
-the columns are the study endpoint and the age
-from baseline, which will differ depending on the chosen
-\code{endpts}.}
+\item{pheno_data}{A data.frame. The phenotypic data on the individuals.
+Should at least contain the columns as described  in
+\link{get_relevant_pheno_data_cols}.}
 
-\item{endpts_indvs_mat}{A data.frame. A matrix with the individuals that can
-be used for each endpoint.}
+\item{score_type}{a character (vector). The score types in the analysis.
+Available options include:
+\itemize{
+\item \code{CCI} for Charlson comorbidity index,
+\item \code{EI} for Elixhauser index,
+\item \code{PRS} for polygenic risk score,
+\item \code{PheRS} for PheRS results score,
+\item \code{MED} for medication data, and
+\item \code{EDU} for educational level. The column for this needs to
+be called \code{ISCED_2011} in the \code{pheno_data}.
+\item \code{ZIP} for zip scores,
+}}
 
-\item{icd_data}{A data.frame. A data.frame with the ICD codes of the
-individuals.}
-
-\item{atc_data}{A data.frame. A data.frame with the ATC codes of the
-individuals.}
-
-\item{prs_data}{A data.frame. A data.frame with the PRS scores of the
-individuals.}
-
-\item{phers_data}{A data.frame. A data.frame with the PheRS scores of the
-individuals.}
-
-\item{score_type}{A character (vector).
-The score types used in the Cox-PH model.}
+\item{create_score_combos}{A boolean, whether or not to create all possible
+score type combinations from the score_type vector.
+see function \link[IUtils:get_all_possible_score_type_combs]{IUtils::get_all_possible_score_type_combs}.}
 
 \item{plot_preds}{A character (vector).
 The predictors to use when plotting HR.}
+
+\item{covs}{A vector of characters. The column names of the covariates
+to add to the predictor of the Cox-PH model.}
+
+\item{endpts_indvs_mat}{A data.frame. A matrix with the individuals that can
+be used for each endpoint. Contains a column of individual
+IDs and a binary column for each endpoint.}
+
+\item{icd_data}{A data.frame. The ICD codes of the individuals. Needs at least the
+columns as described in \link{get_study_cci_data}.}
+
+\item{atc_data}{A data.frame. The ATC codes of the individuals. Needs at least the
+columns as described in \link{get_study_med_data}.}
+
+\item{prs_data}{A data.frame. The PRS scores of the individuals. Needs at least the
+columns as described in \link{get_prs_endpt_data}.}
+
+\item{phers_data}{A data.frame. The PheRS scores of the individuals. Needs at least
+the columns as described in \link{get_phers_endpt_data}.}
+
+\item{zip_data}{A data.frame. The ZIP scores of the individuals. Needs at least the
+columns as described in \link{get_zip_data}.}
 
 \item{study_type}{A character. Can be either \code{forward} or \code{backward}.
 \code{forward} considers individuals of a certain age
@@ -70,58 +90,66 @@ by creating a S4 study object.
 point. The observation and washout period are calcualted
 backwards from this time point. The exposure period will
 be different for each individual depending on their birth
-date. This setup can be created, using the function
-\code{\link{get_backward_study}}.}
+date.}
 
-\item{endpts}{A character (vector). The column names of the endpoints of
-interest.}
+\item{endpts}{A character (vector). The endpoints of interest.}
 
 \item{exp_ages}{An integer (vector). Ages at which exposure period
 starts (in years).}
 
-\item{exp_len}{An integer. Length of the exposure period ^
-(in years).}
+\item{exp_len}{An integer. Length of the exposure period (in years).}
 
-\item{wash_len}{An integer. Length of the washout period
-(in years).}
+\item{wash_len}{An integer. Length of the washout period (in years).}
 
-\item{obs_len}{An integer. Length of the prediction period
-(in years).}
+\item{obs_len}{An integer. Length of the prediction period (in years).}
 
 \item{obs_end_date}{A Date. The end of the observation period. Needed
 for \code{backward} studies. If not set the end will
 be the most recent date across the diagnosis columns.}
 
-\item{down_fctr}{A numeric. Defines how many controls there
-should be for every case.
-Default is NA, which means no
-downsampling is performed.}
-
-\item{ancs}{A character (vector). The ancestries to consider.}
-
 \item{obs_age_range}{A numeric. The age range of individuals in the observation
 period. Inclusive interval.}
 
-\item{covs}{A vector of characters. The column names of the covariates
-to add to the predictor of the Cox-PH model.}
+\item{down_fctr}{A numeric. Defines how many controls there should be for every case.
+Default is NA, which means no downsampling is performed.}
+
+\item{ancs}{A character (vector). The ancestries to consider.}
 
 \item{min_indvs}{An integer. The minimum number of individuals each
 group in the analyses needs to have. This is important
 for being able to export data from the FinnGen Sanbdox.}
 
-\item{write_res}{A boolean. Defines whether to save the results to
-files.}
+\item{filter_1998}{A boolean. Defines whether to filter out any data from before 1998.}
 
-\item{res_dir}{A character. The directory to write the results and
-log to.}
+\item{res_descr}{A character. An addition to add to the results folder.}
 
-\item{score_type_combos}{A boolean, whether or not to create all possible
-score type combinations from the score_type vector.
-see function \link[IUtils:get_all_possible_score_type_combs]{IUtils::get_all_possible_score_type_combs}.}
+\item{write_res}{A boolean. Defines whether to save the results to files.}
+
+\item{res_dir}{A character. The directory to write the results and log to.}
+
+\item{read_pheno_score_files}{A boolean. Defines, whether to create a new
+data.frame with phenotype and score data or
+read it from a file.}
 }
 \description{
 This function runs survival studies for a given endpoint.It fits a
 Cox proportional hazards model to the data and
 calculates the C-index. The resulting HRs and c-indices are written
 to files if wanted.
+}
+\details{
+Creates a \code{surv_ana} and \code{study_setup} object then reads in the phenotype data and
+relevant score data, defined by the selected score types and writes the
+phenotype-score data to files, or simply reads in previously created phenotype-score
+files. Then creates a \code{study} object for each selected endpoint and runs
+the Cox-PH models and extracts the HR data and c-index for each model. Finally, writes
+them to files and plots the HR data.
+
+The \code{endpts_indvs_mat} is mostly relevant for FinnGen where we have some overalp for
+the PRS studies and training and testing sets. However, it could
+also be relevant for the training and testing of the PheRS. See function
+\link{get_crnt_endpt_data}.
+}
+\author{
+Kira E. Detrois
 }

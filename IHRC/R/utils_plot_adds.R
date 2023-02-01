@@ -4,22 +4,15 @@
 #' Adds custom color settings and theme settings to a ggplot object
 #' 
 #' @param plt A ggplot object. 
-#' @param legend_name A character. The legend name. Default: "Predictor".
-#' @param color_labels A character (vector). The labels for the legend.
+#' @param legend_name A string. The legend name. Default: "Predictor".
+#' @param color_labels A string (vector). The labels for the legend.
 #' @param theme_base_size A numeric. The base font size for theme settings
 #' 
 #' @return A ggplot object with added color and theme settings
 #' 
-#' @export
-#' 
-#' @examples
-#' # Create a ggplot object
-#' plt <- ggplot(data = my_data, aes(x = x_var, y = y_var)) + 
-#'         geom_point()
-#' # Add color scale and theme to the plot
-#' plt <- ggplot_add_color_and_theme(plt, color_labels = my_data$color_var)
-#'
 #' @author Kira E. Detrois
+#' 
+#' @export 
 ggplot_add_color_and_theme <- function(plt, 
                                        legend_name="Predictor",
                                        color_labels,

@@ -7,15 +7,20 @@
 get_age_sd_hr_ggplot(coxph_hrs, study_setup, preds, endpt, min_y, max_y)
 }
 \arguments{
-\item{coxph_hrs}{A dataframe. The results of the Cox-PH model for
+\item{coxph_hrs}{A data.frame. The results of the Cox-PH model for
 the current endpoint.}
+
+\item{study_setup}{An S4 \code{study_setup} object. The current study setup.
+See class definition \link[Istudy:study_setup-class]{Istudy::study_setup}.}
+
+\item{preds}{A character (vector). The predictors of the analysis
+for the caption.}
+
+\item{endpt}{A character. The current endpoint.}
 
 \item{min_y}{A numeric. Minimum value for the y-axis.}
 
 \item{max_y}{A numeric. Maximum value for the y-axis.}
-
-\item{ana_details}{A list. Details of the current analysis such as
-study type, predictors, etc.}
 }
 \value{
 A ggplot object.

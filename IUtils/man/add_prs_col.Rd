@@ -7,9 +7,9 @@
 add_prs_col(file_path, disease, col_map, prs_data)
 }
 \arguments{
-\item{file_path}{A character (string). The path to the PRS file.}
+\item{file_path}{A string (string). The path to the PRS file.}
 
-\item{disease}{A character (string). The PRS endpoint description.}
+\item{disease}{A string (string). The PRS endpoint description.}
 
 \item{col_map}{A tibble. The mapping from endpoint names to PRS
 endpoint description.}

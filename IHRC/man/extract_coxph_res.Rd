@@ -7,8 +7,9 @@
 extract_coxph_res(coxph_mdl, score_type)
 }
 \arguments{
-\item{score_type}{A character (vector).
-The score types used in the Cox-PH model.}
+\item{coxph_mdl}{A \code{coxph} object. See function \link[survival:coxph]{survival::coxph}.}
+
+\item{score_type}{A character (vector). The score types used in the analysis.}
 }
 \value{
 A list with elements
@@ -22,11 +23,11 @@ A list with elements
 \item groups: Groupings for the predictors
 \item preds: Predictor names
 }
+If the model is NULL, an empty list is returned
 }
 \description{
 This function extracts the results of a Cox proportional hazards model
-fit and returns them in a list. If the model is NULL, an empty list is
-returned.
+fit and returns them in a list.
 }
 \author{
 Kira E. Detrois

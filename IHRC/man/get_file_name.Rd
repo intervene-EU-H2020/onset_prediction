@@ -4,7 +4,18 @@
 \alias{get_file_name}
 \title{Creats the file name for the HR plots with continuous scores}
 \usage{
-get_file_name(res_type, study_setup, endpt, surv_ana)
+get_file_name(res_type, study_setup, endpt = NULL, surv_ana)
+}
+\arguments{
+\item{res_type}{A character. The results type.}
+
+\item{study_setup}{An S4 \code{study_setup} object. The current study setup.
+See class definition \link[Istudy:study_setup-class]{Istudy::study_setup}.}
+
+\item{endpt}{A character. The current endpoint.}
+
+\item{surv_ana}{An S4 \code{surv_ana} object. The current survival analysis setup.
+See class definition \link{surv_ana}.}
 }
 \value{
 A character. The file name.

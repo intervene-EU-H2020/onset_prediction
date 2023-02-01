@@ -4,23 +4,18 @@
 \alias{plot_hrs}
 \title{Plots the HR from the Cox-PH model}
 \usage{
-plot_hrs(coxph_hrs = NULL, study, surv_ana)
+plot_hrs(coxph_hrs = NULL, study_setup, surv_ana)
 }
 \arguments{
 \item{coxph_hrs}{A tibble. The Cox-PH HR results. Needs
 to at least contain the columns \code{ENDPOINT},
 \code{HR}, \code{CI_NEG}, \code{CI_POS}, and \code{GROUP}.}
 
-\item{surv_ana}{A S4 surv_ana object. The analysis setup.}
+\item{study_setup}{An S4 \code{study_setup} object. The current study setup.
+See class definition \link[Istudy:study_setup-class]{Istudy::study_setup}.}
 
-\item{from_file}{A logical, denotes whether the results are from a
-file or not. Default: FALSE.}
-
-\item{ana_details}{A list. The analysis details for the study.
-See function \link{get_ana_details_from_surv_ana}.}
-
-\item{sort_hrs}{A logical. Should the HRs be sorted for the backward
-study plot. Default: FALSE.}
+\item{surv_ana}{An S4 \code{surv_ana} object. The current survival analysis setup.
+See class definition \link{surv_ana}.}
 }
 \value{
 A ggplot object with the HRs.

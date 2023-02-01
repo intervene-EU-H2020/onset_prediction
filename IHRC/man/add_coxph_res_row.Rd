@@ -4,16 +4,21 @@
 \alias{add_coxph_res_row}
 \title{Adds a row to the Cox-PH HR results tibble}
 \usage{
-add_coxph_res_row(endpt_hr_res, coxph_mdl, study)
+add_coxph_res_row(hr_res, coxph_mdl, study)
 }
 \arguments{
-\item{endpt_hr_res}{A tibble with the results for previous endpts,
+\item{hr_res}{A tibble with the results for previous endpts,
 with columns: \code{ENDPOINT}, \code{EXP_AGE}, \code{VAR},
 \code{GROUP}, \code{N_CONTROLS}, \code{N_CASES}, \code{BETA},
-\code{SE}, \code{P_VAL}, \code{HR}, \code{CI_NEG}, \code{CI_POS}}
+\code{SE}, \code{P_VAL}, \code{HR}, \code{CI_NEG}, \code{CI_POS}.}
+
+\item{coxph_mdl}{A \code{coxph} object. See function \link[survival:coxph]{survival::coxph}.}
+
+\item{study}{An S4 \code{study} object. The current study.
+See class definition \link[Istudy:study-class]{Istudy::study}.}
 }
 \value{
-A tibble. The updated \code{endpt_hr_res} with the added row for
+A tibble. The updated \code{hr_res} with the added row for
 the HRs of the current endpoint.
 }
 \description{

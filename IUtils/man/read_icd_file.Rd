@@ -7,7 +7,7 @@
 read_icd_file(file_path)
 }
 \arguments{
-\item{file_path}{A character (string). The path to the file.}
+\item{file_path}{A string (string). The path to the file.}
 }
 \value{
 A tibble with at least columns \code{ID}, \code{Event_age}, \code{ICD_version}, and

@@ -2,19 +2,26 @@
 % Please edit documentation in R/get_score_data.R
 \name{get_phers_endpt_data}
 \alias{get_phers_endpt_data}
-\title{Renames the PRS score column to \code{PheRS}}
+\title{Gets the current endpoint PheRS score column}
 \usage{
 get_phers_endpt_data(score_data, endpt)
 }
 \arguments{
-\item{endpt}{A character. The column name of the current endpoint
-of interest.}
+\item{score_data}{A data.frame. The PheRS data.
+Contains a column of individual IDs and
+a column named according to the selected
+endpoint.}
+
+\item{endpt}{A character. The current endpoint.}
 }
 \value{
 A tibble. The renamed and filtered score data.
 }
 \description{
-For the PRS data the score columns have names in the
-form of \code{J10_ASTHMA_PRS}. The function renames the
-current PRS column of interest to \code{PheRS}.
+For the PheRS data the score columns have names in the
+form of \code{J10_ASTHMA_PheRS}. The function renames the
+current PheRS column of interest to \code{PheRS}.
+}
+\author{
+Kira E. Detrois
 }

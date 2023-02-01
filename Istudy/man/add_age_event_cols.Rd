@@ -11,6 +11,8 @@ add_age_event_cols(study_data, endpt)
 and i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_DATE} where
 the columns are the study endpoint and date, which will
 differ depending on the input variable \code{endpt}.}
+
+\item{endpt}{A string. The current endpoint.}
 }
 \value{
 The data.frame with tow added columns \code{AGE_AT_BASE} and \code{AGE_AT_END}

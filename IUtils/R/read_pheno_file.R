@@ -2,7 +2,8 @@
 #' 
 #' See \href{https://docs.google.com/document/d/1GbZszpPeyf-hyb0V_YDx828YbM7woh8OBJhvzkEwo2g/edit}{INTERVENE phenotype file definition v1}. 
 #' 
-#' @param file_path A character (string). The path to the file.
+#' @param file_path A string. The path to the file.
+#' @param endpts A string (vector). The endpoints of interest.
 #' 
 #' @return A tibble with the longitudinal phenotype data
 #' 

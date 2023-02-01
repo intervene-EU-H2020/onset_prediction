@@ -1,0 +1,66 @@
+ATC	WEIGHT	NAME	NOTE
+A01AD05	1	acetylsalicylic acid    	
+M05BA04	1	alendronic acid 	osteoporosis
+C08CA01	1	amlodipine	calcium channel blocker
+C07AB03	1	atenolol	beta blocker
+C07AB07	1	bisoprolol	beta blocker
+H05BA01	1	calcitonin (salmon synthetic)	Pagets disease
+C07AG02	1	carvedilol	beta blocker
+N06AB04	1	citalopram	antidepressant
+N02AC04	1	dextropropoxyphene	opioid
+N05BA01	1	diazepam	Insomnia
+C01AA05	1	digoxin	heart conditions
+B01AC07	1	dipyridamole	dilates blood vessels
+N06DA02	1	donepezil	dementia
+C09AA02	1	enalapril	
+R03AL01	1	fenoterol and ipratropium bromide	obstructive airway disease
+D07AC17	1		
+C03CA01	1		
+C03EB01	1		
+A10BB01	1		
+A10BB12	1		
+N05AD01	1		
+C03EA01	1		
+A10AB01	1		
+R01AX03	1		
+L02AE02	1		
+N04BA02	1		
+N05AA02	1		
+C09AA03	1		
+N06DX01	1		
+A10BA02	1		
+C07AB02	1		
+N06AX03	1	mianserin	antidepressant
+C08CA05	1		
+N05BA04	1	axazepam	anxiolytics
+N05AB03	1		
+B01AC30	1		
+A12BA01	1		
+N05AX08	1		
+N06DA03	1	rivastigmine	dementia
+R03AC02	1		obstructive airway disease
+L02BA01	1		
+N05CD07	1		
+R03DA04	1		obstructive airway disease
+N05AC02	1		
+R03BB04	1		
+N02AX02	1		
+B01AA03	1		
+N05CF01	1		
+N06AA09	-1		antidepressant
+C10AA05	-1		
+N07CA01	-1		
+G03CA03	-1		
+G03CA04	-1		
+C05AA08	-1		
+A10BX01	-1		
+N05BA06	-1		
+G03BB01	-1		
+N05CD08	-1		
+N06AX11	-1		antidepressant
+R01AC07	-1		
+G03FA01	-1		
+C10AA07	-1		
+C10AA01	-1		
+R03AC03	-1		
+G03CX01	-1		

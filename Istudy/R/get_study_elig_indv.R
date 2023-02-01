@@ -31,7 +31,6 @@
 #' 
 #' @author Kira E. Detrois
 get_study_elig_indv <- function(study) {
-    print("Gettin elig")
     study@study_data <- filter_too_old_and_young(
                                 study_data=study@study_data,
                                 study_type=study@study_setup@study_type,
@@ -57,7 +56,5 @@ get_study_elig_indv <- function(study) {
                                 endpt=study@endpt)
     study@study_data <- add_age_event_cols(study_data=study@study_data,
                                            endpt=study@endpt)
-    print("Got elig")
-
     return(study@study_data)
 }

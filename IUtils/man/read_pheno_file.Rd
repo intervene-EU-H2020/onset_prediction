@@ -7,7 +7,9 @@
 read_pheno_file(file_path = "", endpts = NULL)
 }
 \arguments{
-\item{file_path}{A character (string). The path to the file.}
+\item{file_path}{A string. The path to the file.}
+
+\item{endpts}{A string (vector). The endpoints of interest.}
 }
 \value{
 A tibble with the longitudinal phenotype data

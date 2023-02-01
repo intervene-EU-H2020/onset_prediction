@@ -3,9 +3,9 @@
 #' Checks if certain columns with specific names are present in a data frame, 
 #' and if they are not present, print a warning message indicating that the column is missing.
 #' 
-#' @param expect_cols A character (vector). The expected column names
-#' @param cols A character (vector). The actual column name.
-#' @param file_path A character (vector). The file from which the column names come from.
+#' @param expect_cols A string (vector). The expected column names
+#' @param cols A string (vector). The actual column name.
+#' @param file_path A string (vector). The file from which the column names come from.
 #' 
 #' @return A modified vector of column names with the expected column names.
 #'  

@@ -2,28 +2,24 @@
 % Please edit documentation in R/join_dfs.R
 \name{join_dfs}
 \alias{join_dfs}
-\title{Joins the phenotypic and score data}
+\title{Joins phenotype and score data}
 \usage{
 join_dfs(pheno_data, score_data, score_type = "CCI")
 }
 \arguments{
-\item{pheno_data}{A data.frame with the phenotypic data on the individuals.
-Should at least contain the columns:
-\code{ID}, the columns specified in \code{covs} and
-i.e. \code{J10_ASTHMA}, and \code{J10_ASTHMA_AGE_FROM_BASE} where
-the columns are the study endpoint and the age
-from baseline, which will differ depending on the chosen
-\code{endpts}.}
+\item{pheno_data}{A data.frame. The phenotype data. Needs at least column \code{ID}.}
 
-\item{score_type}{A character (vector).
-The score types used in the Cox-PH model.}
+\item{score_data}{A data.frame. The score data. Needs at least column \code{ID} and
+if \code{score_type} contains \code{CCI} or \code{EI} then the selected columns.}
+
+\item{score_type}{A character (vector). The score types used in the analysis.}
 }
 \value{
-A dataframe containing the merged study and score data.
+A tibble containing the merged phenotype and score data.
 }
 \description{
-Joins the dataframes \code{pheno_data}, and \code{score_data} using
-the ID variable.
+Joins the data.frames \code{pheno_data}, and \code{score_data} using
+the \code{ID} variable.
 }
 \details{
 Sets missing values for the \code{CCI}, or \code{EI} to 0.

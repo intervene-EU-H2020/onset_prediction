@@ -1,6 +1,6 @@
 Package: Istudy
 Title: INTERVENE - Study Setup
-Version: 3.2.0
+Version: 3.3.0
 Authors@R: 
     person("Kira E.", "Detrois", , "kira.detrois@helsinki.fi", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-7193-624X"))
@@ -13,10 +13,10 @@ Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Imports: 
-    assertthat,
-    dplyr,
-    lubridate,
-    methods,
-    readr,
-    stats,
-    tibble
+    assertthat (>= 0.2.1),
+    dplyr (>= 1.0.10),
+    lubridate (>= 1.9.0),
+    methods (>= 4.2.2),
+    readr (>= 2.1.3),
+    stats (>= 4.2.2),
+    tibble (>= 3.1.8)

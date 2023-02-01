@@ -6,6 +6,7 @@
 #'                   and i.e. `J10_ASTHMA`, and `J10_ASTHMA_DATE` where 
 #'                   the columns are the study endpoint and date, which will 
 #'                   differ depending on the input variable `endpt`.
+#' @param endpt A string. The current endpoint. 
 #' 
 #' @return The data.frame with tow added columns `AGE_AT_BASE` and `AGE_AT_END`
 #' 

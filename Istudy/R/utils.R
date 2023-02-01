@@ -99,7 +99,9 @@ get_study_file_name <- function(study) {
 
 #' Creates file name describing the exposure, wash, and observation period.
 #' 
-#' @inheritParams set_study_dates
+#' @param study_setup An S4 `study_setup` object. The current study setup. 
+#'                      See class definition [Istudy::study_setup].
+#' @inheritParams calc_backward_exp_start_date
 #' 
 #' @export 
 #' 

@@ -13,7 +13,7 @@ get_phers_file_descr(
 )
 }
 \arguments{
-\item{study_type}{A character. Currently only "backward" possible.}
+\item{study_type}{A string. Currently only "backward" possible.}
 
 \item{obs_end_date}{A Date. The end of the observation period.}
 

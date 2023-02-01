@@ -2,17 +2,21 @@
 % Please edit documentation in R/surv_ana.R
 \name{setPreds}
 \alias{setPreds}
-\title{Sets \code{endpt} of the S4 study object to a new value}
+\title{Sets the presictors of the S4 surv_ana object to a new value}
 \usage{
 setPreds(.Object, crnt_score_types)
 }
 \arguments{
-\item{.Object}{The S4 surv_ana object.}
+\item{.Object}{The S4 \link{surv_ana} object.}
 
-\item{preds}{A character. The new predictors.}
-
-\item{plot_preds}{A character. The new predictors for potting}
+\item{crnt_score_types}{A character (vector). The current score types.}
+}
+\value{
+The updated S4 object
 }
 \description{
-Sets \code{endpt} of the S4 study object to a new value
+Sets the presictors of the S4 surv_ana object to a new value
+}
+\author{
+Kira E. Detrois
 }

@@ -9,21 +9,8 @@ set_study_dates(study_data, study_setup)
 \arguments{
 \item{study_data}{A tibble. The data on all study individuals.}
 
-\item{exp_age}{An integer. Age at which exposure period starts
-(in years).}
-
-\item{exp_len}{An integer. Length of the exposure period (in years).}
-
-\item{wash_len}{An integer. Length of the washout period (in years).}
-
-\item{obs_len}{An integer. Length of the observation period
-(in years).}
-
-\item{obs_end_date}{A Date. The end of the observation period.}
-}
-\value{
-The S4 study object with the \code{study_data} tibble updated
-with the date columns.
+\item{study_setup}{An S4 \code{study_setup} object. The current study setup.
+See class definition \link{study_setup}.}
 }
 \description{
 Sets columns for \code{YEAR_OF_BIRTH}, \code{EXP_START_DATE}, \code{EXP_END_DATE},

@@ -5,16 +5,8 @@
 #' For each individuals depending on the selected study setup.
 #' 
 #' @param study_data A tibble. The data on all study individuals.
-#' @inheritParams filter_too_old_and_young
-#' @param exp_age An integer. Age at which exposure period starts 
-#'                            (in years).
-#' @param exp_len An integer. Length of the exposure period (in years).
-#' @param wash_len An integer. Length of the washout period (in years).
-#' @param obs_len An integer. Length of the observation period 
-#'                            (in years).
-#' @param obs_end_date A Date. The end of the observation period.
-#' @return The S4 study object with the `study_data` tibble updated
-#' with the date columns.
+#' @param study_setup An S4 `study_setup` object. The current study setup. 
+#'                      See class definition [Istudy::study_setup].
 #' 
 #' @export 
 #' @importFrom lubridate %m-%
@@ -50,6 +42,7 @@ set_study_dates <- function(study_data,
 #' individual
 #' 
 #' @inheritParams set_study_dates
+#' @param wash_len An integer. Length of the washout period (in years).
 #' 
 #' @return A vector of Dates.
 #' 
@@ -68,6 +61,7 @@ calc_wash_end_date <- function(study_data,
 #' Calcualtes the end date of the exposure period
 #' 
 #' @inheritParams set_study_dates
+#' @param exp_len An integer. Length of the exposure period (in years).
 #' 
 #' @return A vector of Dates.
 #' 
@@ -136,7 +130,8 @@ calc_obs_start_date <- function(study_data,
 
 #' Calcualtes the start date of the observation period for a backward study setup
 #' 
-#' @inheritParams set_study_dates
+#' @param obs_end_date A Date. The end of the observation period.
+#' @param obs_len An integer. Length of the prediction period (in years).
 #' 
 #' @return A Date
 #' 
@@ -181,7 +176,9 @@ calc_wash_start_date <- function(study_data,
 
 #' Calcualtes the start date of the washout period for a backward study setup
 #' 
-#' @inheritParams set_study_dates
+#' @param obs_end_date A Date. The end of the observation period.
+#' @param exp_len An integer. Length of the exposure period (in years).
+#' @param obs_len An integer. Length of the prediction period (in years).
 #' 
 #' @return A Date
 #' 
@@ -231,7 +228,10 @@ calc_exp_start_date <- function(study_data,
 
 #' Calcualtes the end date of the exposure period for a backward study setup
 #' 
-#' @inheritParams set_study_dates
+#' @param obs_end_date A Date. The end of the observation period.
+#' @param exp_len An integer. Length of the exposure period (in years).
+#' @param wash_len An integer. Length of the washout period (in years).
+#' @param obs_len An integer. Length of the prediction period (in years).
 #' 
 #' @return A Date
 #' 

@@ -11,13 +11,10 @@
 #' @param coxph_hrs A tibble. The Cox-PH HR results. Needs
 #'                      to at least contain the columns `ENDPOINT`,
 #'                      `HR`, `CI_NEG`, `CI_POS`, and `GROUP`.
-#' @param surv_ana A S4 surv_ana object. The analysis setup.
-#' @param from_file A logical, denotes whether the results are from a 
-#'                  file or not. Default: FALSE.
-#' @param ana_details A list. The analysis details for the study.
-#'                   See function [IHRC::get_ana_details_from_surv_ana]. 
-#' @param sort_hrs A logical. Should the HRs be sorted for the backward 
-#'                            study plot. Default: FALSE.
+#' @param study_setup An S4 `study_setup` object. The current study setup. 
+#'                      See class definition [Istudy::study_setup].
+#' @param surv_ana An S4 `surv_ana` object. The current survival analysis setup. 
+#'                      See class definition [IHRC::surv_ana].
 #'  
 #' @return A ggplot object with the HRs.
 #' @export 
@@ -26,7 +23,7 @@
 #' 
 #' @author Kira E. Detrois
 plot_hrs <- function(coxph_hrs=NULL,
-                     study,
+                     study_setup,
                      surv_ana) {
     coxph_hrs <- filter_out_missing_hrs(coxph_hrs)
     # filter out variables that are not in the plot_preds list
@@ -35,13 +32,14 @@ plot_hrs <- function(coxph_hrs=NULL,
     crnt_coxph_hrs <- dplyr::filter(coxph_hrs, GROUP == "no groups")
 
     if(nrow(crnt_coxph_hrs) > 0) {
-        if(study@study_setup@study_type == "forward") {
-            plt <- plot_age_sd_hrs(coxph_hrs=crnt_coxph_hrs, 
-                                   study=study,
-                                   surv_ana=surv_ana)
+        if(study_setup@study_type == "forward") {
+            #plt <- plot_age_sd_hrs(coxph_hrs=crnt_coxph_hrs, 
+            #                       study=study_setup,
+            #                       surv_ana=surv_ana)
+            return(NULL)
         } else {
             plt <- plot_endpt_sd_hr(coxph_hrs=crnt_coxph_hrs, 
-                                    study=study,
+                                    study_setup=study_setup,
                                     surv_ana=surv_ana)
             return(plt)
         }
@@ -52,23 +50,28 @@ plot_hrs <- function(coxph_hrs=NULL,
 #'   
 #' Creates a single ggplot with the different endpoints HRs.
 #' 
-#' @inheritParams plot_hrs
-#' 
+#' @param coxph_hrs A tibble. The Cox-PH HR results. Needs
+#'                      to at least contain the columns `ENDPOINT`,
+#'                      `HR`, `CI_NEG`, `CI_POS`, and `GROUP`.
+#' @param study_setup An S4 `study_setup` object. The current study setup. 
+#'                      See class definition [Istudy::study_setup].
+#' @param surv_ana An S4 `surv_ana` object. The current survival analysis setup. 
+#'                      See class definition [IHRC::surv_ana].
+#'   
 #' @export 
 #' 
 #' @author Kira E. Detrois
 plot_endpt_sd_hr <- function(coxph_hrs,
-                             study,
+                             study_setup,
                              surv_ana) {
 
     plt <- get_endpt_sd_hr_ggplot(coxph_hrs=coxph_hrs,
-                                  study_setup=study@study_setup,
+                                  study_setup=study_setup,
                                   preds=surv_ana@preds)
     # Saving resulting plot to file
     if(surv_ana@write_res) {
-        file_path <- check_and_get_file_path(res_type="HR",
-                                             study_setup=study@study_setup,
-                                             endpt=study@endpt,
+        file_path <- get_full_file_name_path(res_type="HR",
+                                             study_setup=study_setup,
                                              surv_ana=surv_ana)
 
         save_plt(file_path=file_path,
@@ -84,13 +87,19 @@ plot_endpt_sd_hr <- function(coxph_hrs,
 #' Creates separate plots for each endpoint for the different age studies.
 #' Plots both the risk group stratified and continuous HRs.
 #' 
-#' @inheritParams plot_hrs
-#' 
+#' @param coxph_hrs A tibble. The Cox-PH HR results. Needs
+#'                      to at least contain the columns `ENDPOINT`,
+#'                      `HR`, `CI_NEG`, `CI_POS`, and `GROUP`.
+#' @param study_setup An S4 `study_setup` object. The current study setup. 
+#'                      See class definition [Istudy::study_setup].
+#' @param surv_ana An S4 `surv_ana` object. The current survival analysis setup. 
+#'                      See class definition [IHRC::surv_ana].
+#'   
 #' @export 
 #' 
 #' @author Kira E. Detrois
 plot_age_sd_hrs <- function(coxph_hrs,
-                            study,
+                            study_setup,
                             surv_ana) {
     # Want all plots created for the same setup to have same axis limits
     max_y <- min(max(c(2, round(coxph_hrs$CI_POS+0.5)), na.rm=TRUE), 10)
@@ -113,7 +122,7 @@ plot_age_sd_hrs <- function(coxph_hrs,
                                         max_y=max_y)
             # Saving resulting plot to file
             if(surv_ana@write_res) {
-                file_path <- check_and_get_file_path(res_type="HR", 
+                file_path <- get_full_file_name_path(res_type="HR", 
                                                      study_setup=study_setup,
                                                      endpt=endpt, 
                                                      surv_ana=surv_ana)

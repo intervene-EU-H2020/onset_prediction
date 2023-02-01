@@ -24,7 +24,6 @@ filter_early_endpt <- function(study_data,
     check_cols_exist(study_data,
                      c(endpt_date_str, "ENDPT_FREE_PERIOD"),
                      "filter_early_endpt")
-
     dplyr::filter(study_data, 
                   !(get(endpt_date_str) %within% ENDPT_FREE_PERIOD) | 
                   is.na(get(endpt_date_str))) # If no endpoint date then NA 

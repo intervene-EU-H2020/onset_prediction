@@ -4,11 +4,21 @@
 \alias{get_all_preds_sorted}
 \title{Get All Preds Sorted}
 \usage{
-get_all_preds_sorted(score_type = "", covs)
+get_all_preds_sorted(score_type, covs = NULL)
 }
 \arguments{
-\item{score_type}{A character (vector).
-The score types used in the Cox-PH model.}
+\item{score_type}{a character (vector). The score types in the analysis.
+Available options include:
+\itemize{
+\item \code{CCI} for Charlson comorbidity index,
+\item \code{EI} for Elixhauser index,
+\item \code{PRS} for polygenic risk score,
+\item \code{PheRS} for PheRS results score,
+\item \code{MED} for medication data, and
+\item \code{EDU} for educational level. The column for this needs to
+be called \code{ISCED_2011} in the \code{pheno_data}.
+\item \code{ZIP} for zip scores,
+}}
 
 \item{covs}{A vector of characters. The column names of the covariates
 to add to the predictor of the Cox-PH model.}

@@ -4,8 +4,34 @@
 \alias{get_full_res_path}
 \title{Adds downsampling and filter information to results directory path}
 \usage{
-get_full_res_path(write_res, res_dir, down_fctr, study_type, score_type)
+get_full_res_path(
+  write_res,
+  res_dir,
+  down_fctr,
+  study_type,
+  score_type,
+  res_descr
+)
+}
+\arguments{
+\item{write_res}{A boolean. Defines whether to save the results to files.}
+
+\item{res_dir}{A character. The directory to write the results and log to.}
+
+\item{down_fctr}{A numeric. Defines how many controls there should be for every case.}
+
+\item{study_type}{A character. Can be either \code{forward} or \code{backward}.}
+
+\item{score_type}{A character (vector). The score types used in the analysis.}
+
+\item{res_descr}{A character. An addition to add to the results directory.}
+}
+\value{
+A character. The updated results directory path.
 }
 \description{
 Adds downsampling and filter information to results directory path
+}
+\author{
+Kira E. Detrois
 }

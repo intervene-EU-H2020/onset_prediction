@@ -9,6 +9,9 @@ calc_obs_end_date(study_data, study_setup)
 }
 \arguments{
 \item{study_data}{A tibble. The data on all study individuals.}
+
+\item{study_setup}{An S4 \code{study_setup} object. The current study setup.
+See class definition \link{study_setup}.}
 }
 \value{
 A vector of Dates. The start date of the observation period

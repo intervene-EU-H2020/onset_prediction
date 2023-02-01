@@ -11,11 +11,10 @@ get_endpt_sd_hr_ggplot(coxph_hrs, study_setup, preds)
 Needs to at least contain the columns \code{ENDPOINT}, \code{HR},
 \code{CI_NEG}, \code{CI_POS}, \code{VAR}}
 
-\item{ana_details}{A list. A list of parameters for the analysis.
-It should contain the following fields: \code{study_type},
-\code{preds}, \code{exp_len}, \code{wash_len}, \code{obs_len}, \code{obs_end_date}.}
+\item{study_setup}{An S4 \code{study_setup} object. The current study setup.
+See class definition \link[Istudy:study_setup-class]{Istudy::study_setup}.}
 
-\item{sort_hrs}{A logical.  If \code{True}, the endpoints are sorted by HR.}
+\item{preds}{A character (vector). The predictors of the analysis.}
 }
 \value{
 A ggplot object

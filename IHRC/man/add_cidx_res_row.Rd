@@ -4,15 +4,21 @@
 \alias{add_cidx_res_row}
 \title{Adds a row to the C-index results tibble}
 \usage{
-add_cidx_res_row(endpt_c_idxs_tib, c_idx_res, surv_ana, study)
+add_cidx_res_row(c_idxs_res, c_idx_res, surv_ana, study)
 }
 \arguments{
-\item{endpt_c_idxs_tib}{A tibble with the results for previous endpts.}
+\item{c_idxs_res}{A tibble with the results for previous endpts.}
 
 \item{c_idx_res}{A tibble with the new results to add.}
+
+\item{surv_ana}{An S4 \code{surv_ana} object. The current survival analysis setup.
+See class definition \link{surv_ana}.}
+
+\item{study}{An S4 \code{study} object. The current study.
+See class definition \link[Istudy:study-class]{Istudy::study}.}
 }
 \value{
-A tibble. The updated \code{endpt_c_idxs_tib} with the added results for
+A tibble. The updated \code{c_idxs_res} with the added results for
 the current endpoint.
 }
 \description{

@@ -41,6 +41,15 @@ filter_too_old_and_young <- function(study_data,
     return(study_data)
 }
 
+#' Censors individuals once they reach the maximum age
+#' 
+#' @inheritParams filter_too_old_and_young
+#' @param max_obs_age A numeric. The maximum age an individuals should
+#'                      be at baseline.
+#' 
+#' @author Kira E. Detrois
+#' 
+#' @export 
 filter_young_age <- function(study_data,
                              study_type,
                              min_obs_age) {
@@ -60,6 +69,10 @@ filter_young_age <- function(study_data,
 #' Censors individuals once they reach the maximum age
 #' 
 #' @inheritParams filter_too_old_and_young
+#' @param max_obs_age A numeric. The maximum age an individuals should
+#'                      be at baseline.
+#' 
+#' @author Kira E. Detrois
 #' 
 #' @export 
 filter_old_age <- function(study_data,

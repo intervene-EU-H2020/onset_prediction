@@ -24,7 +24,8 @@ The average ages are based on FinnGen R10. For more details see:
 }
 \examples{
 
-study_data <- tibble(ID = 1:7, ISCED_2011 = c("1", "2", "3", "4", "5", "6", "7"))
+study_data <- tibble::tibble(ID = 1:7, 
+                             ISCED_2011 = c("1","2","3","4","5","6","7"))
 get_study_edu_data(study_data)
 
 }
@@ -32,5 +33,8 @@ get_study_edu_data(study_data)
 The International Standard Classification of Education (ISCED) 2011
 is a framework developed by UNESCO for classifying and comparing education
 levels and programmes. For more information see:
-https://uis.unesco.org/en/topic/international-standard-classification-education-isced
+\href{https://uis.unesco.org/en/topic/international-standard-classification-education-isced}{uis.onesco.org}
+}
+\author{
+Kira E. Detrois
 }

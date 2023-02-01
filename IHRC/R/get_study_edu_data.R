@@ -15,22 +15,30 @@
 #' @references The International Standard Classification of Education (ISCED) 2011 
 #'              is a framework developed by UNESCO for classifying and comparing education 
 #'              levels and programmes. For more information see: 
-#'              https://uis.unesco.org/en/topic/international-standard-classification-education-isced
+#'              [uis.onesco.org](https://uis.unesco.org/en/topic/international-standard-classification-education-isced)
 #' @examples
 #' 
-#' study_data <- tibble(ID = 1:7, ISCED_2011 = c("1", "2", "3", "4", "5", "6", "7"))
+#' study_data <- tibble::tibble(ID = 1:7, 
+#'                              ISCED_2011 = c("1","2","3","4","5","6","7"))
 #' get_study_edu_data(study_data)
 #' 
 #' @param study_data A data frame containing columns `ID` and `ISCED_2011`
+#' 
+#' @importFrom dplyr %>% 
+#' 
+#' @author Kira E. Detrois
+#' 
 #' @export
 get_study_edu_data <- function(study_data) {
     # Read in ISCED 2011 mapping
-    file_path <- system.file("data", "finngen_age_modes.tsv", package = "IHRC")
+    file_path <- system.file("extdata", "finngen_age_modes.tsv", package = "IHRC")
+    print(file_path)
     isced_map <- readr::read_delim(file_path, delim="\t", show_col_types=FALSE)
+    class(isced_map$ISCED_2011) <- class(study_data$ISCED_2011)
 
     # Add age mode based on Finngen R10 to the data
-    edu_data <- dplyr::inner_join(study_data, 
-                                  isced_map,
+    edu_data <- dplyr::left_join(study_data, 
+                                 isced_map,
                                  by="ISCED_2011")
     edu_data <- dplyr::rename(edu_data, EDU=FIN_AGE_MODE) %>% 
                     dplyr::select(ID, EDU)

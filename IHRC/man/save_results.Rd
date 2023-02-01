@@ -4,14 +4,18 @@
 \alias{save_results}
 \title{Saves the results}
 \usage{
-save_results(hr_res, cidx_res, study, surv_ana)
+save_results(hr_res, cidx_res, study_setup, surv_ana)
 }
 \arguments{
 \item{hr_res}{A tibble containing the hazard ratios for each exposure age.}
 
 \item{cidx_res}{A tibble containing the c-index for each exposure age.}
 
-\item{surv_ana}{A survival analysis object}
+\item{study_setup}{An S4 \code{study_setup} object. The current study setup.
+See class definition \link[Istudy:study_setup-class]{Istudy::study_setup}.}
+
+\item{surv_ana}{An S4 \code{surv_ana} object. The current survival analysis setup.
+See class definition \link{surv_ana}.}
 }
 \description{
 This function saves the results of a survival analysis and plots them

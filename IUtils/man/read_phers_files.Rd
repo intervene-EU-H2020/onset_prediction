@@ -7,14 +7,13 @@
 read_phers_files(dir_path, study_descr = NULL, endpts = NULL)
 }
 \arguments{
-\item{dir_path}{A character (string). The path to the directory.}
+\item{dir_path}{A string (string). The path to the directory.}
 
-\item{endpts}{A character (vector). The endpoint names. If not provided
+\item{study_descr}{A string. The study description in the PheRS files. If not
+provided uses standard call to \link{get_phers_file_descr}.}
+
+\item{endpts}{A string (vector). The endpoint names. If not provided
 uses default endpoints from function \code{\link[=get_endpts]{get_endpts()}}.}
-
-\item{prs_endpt_descr}{A character (vector). The PRS files endpoint
-descriptions. If not provided, uses default endpoints
-from function \code{\link[=prs_endpt_descr]{prs_endpt_descr()}}.}
 }
 \value{
 A tibble with columns \code{ID} and a column for each selected endpoint

@@ -4,37 +4,28 @@
 \alias{read_prs_files}
 \title{Reads the PRS files for the endpoints from a common directory}
 \usage{
-read_prs_files(dir_path, endpts = NULL, prs_endpt_descr = NULL)
+read_prs_files(dir_path, prs_endpts_map = NULL)
 }
 \arguments{
-\item{dir_path}{A character (string). The path to the directory.}
+\item{dir_path}{A string. The path to the PRS file directory.}
 
-\item{endpts}{A character (vector). The endpoint names. If not provided
-uses default endpoints from function \code{\link[=get_endpts]{get_endpts()}}.}
-
-\item{prs_endpt_descr}{A character (vector). The PRS files endpoint
-descriptions. If not provided, uses default endpoints
-from function \code{\link[=prs_endpt_descr]{prs_endpt_descr()}}.
-
-The files need to be named in a format \code{prsendptdescr_PRS_hm3.sscore}.
-For example, for endpoint \code{J10_ASTHMA} the file would be named
-\code{Asthma_PRS_hm3.sscore}.
-
-For the PRS endpoint descriptions, see function \code{\link[=get_prs_endpt_descr]{get_prs_endpt_descr()}}.
-
-It is possible to provide custom endpoints or PRS endpoint descriptions,
-using the parameters \code{endpts} and/or \code{prs_endpt_descr}. However, make sure
-that the two vectors are in the same order and length. For the default
-endpoint vector see \code{\link[=get_endpts]{get_endpts()}}.
-
-The PRS files should at least contain columns \code{IID} and \code{SCORE1_AVG}.}
+\item{prs_endpts_map}{A tibble. Mapping the endpoint names to the ones used
+in the PRS files. If not provided uses standard
+mapping from \link{get_endpts} to
+\link{get_prs_endpt_descr}.}
 }
 \value{
 A tibble with columns \code{ID} and a column for each selected endpoint
 named \code{endpt_PRS} i.e. \code{J10_ASTHMA_PRS}.
 }
 \description{
-Reads the PRS files for the endpoints from a common directory
+The files need to be named in a format \code{Asthma_PRS_hm3.sscore},
+for example, for endpoint \code{J10_ASTHMA}.
+}
+\details{
+For the PRS endpoint descriptions, see function \link{get_prs_endpt_descr}.
+
+The PRS files should at least contain columns \code{IID} and \code{SCORE1_AVG}.
 }
 \author{
 Kira E. Detrois
