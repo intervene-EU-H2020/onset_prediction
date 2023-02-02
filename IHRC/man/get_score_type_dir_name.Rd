@@ -7,12 +7,12 @@
 get_score_type_dir_name(score_type, res_descr = NULL)
 }
 \arguments{
-\item{score_type}{A character (vector). The score types used in the analysis.}
+\item{score_type}{A string (vector). The score types used in the analysis.}
 
-\item{res_descr}{A character. An addition to add to the results directory.}
+\item{res_descr}{A string. An addition to add to the results directory.}
 }
 \value{
-A character. The directory name.
+A string. The directory name.
 }
 \description{
 Turns the score types and results description into a directory name

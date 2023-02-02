@@ -14,7 +14,7 @@ Needs to at least contain the columns \code{ENDPOINT}, \code{HR},
 \item{study_setup}{An S4 \code{study_setup} object. The current study setup.
 See class definition \link[Istudy:study_setup-class]{Istudy::study_setup}.}
 
-\item{preds}{A character (vector). The predictors of the analysis.}
+\item{preds}{A string (vector). The predictors of the analysis.}
 }
 \value{
 A ggplot object

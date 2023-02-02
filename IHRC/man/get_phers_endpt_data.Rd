@@ -12,7 +12,7 @@ Contains a column of individual IDs and
 a column named according to the selected
 endpoint.}
 
-\item{endpt}{A character. The current endpoint.}
+\item{endpt}{A string. The current endpoint.}
 }
 \value{
 A tibble. The renamed and filtered score data.

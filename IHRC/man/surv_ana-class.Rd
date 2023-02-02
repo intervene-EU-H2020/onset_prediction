@@ -14,9 +14,9 @@ Contains information about the score types
 \item{\code{min_indvs}}{An integer. The minimum number of individuals each
 group in the analyses needs to have.}
 
-\item{\code{score_types}}{A character (vector). The score types used in the analysis.}
+\item{\code{score_types}}{A string (vector). The score types used in the analysis.}
 
-\item{\code{covs}}{A character (vector). The added covariates for the Cox-PH model
+\item{\code{covs}}{A string (vector). The added covariates for the Cox-PH model
 additional to the \code{score_types}.}
 
 \item{\code{create_score_combos}}{A boolean, whether or not to create all possible
@@ -26,18 +26,18 @@ see function \link[IUtils:get_all_possible_score_type_combs]{IUtils::get_all_pos
 \item{\code{score_combos}}{A list. The score type combinations to be run in the
 analyses.}
 
-\item{\code{preds}}{A character (vector). The names of the all predictors to
+\item{\code{preds}}{A string (vector). The names of the all predictors to
 be used in the Cox-PH model.}
 
-\item{\code{plot_preds}}{A character (vector). The predictors to use when plotting the HRs.}
+\item{\code{plot_preds}}{A string (vector). The predictors to use when plotting the HRs.}
 
 \item{\code{write_res}}{A boolean. Defines whether to save the results to
 files.}
 
-\item{\code{res_dir}}{A character. The directory to write the results and
+\item{\code{res_dir}}{A string. The directory to write the results and
 logs to.}
 
-\item{\code{error_file}}{A character. The file path to the error file.}
+\item{\code{error_file}}{A string. The file path to the error file.}
 }}
 
 \author{

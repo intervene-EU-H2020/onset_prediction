@@ -9,7 +9,7 @@ add_phers_endpt_data(score_data, score_type, phers_data, endpt)
 \arguments{
 \item{score_data}{A data.frame. The current score data for the study setup.}
 
-\item{score_type}{a character (vector). The score types in the analysis.
+\item{score_type}{A string (vector). The score types in the analysis.
 Available options include:
 \itemize{
 \item \code{CCI} for Charlson comorbidity index,
@@ -25,7 +25,7 @@ be called \code{ISCED_2011} in the \code{pheno_data}.
 \item{phers_data}{A data.frame. The PheRS scores of the individuals. Needs at least
 the columns as described in \link{get_phers_endpt_data}.}
 
-\item{endpt}{A character. The current endpoint.
+\item{endpt}{A string. The current endpoint.
 Required if \code{PRS} or \code{PheRS} is present in \code{score_type}.}
 }
 \value{

@@ -14,9 +14,9 @@ ggplot_add_color_and_theme(
 \arguments{
 \item{plt}{A ggplot object.}
 
-\item{legend_name}{A character. The legend name. Default: "Predictor".}
+\item{legend_name}{A string. The legend name. Default: "Predictor".}
 
-\item{color_labels}{A character (vector). The labels for the legend.}
+\item{color_labels}{A string (vector). The labels for the legend.}
 
 \item{theme_base_size}{A numeric. The base font size for theme settings}
 }

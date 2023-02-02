@@ -39,7 +39,7 @@ run_surv_studies(
 Should at least contain the columns as described  in
 \link{get_relevant_pheno_data_cols}.}
 
-\item{score_type}{a character (vector). The score types in the analysis.
+\item{score_type}{A string (vector). The score types in the analysis.
 Available options include:
 \itemize{
 \item \code{CCI} for Charlson comorbidity index,
@@ -56,7 +56,7 @@ be called \code{ISCED_2011} in the \code{pheno_data}.
 score type combinations from the score_type vector.
 see function \link[IUtils:get_all_possible_score_type_combs]{IUtils::get_all_possible_score_type_combs}.}
 
-\item{plot_preds}{A character (vector).
+\item{plot_preds}{A string (vector).
 The predictors to use when plotting HR.}
 
 \item{covs}{A vector of characters. The column names of the covariates
@@ -81,7 +81,7 @@ the columns as described in \link{get_phers_endpt_data}.}
 \item{zip_data}{A data.frame. The ZIP scores of the individuals. Needs at least the
 columns as described in \link{get_zip_data}.}
 
-\item{study_type}{A character. Can be either \code{forward} or \code{backward}.
+\item{study_type}{A string. Can be either \code{forward} or \code{backward}.
 \code{forward} considers individuals of a certain age
 and a set exposure, washout, and observation periods
 calcualted onwards from this age. It can simply be created
@@ -92,7 +92,7 @@ backwards from this time point. The exposure period will
 be different for each individual depending on their birth
 date.}
 
-\item{endpts}{A character (vector). The endpoints of interest.}
+\item{endpts}{A string (vector). The endpoints of interest.}
 
 \item{exp_ages}{An integer (vector). Ages at which exposure period
 starts (in years).}
@@ -113,7 +113,7 @@ period. Inclusive interval.}
 \item{down_fctr}{A numeric. Defines how many controls there should be for every case.
 Default is NA, which means no downsampling is performed.}
 
-\item{ancs}{A character (vector). The ancestries to consider.}
+\item{ancs}{A string (vector). The ancestries to consider.}
 
 \item{min_indvs}{An integer. The minimum number of individuals each
 group in the analyses needs to have. This is important
@@ -121,11 +121,11 @@ for being able to export data from the FinnGen Sanbdox.}
 
 \item{filter_1998}{A boolean. Defines whether to filter out any data from before 1998.}
 
-\item{res_descr}{A character. An addition to add to the results folder.}
+\item{res_descr}{A string. An addition to add to the results folder.}
 
 \item{write_res}{A boolean. Defines whether to save the results to files.}
 
-\item{res_dir}{A character. The directory to write the results and log to.}
+\item{res_dir}{A string. The directory to write the results and log to.}
 
 \item{read_pheno_score_files}{A boolean. Defines, whether to create a new
 data.frame with phenotype and score data or

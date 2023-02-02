@@ -7,7 +7,7 @@
 get_endpt_fig_height(coxph_vars)
 }
 \arguments{
-\item{coxph_vars}{A character(vector). The variables used in the Cox-PH model.}
+\item{coxph_vars}{A string(vector). The variables used in the Cox-PH model.}
 }
 \value{
 An integer indicating the height of the plot

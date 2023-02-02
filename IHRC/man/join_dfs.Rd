@@ -12,7 +12,7 @@ join_dfs(pheno_data, score_data, score_type = "CCI")
 \item{score_data}{A data.frame. The score data. Needs at least column \code{ID} and
 if \code{score_type} contains \code{CCI} or \code{EI} then the selected columns.}
 
-\item{score_type}{A character (vector). The score types used in the analysis.}
+\item{score_type}{A string (vector). The score types used in the analysis.}
 }
 \value{
 A tibble containing the merged phenotype and score data.

@@ -7,7 +7,7 @@
 get_all_preds_sorted(score_type, covs = NULL)
 }
 \arguments{
-\item{score_type}{a character (vector). The score types in the analysis.
+\item{score_type}{A string (vector). The score types in the analysis.
 Available options include:
 \itemize{
 \item \code{CCI} for Charlson comorbidity index,
@@ -24,7 +24,7 @@ be called \code{ISCED_2011} in the \code{pheno_data}.
 to add to the predictor of the Cox-PH model.}
 }
 \value{
-A character vector of all predictors being used in the survival analysis,
+A string vector of all predictors being used in the survival analysis,
 sorted by predictor name.
 }
 \description{

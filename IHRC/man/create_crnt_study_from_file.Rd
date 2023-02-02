@@ -13,7 +13,7 @@ See class definition \link{surv_ana}.}
 \item{study_setup}{An S4 \code{study_setup} object. The current study setup.
 See class definition \link[Istudy:study_setup-class]{Istudy::study_setup}.}
 
-\item{endpt}{A character. The current endpoint.}
+\item{endpt}{A string. The current endpoint.}
 }
 \value{
 An S4 study object with the current endpoint.

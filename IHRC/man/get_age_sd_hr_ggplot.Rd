@@ -13,10 +13,10 @@ the current endpoint.}
 \item{study_setup}{An S4 \code{study_setup} object. The current study setup.
 See class definition \link[Istudy:study_setup-class]{Istudy::study_setup}.}
 
-\item{preds}{A character (vector). The predictors of the analysis
+\item{preds}{A string (vector). The predictors of the analysis
 for the caption.}
 
-\item{endpt}{A character. The current endpoint.}
+\item{endpt}{A string. The current endpoint.}
 
 \item{min_y}{A numeric. Minimum value for the y-axis.}
 

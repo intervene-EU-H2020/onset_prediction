@@ -7,11 +7,11 @@
 reformat_preds_pretty(preds)
 }
 \arguments{
-\item{preds}{A character (vector).
+\item{preds}{A string (vector).
 The predictors to be reformatted.}
 }
 \value{
-A character vector with the reformatted predictors.
+A string vector with the reformatted predictors.
 }
 \description{
 Replaces certain string patterns by shorter and more pretty versions,

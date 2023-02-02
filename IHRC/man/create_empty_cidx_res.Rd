@@ -11,7 +11,7 @@ An empty tibble with the following columns:
 \itemize{
 \item ENDPOINT: endpoint name
 \item EXP_AGE: exposure age
-\item SURV_MODEL: a character describing the the survival model
+\item SURV_MODEL: A string describing the the survival model
 \item N_CASES: a numeric column for the number of cases
 \item N_CONTROLS: a numeric column for the number of controls
 \item C_IDX: a numeric column for the c-index

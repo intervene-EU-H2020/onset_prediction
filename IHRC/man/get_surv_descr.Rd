@@ -7,7 +7,7 @@
 get_surv_descr(preds)
 }
 \arguments{
-\item{preds}{A character (vector). The predictor variables
+\item{preds}{A string (vector). The predictor variables
 for the survival analysis}
 }
 \value{

@@ -9,7 +9,7 @@ get_surv_obj(study_data, endpt)
 \arguments{
 \item{study_data}{A data.frame. The data for the Cox-PH model.}
 
-\item{endpt}{A character. The current endpoint.}
+\item{endpt}{A string. The current endpoint.}
 }
 \description{
 Creates a survival object for the selected endpoint. With time

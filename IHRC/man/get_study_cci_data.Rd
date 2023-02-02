@@ -13,7 +13,7 @@ and \code{DATE_OF_BIRTH}.}
 \item{icd_data}{A data.frame. The ICD diagnoses codes. Needs at least columns
 \code{ID}, \code{Event_age}, and \code{PRIMARY_ICD}.}
 
-\item{score_type}{A character. Can be either \code{charlson} or \code{elixhauser}.}
+\item{score_type}{A string. Can be either \code{charlson} or \code{elixhauser}.}
 
 \item{study_setup}{An S4 \code{study_setup} object. The current study setup.
 See class definition \link[Istudy:study_setup-class]{Istudy::study_setup}.}

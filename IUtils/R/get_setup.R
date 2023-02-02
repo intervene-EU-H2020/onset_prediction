@@ -49,7 +49,7 @@ get_setup <- function(setup_file_path) {
         setup$ancs <- NA_character_
     }
     if(is.null(setup$score_type)) {
-        setup$score_type <- ""
+        setup$score_type <- c("")
     }
     setup$obs_end_date <- obs_end_date
     return(setup)

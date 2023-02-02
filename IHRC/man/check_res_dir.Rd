@@ -9,7 +9,7 @@ check_res_dir(write_res, res_dir)
 \arguments{
 \item{write_res}{A boolean. Whether to write log files.}
 
-\item{res_dir}{A character. The path to the results directory.}
+\item{res_dir}{A string. The path to the results directory.}
 }
 \value{
 A boolean. Whether to write the results to the \code{res_dir}.

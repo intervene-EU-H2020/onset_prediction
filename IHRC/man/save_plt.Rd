@@ -7,7 +7,7 @@
 save_plt(file_path, plt, width, height)
 }
 \arguments{
-\item{file_path}{A character. The file path to save the plot to.}
+\item{file_path}{A string. The file path to save the plot to.}
 
 \item{plt}{ggplot object. The plot to be saved.}
 

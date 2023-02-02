@@ -20,7 +20,7 @@ get_pheno_score_data(
 )
 }
 \arguments{
-\item{score_type}{a character (vector). The score types in the analysis.
+\item{score_type}{A string (vector). The score types in the analysis.
 Available options include:
 \itemize{
 \item \code{CCI} for Charlson comorbidity index,
@@ -65,7 +65,7 @@ columns as described in \link{get_zip_data}.}
 group in the analyses needs to have. This is important
 for being able to export data from the FinnGen Sanbdox.}
 
-\item{error_file}{A character. The path to the error file.}
+\item{error_file}{A string. The path to the error file.}
 }
 \value{
 A tibble with the phenotype and score data for all eligible individuals

@@ -7,10 +7,10 @@
 get_plot_preds(plot_preds, score_type)
 }
 \arguments{
-\item{plot_preds}{A character (vector).
+\item{plot_preds}{A string (vector).
 The predictors to use when plotting HR.}
 
-\item{score_type}{a character (vector). The score types in the analysis.
+\item{score_type}{A string (vector). The score types in the analysis.
 Available options include:
 \itemize{
 \item \code{CCI} for Charlson comorbidity index,
@@ -24,7 +24,7 @@ be called \code{ISCED_2011} in the \code{pheno_data}.
 }}
 }
 \value{
-A character vector of predictors to use when plotting hazard ratios.
+A string vector of predictors to use when plotting hazard ratios.
 }
 \description{
 This function returns the predictors to use when plotting hazard ratios.

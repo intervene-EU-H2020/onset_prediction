@@ -9,9 +9,9 @@ ggplot_add_points_and_errors(plt, coxph_vars, study_type)
 \arguments{
 \item{plt}{The ggplot object to add points and error bars to.}
 
-\item{coxph_vars}{A character(vector). The variables used in the Cox-PH model.}
+\item{coxph_vars}{A string(vector). The variables used in the Cox-PH model.}
 
-\item{study_type}{A character. Can be either \code{forward} or \code{backward}.
+\item{study_type}{A string. Can be either \code{forward} or \code{backward}.
 \code{forward} considers individuals of a certain age
 and a set exposure, washout, and observation periods
 calcualted onwards from this age. It can simply be created

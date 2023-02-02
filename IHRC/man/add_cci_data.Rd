@@ -9,7 +9,7 @@ add_cci_data(score_data, score_type, pheno_data, icd_data, study_setup)
 \arguments{
 \item{score_data}{A data.frame. The current score data for the study setup.}
 
-\item{score_type}{a character (vector). The score types in the analysis.
+\item{score_type}{A string (vector). The score types in the analysis.
 Available options include:
 \itemize{
 \item \code{CCI} for Charlson comorbidity index,

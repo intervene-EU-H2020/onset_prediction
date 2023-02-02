@@ -15,12 +15,12 @@ get_crnt_endpt_data(
 \item{endpts_indvs_mat}{A data.frame. Contains a column of individual
 IDs and a binary column for each endpoint.}
 
-\item{endpt}{A character. The endpoint of interest,
+\item{endpt}{A string. The endpoint of interest,
 must match a column name in \code{endpts_indvs_mat}.}
 
 \item{pheno_data}{A data.frame. The phenotype data. Needs at least column \code{ID}.}
 
-\item{error_file}{A character. The path to the error file.}
+\item{error_file}{A string. The path to the error file.}
 }
 \value{
 A data.frame that contains the data for individuals that can be used

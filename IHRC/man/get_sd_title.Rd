@@ -7,7 +7,7 @@
 get_sd_title(coxph_vars)
 }
 \arguments{
-\item{coxph_vars}{A character(vector). The variables used in the Cox-PH model.}
+\item{coxph_vars}{A string(vector). The variables used in the Cox-PH model.}
 }
 \value{
 The title of the plot.

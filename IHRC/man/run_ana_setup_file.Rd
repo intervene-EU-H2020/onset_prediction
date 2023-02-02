@@ -10,8 +10,8 @@ run_ana_setup_file(setup_file_path)
 \item{setup_file_path}{A string. The path to the setup file.}
 }
 \description{
-Reads in all the data, using function \link{get_all_data} and then runs function
-\link[IHRC:run_surv_studies]{IHRC::run_surv_studies}.
+Reads in all the data, using function \link[IUtils:get_all_data]{IUtils::get_all_data} and then runs function
+\link{run_surv_studies}.
 }
 \author{
 Kira E. Detrois

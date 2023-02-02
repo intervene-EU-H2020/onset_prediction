@@ -18,7 +18,7 @@ preprocess_score_data(
 )
 }
 \arguments{
-\item{score_type}{a character (vector). The score types in the analysis.
+\item{score_type}{A string (vector). The score types in the analysis.
 Available options include:
 \itemize{
 \item \code{CCI} for Charlson comorbidity index,
@@ -50,13 +50,13 @@ the columns as described in \link{get_phers_endpt_data}.}
 \item{zip_data}{A data.frame. The ZIP scores of the individuals. Needs at least the
 columns as described in \link{get_zip_data}.}
 
-\item{endpt}{A character. The current endpoint.
+\item{endpt}{A string. The current endpoint.
 Required if \code{PRS} or \code{PheRS} is present in \code{score_type}.}
 
 \item{study_setup}{An S4 \code{study_setup} object. The current study setup.
 See class definition \link[Istudy:study_setup-class]{Istudy::study_setup}.}
 
-\item{error_file}{A character. The path to the error file.}
+\item{error_file}{A string. The path to the error file.}
 }
 \value{
 A data.frame containing all the preprocessed scores specified in

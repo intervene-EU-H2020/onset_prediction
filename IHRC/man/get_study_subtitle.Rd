@@ -11,7 +11,7 @@ get_study_subtitle(study_setup)
 See class definition \link[Istudy:study_setup-class]{Istudy::study_setup}.}
 }
 \value{
-A character. The subtitle describing the study setup.
+A string. The subtitle describing the study setup.
 }
 \description{
 Creates a subtitle for a plot based on the current study setup

@@ -22,12 +22,12 @@ create_pheno_score_data_files(
 \item{study_setup}{An S4 \code{study_setup} object. The current study setup.
 See class definition \link[Istudy:study_setup-class]{Istudy::study_setup}.}
 
-\item{endpts}{A character (vector). The endpoints of interest.}
+\item{endpts}{A string (vector). The endpoints of interest.}
 
 \item{surv_ana}{An S4 \code{surv_ana} object. The current survival analysis setup.
 See class definition \link{surv_ana}.}
 
-\item{score_type}{a character (vector). The score types in the analysis.
+\item{score_type}{A string (vector). The score types in the analysis.
 Available options include:
 \itemize{
 \item \code{CCI} for Charlson comorbidity index,

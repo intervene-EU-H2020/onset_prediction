@@ -14,7 +14,7 @@ Needs to at least contain the columns \code{EXP_AGE}-}
 See class definition \link[Istudy:study_setup-class]{Istudy::study_setup}.}
 }
 \value{
-A character vector with the observation period strings
+A string vector with the observation period strings
 for each age group for the axis labels of the plot.
 }
 \description{

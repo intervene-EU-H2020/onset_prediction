@@ -7,7 +7,7 @@
 scale_preds(preds, study_data)
 }
 \arguments{
-\item{preds}{A character vector of the variables to be scaled}
+\item{preds}{A string vector of the variables to be scaled}
 
 \item{study_data}{A data frame with the variables to be scaled}
 }

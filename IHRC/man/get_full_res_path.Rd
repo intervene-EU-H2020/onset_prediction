@@ -16,18 +16,18 @@ get_full_res_path(
 \arguments{
 \item{write_res}{A boolean. Defines whether to save the results to files.}
 
-\item{res_dir}{A character. The directory to write the results and log to.}
+\item{res_dir}{A string. The directory to write the results and log to.}
 
 \item{down_fctr}{A numeric. Defines how many controls there should be for every case.}
 
-\item{study_type}{A character. Can be either \code{forward} or \code{backward}.}
+\item{study_type}{A string. Can be either \code{forward} or \code{backward}.}
 
-\item{score_type}{A character (vector). The score types used in the analysis.}
+\item{score_type}{A string (vector). The score types used in the analysis.}
 
-\item{res_descr}{A character. An addition to add to the results directory.}
+\item{res_descr}{A string. An addition to add to the results directory.}
 }
 \value{
-A character. The updated results directory path.
+A string. The updated results directory path.
 }
 \description{
 Adds downsampling and filter information to results directory path

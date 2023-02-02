@@ -7,9 +7,9 @@
 write_to_error_file(error_file, msg)
 }
 \arguments{
-\item{error_file}{A character. The path to the error file.}
+\item{error_file}{A string. The path to the error file.}
 
-\item{msg}{A character. The message to write to the error file.}
+\item{msg}{A string. The message to write to the error file.}
 }
 \description{
 Writes error message to file if path is not Null or NA

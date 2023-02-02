@@ -7,10 +7,10 @@
 get_preds_file_name(preds)
 }
 \arguments{
-\item{preds}{A character (vector). The predictors to rename.}
+\item{preds}{A string (vector). The predictors to rename.}
 }
 \value{
-A character. The file name.
+A string. The file name.
 }
 \description{
 Renames predictors for nicer files names and creates file name

@@ -9,7 +9,7 @@ extract_coxph_res(coxph_mdl, score_type)
 \arguments{
 \item{coxph_mdl}{A \code{coxph} object. See function \link[survival:coxph]{survival::coxph}.}
 
-\item{score_type}{A character (vector). The score types used in the analysis.}
+\item{score_type}{A string (vector). The score types used in the analysis.}
 }
 \value{
 A list with elements

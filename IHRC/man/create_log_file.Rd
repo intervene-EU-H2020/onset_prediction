@@ -11,7 +11,7 @@ create_log_file(.Object)
 See class definition \link{surv_ana}.}
 }
 \value{
-A character. The file path for the error file.
+A string. The file path for the error file.
 }
 \description{
 Creates log file

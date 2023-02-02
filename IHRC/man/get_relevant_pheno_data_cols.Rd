@@ -9,7 +9,7 @@ get_relevant_pheno_data_cols(pheno_data, endpt)
 \arguments{
 \item{pheno_data}{A data.frame. The phenotype data.}
 
-\item{endpt}{A character. The current endpoint.}
+\item{endpt}{A string. The current endpoint.}
 }
 \value{
 A tibble the relevant columns from the phenotype data.

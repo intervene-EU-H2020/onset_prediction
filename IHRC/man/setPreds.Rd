@@ -9,7 +9,7 @@ setPreds(.Object, crnt_score_types)
 \arguments{
 \item{.Object}{The S4 \link{surv_ana} object.}
 
-\item{crnt_score_types}{A character (vector). The current score types.}
+\item{crnt_score_types}{A string (vector). The current score types.}
 }
 \value{
 The updated S4 object

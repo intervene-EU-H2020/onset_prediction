@@ -7,14 +7,14 @@
 get_coxph_formula(preds, endpt)
 }
 \arguments{
-\item{preds}{A character (vector). The predictors for the model.}
+\item{preds}{A string (vector). The predictors for the model.}
 
-\item{endpt}{A character. The current endpoint.}
+\item{endpt}{A string. The current endpoint.}
 }
 \value{
 The formula for the Cox-PH model.
 
-A character. The formula string for the Cox-PH model.
+A string. The formula string for the Cox-PH model.
 }
 \description{
 Will be i.e.

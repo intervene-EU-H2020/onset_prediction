@@ -10,7 +10,7 @@ get_down_dir(down_fctr)
 \item{down_fctr}{A numeric. Defines how many controls there should be for every case.}
 }
 \value{
-A character. The directory name describing the downsampling factor used.
+A string. The directory name describing the downsampling factor used.
 }
 \description{
 If the downsampling factor is NA then the direcotry is
