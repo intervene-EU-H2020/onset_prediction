@@ -9,7 +9,7 @@ This project includes different R packages to help working with INTERVENE longit
 
 ## Istudy
 
-he goal of this package is to select individuals from the data that are eligible given a certain study setup. A study setup consists of an exposure, a washout, and an observation period. Eligible individuals cannot have the selected endpoint of interest inside the endpoint free period. The endpoint free period ranges from birth until the observation period begins. 
+The goal of this package is to select individuals from the data that are eligible given a certain study setup. A study setup consists of an exposure, a washout, and an observation period. Eligible individuals cannot have the selected endpoint of interest inside the endpoint free period. The endpoint free period ranges from birth until the observation period begins. 
 
 The study, considers all individuals at a set time point. The observation, washout, and exposure period are calcualted backwards from this time point.
 
@@ -18,7 +18,7 @@ The study, considers all individuals at a set time point. The observation, washo
 The important column names for the input data are indicated in each function documentation. 
 ## IHRC
 
-Builds Cox-propotional hazards models (Cox-PH) for the different endpoints and study setups. Calcualtes the Hazard Ratios(HRs) and the c-index for the different models. 
+This package builds the Cox-propotional hazards models (Cox-PH) for the different endpoints and study setups. Calcualtes the Hazard Ratios(HRs) and the c-index for the different models. 
 
 ## IUtils
 
@@ -36,7 +36,7 @@ install.packages("/finngen/green/path/to/package/packag_name.tar.xz",
 
 See [How to install a R package into Sandbox?](https://finngen.gitbook.io/finngen-analyst-handbook/working-in-the-sandbox/quirks-and-features/how-to-upload-to-your-own-ivm-via-finngen-green/my-r-package-doesnt-exist-in-finngen-sandbox-r-rstudio.-how-can-i-get-a-new-r-package-to-finngen).
 
-# R package Dependencies
+# Dependencies
 
  All packages are alread installed in the FinnGen Sandbox. The minimal versions on which this package has been tester are indicated in brackets. 
 
@@ -54,4 +54,3 @@ See [How to install a R package into Sandbox?](https://finngen.gitbook.io/finnge
 - stringr (>= 1.4.1) - For easier regex
 - assertthat (>= 0.2.1) - For testing
 - stats (>= 4.2.2) - For creating test data
-
