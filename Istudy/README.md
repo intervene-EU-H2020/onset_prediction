@@ -22,12 +22,12 @@ The important column names for the input data are indicated in each function doc
 ### R package Dependencies
  All packages are alread installed in the FinnGen Sandbox.
  
-- assertthat (For testing)
-- stats (For creating test data)
-- lubridate (For handling dates)
-- dplyr (For data manipulation)
-- tibble (For better data.frames)
-- readr (For reading and writing files)
+- assertthat (>= 0.2.1) - For testing
+- stats (>= 4.2.2) - For creating test data
+- lubridate (>= 1.9.0) - For handling dates
+- dplyr (>= 1.0.10) - For data manipulation
+- tibble (>= 3.1.8) - For better data.frames
+- readr (>= 2.1.3) - For reading and writing files
 
 ## Example
 

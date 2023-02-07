@@ -45,7 +45,7 @@ See [How to install a R package into Sandbox?](https://finngen.gitbook.io/finnge
 # R package Dependencies
 
  All packages are alread installed in the FinnGen Sandbox. The minimal versions on which this package has been tester are indicated in brackets. 
- 
+
 - dplyr (>= 1.0.10) - For data manipulation
 - tibble (>= 3.1.8) - For better data.frames
 - ggplot2 (>= 3.4.0) - For plotting
@@ -58,3 +58,6 @@ See [How to install a R package into Sandbox?](https://finngen.gitbook.io/finnge
 - IUtils (>= 2.0.0) - For file reading and plotting
 - lubridate (>= 1.9.0) - For easier dealing with dates
 - stringr (>= 1.4.1) - For easier regex
+- assertthat (>= 0.2.1) - For testing
+- stats (>= 4.2.2) - For creating test data
+
