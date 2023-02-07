@@ -11,13 +11,7 @@ This project includes different R packages to help working with INTERVENE longit
 
 he goal of this package is to select individuals from the data that are eligible given a certain study setup. A study setup consists of an exposure, a washout, and an observation period. Eligible individuals cannot have the selected endpoint of interest inside the endpoint free period. The endpoint free period ranges from birth until the observation period begins. 
 
-There are two types of study setups:
-
-1.`forward` considers individuals of a certain age. It calculates the exposure, washout, and observation period onwards from this age.
-
-![Study Setup](https://github.com/intervene-EU-H2020/onset_prediction/blob/main/Istudy/man/Forward_Study_30_white.svg)
-
-2. `backward` considers all individuals at a set time point. The observation, washout, and exposure period are calcualted backwards from this time point.
+The study, considers all individuals at a set time point. The observation, washout, and exposure period are calcualted backwards from this time point.
 
 ![Study Setup Backwards](https://github.com/intervene-EU-H2020/onset_prediction/blob/main/Istudy/man/Back_study_white.svg)
 

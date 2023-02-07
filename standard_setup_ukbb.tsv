@@ -1,0 +1,19 @@
+study_type	backward
+exp_len	10
+wash_len	2
+obs_len	8
+obs_end_date	2019/01/01
+exp_f1998	FALSE
+ancs	EUR
+obs_age_range	32,70
+score_type	CCI, PRS, PheRS
+covs	SEX, YEAR_OF_BIRTH, PC1, PC2, PC3, PC4, PC5, PC6, PC7, PC8, PC9, PC10, BATCH
+min_indvs	50
+write_res	TRUE
+res_dir	path/to/save/results
+pheno_file_path	path/to/phenotyp_file
+icd_file_path	path/to/icd_file
+prs_dir_path	path/to/prs/directory/
+phers_dir_path	path/to/phers/directory/
+create_score_combos	TRUE
+read_pheno_score_files	FALSE
