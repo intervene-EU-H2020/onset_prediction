@@ -1,35 +1,35 @@
-# test_that("read_icd_files correct file works", {
-#   file_path <- "../data/icd_file_correct.tsv"
+test_that("read_icd_files correct file works", {
+  file_path <- "../data/icd_file_correct.tsv"
 
-#   true_res <- tibble::tibble(ID="KT00001",
-#                              Event_age=12.4,
-#                              ICD_version="10",
-#                              primary_ICD="HJ912",
-#                              secondary_ICD="LKJ23")
-#   read_res <- read_icd_file(file_path)
-#   expect_equal(read_res, true_res)
-# })
+  true_res <- tibble::tibble(ID="KT00001",
+                             Event_age=12.4,
+                             ICD_version="10",
+                             primary_ICD="HJ912",
+                             secondary_ICD="LKJ23")
+  read_res <- read_icd_file(file_path)
+  expect_equal(read_res, true_res)
+})
 
-# test_that("read_icd_files empty file works", {
+test_that("read_icd_files empty file works", {
 
-#   file_path <- "../data/icd_file_empty.tsv"
-#   read_res <- suppressWarnings(read_icd_file(file_path))
-#   true_res <- tibble::tibble(ID=character(),
-#                              Event_age=numeric(),
-#                              ICD_version=character(),
-#                              primary_ICD=character(),
-#                              secondary_ICD=character())
-#   expect_warning(read_icd_file(file_path))
-#   expect_equal(read_res, true_res)
-# })
+  file_path <- "../data/icd_file_empty.tsv"
+  read_res <- suppressWarnings(read_icd_file(file_path))
+  true_res <- tibble::tibble(ID=character(),
+                             Event_age=numeric(),
+                             ICD_version=character(),
+                             primary_ICD=character(),
+                             secondary_ICD=character())
+  expect_warning(read_icd_file(file_path))
+  expect_equal(read_res, true_res)
+})
 
 
-# test_that("read_icd_files missing secondary file works", {
-#   file_path <- "../data/icd_file_no_secondary.tsv"
-#   read_res <- read_icd_file(file_path)
-#   true_res <- tibble::tibble(ID="KT00001",
-#                              Event_age=12.4,
-#                              ICD_version="10",
-#                              primary_ICD="HJ912")
-#   expect_equal(read_res, true_res)
-# })
+test_that("read_icd_files missing secondary file works", {
+  file_path <- "../data/icd_file_no_secondary.tsv"
+  read_res <- read_icd_file(file_path)
+  true_res <- tibble::tibble(ID="KT00001",
+                             Event_age=12.4,
+                             ICD_version="10",
+                             primary_ICD="HJ912")
+  expect_equal(read_res, true_res)
+})

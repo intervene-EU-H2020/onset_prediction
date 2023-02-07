@@ -3,7 +3,7 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of this package is to fit a Cox-proportional hazards model to longitudinal data given different study setups. For creating a study setups see package `Istudy`.
+The goal of this package is to fit Cox-proportional hazards models to longitudinal data given different study setups and endpoints. For creating a study setups see package `Istudy`. 
 
 For the input file format of the phenotypic data see: [INTERVENE Phenotype File Definition](https://docs.google.com/document/d/1GbZszpPeyf-hyb0V_YDx828YbM7woh8OBJhvzkEwo2g/edit). Additionally, the important column names the date needs to have are inidicated in each function documentation.
 

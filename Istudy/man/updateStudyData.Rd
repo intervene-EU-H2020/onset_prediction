@@ -11,6 +11,12 @@ updateStudyData(.Object, study_data)
 
 \item{endpt}{A character. The new endpoint.}
 }
+\value{
+The updated \code{study} object.
+}
 \description{
 Sets \code{endpt} of the S4 study object to a new value
+}
+\author{
+Kira E. Detrois
 }

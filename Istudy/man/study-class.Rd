@@ -11,18 +11,12 @@ An S4 class representing the study setup
 \section{Slots}{
 
 \describe{
-\item{\code{study_type}}{A character. Can be either \code{forward} or \code{backward}.
-\code{forward} considers individuals of a certain age.
-It calculates the exposure, washout, and observation
-period onwards from this age.
-\code{backward} considers all individuals at a set time
-point. The observation and washout period are calcualted
-backwards from this time point.}
+\item{\code{study_setup}}{An S4 \code{study_setup} object. The current study setup.
+See class definition \link{study_setup}.}
 
 \item{\code{study_data}}{A tibble. The data on all study individuals.}
 
-\item{\code{endpt}}{A character. The column name of the current endpoint of
-interest.}
+\item{\code{endpt}}{A character. The current endpoint of interest.}
 }}
 
 \author{

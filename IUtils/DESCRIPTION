@@ -17,7 +17,6 @@ Imports:
     data.table (>= 1.14.6),
     dplyr (>= 1.0.10),
     ggplot2 (>= 3.4.0),
-    IHRC (>= 4.0.0),
     Istudy (>= 3.3.0),
     lubridate (>= 1.9.0),
     readr (>= 2.1.3),

@@ -196,3 +196,36 @@ setMethod(f="setEndpt",
                               return(.Object)
                       }
 )
+
+#' Sets `endpt` of the S4 study object to a new value
+#' 
+#' @param .Object The S4 study object.
+#' @param endpt A character. The new endpoint.
+#' 
+#' @return The updated `study` object.
+#' 
+#' @author Kira E. Detrois
+#' 
+#' @export 
+setGeneric(name="updateStudyData",
+           def=function(.Object, study_data) { standardGeneric("updateStudyData") } 
+)
+
+#' Sets `endpt` of the S4 study object to a new value
+#' 
+#' @param .Object The S4 study object.
+#' @param endpt A character. The new endpoint.
+#' 
+#' @return The updated `study` object.
+#' 
+#' @author Kira E. Detrois
+#' 
+#' @export 
+setMethod(f="updateStudyData",
+          signature="study",
+          definition=function(.Object,study_data) {
+                              .Object@study_data <- study_data
+                              methods::validObject(.Object)
+                              return(.Object)
+                      }
+)

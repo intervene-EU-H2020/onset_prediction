@@ -27,7 +27,7 @@
 #                          write_res=TRUE,
 #                          res_dir="/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/"), regexp=NA)
 
-#       elig_test <- readr::read_delim("/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/forward/down_4/logs/CCI_SEX_YOB_logs/elig_indv/I9_VTE_a20_e10_w2_o8_elig_indv.tsv", delim="\t", show_col_types = FALSE)
+#       elig_test <- readr::read_delim("/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/forward/down_4/logs/CCI_SEX_YOB_logs/pheno_score/I9_VTE_a20_e10_w2_o8_elig_indv.tsv", delim="\t", show_col_types = FALSE)
 #       elig_true_vte <- readr::read_delim("/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/true_results/I9_VTE_a20_e10_w2_o8_elig_indv.tsv", delim="\t", show_col_types = FALSE)
 #       expect_equal(elig_test$ID, elig_true_vte$ID)
 

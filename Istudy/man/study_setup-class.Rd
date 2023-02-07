@@ -35,6 +35,8 @@ should be for every case.
 Default is NA, which means no
 downsampling is performed.}
 
+\item{\code{exp_f1998}}{A boolean. Defines whether to filter out any data from before 1998.}
+
 \item{\code{ancs}}{A character (vector). The ancestries to consider.}
 
 \item{\code{obs_age_range}}{A numeric. The age range of individuals in the observation

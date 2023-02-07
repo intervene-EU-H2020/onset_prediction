@@ -22,8 +22,7 @@ get_coxph_mdl <- function(surv_ana,
     coxph_mdl <- NULL
     if(nrow(study@study_data) > 0) {
         coxph_formula <- get_coxph_formula(preds=surv_ana@preds, endpt=study@endpt)  
-        study@study_data <- scale_preds(preds=surv_ana@plot_preds,
-                                        study_data=study@study_data)
+        study <-  Istudy::updateStudyData(study, scale_preds(preds=surv_ana@plot_preds, study_data=study@study_data))
         coxph_mdl <- tryCatch({
             coxph_mdl <- suppressWarnings(
                 survival::coxph(formula=coxph_formula, 

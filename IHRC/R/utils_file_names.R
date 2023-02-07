@@ -23,7 +23,6 @@ get_all_preds_sorted <- function(score_type,
             interact_preds <- interact_preds[order(interact_preds)]
             score_type <- c(non_interact_preds, interact_preds)
         } else {     
-            print(score_type)  
             score_type <- score_type[order(score_type)]
         }
     }

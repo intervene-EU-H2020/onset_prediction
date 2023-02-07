@@ -6,6 +6,16 @@
 \usage{
 get_ewo_file_name(study_type, exp_len, wash_len, obs_len)
 }
+\arguments{
+\item{exp_len}{An integer. Length of the exposure period (in years).}
+
+\item{wash_len}{An integer. Length of the washout period (in years).}
+
+\item{obs_len}{An integer. Length of the prediction period (in years).}
+
+\item{study_setup}{An S4 \code{study_setup} object. The current study setup.
+See class definition \link{study_setup}.}
+}
 \description{
 Creates file name describing the exposure, wash, and observation period.
 }

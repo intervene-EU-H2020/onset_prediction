@@ -7,9 +7,9 @@
 calc_backward_wash_start_date(obs_end_date, wash_len, obs_len)
 }
 \arguments{
-\item{obs_len}{An integer. Length of the prediction period (in years).}
+\item{obs_end_date}{A Date. The end of the observation period.}
 
-\item{obs_end_data}{A Date. The end of the observation period.}
+\item{obs_len}{An integer. Length of the prediction period (in years).}
 
 \item{exp_len}{An integer. Length of the exposure period (in years).}
 }

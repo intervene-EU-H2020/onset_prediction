@@ -32,7 +32,6 @@
 get_study_edu_data <- function(study_data) {
     # Read in ISCED 2011 mapping
     file_path <- system.file("extdata", "finngen_age_modes.tsv", package = "IHRC")
-    print(file_path)
     isced_map <- readr::read_delim(file_path, delim="\t", show_col_types=FALSE)
     class(isced_map$ISCED_2011) <- class(study_data$ISCED_2011)
 
