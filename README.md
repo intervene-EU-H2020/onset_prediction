@@ -38,7 +38,16 @@ See [How to install a R package into Sandbox?](https://finngen.gitbook.io/finnge
 
 # Dependencies
 
- All packages are alread installed in the FinnGen Sandbox. The minimal versions on which this package has been tester are indicated in brackets. 
+ All packages are alread installed in the FinnGen Sandbox. The minimal versions on which this package has been tested are indicated in brackets. 
+
+ ## (Likely) need to be manually installed:
+- ICCI (>= 1.1.0) - For calculating the CCI, see: https://github.com/dsgelab/ICCI
+- comorbidity (>= 1.0.0) - For caclulating the CCI, likely needs to manually installed see: https://cran.r-project.org/web/packages/comorbidity/
+- IUtils (>= 2.0.0) - For file reading and plotting
+- Istudy (>= 3.3.0) - For selecting the cases and controls
+- IHRC (>=4.0.0) - For running the survival analysis
+
+## (Likely) already present
 
 - dplyr (>= 1.0.10) - For data manipulation
 - tibble (>= 3.1.8) - For better data.frames
@@ -46,11 +55,8 @@ See [How to install a R package into Sandbox?](https://finngen.gitbook.io/finnge
 - readr (>= 2.1.3) - For reading and writing files
 - methods (>= 4.2.2) - For working with S4 objects
 - survival (>= 3.2-7) - For the Cox-PH model
-- Hmisc (>= 4.4-2) - For the c-index
-- ICCI (>= 1.1.0) - For calculating the CCI
-- Istudy (>= 3.3.0) - For selecting the cases and controls
-- IUtils (>= 2.0.0) - For file reading and plotting
 - lubridate (>= 1.9.0) - For easier dealing with dates
 - stringr (>= 1.4.1) - For easier regex
 - assertthat (>= 0.2.1) - For testing
 - stats (>= 4.2.2) - For creating test data
+- Hmisc (>= 4.4-2) - For the c-index
