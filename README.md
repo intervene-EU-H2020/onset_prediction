@@ -40,12 +40,12 @@ See [How to install a R package into Sandbox?](https://finngen.gitbook.io/finnge
 
  All packages are alread installed in the FinnGen Sandbox. The minimal versions on which this package has been tested are indicated in brackets. 
 
- ## (Likely) need to be manually installed:
+ ## (Likely) need to be manually installed
 - ICCI (>= 1.1.0) - For calculating the CCI, see: https://github.com/dsgelab/ICCI
-- comorbidity (>= 1.0.0) - For caclulating the CCI, likely needs to manually installed see: https://cran.r-project.org/web/packages/comorbidity/
+- comorbidity (>= 1.0.0) - For caclulating the CCI, see: https://cran.r-project.org/web/packages/comorbidity/
 - IUtils (>= 2.0.0) - For file reading and plotting
 - Istudy (>= 3.3.0) - For selecting the cases and controls
-- IHRC (>=4.0.0) - For running the survival analysis
+- IHRC (>= 4.0.0) - For running the survival analysis
 
 ## (Likely) already present
 
