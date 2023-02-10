@@ -6,7 +6,7 @@ obs_end_date	2019/01/01
 exp_f1998	FALSE
 ancs	EUR
 obs_age_range	32,70
-score_type	CCI, PRS, PheRS
+score_type	CCI, PheRS
 covs	SEX, YEAR_OF_BIRTH, PC1, PC2, PC3, PC4, PC5, PC6, PC7, PC8, PC9, PC10, BATCH
 min_indvs	50
 write_res	TRUE
@@ -17,4 +17,3 @@ prs_dir_path	path/to/prs/directory/
 phers_dir_path	path/to/phers/directory/
 create_score_combos	TRUE
 read_pheno_score_files	FALSE
-endpts	G6_EPLEPSY, RHEUMA_SEROPOS_OTH, GOUT
