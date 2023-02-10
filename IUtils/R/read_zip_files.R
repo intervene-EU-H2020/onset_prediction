@@ -22,6 +22,7 @@ read_zip_files <- function(dir_path,
             # Reading
             file_name_zip <- paste0(dir_path,  endpt, "_2019-01-01_o8_w2_e10_32_70.tsv")
             zip_probs <- readr::read_delim(file_name_zip, delim="\t",show_col_types = FALSE)
+            zip_probs <- dplyr::mutate(zip_probs, ID=as.character(ID))
             names(zip_probs)[names(zip_probs) == "ZIP_probs"] <- paste0(endpt, "_ZIPprobs")
             names(zip_probs)[names(zip_probs) == "ZIP"] <- paste0(endpt, "_ZIP")
 

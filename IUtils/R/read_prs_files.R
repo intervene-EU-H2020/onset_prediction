@@ -60,10 +60,13 @@ add_prs_col <- function(file_path,
                         disease,
                         col_map,
                         prs_data) {
-    crnt_prs <- readr::read_delim(file_path, delim="\t", show_col_types=FALSE)
+    crnt_prs <- readr::read_delim(file_path, 
+                                  delim="\t", 
+                                  show_col_types=FALSE,
+                                  col_types=list(IID="c"))
     endpt <- col_map[col_map$prs == disease,]$endpt
     crnt_prs <- dplyr::rename(crnt_prs, ID=IID) %>%
-                    dplyr::select(ID, SCORE1_AVG)
+                    dplyr::select(ID, SCORE1_AVG) 
     names(crnt_prs)[names(crnt_prs) == "SCORE1_AVG"] <- paste0(endpt, "_PRS")
     prs_data <- dplyr::full_join(crnt_prs, prs_data, by="ID", na_matches="na")
     return(prs_data)

@@ -29,7 +29,10 @@ read_phers_files <- function(dir_path,
         if(dir.exists(file_path)) {
             # Reading
             file_name_phers <- paste0(file_path, "pred_probas.txt.gz")
-            phers_probs <- readr::read_delim(file_name_phers, delim="\t",show_col_types = FALSE)
+            phers_probs <- readr::read_delim(file_name_phers, 
+                                             delim="\t",
+                                             show_col_types=FALSE,
+                                             col_types=list(`#ID`="c"))
             # Renaming
             phers_probs <- dplyr::rename(phers_probs, ID = `#ID`) %>%
                             dplyr::select(ID, pred_class1_prob)
@@ -39,6 +42,7 @@ read_phers_files <- function(dir_path,
                                            phers_data, 
                                            by="ID", 
                                            na_matches="na")
+           
         }
     }
     return(phers_data)
