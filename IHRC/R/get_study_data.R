@@ -69,10 +69,10 @@ get_pheno_score_data  <- function(score_type,
     } else {
         study_data <- pheno_data
     }
-    if(!is.null(study_data)) {
-        # Only complete cases needed for analyses anyways
-        study_data <- study_data[stats::complete.cases(dplyr::select(study_data, -paste0(endpt, "_DATE"))),]
-    }
+    #if(!is.null(study_data)) {
+    #    # Only complete cases needed for analyses anyways
+    #    study_data <- study_data[stats::complete.cases(dplyr::select(study_data, -paste0(endpt, "_DATE"))),]
+    #}
 
     return(study_data)
 }
