@@ -28,7 +28,7 @@ join_endpts_indvs_mats <- function(crnt_endpts_indvs_mat,
 
         # Combining booleans
         endpts_indvs_mat[,paste0(endpt)] <- endpts_indvs_mat[,paste0(endpt, "_crnt")] & endpts_indvs_mat[,paste0(endpt)]
-    } else {
+    } else { # Potential problem
         endpts_indvs_mat <- crnt_endpts_indvs_mat
         endpts_indvs_mat[,paste0(endpt)] <- as.logical(dplyr::pull(endpts_indvs_mat, paste0(endpt, "_crnt")))
     }
@@ -166,7 +166,7 @@ add_cohort_chip_info <- function(pheno_data,
                                  by="ID", na_matches="na")
   
   ## ADDING R3 COHORT INFORMATION
-  R8_ids_with_R3_info <- readr::read_delim("/finngen/red/detrois/onset_pred/data/R8_ids_with_R3_info.tsv",
+  R8_ids_with_R3_info <- readr::read_delim("/home/ivm/onset_pred/data/R8_ids_with_R3_info.tsv",
                                            delim="\t",
                                            show_col_types = FALSE)
   pheno_data <- dplyr::left_join(pheno_data, 
