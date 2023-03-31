@@ -89,7 +89,7 @@ setMethod("initialize", "study", function(.Object, ...) {
     .Object <- callNextMethod()
     if(nrow(.Object@study_data) > 0) {
         check_cols_exist(.Object@study_data, .Object@endpt, "initialize")
-        .Object@study_data <- process_ISCED_2011(.Object@study_data)
+        #.Object@study_data <- process_EDU(.Object@study_data)
         .Object@study_data <- set_study_dates(study_data=.Object@study_data,
                                             study_setup=.Object@study_setup)
         .Object@study_data <- add_age_obs_cols(study_data=.Object@study_data)
@@ -99,25 +99,25 @@ setMethod("initialize", "study", function(.Object, ...) {
     return(.Object)
 })
 
-#' Turn ISCED_2011 codes into integers
+#' Turn EDU codes into integers
 #' 
 #' @param study_data A tibble. The data on all study individuals. Needs
-#'                      at least column `ISCED_2011`.
+#'                      at least column `EDU`.
 #' 
 #' @return The updated study data
 #' 
 #' @author Kira E. Detrois
 #' 
 #' @export 
-process_ISCED_2011 <- function(study_data) {
-    study_data$ISCED_2011 <- as.integer(stringr::str_extract(study_data$ISCED_2011, "[0-9]"))
+process_EDU <- function(study_data) {
+    study_data$EDU <- as.integer(stringr::str_extract(study_data$EDU, "[0-9]"))
     return(study_data)
 }
 
 #' Checks that the `study_setup` gets valid input
 #' 
 #' @param study_data A tibble. The data on all study individuals. Needs
-#'                      at least column `ISCED_2011`.
+#'                      at least column `EDU`.
 #' 
 #' @return The updated study data
 #' 

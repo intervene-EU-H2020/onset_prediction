@@ -11,13 +11,16 @@ custom_colors_brewer <- function(N_colors) {
     if(N_colors == 1)
       c("#000000")
     else if(N_colors == 2) {
-      c("#D5694F", "#224767")
+      c("#D5694F", "#29557B")
     } else if(N_colors == 3)  {
-      c("#D5694F", "#224767", "#EAB034")
+      c("#D5694F", "#29557B", "#EAB034")
     } else if(N_colors == 4) {
-      c("#D5694F", "#224767", "#EAB034", "#748AAA")
+      c("#D5694F", "#29557B", "#EAB034", "#748AAA")
     } else if(N_colors == 5) {
-      c("#D5694F", "#224767", "#EAB034", "#748AAA", "#9E577C")
+      c("#D5694F", "#29557B", "#EAB034", "#748AAA", "#CCB6AF")
+    } else if(N_colors == 10) {
+      c("#D5694F", "#29557B", "#EAB034", "#748AAA", "#CCB6AF", "#9E577C", "#7D7C7F", "#FBCF9D",  "#678C18", "#588986")
+
     }
 }
 

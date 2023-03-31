@@ -14,7 +14,7 @@
 #'                      \item `MED` for medication data, then the
 #'                              `atc_file_path` should be provided.
 #'                      \item `EDU` for educational level. The column for this needs to 
-#'                                  be called `ISCED_2011` in the `pheno_data`.
+#'                                  be called `EDU` in the `pheno_data`.
 #'                      \item `ZIP` for zip scores, then the
 #'                              `zip_file_path` should be provided.
 #'                  }
@@ -109,7 +109,7 @@ get_all_data <- function(score_type,
             "\nHowever, the phers_dir_path is not provided or incorrect.\n", phers_dir_path))
         }
     }
-    if(any(stringr::str_detect(score_type, "ZIP"))) {
+    if(any(stringr::str_detect(score_type, "ZIP_prob"))) {
         if(dir.exists(zip_dir_path)) {
             zip_data <- read_zip_files(zip_dir_path, endpts)
         } else {

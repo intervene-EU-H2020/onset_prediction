@@ -42,7 +42,7 @@
 #'                      \item `PheRS` for PheRS results score, 
 #'                      \item `MED` for medication data, and 
 #'                      \item `EDU` for educational level. The column for this needs to 
-#'                                  be called `ISCED_2011` in the `pheno_data`.
+#'                                  be called `EDU` in the `pheno_data`.
 #'                      \item `ZIP` for zip scores,
 #'                  }
 #' @param create_score_combos A boolean, whether or not to create all possible

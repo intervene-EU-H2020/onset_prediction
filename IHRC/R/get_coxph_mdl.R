@@ -22,7 +22,7 @@ get_coxph_mdl <- function(surv_ana,
     coxph_mdl <- NULL
     if(nrow(study@study_data) > 0) {
         coxph_formula <- get_coxph_formula(preds=surv_ana@preds, endpt=study@endpt)  
-        study <-  Istudy::updateStudyData(study, scale_preds(preds=surv_ana@plot_preds, study_data=study@study_data))
+        study <-  Istudy::updateStudyData(study, scale_preds(preds=surv_ana@preds, study_data=study@study_data))
         coxph_mdl <- tryCatch({
             coxph_mdl <- suppressWarnings(
                 survival::coxph(formula=coxph_formula, 
@@ -72,11 +72,15 @@ scale_preds <- function(preds,
                         study_data) {
     for(pred in preds) {
         if(pred %in% colnames(study_data)) {
-            if(pred %in% c("PRS", "CCI", "EI", "YEAR_OF_BIRTH", "MED", "EDU", "PheRS", "ZIP")) {
+            if(pred %in% c("PRS", "CCI", "EI", "YEAR_OF_BIRTH", "MED", "EDU_prob", "EDU_cont", "PheRS", "ZIP_prob")) {
                 study_data[,pred] <- scale(study_data[,pred])
+            } 
+            if(pred %in% c("EDU", "ZIP")) {
+                study_data[,pred] <- as.factor(dplyr::pull(study_data, pred))
             }
         }
     }
+
     study_data$SEX <- factor(study_data$SEX, levels=c("female", "male"))
     return(study_data)
 }

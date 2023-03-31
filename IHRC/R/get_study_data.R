@@ -96,7 +96,7 @@ get_pheno_score_data  <- function(score_type,
 #'              \item `END_OF_FOLLOWUP`
 #'              \item All principal components 
 #'              \item `BATCH`
-#'              \item `ISCED_2011`
+#'              \item `EDU`
 #'          }
 #' 
 #' @author Kira E. Detrois
@@ -104,20 +104,57 @@ get_pheno_score_data  <- function(score_type,
 #' @export 
 get_relevant_pheno_data_cols <- function(pheno_data,
                                          endpt) {
-    pheno_data <- dplyr::select(pheno_data,
-                                ID, 
-                                SEX, 
-                                DATE_OF_BIRTH, 
-                                ANCESTRY, 
-                                # Otherwise dplyr will throw error. 
-                                # test_endpt_input_correct already 
-                                # checks that this is only a single 
-                                # string and not a vector.
-                                all_of(endpt),  
-                                paste0(endpt, "_DATE"),
-                                END_OF_FOLLOWUP,
-                                dplyr::starts_with("PC"),
-                                BATCH,
-                                ISCED_2011)
+    print(colnames(pheno_data))
+    if(("ZIP" %in% colnames(pheno_data)) & ("EDU" %in% colnames(pheno_data))) {
+        pheno_data <- dplyr::select(pheno_data,
+                                    ID, 
+                                    SEX, 
+                                    DATE_OF_BIRTH, 
+                                    ANCESTRY, 
+                                    # Otherwise dplyr will throw error. 
+                                    # test_endpt_input_correct already 
+                                    # checks that this is only a single 
+                                    # string and not a vector.
+                                    all_of(endpt),  
+                                    paste0(endpt, "_DATE"),
+                                    END_OF_FOLLOWUP,
+                                    dplyr::starts_with("PC"),
+                                    BATCH,
+                                    ZIP,
+                                    EDU)
+    } else if("EDU" %in% colnames(pheno_data)) {
+                pheno_data <- dplyr::select(pheno_data,
+                                    ID, 
+                                    SEX, 
+                                    DATE_OF_BIRTH, 
+                                    ANCESTRY, 
+                                    # Otherwise dplyr will throw error. 
+                                    # test_endpt_input_correct already 
+                                    # checks that this is only a single 
+                                    # string and not a vector.
+                                    all_of(endpt),  
+                                    paste0(endpt, "_DATE"),
+                                    END_OF_FOLLOWUP,
+                                    dplyr::starts_with("PC"),
+                                    BATCH,
+                                    EDU)
+    } else if("ZIP" %in% colnames(pheno_data)) {
+                pheno_data <- dplyr::select(pheno_data,
+                                    ID, 
+                                    SEX, 
+                                    DATE_OF_BIRTH, 
+                                    ANCESTRY, 
+                                    # Otherwise dplyr will throw error. 
+                                    # test_endpt_input_correct already 
+                                    # checks that this is only a single 
+                                    # string and not a vector.
+                                    all_of(endpt),  
+                                    paste0(endpt, "_DATE"),
+                                    END_OF_FOLLOWUP,
+                                    dplyr::starts_with("PC"),
+                                    BATCH,
+                                    ZIP)
+    }
+
     return(pheno_data)
 }

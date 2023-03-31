@@ -29,7 +29,7 @@ Available options include:
 \item \code{PheRS} for PheRS results score,
 \item \code{MED} for medication data, and
 \item \code{EDU} for educational level. The column for this needs to
-be called \code{ISCED_2011} in the \code{pheno_data}.
+be called \code{EDU} in the \code{pheno_data}.
 \item \code{ZIP} for zip scores,
 }}
 

@@ -17,7 +17,7 @@ read_pheno_file <- function(file_path="",
 
     pheno_data <- readr::read_delim(file_path, 
                                     delim="\t", 
-                                    col_types=list(SEX="f", DATE_OF_BIRTH="D", END_OF_FOLLOWUP="D", ANCESTRY="f", ISCED_2011="d", ID="c"),
+                                    col_types=list(SEX="f", DATE_OF_BIRTH="D", END_OF_FOLLOWUP="D", ANCESTRY="f", ID="c"),
                                     show_col_types = FALSE)
     if(nrow(pheno_data) == 0) {
         warning(paste0("Warning. Phenotype file contained no entries. Given path: ", file_path))
@@ -26,7 +26,7 @@ read_pheno_file <- function(file_path="",
     if(is.null(endpts)) {
         endpts <- get_endpts()
     }
-    expect_cols <- c("ID", "SEX", "DATE_OF_BIRTH", paste0("PC", 1:10), "ANCESTRY", "START_OF_FOLLOWUP", "END_OF_FOLLOWUP", endpts, paste0(endpts, "_DATE"), "ISCED_2011")
+    expect_cols <- c("ID", "SEX", "DATE_OF_BIRTH", paste0("PC", 1:10), "ANCESTRY", "START_OF_FOLLOWUP", "END_OF_FOLLOWUP", endpts, paste0(endpts, "_DATE"), "EDU")
     check_cols(expect_cols, colnames(pheno_data), file_path)
 
     return(pheno_data)

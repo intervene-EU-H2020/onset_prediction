@@ -7,7 +7,7 @@
 get_study_edu_data(study_data)
 }
 \arguments{
-\item{study_data}{A data frame containing columns \code{ID} and \code{ISCED_2011}}
+\item{study_data}{A data frame containing columns \code{ID} and \code{EDU}}
 }
 \value{
 A tibble containing columns \code{ID} and \code{EDU}
@@ -25,7 +25,7 @@ The average ages are based on FinnGen R10. For more details see:
 \examples{
 
 study_data <- tibble::tibble(ID = 1:7, 
-                             ISCED_2011 = c("1","2","3","4","5","6","7"))
+                             EDU = c("1","2","3","4","5","6","7"))
 get_study_edu_data(study_data)
 
 }

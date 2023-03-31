@@ -197,7 +197,7 @@ get_zip_data <- function(score_data,
         score_data <- dplyr::select(.data=score_data, 
                                     ID, 
                                     {{ zip_col_name }}) %>% 
-                        dplyr::rename("ZIP" = {{ zip_col_name }})
+                        dplyr::rename("ZIP_prob" = {{ zip_col_name }})
     } else {
         score_data <- NULL
     }

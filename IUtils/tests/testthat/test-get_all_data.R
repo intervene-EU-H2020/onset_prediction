@@ -4,7 +4,7 @@ test_that("get_all_data works", {
     prs_dir_path <- "../data/PRS_R8/"
     phers_dir_path <- "../data/PheRS_R8/"
 
-    pheno_expect_cols <- c("ID", "SEX", "DATE_OF_BIRTH","START_OF_FOLLOWUP", "END_OF_FOLLOWUP", "ANCESTRY",  "C3_BREAST", "C3_BREAST_DATE", "T2D", "T2D_DATE", "C3_PROSTATE", "C3_PROSTATE_DATE", "COVHOSP", "COVHOSP_DATE", "I9_VTE", "I9_VTE_DATE", "J10_ASTHMA",  "J10_ASTHMA_DATE", "PC1", "BATCH", "ISCED_2011", "PC2", "PC3", "PC4", "PC5", "PC6","PC7", "PC8", "PC9", "PC10")
+    pheno_expect_cols <- c("ID", "SEX", "DATE_OF_BIRTH","START_OF_FOLLOWUP", "END_OF_FOLLOWUP", "ANCESTRY",  "C3_BREAST", "C3_BREAST_DATE", "T2D", "T2D_DATE", "C3_PROSTATE", "C3_PROSTATE_DATE", "COVHOSP", "COVHOSP_DATE", "I9_VTE", "I9_VTE_DATE", "J10_ASTHMA",  "J10_ASTHMA_DATE", "PC1", "BATCH", "EDU", "PC2", "PC3", "PC4", "PC5", "PC6","PC7", "PC8", "PC9", "PC10")
     icd_expect <- tibble::tibble(ID="KT00001",
                                  Event_age=12.4,
                                  ICD_version="10",

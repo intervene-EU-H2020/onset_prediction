@@ -2,7 +2,7 @@
 
 export(add_cci_data)
 export(add_coxph_res_row)
-export(add_edu_data)
+export(add_edu_cont_data)
 export(add_med_endpt_data)
 export(add_phers_endpt_data)
 export(add_prs_endpt_data)

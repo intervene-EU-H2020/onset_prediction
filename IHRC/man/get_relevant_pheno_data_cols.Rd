@@ -23,7 +23,7 @@ A tibble the relevant columns from the phenotype data.
 \item \code{END_OF_FOLLOWUP}
 \item All principal components
 \item \code{BATCH}
-\item \code{ISCED_2011}
+\item \code{EDU}
 }
 }
 \description{
