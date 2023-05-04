@@ -95,6 +95,8 @@ read_phers_endpts_indvs_mat <- function(dir_path,
                                                  by="ID", 
                                                  na_matches="na")
             endpts_indvs_mat[,paste0(endpt)][is.na(endpts_indvs_mat[,paste0(endpt)])] <- set_nas_true
+        } else {
+            error(paste0("PheRS training/test data file ", file_path, " does not exist."))
         }
     }
     return(endpts_indvs_mat)
@@ -133,45 +135,4 @@ read_finngen_endpts_indvs_mat <- function(pheno_data,
   }
   return(endpts_indvs_mat)
 }
- 
-#' Adds Cohort and Chip information for the individuals in FinnGen
-#' 
-#' Used for getting in the test individuals for each endpoint of the PRS data 
-#' in FinnGen. These are individuals not used in training the PRS.
-#' 
-#' @param pheno_data A data.frame. The phenotype data. Needs at least column `ID`.
-#' @param ver A string. The FinnGen version.
-#' 
-#' @author Kira E. Detrois
-#' 
-#' @export 
-add_cohort_chip_info <- function(pheno_data, 
-                                 ver) {
-  ## ADDING BATCH
-  if(ver == "R10") {
-    file_name <- "/finngen/library-red/finngen_R10/analysis_covariates/R10_COV_PHENO_V1.txt.gz"
-  } else if(ver == "R8") {
-    file_name <- "/finngen/library-red/finngen_R8/analysis_covariates/finngen_R8_cov_1.0.txt.gz"
-  } else {
-    warning(paste0("Unknown version: ", ver))
-    return(NULL)
-  }
-  cohort_chip_info <- data.table::fread(file_name, sep="\t")
-  cohort_chip_info <- dplyr::select(cohort_chip_info, 
-                                    FINNGENID, chip, cohort)
-  cohort_chip_info <- dplyr::rename(cohort_chip_info, ID=FINNGENID)
-  cohort_chip_info <- dplyr::rename(cohort_chip_info, CHIP=chip)
-  cohort_chip_info <- dplyr::rename(cohort_chip_info, COHORT=cohort)
-  pheno_data <- dplyr::left_join(pheno_data, cohort_chip_info, 
-                                 by="ID", na_matches="na")
-  
-  ## ADDING R3 COHORT INFORMATION
-  R8_ids_with_R3_info <- readr::read_delim("/home/ivm/onset_pred/data/R8_ids_with_R3_info.tsv",
-                                           delim="\t",
-                                           show_col_types = FALSE)
-  pheno_data <- dplyr::left_join(pheno_data, 
-                                 R8_ids_with_R3_info, 
-                                 by="ID", 
-                                 na_matches="na")
-  return(pheno_data)
-}
+
