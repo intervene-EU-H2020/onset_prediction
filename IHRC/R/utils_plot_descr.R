@@ -47,7 +47,7 @@ get_surv_descr <- function(preds) {
 #' 
 #' @author Kira E. Detrois
 reformat_preds_pretty <- function(preds) {
-    preds <- stringr::str_replace(preds, "YEAR_OF_BIRTH", "YoB")
+    preds <- stringr::str_replace(preds, "YEAR_OF_BIRTH", "Age")
     preds <- stringr::str_replace(preds, "BATCH", "Batch")        
     preds <- stringr::str_replace(preds, "EDU", "Edu")
     preds <- stringr::str_replace(preds, "SEX", "Sex")        

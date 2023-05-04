@@ -20,7 +20,7 @@
 #' 
 #' study_data <- tibble::tibble(ID = 1:7, 
 #'                              EDU = c("1","2","3","4","5","6","7"))
-#' get_study_edu_data(study_data)
+#' get_edu_cont_data(study_data)
 #' 
 #' @param study_data A data frame containing columns `ID` and `EDU`
 #' 
@@ -29,7 +29,7 @@
 #' @author Kira E. Detrois
 #' 
 #' @export
-get_study_edu_data <- function(study_data) {
+get_edu_cont_data <- function(study_data) {
     # Read in ISCED 2011 mapping
     file_path <- system.file("extdata", "finngen_age_modes.tsv", package = "IHRC")
     isced_map <- readr::read_delim(file_path, delim="\t", show_col_types=FALSE)

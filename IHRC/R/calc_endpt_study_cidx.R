@@ -60,7 +60,7 @@ calc_endpt_study_cidx <- function(surv_ana,
 #' @export
 get_surv_obj <- function(study_data,
                          endpt) {
-    
+
     survival::Surv(time=dplyr::pull(study_data, 
                                     paste0(endpt, "_AGE_FROM_BASE")),
                    event=dplyr::pull(study_data, 

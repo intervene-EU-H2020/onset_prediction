@@ -16,17 +16,17 @@ write_pheno_score_files <- function(pheno_score_data,
                                     study_setup,
                                     endpt,
                                     surv_ana) {
-    if(check_res_dir(surv_ana@write_res, surv_ana@res_dir) & 
-        !is.null(pheno_score_data)) {
+    if(!is.null(pheno_score_data)) {
         file_path <- get_full_file_name_path(res_type="pheno_score",
-                                             study_setup=study_setup,
-                                             endpt=endpt,
-                                             surv_ana=surv_ana)
+                                            study_setup=study_setup,
+                                            endpt=endpt,
+                                            surv_ana=surv_ana)
         readr::write_delim(x=pheno_score_data,
                            file=file_path,
                            delim="\t")
+    } else {
+        stop("No phenotype-score data to write to file.")
     }
-
 }
 
 #' Creates a string of the current study setup

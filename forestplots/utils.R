@@ -26,7 +26,7 @@ write_endpt_order_file <- function(coxph_file_path,
 }
 
 tib_by_endpt_order <- function(tib,
-                               endpt_order) {
+                               endpt_order) {   
     tib <- dplyr::left_join(endpt_order, tib, by="ENDPOINT", na_matches="na")
     tib <- dplyr::arrange(tib, ENDPT_ORDER)
     return(tib)

@@ -189,15 +189,15 @@ calc_exp_end_age <- function(elig_indv) {
 #' @author Kira E. Detrois
 #' 
 #' @export 
-get_zip_data <- function(score_data,
+get_prob_data <- function(score_data,
                          endpt) {
     
-    zip_col_name <- paste0(endpt, "_ZIPprobs")
-    if(zip_col_name %in% colnames(score_data)) {
+    prob_col_name <- paste0(endpt, "_prob")
+    if(prob_col_name %in% colnames(score_data)) {
         score_data <- dplyr::select(.data=score_data, 
                                     ID, 
-                                    {{ zip_col_name }}) %>% 
-                        dplyr::rename("ZIP_prob" = {{ zip_col_name }})
+                                    {{ prob_col_name }}) %>% 
+                        dplyr::rename("Prob" = {{ zip_col_name }})
     } else {
         score_data <- NULL
     }

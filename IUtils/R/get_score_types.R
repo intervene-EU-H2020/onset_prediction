@@ -49,7 +49,7 @@ get_all_possible_score_type_combs <- function(score_type) {
         n = n + 1
     }
 
-    if(length(score_type) >= 2) {
+    if(length(score_type) > 2) {
         m = 1
         while(m <= length(score_type)) {
             i = m + 1
@@ -62,7 +62,7 @@ get_all_possible_score_type_combs <- function(score_type) {
         }
     }
 
-    if(length(score_type) >= 3) {
+    if(length(score_type) > 3) {
         m = 1
         while(m <= length(score_type)) {
             i = m + 1
@@ -77,6 +77,53 @@ get_all_possible_score_type_combs <- function(score_type) {
             }
             m = m + 1
         }
+    }
+    if(length(score_type) > 4) {
+        m = 1
+        while(m <= length(score_type)) {
+            i = m + 1
+            while(i <= length(score_type)) {
+                j = i + 1
+                while(j <= length(score_type)) {
+                    k = j + 1
+                    while(k <= length(score_type)) {
+                        score_type_combs[[n]] <- c(score_type[m], score_type[i], score_type[j], score_type[k])
+                        k = k + 1
+                        n = n + 1
+                    }
+                    j = j + 1
+                }
+                i = i + 1
+            }
+            m = m + 1
+        } 
+    }
+    if(length(score_type) > 5) {
+        m = 1
+        while(m <= length(score_type)) {
+            i = m + 1
+            while(i <= length(score_type)) {
+                j = i + 1
+                while(j <= length(score_type)) {
+                    k = j + 1
+                    while(k <= length(score_type)) {
+                        l = k + 1 
+                        while(l <= length(score_type)) {
+                            score_type_combs[[n]] <- c(score_type[m], score_type[i], score_type[j], score_type[k], score_type[l])
+                            l = l +1
+                            n = n + 1
+                        }
+                        k = k +1
+                    }
+                    j = j + 1
+                }
+                i = i + 1
+            }
+            m = m + 1
+        } 
+    }
+    if(length(score_type) > 6) {
+        writeLines("No implementation of number of score types >= 6 for score type combos.")
     }
 
     return(score_type_combs)

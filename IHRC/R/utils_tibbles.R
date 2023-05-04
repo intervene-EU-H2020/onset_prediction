@@ -21,7 +21,7 @@
 #' @author Kira E. Detrois 
 create_empty_hr_res <- function() {
     tibble::tibble(ENDPOINT=character(),
-                   EXP_AGE=numeric(),
+                   SURV_MODEL=character(),
                    VAR=character(),
                    GROUP=character(),
                    N_CONTROLS=numeric(),
@@ -57,7 +57,6 @@ create_empty_hr_res <- function() {
 create_empty_cidx_res <- function() {
     tibble::tibble(
         ENDPOINT = character(),
-        EXP_AGE = numeric(),
         SURV_MODEL = character(),
         N_CASES = numeric(),
         N_CONTROLS = numeric(),
@@ -86,13 +85,16 @@ create_empty_cidx_res <- function() {
 #' @author Kira E. Detrois 
 add_coxph_res_row <- function(hr_res,
                               coxph_mdl,
-                              study) {
+                              study,
+                              preds) {
     if(!is.null(coxph_mdl)) {
+        surv_descr <- stringr::str_remove_all(get_surv_descr(preds), " ") 
         coxph_res_list <- get_min_indvs_data(coxph_mdl=coxph_mdl,
                                              study=study)
          if(!is.null(coxph_res_list)) {
             hr_res <- tibble::add_row(hr_res, 
                                       ENDPOINT=study@endpt,
+                                      SURV_MODEL=surv_descr,
                                       VAR=coxph_res_list$preds,
                                       GROUP=coxph_res_list$groups,
                                       N_CONTROLS=coxph_res_list$n_cntrl,
@@ -121,8 +123,28 @@ add_coxph_res_row <- function(hr_res,
 get_min_indvs_data <- function(coxph_mdl,
                                study) {
     coxph_res_list <- extract_coxph_res(coxph_mdl)
-    coxph_res_list$n_case <- Istudy::get_n_cases(study@study_data, study@endpt)
-    coxph_res_list$n_cntrl <- Istudy::get_n_cntrls(study@study_data, study@endpt)
+    n_cases_vec <- c()
+    n_cntrls_vec <- c()
+    for(group_var in names(coxph_mdl$xlevels)) {
+        for(group in unique(dplyr::pull(study@study_data, get(group_var)))) {
+            group_data <- dplyr::filter(study@study_data, get(group_var) == group)
+            n_cntrls_vec <- c(n_cntrls_vec, Istudy::get_n_cntrls(group_data, study@endpt))
+            names(n_cntrls_vec)[length(n_cntrls_vec)] = paste0(group_var, group)
+            n_cases_vec <- c(n_cases_vec, Istudy::get_n_cases(group_data, study@endpt))
+            names(n_cases_vec)[length(n_cases_vec)] = paste0(group_var, group)
+        }
+    }
+    coxph_res_list$n_case <- rep(Istudy::get_n_cases(study@study_data, study@endpt), length(coxph_res_list$HR))
+    names(coxph_res_list$n_case) <- names(coxph_res_list$HR)
+    coxph_res_list$n_cntrl <- rep(Istudy::get_n_cntrls(study@study_data, study@endpt), length(coxph_res_list$HR))
+    names(coxph_res_list$n_cntrl) <- names(coxph_res_list$HR)
+
+    for(var in names(coxph_res_list$n_case)) {
+        if(var %in% names(n_cases_vec)) {
+            coxph_res_list$n_case[[var]] <- n_cases_vec[[var]]
+            coxph_res_list$n_cntrl[[var]] <- n_cntrls_vec[[var]]
+        }
+    }
     return(coxph_res_list)
 }
 
@@ -144,7 +166,7 @@ add_cidx_res_row <- function(c_idxs_res,
                              surv_ana,
                              study) {
     if(!is.null(c_idx_res)) {
-        surv_descr=get_surv_descr(surv_ana@preds)  
+        surv_descr <- stringr::str_remove_all(get_surv_descr(surv_ana@preds), " ")
         # In docu it says to use se=sd/2
         c_idx_ci <- get_CI(c_idx_res["C Index"], c_idx_res["S.D."]/2)
         c_idxs_res <- tibble::add_row(

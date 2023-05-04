@@ -19,8 +19,13 @@ custom_colors_brewer <- function(N_colors) {
     } else if(N_colors == 5) {
       c("#D5694F", "#29557B", "#EAB034", "#748AAA", "#CCB6AF")
     } else if(N_colors == 10) {
-      c("#D5694F", "#29557B", "#EAB034", "#748AAA", "#CCB6AF", "#9E577C", "#7D7C7F", "#FBCF9D",  "#678C18", "#588986")
-
+      c("#D5694F", "#29557B", "#EAB034", "#748AAA", "#CCB6AF", "#841C26", "#7D7C7F", "#FBCF9D",  "#7BA05B", "#588986")
+    } else if(N_colors == 17) {
+      c("#841C26", "#B53389", "#C6878F", "#A81C07", "#D5694F", "#FBCF9D", "#59260B", "#CCB6AF", "#7D7C7F", "#91A3B0",
+         "#3C4E2D", "#7BA05B", "#9BB59B", "#588986","#29557B","#748AAA", "#ADD8E6")
+    } else if(N_colors == 18) {
+      c("#841C26", "#B53389", "#C6878F", "#A81C07", "#D5694F", "#FBCF9D", "#59260B", "#CCB6AF", "#7D7C7F", "#91A3B0",
+         "#3C4E2D", "#7BA05B", "#9BB59B", "#588986","#29557B","#748AAA", "#ADD8E6", "#D6ECFF")
     }
 }
 
@@ -53,7 +58,6 @@ theme_custom <- function(base_size = 18,
     ) %+replace%
     ggplot2::theme(
       plot.title = ggplot2::element_text(
-        face = "bold",
         hjust = 0
       ),
       axis.text.y = ggplot2::element_text(

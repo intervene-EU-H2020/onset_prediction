@@ -13,22 +13,8 @@
 write_res_files <- function(hr_res,
                             c_idxs_res,
                             study_setup,
-                            surv_ana) {
-    file_path_coxph <- get_full_file_name_path(res_type="coxph",
-                                               study_setup=study_setup,
-                                               surv_ana=surv_ana)
-    file_path_cidx <- get_full_file_name_path(res_type="cidx",
-                                              study_setup=study_setup,
-                                              surv_ana=surv_ana)
+                            surv_ana,
+                            score_types,
+                            is_first_endpt) {
 
-    if(!is.null(file_path_coxph)) {
-        hr_res <- dplyr::filter(hr_res, !stringr::str_detect(VAR, "PC"))
-        hr_res <- dplyr::filter(hr_res, !stringr::str_detect(VAR, "BATCH"))
-        readr::write_delim(x=hr_res, 
-                           file=file_path_coxph, 
-                           delim="\t")
-        readr::write_delim(x=c_idxs_res,
-                           file=file_path_cidx,
-                           delim="\t")
-    }
 }

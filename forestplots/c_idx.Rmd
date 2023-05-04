@@ -1,17 +1,25 @@
-## PRS and PRSiYoB
+# PRS + PheRS
 
 ```{r}
-file_path_endpt_order <- "/home/kira/duni/helsinki/DSGE/Code/onset_prediction/forestplots/endpt_order.tsv"
+source("/home/kira/duni/helsinki/DSGE/Code/onset_prediction/forestplots/utils.R")
+file_path_endpt_order <- "/home/kira/duni/helsinki/DSGE/results/down_08_02_23/down_coxph_02_07_23/endpt_order.tsv"
+library(tidyverse)
+library(forestploter)
 endpt_order <- readr::read_delim(file_path_endpt_order, delim="\t")
-endpt_order$` ` <- paste(rep(" ", 35), collapse = " ")
+```
 
-file_path_prs <- "/home/kira/duni/helsinki/DSGE/results/down_coxph_11_17_22/2019-01-01_o8_w2_e10_PRS_SEX_YOB_BATCH_PCs_cidx.tsv"
-prs_cidxs <- readr::read_delim(file_path_prs, delim="\t")
-prs_cidxs <- tib_by_endpt_order(prs_cidxs, endpt_order)
+```{r}
+base <- readr::read_delim("/home/kira/duni/helsinki/DSGE/results/down_08_02_23/down_coxph_02_07_23/cidx/2019-01-01_o8_w2_e10_32_70_CCI_Edu_BATCH_SEX_YOB_PCs_cidx.tsv")
+base <- tib_by_endpt_order(base, endpt_order)
 
-file_path_prsiyob <- "/home/kira/duni/helsinki/DSGE/results/down_coxph_11_17_22/2019-01-01_o8_w2_e10_PRS_PRSiYOB_SEX_YOB_BATCH_PCs_cidx.tsv"
-prs_prsiyob_cidxs <- readr::read_delim(file_path_prsiyob, delim="\t")
-prs_prsiyob_cidxs <- tib_by_endpt_order(prs_prsiyob_cidxs, endpt_order)
+phers <- readr::read_delim("/home/kira/duni/helsinki/DSGE/results/down_08_02_23/down_coxph_02_07_23/cidx/2019-01-01_o8_w2_e10_32_70_CCI_Edu_PheRS_BATCH_SEX_YOB_PCs_cidx.tsv")
+phers <- tib_by_endpt_order(phers, endpt_order)
+
+prs <- readr::read_delim("/home/kira/duni/helsinki/DSGE/results/down_08_02_23/down_coxph_02_07_23/cidx/2019-01-01_o8_w2_e10_32_70_CCI_Edu_PRS_BATCH_SEX_YOB_PCs_cidx.tsv")
+prs <- tib_by_endpt_order(prs, endpt_order)
+
+full <- readr::read_delim("/home/kira/duni/helsinki/DSGE/results/down_08_02_23/down_coxph_02_07_23/cidx/2019-01-01_o8_w2_e10_32_70_CCI_Edu_PheRS_PRS_BATCH_SEX_YOB_PCs_cidx.tsv")
+full <- tib_by_endpt_order(full, endpt_order)
 ```
 
 ```{r}
@@ -19,14 +27,14 @@ tm <- forest_theme(base_size = 15,
                    ci_Theight=0.2,
                    refline_lty = "solid",
                    ci_pch = c(19,19),
-                   ci_col = c("#224767", "#D5694F"),
+                   ci_col = c("#748AAA", "#D5694F", "#EAB034", "#224767"),
                    legend_name = "Model",
-                   legend_value = c("PRS", "PRS + PRS*YoB"))
-g <- forest(endpt_order[-(2:3)],
-       est=list(prs_cidxs$C_IDX, prs_cidxs$C_IDX),
-       lower=list(prs_cidxs$C_IDX_CI_NEG, prs_prsiyob_cidxs$C_IDX_CI_NEG),
-       upper=list(prs_cidxs$C_IDX_CI_POS, prs_prsiyob_cidxs$C_IDX_CI_POS),
-       ci_column=2,
+                   legend_value = c("Base", "PRS", "PheRS", "Full"))
+g <- forest(endpt_order[-(3:4)],
+       est=list(base$C_IDX, prs$C_IDX, phers$C_IDX, full$C_IDX),
+       lower=list(base$C_IDX_CI_NEG, prs$C_IDX_CI_NEG, phers$C_IDX_CI_NEG, full$C_IDX_CI_NEG),
+       upper=list(base$C_IDX_CI_POS, prs$C_IDX_CI_POS, phers$C_IDX_CI_POS, full$C_IDX_CI_POS),
+       ci_column=3,
        ref_line=.5,
        sizes=0.7,
        xlim=c(0.5,1),
@@ -38,7 +46,7 @@ g
 ```
 
 ```{r}
-common_path <- "/home/kira/duni/helsinki/DSGE/results/forestplots/cidx/2019-01-01_o8_w2_e10_PRS_interaction_comp_cidx"
+common_path <- "/home/kira/duni/helsinki/DSGE/results/down_08_02_23/down_coxph_02_07_23/cidx/2019-01-01_o8_w2_e10_32_70_CCI_Edu_PheRS_PRS_BATCH_SEX_YOB_PCs"
 save_forestplotter(paste0(common_path, "_striped.png"), g)
 ```
 

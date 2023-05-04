@@ -47,22 +47,12 @@ preprocess_score_data <- function(score_type,
                                      study_setup=study_setup,
                                      atc_data=atc_data)
     score_data <- add_edu_cont_data(score_data=score_data,
-                               score_type=score_type,
-                               pheno_data=pheno_data)
-    
-    if("ZIP_prob" %in% score_type) {
-        zip_data <- get_zip_data(score_data=zip_data, endpt=endpt)
-        if(!is.null(score_data) & !is.null(zip_data)) {
-            new_score_data <- dplyr::full_join(zip_data, score_data, by="ID")
-        } else {
-            new_score_data <- zip_data
-        }
-        if(!is.null(new_score_data)) {
-            score_data <- new_score_data
-        }
-    }
-
-    if(!all(score_type[!(score_type %in% c("EDU", "ZIP"))] %in% colnames(score_data))) {
+                                    score_type=score_type,
+                                    pheno_data=pheno_data)
+    score_data <- add_prob_data(score_data=score_data,
+                                    score_type=score_type,
+                                    pheno_data=pheno_data)
+    if(!all(score_type %in% colnames(score_data))) {
         missing_score <- score_type[!(score_type %in% c("EDU", "ZIP")) & !(score_type %in% colnames(score_data))]
         write_to_error_file(error_file, paste0("Something went wrong when getting the score data for endpoint ", endpt, ". Missing ", paste0(missing_score, collapse=", "), " data.\n"))
         score_data <- NULL
@@ -212,7 +202,7 @@ add_med_endpt_data <- function(score_data,
 #' 
 #' The education data comes from the phenotype data and gets
 #' mapped from ISCED 2011 to the FinnGen R10 age modes, see
-#' function [IHRC::get_study_edu_data].
+#' function [IHRC::get_edu_cont_data].
 #' 
 #' @param score_data A data.frame. The current score data for the study setup.
 #' @inheritParams preprocess_score_data
@@ -227,11 +217,42 @@ add_edu_cont_data <- function(score_data,
                          pheno_data) {
     # The education data comes from the phenotypic file
     if("EDU_cont" %in% score_type) {
-        edu_data <- get_study_edu_data(pheno_data)
+        edu_data <- get_edu_cont_data(pheno_data)
         if(!is.null(score_data) & !is.null(edu_data)) {
             new_score_data <- dplyr::full_join(edu_data, score_data, by="ID")
         } else {
             new_score_data <- edu_data
+        }
+        if(!is.null(new_score_data)) {
+            score_data <- new_score_data
+        }
+    }
+    return(score_data)
+}
+
+#' Adds the education data to the score data
+#' 
+#' The education data comes from the phenotype data and gets
+#' mapped from ISCED 2011 to the FinnGen R10 age modes, see
+#' function [IHRC::get_edu_cont_data].
+#' 
+#' @param score_data A data.frame. The current score data for the study setup.
+#' @inheritParams preprocess_score_data
+#' 
+#' @return A tibble. The score data with added column `EDU`.
+#' 
+#' @author Kira E. Detrois
+#' 
+#' @export 
+add_prob_data <- function(score_data,
+                          score_type,
+                          pheno_data) {
+    if("Prob" %in% score_type) {
+        prob_data <- get_prob_data(score_data=score_data, endpt=endpt)
+        if(!is.null(score_data) & !is.null(prob_data)) {
+            new_score_data <- dplyr::full_join(prob_data, score_data, by="ID")
+        } else {
+            new_score_data <- prob_data
         }
         if(!is.null(new_score_data)) {
             score_data <- new_score_data

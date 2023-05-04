@@ -36,17 +36,12 @@ get_pheno_score_data  <- function(score_type,
                                   phers_data=NULL,
                                   zip_data=NULL,
                                   endpt=NULL,
-                                  min_indvs=5,
+                                  min_indvs=min_indvs,
                                   error_file=NULL) {
-    # Get data of individuals who can be used for the current endpoint
-    pheno_data <- get_crnt_endpt_data(endpts_indvs_mat=endpts_indvs_mat, 
-                                      endpt=endpt, 
-                                      pheno_data=pheno_data,
-                                      error_file=error_file)
+                                  # Get data of individuals who can be used for the current endpoint
     pheno_data <- get_relevant_pheno_data_cols(pheno_data, endpt)
-
     # Need to preprocess score data for these score types
-    if(any(stringr::str_detect(score_type, "(CCI)|(PRS)|(EI)|(PheRS)|(MED)|(EDU)|(ZIP)"))) {
+    if(any(stringr::str_detect(score_type, "(CCI)|(PRS)|(EI)|(PheRS)|(MED)|(EDU_cont)|(Prob)"))) {
         score_data <- preprocess_score_data(score_type=score_type, 
                                             pheno_data=pheno_data,
                                             icd_data=icd_data, 
@@ -69,11 +64,18 @@ get_pheno_score_data  <- function(score_type,
     } else {
         study_data <- pheno_data
     }
-    #if(!is.null(study_data)) {
-    #    # Only complete cases needed for analyses anyways
-    #    study_data <- study_data[stats::complete.cases(dplyr::select(study_data, -paste0(endpt, "_DATE"))),]
-    #}
-
+    if(!is.null(study_data)) {
+        # Only complete cases needed for analyses anyways
+        if(endpt %in% colnames(endpts_indvs_mat)) {
+            train_status <- dplyr::select(endpts_indvs_mat, ID, endpt)
+            colnames(train_status) <- c("ID", "TRAIN_STATUS")
+            train_status <- dplyr::mutate(train_status, TRAIN_STATUS=!TRAIN_STATUS)
+            study_data <- dplyr::left_join(study_data, train_status, by="ID")
+            study_data$TRAIN_STATUS[is.na(study_data$TRAIN_STATUS)] <- 0
+        } else {
+            study_data <- dplyr::mutate(study_data, TRAIN_STATUS=0)
+        }
+    }
     return(study_data)
 }
 
@@ -104,57 +106,29 @@ get_pheno_score_data  <- function(score_type,
 #' @export 
 get_relevant_pheno_data_cols <- function(pheno_data,
                                          endpt) {
-    print(colnames(pheno_data))
-    if(("ZIP" %in% colnames(pheno_data)) & ("EDU" %in% colnames(pheno_data))) {
-        pheno_data <- dplyr::select(pheno_data,
-                                    ID, 
-                                    SEX, 
-                                    DATE_OF_BIRTH, 
-                                    ANCESTRY, 
-                                    # Otherwise dplyr will throw error. 
-                                    # test_endpt_input_correct already 
-                                    # checks that this is only a single 
-                                    # string and not a vector.
-                                    all_of(endpt),  
-                                    paste0(endpt, "_DATE"),
-                                    END_OF_FOLLOWUP,
-                                    dplyr::starts_with("PC"),
-                                    BATCH,
-                                    ZIP,
-                                    EDU)
-    } else if("EDU" %in% colnames(pheno_data)) {
-                pheno_data <- dplyr::select(pheno_data,
-                                    ID, 
-                                    SEX, 
-                                    DATE_OF_BIRTH, 
-                                    ANCESTRY, 
-                                    # Otherwise dplyr will throw error. 
-                                    # test_endpt_input_correct already 
-                                    # checks that this is only a single 
-                                    # string and not a vector.
-                                    all_of(endpt),  
-                                    paste0(endpt, "_DATE"),
-                                    END_OF_FOLLOWUP,
-                                    dplyr::starts_with("PC"),
-                                    BATCH,
-                                    EDU)
-    } else if("ZIP" %in% colnames(pheno_data)) {
-                pheno_data <- dplyr::select(pheno_data,
-                                    ID, 
-                                    SEX, 
-                                    DATE_OF_BIRTH, 
-                                    ANCESTRY, 
-                                    # Otherwise dplyr will throw error. 
-                                    # test_endpt_input_correct already 
-                                    # checks that this is only a single 
-                                    # string and not a vector.
-                                    all_of(endpt),  
-                                    paste0(endpt, "_DATE"),
-                                    END_OF_FOLLOWUP,
-                                    dplyr::starts_with("PC"),
-                                    BATCH,
-                                    ZIP)
+    select_cols <- c("ID", 
+                     "SEX", 
+                     "DATE_OF_BIRTH", 
+                     "ANCESTRY", 
+                     endpt,  
+                     paste0(endpt, "_DATE"),
+                     "END_OF_FOLLOWUP")
+    if(("BATCH" %in% colnames(pheno_data))) {
+        select_cols <- c(select_cols, "BATCH")
     }
+    if(("ZIP" %in% colnames(pheno_data))) {
+        select_cols <- c(select_cols, "ZIP")
+    }
+    if(("EDU" %in% colnames(pheno_data))) {
+        select_cols <- c(select_cols, "EDU")
+    }
+    if(("EDU_cont" %in% colnames(pheno_data))) {
+        select_cols <- c(select_cols, "EDU_cont")
+    }
+    if(("Prob" %in% colnames(pheno_data))) {
+        select_cols <- c(select_cols, "Prob")
+    }
+    pheno_data <- dplyr::select(pheno_data, all_of(select_cols), dplyr::starts_with("PC"))
 
     return(pheno_data)
 }

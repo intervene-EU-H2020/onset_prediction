@@ -1,60 +1,49 @@
 # Packages
 
 ```{r}
-library(forestploter)
+source("/home/kira/duni/helsinki/DSGE/Code/onset_prediction/forestplots/utils.R")
+file_path_endpt_order <- "/home/kira/duni/helsinki/DSGE/results/down_08_02_23/down_coxph_02_07_23/endpt_order.tsv"
 library(tidyverse)
-library(grid)
-source("utils.R")
+library(forestploter)
+endpt_order <- readr::read_delim(file_path_endpt_order, delim="\t")
 ```
-
-
-# PRS + CCI
+# PRS + PHeRS
 
 ```{r}
-file_path_endpt_order <- "/home/kira/duni/helsinki/DSGE/Code/onset_prediction/forestplots/endpt_order.tsv"
-endpt_order <- readr::read_delim(file_path_endpt_order, delim="\t")
-
-file_path_coxph <- "/home/kira/duni/helsinki/DSGE/results/down_coxph_11_17_22/2019-01-01_o8_w2_e10_CCI_PRS_SEX_YOB_BATCH_PCs_coxph.tsv"
+file_path_coxph <- "/home/kira/duni/helsinki/DSGE/results/down_08_02_23/down_coxph_02_07_23/coxph/2019-01-01_o8_w2_e10_32_70_CCI_Edu_PheRS_PRS_BATCH_SEX_YOB_PCs_coxph.tsv"
 coxph_hrs <- readr::read_delim(file_path_coxph, delim="\t")
 coxph_hrs <- tib_by_endpt_order(coxph_hrs, endpt_order)
 prs_hrs <- dplyr::filter(coxph_hrs, VAR == "PRS")
-cci_hrs <- dplyr::filter(coxph_hrs, VAR == "CCI")
-
-endpt_order$`HRs for 1-SD Increment` <- paste(rep(" ", 35), collapse = " ")
+phers_hrs <- dplyr::filter(coxph_hrs, VAR == "PheRS")
 ```
+
 
 ```{r}
 tm <- forest_theme(base_size = 15,
                    ci_Theight=0.2,
                    refline_lty = "solid",
                    ci_pch = c(19,19),
-                   ci_col = c("#224767", "#D5694F"),
+                   ci_col = c("#D5694F", "#EAB034"),
                    legend_name = "Predictor",
-                   legend_value = c("PRS", "CCI"))
-g <- forest(endpt_order[-(2:3)],
-       est=list(prs_hrs$HR, cci_hrs$HR),
-       lower=list(prs_hrs$CI_NEG, cci_hrs$CI_NEG),
-       upper=list(prs_hrs$CI_POS, cci_hrs$CI_POS),
-       ci_column=2,
+                   legend_value = c("PRS", "PheRS"))
+g <- forest(endpt_order[-c(3,4)],
+       est=list(prs_hrs$HR, phers_hrs$HR),
+       lower=list(prs_hrs$CI_NEG, phers_hrs$CI_NEG),
+       upper=list(prs_hrs$CI_POS, phers_hrs$CI_POS),
+       ci_column=3,
        ref_line=1,
        sizes=0.7,
-       xlim=c(0.8,2.2),
-       ticks_at=c(1,1.5,2),
-       vert_line=c(1,1.5,2),
-       xlab="                                                  HR (95% CI)",
+       xlim=c(0.5,3),
+       ticks_at=c(0.5, 1,1.5,2,2.5),
+       vert_line=c(0.5, 1.5, 2,2.5),
+       xlab="                                         HR (95% CI)",
        theme=tm)
 g
-plt_marked_good <- forestplotter_edit_stripes(g, c(6,7,8,13,19), "#FCF4F2")
-plt_marked_cancer <- forestplotter_edit_stripes(plt_marked_good, c(1,3,4,10,14,16), "#EDEDED", skip_white = TRUE)
-
-plt_marked_cancer
 ```
 
 ```{r}
-common_path <- "/home/kira/duni/helsinki/DSGE/results/forestplots/HR/2019-01-01_o8_w2_e10_PRS_CCI_fp"
+common_path <- "/home/kira/duni/helsinki/DSGE/results/down_08_02_23/down_coxph_02_07_23/coxph/2019-01-01_o8_w2_e10_PRS_PheRS"
 save_forestplotter(paste0(common_path, "_striped.png"), g)
-save_forestplotter(paste0(common_path, "_marked_good.png"), plt_marked_good)
-save_forestplotter(paste0(common_path, "_marked_cancer.png"), plt_marked_cancer)
 ```
 
 # PRS + CCI + EDU

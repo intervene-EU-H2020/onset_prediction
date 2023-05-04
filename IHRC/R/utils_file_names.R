@@ -164,9 +164,9 @@ get_file_name <- function(res_type,
                           study_setup,
                           endpt=NULL,
                           surv_ana) {
-    # Add date or endpoint infor
-    if(study_setup@study_type == "forward" | res_type %in% c("log", "pheno_score")) {
-        file_name <- endpt
+    # Add date or endpoint information
+    if(res_type == "pheno_score") {
+        file_name <- paste0(endpt, "_", study_setup@obs_end_date)
     } else {
         file_name <- study_setup@obs_end_date
     }
@@ -183,14 +183,9 @@ get_file_name <- function(res_type,
                         paste0(study_setup@obs_age_range, collapse="_"))
 
     # Add Predictors
-    if(res_type == "HR") {
-        file_name <- paste0(file_name,  "_", get_preds_file_name(surv_ana@plot_preds))
-        if(!(length(surv_ana@plot_preds) == length(surv_ana@preds))) {
-            file_name <- paste0(file_name, "_p_", get_preds_file_name(setdiff(surv_ana@preds, surv_ana@plot_preds)))
-        }
-    } else {
-        file_name <- paste0(file_name,  "_", get_preds_file_name(surv_ana@preds))
-    }
+    #if(res_type != "pheno_score") {
+    #    file_name <- paste0(file_name,  "_", get_preds_file_name(surv_ana@preds))
+    #}
 
     return(file_name)
 }
@@ -207,7 +202,8 @@ get_file_name <- function(res_type,
 get_preds_file_name <- function(preds) {
     preds <- stringr::str_replace_all(preds, " ", "_")
     preds <- stringr::str_replace_all(preds, "[*]", "i")
-    preds <- stringr::str_replace_all(preds, "YEAR_OF_BIRTH", "YOB")
+    preds <- stringr::str_replace_all(preds, "YEAR_OF_BIRTH", "Age")
+    preds <- stringr::str_replace_all(preds, "SEX", "Sex")
     preds <- stringr::str_replace_all(preds,  "EDU", "Edu")
 
     n_pcs <- sum(stringr::str_count(preds, "PC"))

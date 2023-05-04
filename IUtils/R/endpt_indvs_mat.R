@@ -115,7 +115,7 @@ read_phers_endpts_indvs_mat <- function(dir_path,
 read_finngen_endpts_indvs_mat <- function(pheno_data,
                                           endpts,
                                           ver) {
-  pheno_data <- add_cohort_chip_info(pheno_data, ver)
+  #pheno_data <- add_cohort_chip_info(pheno_data, ver)
   endpts_indvs_mat <- tibble::tibble(ID = pheno_data$ID)
   for(endpt in endpts) {
     if(endpt %in% c("I9_CHD", "I9_AF")) {
@@ -129,7 +129,7 @@ read_finngen_endpts_indvs_mat <- function(pheno_data,
     } else {
       bin_vec <- TRUE
     }
-    endpts_indvs_mat[,paste0(endpt)] <- bin_vec
+    endpts_indvs_mat[,endpt] <- bin_vec
   }
   return(endpts_indvs_mat)
 }

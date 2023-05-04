@@ -14,7 +14,7 @@ read_pheno_file <- function(file_path="",
                             endpts=NULL) {
     assertthat::assert_that(file_path != "", 
                             msg="Error. Phenotype file path needs to always be provided.")
-
+    
     pheno_data <- readr::read_delim(file_path, 
                                     delim="\t", 
                                     col_types=list(SEX="f", DATE_OF_BIRTH="D", END_OF_FOLLOWUP="D", ANCESTRY="f", ID="c"),

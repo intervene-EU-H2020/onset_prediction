@@ -72,7 +72,7 @@ scale_preds <- function(preds,
                         study_data) {
     for(pred in preds) {
         if(pred %in% colnames(study_data)) {
-            if(pred %in% c("PRS", "CCI", "EI", "YEAR_OF_BIRTH", "MED", "EDU_prob", "EDU_cont", "PheRS", "ZIP_prob")) {
+            if(pred %in% c("PRS", "CCI", "EI", "YEAR_OF_BIRTH", "MED", "EDU_cont", "PheRS", "Prob")) {
                 study_data[,pred] <- scale(study_data[,pred])
             } 
             if(pred %in% c("EDU", "ZIP")) {

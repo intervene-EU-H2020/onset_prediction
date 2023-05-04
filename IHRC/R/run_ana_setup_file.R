@@ -10,22 +10,20 @@
 #' @export 
 run_ana_setup_file <- function(setup_file_path) {
     setup <- IUtils::get_setup(setup_file_path)
-    if(!setup$read_pheno_score_files) {
-        data <- IUtils::get_all_data(score_type=setup$score_type,
-                                     endpts=setup$endpts,
-                                     pheno_file_path=setup$pheno_file_path,
-                                     icd_file_path=setup$icd_file_path,
-                                     atc_file_path=setup$atc_file_path,
-                                     prs_dir_path=setup$prs_dir_path,
-                                     phers_dir_path=setup$phers_dir_path,
-                                     phers_study_descr=IUtils::get_phers_file_descr(
-                                                                    study_type=setup$study_type,
-                                                                    obs_end_date=setup$obs_end_date,
-                                                                    exp_len=setup$exp_len,
-                                                                    wash_len=setup$wash_len,
-                                                                    obs_len=setup$obs_len),
-                                     zip_dir_path=setup$zip_dir_path)
-    }
+    data <- IUtils::get_all_data(score_type=setup$score_type,
+                                 endpts=setup$endpts,
+                                 pheno_file_path=setup$pheno_file_path,
+                                 icd_file_path=setup$icd_file_path,
+                                 atc_file_path=setup$atc_file_path,
+                                 prs_dir_path=setup$prs_dir_path,
+                                 phers_dir_path=setup$phers_dir_path,
+                                 phers_study_descr=IUtils::get_phers_file_descr(
+                                                                        study_type=setup$study_type,
+                                                                        obs_end_date=setup$obs_end_date,
+                                                                        exp_len=setup$exp_len,
+                                                                        wash_len=setup$wash_len,
+                                                                        obs_len=setup$obs_len),
+                                 zip_dir_path=setup$zip_dir_path)
     res <- IHRC::run_surv_studies(pheno_data=data$pheno, 
                                   endpts_indvs_mat=IUtils::get_endpts_indvs_mat(setup, data$pheno),
                                   icd_data=data$icd,
@@ -49,6 +47,5 @@ run_ana_setup_file <- function(setup_file_path) {
                                   min_indvs=setup$min_indvs,
                                   write_res=TRUE,
                                   res_dir=setup$res_dir,
-                                  res_descr=setup$res_descr,
-                                  read_pheno_score_files=setup$read_pheno_score_files)
+                                  res_descr=setup$res_descr)
 } 

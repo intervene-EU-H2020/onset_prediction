@@ -13,10 +13,10 @@
 get_endpts_indvs_mat <- function(setup,
                                  pheno_data) {
     endpts_indvs_mat <- NULL
-    if("FinnGen" %in% names(setup) & any(stringr::str_detect(setup$score_type, "PRS"))) {
+    if(("FinnGen" %in% names(setup)) & any(stringr::str_detect(setup$score_type, "PRS"))) {
         endpts_indvs_mat <- read_finngen_endpts_indvs_mat(pheno_data, setup$endpts, setup$FinnGen)
     }
-    if(any(stringr::str_detect(setup$score_type, "(PheRS)|(ZIP)"))) {
+    if(any(stringr::str_detect(setup$score_type, "(PheRS)|(ZIP_prob)"))) {
        endpts_indvs_mat <-  IUtils::read_phers_endpts_indvs_mat(
                                                setup$phers_dir_path,
                                                indvs_ids=pheno_data$ID,
