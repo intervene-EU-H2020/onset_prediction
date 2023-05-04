@@ -43,6 +43,8 @@ read_phers_files <- function(dir_path,
                                            by="ID", 
                                            na_matches="na")
            
+        } else {
+            error(paste0("Directory for PheRS files ", file_path, " does not exist."))
         }
     }
     return(phers_data)

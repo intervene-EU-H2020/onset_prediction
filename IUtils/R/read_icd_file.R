@@ -17,9 +17,12 @@
 #' 
 #' @author Kira E. Detrois
 read_icd_file <- function(file_path) {
-    icd_data <- readr::read_delim(file_path, 
-                                  delim="\t",
-                                  col_types=c("cdccc"))
+    tryCatch({
+        icd_data <- readr::read_delim(file_path, 
+                                      delim="\t",
+                                      col_types=c("cdccc"))
+    }, error=function(e) {writeLines(paste0("Could not read ICD file ", file_path))})
+
     if(nrow(icd_data) == 0) {
         warning(paste0("Warning. ICD-file contained no entries. Given path: ", file_path, "\nGot: ", file_path))
     }
