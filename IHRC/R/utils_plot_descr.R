@@ -81,9 +81,10 @@ get_plot_preds <- function(plot_preds,
 }
 
 filter_plot_preds_fctr <- function(coxph_hrs,
-                                plot_preds) {
+                                   plot_preds) {
     plot_preds <- stringr::str_replace_all(plot_preds, "[*]", ":")
     coxph_hrs <- dplyr::filter(coxph_hrs, VAR %in% plot_preds)
+    print(coxph_hrs)
     coxph_hrs$VAR <- factor(coxph_hrs$VAR, levels=plot_preds)
 
     return(coxph_hrs)
