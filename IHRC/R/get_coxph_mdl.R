@@ -35,26 +35,6 @@ get_coxph_mdl <- function(surv_ana,
                                 write_to_error_file(surv_ana@error_file, msg=paste0(e, collapse="\n"))
                                 return(NULL)})
         write_coxph_to_log(coxph_mdl, study, surv_ana) 
-
-        # ## Seeing if we need to add interaction terms because of non-proportional hazards
-        # zph_res <- tryCatch({ survival::cox.zph(coxph_mdl)$table}, error = function(e) { return(NULL) })
-        # if(!is.null(zph_res)) {
-        #     signf_zph_res <- zph_res[((zph_res[, "p"] < 0.01) & !is.na(zph_res[, "p"])),]
-        #     if(!is.null(rownames(signf_zph_res))) {
-        #         coxph_formula <- add_time_interact_terms(coxph_formula, rownames(signf_zph_res), study@endpt)
-        #         coxph_mdl <- tryCatch({
-        #               suppressWarnings(survival::coxph(formula=coxph_formula, 
-        #                                                data=study@study_data,
-        #                                                # Larger fit object but no need for
-        #                                                # other functions to reconstruct
-        #                                                # which fails in this setup
-        #                                                model=TRUE))
-        #               }, error = function(e) {
-        #                         write_to_error_file(surv_ana@error_file, msg=paste0(e, collapse="\n"))
-        #                         return(NULL)})
-        #         update_coxph_log(coxph_mdl, study, surv_ana)
-        #     }
-        # }
     }
 
     return(coxph_mdl)

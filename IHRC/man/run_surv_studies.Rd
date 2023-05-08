@@ -8,7 +8,6 @@ run_surv_studies(
   pheno_data,
   score_type,
   create_score_combos = FALSE,
-  plot_preds = NULL,
   covs = c("SEX", "YEAR_OF_BIRTH"),
   endpts_indvs_mat = NULL,
   icd_data = NULL,
@@ -54,9 +53,6 @@ be called \code{EDU} in the \code{pheno_data}.
 \item{create_score_combos}{A boolean, whether or not to create all possible
 score type combinations from the score_type vector.
 see function \link[IUtils:get_all_possible_score_type_combs]{IUtils::get_all_possible_score_type_combs}.}
-
-\item{plot_preds}{A string (vector).
-The predictors to use when plotting HR.}
 
 \item{covs}{A vector of characters. The column names of the covariates
 to add to the predictor of the Cox-PH model.}

@@ -29,8 +29,6 @@ analyses.}
 \item{\code{preds}}{A string (vector). The names of the all predictors to
 be used in the Cox-PH model.}
 
-\item{\code{plot_preds}}{A string (vector). The predictors to use when plotting the HRs.}
-
 \item{\code{write_res}}{A boolean. Defines whether to save the results to
 files.}
 

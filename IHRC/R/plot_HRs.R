@@ -4,9 +4,6 @@
 #' endpoint for the different age studies. For 
 #' the backward study creates a single plot with the
 #' different endpoints.
-#' 
-#' It then filters out any missing HRs and filters the coxph_hrs tibble 
-#' to only include the variables that are specified in the `plot_preds`
 #'  
 #' @param coxph_hrs A tibble. The Cox-PH HR results. Needs
 #'                      to at least contain the columns `ENDPOINT`,
@@ -26,9 +23,9 @@ plot_hrs <- function(coxph_hrs=NULL,
                      study_setup,
                      surv_ana) {
     coxph_hrs <- filter_out_missing_hrs(coxph_hrs)
-    # filter out variables that are not in the plot_preds list
-    coxph_hrs <- filter_plot_preds_fctr(coxph_hrs,
-                                        surv_ana@plot_preds)
+    # filter out variables that are not in the list
+    coxph_hrs <- format_preds_for_plots(coxph_hrs, surv_ana@preds)
+
     crnt_coxph_hrs <- dplyr::filter(coxph_hrs, GROUP == "no groups")
 
     if(nrow(crnt_coxph_hrs) > 0) {

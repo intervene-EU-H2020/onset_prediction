@@ -48,8 +48,6 @@
 #' @param create_score_combos A boolean, whether or not to create all possible
 #'                          score type combinations from the score_type vector.
 #'                          see function [IUtils::get_all_possible_score_type_combs].
-#' @param plot_preds A string (vector). 
-#'                     The predictors to use when plotting HR.
 #' @param covs A vector of characters. The column names of the covariates 
 #'              to add to the predictor of the Cox-PH model.
 #' @param study_type A string. Can be either `forward` or `backward`. 
@@ -90,7 +88,6 @@
 run_surv_studies <- function(pheno_data, 
                              score_type,
                              create_score_combos=FALSE,
-                             plot_preds=NULL,
                              covs=c("SEX", "YEAR_OF_BIRTH"),
                              endpts_indvs_mat=NULL,
                              icd_data=NULL,
@@ -282,6 +279,9 @@ run_models <- function(study_setup,
                      endpt=endpt,
                      pheno_score_data=pheno_score_data,
                      is_first_endpt=is_first_endpt)
+        # plot_hrs(coxph_hrs=hr_res, 
+        #          study_setup=study_setup,
+        #          surv_ana=surv_ana) 
         is_first_endpt <- FALSE
     }
 }
@@ -342,9 +342,6 @@ save_results <- function(hr_res,
                                 append=TRUE)
             }
         }
-        plot_hrs(coxph_hrs=hr_res, 
-                 study_setup=study_setup,
-                 surv_ana=surv_ana) 
     }}
 
 #' Creates a study object 

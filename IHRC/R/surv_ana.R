@@ -14,7 +14,6 @@
 #'              analyses.
 #' @slot preds A string (vector). The names of the all predictors to 
 #'              be used in the Cox-PH model.
-#' @slot plot_preds A string (vector). The predictors to use when plotting the HRs.
 #' @slot write_res A boolean. Defines whether to save the results to 
 #'                             files. 
 #' @slot res_dir A string. The directory to write the results and
@@ -33,7 +32,6 @@ surv_ana <- methods::setClass("surv_ana",
                            create_score_combos="logical",
                            score_combos="list",
                            preds="character",
-                           plot_preds="character",
                            write_res="logical",
                            res_dir="character",
                            error_file="character"),
@@ -41,7 +39,6 @@ surv_ana <- methods::setClass("surv_ana",
                                create_score_combos=FALSE,
                                score_combos=list(),
                                preds=c("SEX", "YEAR_OF_BIRTH"),
-                               plot_preds=NA_character_,
                                write_res=FALSE,
                                res_dir=NA_character_,
                                error_file=NA_character_))
@@ -61,7 +58,6 @@ setMethod("initialize", "surv_ana", function(.Object, ...) {
         .Object@score_combos[[2]] <- ""
     }
     .Object@preds <- get_all_preds_sorted(.Object@score_types, .Object@covs)
-    .Object@plot_preds <- get_all_preds_sorted(.Object@score_types, covs=NULL)
     return(.Object)
 })
 
@@ -134,7 +130,6 @@ setMethod(f="setPreds",
           signature="surv_ana",
           definition=function(.Object, crnt_score_types) {
                 .Object@preds <- get_all_preds_sorted(crnt_score_types, .Object@covs)
-                .Object@plot_preds <- get_all_preds_sorted(crnt_score_types, covs=NULL)
                 methods::validObject(.Object)
                 return(.Object)
           }

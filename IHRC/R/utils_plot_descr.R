@@ -60,32 +60,17 @@ reformat_preds_pretty <- function(preds) {
     return(preds)
 }
 
-#' Get Plot Preds
-#'
-#' This function returns the predictors to use when plotting hazard ratios. 
-#' If `plot_preds` is not NULL, it is returned. Otherwise, `score_type` is returned.
-#' 
-#' @inheritParams run_surv_studies
-#' 
-#' @return A string vector of predictors to use when plotting hazard ratios.
-#' 
-#' @export
-#' 
-#' @author Kira E. Detrois
-get_plot_preds <- function(plot_preds, 
-                           score_type) {
-    if(is.null(plot_preds)) {
-        plot_preds <- score_type
-    }
-    return(plot_preds)
-}
-
-filter_plot_preds_fctr <- function(coxph_hrs,
-                                   plot_preds) {
-    plot_preds <- stringr::str_replace_all(plot_preds, "[*]", ":")
-    coxph_hrs <- dplyr::filter(coxph_hrs, VAR %in% plot_preds)
+format_preds_for_plots <- function(coxph_hrs,
+                                   preds) {
+    preds <- stringr::str_replace_all(preds, "[*]", ":")
+    coxph_hrs <- dplyr::filter(coxph_hrs, VAR %in% preds)
+    coxph_hrs$VAR[coxph_hrs$VAR == "YEAR_OF_BIRTH"] <- "Age"
+    coxph_hrs$HR[coxph_hrs$VAR == "Age"] <- (1-coxph_hrs$HR[coxph_hrs$VAR == "Age"])+1
+    coxph_hrs$CI_NEG[coxph_hrs$VAR == "Age"] <- (1-coxph_hrs$CI_NEG[coxph_hrs$VAR == "Age"])+1
+    coxph_hrs$CI_NEG[coxph_hrs$VAR == "Age"] <- (1-coxph_hrs$CI_NEG[coxph_hrs$VAR == "Age"])+1
     print(coxph_hrs)
-    coxph_hrs$VAR <- factor(coxph_hrs$VAR, levels=plot_preds)
+
+    coxph_hrs$VAR <- factor(coxph_hrs$VAR, levels=preds)
 
     return(coxph_hrs)
 }

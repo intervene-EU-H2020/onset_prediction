@@ -26,10 +26,6 @@ endpoint for the different age studies. For
 the backward study creates a single plot with the
 different endpoints.
 }
-\details{
-It then filters out any missing HRs and filters the coxph_hrs tibble
-to only include the variables that are specified in the \code{plot_preds}
-}
 \author{
 Kira E. Detrois
 }
