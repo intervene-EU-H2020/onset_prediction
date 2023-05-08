@@ -58,6 +58,7 @@ get_pheno_score_data  <- function(score_type,
                                    score_data=score_data,
                                    score_type=score_type)
         } else {
+
             study_data <- NULL
         }
     # Otherwise only need the phenotype data
@@ -65,7 +66,6 @@ get_pheno_score_data  <- function(score_type,
         study_data <- pheno_data
     }
     if(!is.null(study_data)) {
-        # Only complete cases needed for analyses anyways
         if(endpt %in% colnames(endpts_indvs_mat)) {
             train_status <- dplyr::select(endpts_indvs_mat, ID, endpt)
             colnames(train_status) <- c("ID", "TRAIN_STATUS")

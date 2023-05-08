@@ -251,9 +251,6 @@ run_models <- function(study_setup,
             if(nrow(study@study_data) > 0) {
                 coxph_mdl <- get_coxph_mdl(surv_ana=surv_ana, study=study)
                 if(!is.null(coxph_mdl)) {
-                    append_log_file(coxph_mdl=coxph_mdl, 
-                                    study=study,
-                                    surv_ana=surv_ana)
                     hr_res <- add_coxph_res_row(hr_res=hr_res,
                                                 coxph_mdl=coxph_mdl,
                                                 study=study,

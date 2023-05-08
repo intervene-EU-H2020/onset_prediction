@@ -4,7 +4,16 @@
 \alias{save_results}
 \title{Saves the results}
 \usage{
-save_results(hr_res, cidx_res, study_setup, surv_ana)
+save_results(
+  hr_res,
+  cidx_res,
+  study_setup,
+  surv_ana,
+  score_types,
+  endpt,
+  pheno_score_data,
+  is_first_endpt
+)
 }
 \arguments{
 \item{hr_res}{A tibble containing the hazard ratios for each exposure age.}

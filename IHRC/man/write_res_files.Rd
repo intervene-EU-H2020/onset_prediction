@@ -4,7 +4,14 @@
 \alias{write_res_files}
 \title{Writes model results to a tab-delim file}
 \usage{
-write_res_files(hr_res, c_idxs_res, study_setup, surv_ana)
+write_res_files(
+  hr_res,
+  c_idxs_res,
+  study_setup,
+  surv_ana,
+  score_types,
+  is_first_endpt
+)
 }
 \arguments{
 \item{hr_res}{A tibble containing the hazard ratios for each exposure age.}

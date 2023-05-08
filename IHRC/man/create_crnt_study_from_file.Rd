@@ -4,7 +4,7 @@
 \alias{create_crnt_study_from_file}
 \title{Creates a study object}
 \usage{
-create_crnt_study_from_file(surv_ana, study_setup, endpt)
+create_crnt_study_from_file(surv_ana, study_setup, endp, pheno_score_d)
 }
 \arguments{
 \item{surv_ana}{An S4 \code{surv_ana} object. The current survival analysis setup.

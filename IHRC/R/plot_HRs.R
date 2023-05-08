@@ -32,18 +32,13 @@ plot_hrs <- function(coxph_hrs=NULL,
     crnt_coxph_hrs <- dplyr::filter(coxph_hrs, GROUP == "no groups")
 
     if(nrow(crnt_coxph_hrs) > 0) {
-        if(study_setup@study_type == "forward") {
-            #plt <- plot_age_sd_hrs(coxph_hrs=crnt_coxph_hrs, 
-            #                       study=study_setup,
-            #                       surv_ana=surv_ana)
-            return(NULL)
-        } else {
-            plt <- plot_endpt_sd_hr(coxph_hrs=crnt_coxph_hrs, 
-                                    study_setup=study_setup,
-                                    surv_ana=surv_ana)
-            return(plt)
-        }
+        plt <- plot_endpt_sd_hr(coxph_hrs=crnt_coxph_hrs, 
+                                study_setup=study_setup,
+                                surv_ana=surv_ana)
+    } else {
+        plt <- NULL
     }
+    return(plt)
 }
 
 #' Plots the HR from the Cox-PH model of a backwards study

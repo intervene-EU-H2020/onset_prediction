@@ -52,23 +52,7 @@ log_msg_string <- function(study) {
            "Length of observation period: ", study@study_setup@obs_len, "\n")
 }
 
-append_log_file <- function(coxph_mdl,
-                            study,
-                            surv_ana) {
-    if(check_res_dir(surv_ana@write_res, surv_ana@res_dir) & !is.null(coxph_mdl)) {
-        file_path <- get_full_file_name_path(res_type="log",
-                                             study_setup=study@study_setup,
-                                             endpt=study@endpt,
-                                             surv_ana=surv_ana)
-        readr::write_file(paste0("\nSummary cox-PH model:\n\nNo of cases:", summary(coxph_mdl)$nevent, "\nNo of ctrls:", summary(coxph_mdl)$n-summary(coxph_mdl)$nevent, "\n\nzph:\n\n"),
-                          file_path)
-        try(readr::write_delim(tibble::as_tibble(survival::cox.zph(coxph_mdl)$table, rownames="PRED"),
-                           file_path,
-                           append=TRUE,
-                           col_names=TRUE))
 
-    }
-}
 
 #' Checks whether to write a results file and if the directory exists
 #' 

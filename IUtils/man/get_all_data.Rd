@@ -32,7 +32,7 @@ Available options include:
 \item \code{MED} for medication data, then the
 \code{atc_file_path} should be provided.
 \item \code{EDU} for educational level. The column for this needs to
-be called \code{ISCED_2011} in the \code{pheno_data}.
+be called \code{EDU} in the \code{pheno_data}.
 \item \code{ZIP} for zip scores, then the
 \code{zip_file_path} should be provided.
 }}

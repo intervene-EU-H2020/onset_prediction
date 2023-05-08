@@ -165,7 +165,7 @@ get_file_name <- function(res_type,
                           endpt=NULL,
                           surv_ana) {
     # Add date or endpoint information
-    if(res_type == "pheno_score") {
+    if(res_type %in% c("pheno_score", "log")) {
         file_name <- paste0(endpt, "_", study_setup@obs_end_date)
     } else {
         file_name <- study_setup@obs_end_date
@@ -183,9 +183,9 @@ get_file_name <- function(res_type,
                         paste0(study_setup@obs_age_range, collapse="_"))
 
     # Add Predictors
-    #if(res_type != "pheno_score") {
-    #    file_name <- paste0(file_name,  "_", get_preds_file_name(surv_ana@preds))
-    #}
+    if(res_type == "log") {
+        file_name <- paste0(file_name,  "_", get_preds_file_name(surv_ana@preds))
+    }
 
     return(file_name)
 }

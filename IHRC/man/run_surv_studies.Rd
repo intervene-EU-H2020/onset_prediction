@@ -30,8 +30,7 @@ run_surv_studies(
   filter_1998 = FALSE,
   res_descr = NULL,
   write_res = FALSE,
-  res_dir = NULL,
-  read_pheno_score_files = FALSE
+  res_dir = NULL
 )
 }
 \arguments{
@@ -126,10 +125,6 @@ for being able to export data from the FinnGen Sanbdox.}
 \item{write_res}{A boolean. Defines whether to save the results to files.}
 
 \item{res_dir}{A string. The directory to write the results and log to.}
-
-\item{read_pheno_score_files}{A boolean. Defines, whether to create a new
-data.frame with phenotype and score data or
-read it from a file.}
 }
 \description{
 This function runs survival studies for a given endpoint.It fits a

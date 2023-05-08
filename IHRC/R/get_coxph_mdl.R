@@ -20,23 +20,43 @@
 get_coxph_mdl <- function(surv_ana,
                           study) {
     coxph_mdl <- NULL
+
     if(nrow(study@study_data) > 0) {
         coxph_formula <- get_coxph_formula(preds=surv_ana@preds, endpt=study@endpt)  
         study <-  Istudy::updateStudyData(study, scale_preds(preds=surv_ana@preds, study_data=study@study_data))
         coxph_mdl <- tryCatch({
-            coxph_mdl <- suppressWarnings(
-                survival::coxph(formula=coxph_formula, 
-                                data=study@study_data,
-                                # Larger fit object but no need for
-                                # other functions to reconstruct
-                                # which fails in this setup
-                                model=TRUE))
-            },
-            error = function(e) {
-                write_to_error_file(surv_ana@error_file, msg=paste0(e, collapse="\n"))
-                return(NULL)
-            })
+            suppressWarnings(survival::coxph(formula=coxph_formula, 
+                                             data=study@study_data,
+                                             # Larger fit object but no need for
+                                             # other functions to reconstruct
+                                             # which fails in this setup
+                                             model=TRUE))
+                      }, error = function(e) {
+                                write_to_error_file(surv_ana@error_file, msg=paste0(e, collapse="\n"))
+                                return(NULL)})
+        write_coxph_to_log(coxph_mdl, study, surv_ana) 
+
+        # ## Seeing if we need to add interaction terms because of non-proportional hazards
+        # zph_res <- tryCatch({ survival::cox.zph(coxph_mdl)$table}, error = function(e) { return(NULL) })
+        # if(!is.null(zph_res)) {
+        #     signf_zph_res <- zph_res[((zph_res[, "p"] < 0.01) & !is.na(zph_res[, "p"])),]
+        #     if(!is.null(rownames(signf_zph_res))) {
+        #         coxph_formula <- add_time_interact_terms(coxph_formula, rownames(signf_zph_res), study@endpt)
+        #         coxph_mdl <- tryCatch({
+        #               suppressWarnings(survival::coxph(formula=coxph_formula, 
+        #                                                data=study@study_data,
+        #                                                # Larger fit object but no need for
+        #                                                # other functions to reconstruct
+        #                                                # which fails in this setup
+        #                                                model=TRUE))
+        #               }, error = function(e) {
+        #                         write_to_error_file(surv_ana@error_file, msg=paste0(e, collapse="\n"))
+        #                         return(NULL)})
+        #         update_coxph_log(coxph_mdl, study, surv_ana)
+        #     }
+        # }
     }
+
     return(coxph_mdl)
 }
 
@@ -57,8 +77,87 @@ get_coxph_mdl <- function(surv_ana,
 get_coxph_formula <- function(preds,
                               endpt) {
     pred_string <- paste0(preds, collapse="+")
-    stats::as.formula(paste0("survival::Surv(", endpt, "_AGE_FROM_BASE, ",  endpt, ") ~ ",  pred_string))
+    #pred_string <- paste0(pred_string, " + tt(YEAR_OF_BIRTH)")
+    coxph_formula <- stats::as.formula(paste0("survival::Surv(", endpt, "_AGE_FROM_BASE, ",  endpt, ") ~ ",  pred_string))
+    return(coxph_formula)
 }
+
+add_time_interact_terms <- function(coxph_formula,
+                                    signf_zph_preds,
+                                    endpt) {
+    signf_zph_preds <- signf_zph_preds[signf_zph_preds != "GLOBAL"]
+    # New interaction term
+    interact_terms <- paste0("tt(", signf_zph_preds, ")", collapse=" + ")
+    # Getting predictor part of formula
+    preds <- stringr::str_split(deparse(coxph_formula), "~")[[1]][2]
+    surv_part <- stringr::str_split(deparse(coxph_formula), "~")[[1]][1]
+
+    # Removing predictors that now is part of the interaction term
+    preds <- paste0(stringr::str_remove_all(unlist(stringr::str_split(preds, "\\+")), " "), collapse="+")
+    #preds <- preds[!(preds %in% signf_zph_preds)]
+    
+    # Creating new formula
+    coxph_formula <- as.formula(paste0(surv_part, " ~ ", preds, " + ", interact_terms))
+    print(deparse(coxph_formula))
+    return(coxph_formula)
+}
+
+write_coxph_to_log <- function(coxph_mdl,
+                              study,
+                              surv_ana) { 
+    if(!is.null(coxph_mdl)) {
+        file_path <- get_full_file_name_path(res_type="log",
+                                            study_setup=study@study_setup,
+                                            endpt=study@endpt,
+                                            surv_ana=surv_ana)
+        readr::write_file(paste0("\nSummary cox-PH model:\n\nNo of cases:", summary(coxph_mdl)$nevent, "\nNo of ctrls:", summary(coxph_mdl)$n-summary(coxph_mdl)$nevent, "\n\nzph original model:\n\n"),
+                        file_path)
+        zph_res <-  tryCatch({
+                            tibble::as_tibble(survival::cox.zph(coxph_mdl)$table, rownames="PRED")
+                        }, error = function(e) {
+                            return("Couldn't calculate zph")
+                        })
+        if(is.data.frame(zph_res)) {
+            readr::write_delim(zph_res,
+                               file=file_path,
+                               append=TRUE,
+                               col_names=TRUE)
+        } else {
+            readr::write_file(zph_res,
+                              file=file_path,
+                              append=TRUE)
+        }
+    }
+}
+
+#' Adding new zph analysis of the updated coxph model with interaction terms to the log
+#' 
+#' @param coxph_mdl The updated coxph model
+#' @param study The study object
+#' @param surv_ana The survival analysis object
+update_coxph_log <- function(coxph_mdl, study, surv_ana) {
+    file_path <- get_full_file_name_path(res_type="log",
+                                         study_setup=study@study_setup,
+                                         endpt=study@endpt,
+                                         surv_ana=surv_ana)
+    readr::write_file("\n\n zph updated model:\n\n", file=file_path, append=TRUE)
+    zph_res <-  tryCatch({
+                        tibble::as_tibble(survival::cox.zph(coxph_mdl)$table, rownames="PRED")
+                    }, error = function(e) {
+                        return("Couldn't calculate zph")
+                    })
+    if(is.data.frame(zph_res)) {
+        readr::write_delim(zph_res,
+                           file_path,
+                           append=TRUE,
+                           col_names=TRUE)
+    } else {
+        readr::write_file(zph_res,
+                          file=file_path,
+                          append=TRUE)
+    }
+}
+
 
 #' Scales the given variables in the score data
 #'

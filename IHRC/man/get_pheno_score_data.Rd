@@ -15,7 +15,7 @@ get_pheno_score_data(
   phers_data = NULL,
   zip_data = NULL,
   endpt = NULL,
-  min_indvs = 5,
+  min_indvs = min_indvs,
   error_file = NULL
 )
 }
