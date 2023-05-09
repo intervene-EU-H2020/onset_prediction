@@ -16,6 +16,7 @@ install.packages("/finngen/green/path/to/package/packag_name.tar.xz",
                  repos = NULL, type="source")
 ```
 
+You can also find helpful functions for installing all relevant files in the script `installtion_script.R`.
 ### FinnGen
 To install any of the previous named packages in the FinnGen Sandbox, compress it and upload it through green uploads and then use i.e.
 
@@ -23,7 +24,7 @@ See [How to install a R package into Sandbox?](https://finngen.gitbook.io/finnge
 
 # Run
 
-To run the analysis, the simples way is to use a setup file and then run
+To run the analysis, the simples way is to use a setup file and then run.
 
 ```{r example}
 library(ICCI)
