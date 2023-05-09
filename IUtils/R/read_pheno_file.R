@@ -21,7 +21,7 @@ read_pheno_file <- function(file_path="",
                                             show_col_types = FALSE)
             }, error=function(e) {writeLines(paste0("Could not read phenotype file ", file_path))})
     if(nrow(pheno_data) == 0) {
-        error(paste0("Error. Phenotype file contained no entries. Given path: ", file_path))
+        st(paste0("Error. Phenotype file contained no entries. Given path: ", file_path))
     }
 
     if(is.null(endpts)) {

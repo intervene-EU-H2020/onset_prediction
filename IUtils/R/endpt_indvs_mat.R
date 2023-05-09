@@ -96,7 +96,7 @@ read_phers_endpts_indvs_mat <- function(dir_path,
                                                  na_matches="na")
             endpts_indvs_mat[,paste0(endpt)][is.na(endpts_indvs_mat[,paste0(endpt)])] <- set_nas_true
         } else {
-            error(paste0("PheRS training/test data file ", file_path, " does not exist."))
+            stop(paste0("PheRS training/test data file ", file_path, " does not exist."))
         }
     }
     return(endpts_indvs_mat)
