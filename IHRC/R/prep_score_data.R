@@ -89,6 +89,8 @@ add_cci_data <- function(score_data,
         }
         if(!is.null(new_score_data)) {
             score_data <- new_score_data
+        } else {
+            stop("Something went wrong when getting the CCI data.")
         }
     }     
     if("EI" %in% score_type) {
@@ -133,6 +135,8 @@ add_prs_endpt_data <- function(score_data,
         }
         if(!is.null(new_score_data)) {
             score_data <- new_score_data
+        } else {
+            stop("Something went wrong when getting the PRS data.")
         }
     }
     return(score_data)
@@ -164,6 +168,8 @@ add_phers_endpt_data  <- function(score_data,
         }
         if(!is.null(new_score_data)) {
             score_data <- new_score_data
+        } else {
+            stop("Something went wrong when getting the PheRS data.")
         }
     }
     return(score_data)
@@ -193,6 +199,8 @@ add_med_endpt_data <- function(score_data,
         }
         if(!is.null(new_score_data)) {
             score_data <- new_score_data
+        } else {
+            stop("Something went wrong when getting the medication data.")
         }
     }
     return(score_data)
@@ -225,6 +233,8 @@ add_edu_cont_data <- function(score_data,
         }
         if(!is.null(new_score_data)) {
             score_data <- new_score_data
+        } else {
+            stop("Something went wrong when getting the education data.")
         }
     }
     return(score_data)
@@ -256,6 +266,8 @@ add_prob_data <- function(score_data,
         }
         if(!is.null(new_score_data)) {
             score_data <- new_score_data
+        }else {
+            stop("Something went wrong when getting the probability data.")
         }
     }
     return(score_data)

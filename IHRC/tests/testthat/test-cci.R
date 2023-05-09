@@ -25,7 +25,7 @@
 #                          ancs=NA_character_,
 #                          covs=c("SEX", "YEAR_OF_BIRTH"),
 #                          write_res=TRUE,
-#                          res_dir="/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/"), regexp=NA)
+#                          res_dir="/Users/detrokir/Documents/Projects/onset_prediction/code/onset_prediction/IHRC/tests/results/"), regexp=NA)
 
 #       elig_test <- readr::read_delim("/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/forward/down_4/logs/CCI_SEX_YOB_logs/pheno_score/I9_VTE_a20_e10_w2_o8_elig_indv.tsv", delim="\t", show_col_types = FALSE)
 #       elig_true_vte <- readr::read_delim("/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/true_results/I9_VTE_a20_e10_w2_o8_elig_indv.tsv", delim="\t", show_col_types = FALSE)
@@ -68,7 +68,7 @@
 #                          ancs=NA_character_,
 #                          covs=c("SEX", "YEAR_OF_BIRTH", "PC1", "PC2"),
 #                          write_res=TRUE,
-#                          res_dir="/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/"), regexp=NA)
+#                          res_dir="/Users/detrokir/Documents/Projects/onset_prediction/code/onset_prediction/IHRC/tests/results/"), regexp=NA)
  
 #    } else {
 #       message("Could not rudn tests, because ICCI is not available.")

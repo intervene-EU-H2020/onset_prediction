@@ -18,6 +18,6 @@ test_that("calc_endpt_studies_hrs works", {
                          ancs=NA_character_,
                          covs=c("SEX", "YEAR_OF_BIRTH"),
                          write_res=TRUE,
-                         res_dir="/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/"), regexp=NA)
+                         res_dir="/Users/detrokir/Documents/Projects/onset_prediction/code/onset_prediction/IHRC/tests/results/"), regexp=NA)
  
 })

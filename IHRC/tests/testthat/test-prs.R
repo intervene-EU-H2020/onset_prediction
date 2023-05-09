@@ -28,7 +28,7 @@
 #                                   covs=c("SEX", "YEAR_OF_BIRTH"),
 #                                   min_indvs=5,
 #                                   write_res=TRUE,
-#                                   res_dir="/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/"), regexp=NA)
+#                                   res_dir="/Users/detrokir/Documents/Projects/onset_prediction/code/onset_prediction/IHRC/tests/results/"), regexp=NA)
 # })
 
 
@@ -54,7 +54,7 @@
 #                      covs=c("SEX", "YEAR_OF_BIRTH"),
 #                      min_indvs=5,
 #                      write_res=TRUE,
-#                      res_dir="/home/kira/duni/helsinki/DSGE/Code/onset_prediction/IHRC/tests/results/"), regexp=NA)
+#                      res_dir="/Users/detrokir/Documents/Projects/onset_prediction/code/onset_prediction/IHRC/tests/results/"), regexp=NA)
 # })
 
 

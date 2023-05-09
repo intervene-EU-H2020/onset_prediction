@@ -58,7 +58,7 @@ get_pheno_score_data  <- function(score_type,
                                    score_data=score_data,
                                    score_type=score_type)
         } else {
-
+            stop("Something went wrong with getting the score data.")
             study_data <- NULL
         }
     # Otherwise only need the phenotype data
