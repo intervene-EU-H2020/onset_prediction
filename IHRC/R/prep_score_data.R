@@ -136,7 +136,7 @@ add_prs_endpt_data <- function(score_data,
         if(!is.null(new_score_data)) {
             score_data <- new_score_data
         } else {
-            stop("Something went wrong when getting the PRS data.")
+            warning("Something went wrong when getting the PRS data for endpoint ", endpt, ".")
         }
     }
     return(score_data)
@@ -169,7 +169,7 @@ add_phers_endpt_data  <- function(score_data,
         if(!is.null(new_score_data)) {
             score_data <- new_score_data
         } else {
-            stop("Something went wrong when getting the PheRS data.")
+            warning("Something went wrong when getting the PheRS data for endpoint ", endpt, ".")
         }
     }
     return(score_data)
