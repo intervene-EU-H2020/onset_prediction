@@ -34,6 +34,7 @@ read_prs_files <- function(dir_path,
      for(file_name in file_names) {
         file_path <- paste0(dir_path, file_name)
         disease <- sub(paste0("(.*)", prs_file_end, "$"), "\\1", file_name)
+        print(disease)
         if(disease %in% prs_endpts_map$prs) {
             prs_data <- add_prs_col(file_path, disease, prs_endpts_map, prs_data)
         }
@@ -60,6 +61,7 @@ add_prs_col <- function(file_path,
                         disease,
                         col_map,
                         prs_data) {
+    prs_data <- tibble::tibble()
     tryCatch({
         crnt_prs <- readr::read_delim(file_path, 
                                       delim="\t", 
