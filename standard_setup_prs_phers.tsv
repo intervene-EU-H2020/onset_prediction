@@ -14,5 +14,6 @@ res_dir	path/to/save/results/
 pheno_file_path	path/to/phenotyp_file
 icd_file_path	path/to/icd_file
 prs_dir_path	path/to/prs/directory/
+prs_file_end    .sscore
 phers_dir_path	path/to/phers/directory/
 create_score_combos	TRUE

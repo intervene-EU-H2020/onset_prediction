@@ -51,6 +51,9 @@ get_setup <- function(setup_file_path) {
     if(is.null(setup$score_type)) {
         setup$score_type <- c("")
     }
+    if(is.null(setup$prs_file_end)) {
+        setup$prs_file_end <- "_PRS_hm3.sscore"
+    }
     setup$obs_end_date <- obs_end_date
     return(setup)
 }

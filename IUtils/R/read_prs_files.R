@@ -20,7 +20,8 @@
 #' 
 #' @export 
 read_prs_files <- function(dir_path,
-                           prs_endpts_map=NULL) {
+                           prs_endpts_map=NULL,
+                           prs_file_end="_PRS_hm3.sscore") {
     if(is.null(prs_endpts_map)) {
         endpts <- get_endpts()
         get_prs_endpt_descr <- get_prs_endpt_descr()  
@@ -32,7 +33,7 @@ read_prs_files <- function(dir_path,
     file_names <- list.files(dir_path)
      for(file_name in file_names) {
         file_path <- paste0(dir_path, file_name)
-        disease <- sub("(.*)(_PRS_hm3.sscore)$", "\\1", file_name)
+        disease <- sub(paste0("(.*)", prs_file_end, "$"), "\\1", file_name)
         if(disease %in% prs_endpts_map$prs) {
             prs_data <- add_prs_col(file_path, disease, prs_endpts_map, prs_data)
         }
