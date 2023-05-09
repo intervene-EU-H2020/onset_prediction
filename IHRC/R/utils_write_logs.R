@@ -25,7 +25,7 @@ write_pheno_score_files <- function(pheno_score_data,
                            file=file_path,
                            delim="\t")
     } else {
-        stop("No phenotype-score data to write to file.")
+        warning("No phenotype-score data to write to file for endpoint ", endpt, ".")
     }
 }
 
