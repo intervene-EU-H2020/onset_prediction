@@ -17,7 +17,7 @@ pckg_install_ICCI <- function(target_dir="/home/ivm/R/x86_64-pc-linux-gnu-librar
                    repos=NULL, 
                    type="source")
   library(comorbidity)
-  install.packages("/finngen/green/detrois_up/pckg_share/ICCI_2.2.2.tar.xz",
+  install.packages("/finngen/green/detrois_up/pckg_share/ICCI_2.2.2.tar.gz",
                    target_dir, 
                    repos=NULL, 
                    type="source")
@@ -26,20 +26,20 @@ pckg_install_ICCI <- function(target_dir="/home/ivm/R/x86_64-pc-linux-gnu-librar
 #' Installs personal packages in the sandbox
 pckg_install <- function() {
   assign(".lib.loc", c("/home/ivm/R/x86_64-pc-linux-gnu-library/4.2", "/usr/local/lib/R/site-library","/usr/lib/R/site-library", "/usr/lib/R/library") , envir=environment(.libPaths))
-  install.packages("/home/ivm/R/pckg_uploads/Istudy.tar.xz",
+  install.packages("/home/ivm/R/pckg_uploads/Istudy_3.3.0.tar.xz",
                    "/home/ivm/R/x86_64-pc-linux-gnu-library/4.2/", 
                    repos=NULL, 
                    type="source")
   library(Istudy)
   
-  install.packages("/home/ivm/R/pckg_uploads/IUtils.tar.xz",
+  install.packages("/home/ivm/R/pckg_uploads/IUtils_2.1.0.tar.xz",
                    "/home/ivm/R/x86_64-pc-linux-gnu-library/4.2/", 
                    repos=NULL, 
                    type="source")
   library(IUtils)
 
 
-  install.packages("/home/ivm/R/pckg_uploads/IHRC.tar.xz",
+  install.packages("/home/ivm/R/pckg_uploads/IHRC_4.0.0.tar.xz",
                    "/home/ivm/R/x86_64-pc-linux-gnu-library/4.2/", 
                    repos=NULL, 
                    type="source")
@@ -49,7 +49,7 @@ pckg_install <- function() {
 #' Loads personal packages in the sandbox
 pckg_load <- function() {
   #rm(list = ls())
-  #assign(".lib.loc", c("/home/ivm/R/x86_64-pc-linux-gnu-library/4.2", "/usr/local/lib/R/site-library","/usr/lib/R/site-library", "/usr/lib/R/library") , envir=environment(.libPaths))
+  assign(".lib.loc", c("/home/ivm/R/x86_64-pc-linux-gnu-library/4.2", "/usr/local/lib/R/site-library","/usr/lib/R/site-library", "/usr/lib/R/library") , envir=environment(.libPaths))
   library(Istudy)
   library(IUtils)
   library(ICCI)

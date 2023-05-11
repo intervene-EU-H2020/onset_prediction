@@ -37,7 +37,8 @@ get_pheno_score_data  <- function(score_type,
                                   zip_data=NULL,
                                   endpt=NULL,
                                   min_indvs=min_indvs,
-                                  error_file=NULL) {
+                                  error_file=NULL,
+                                  write_progress=FALSE) {
                                   # Get data of individuals who can be used for the current endpoint
     pheno_data <- get_relevant_pheno_data_cols(pheno_data, endpt)
     # Need to preprocess score data for these score types
@@ -51,14 +52,16 @@ get_pheno_score_data  <- function(score_type,
                                             zip_data=zip_data,
                                             endpt=endpt,
                                             study_setup=study_setup,
-                                            error_file=error_file)
+                                            error_file=error_file,
+                                            write_progress=write_progress)
         if(!is.null(score_data)) {
             # Joining score data with phenotypic data
             study_data <- join_dfs(pheno_data=pheno_data,
                                    score_data=score_data,
                                    score_type=score_type)
+            if(write_progress) writeLines("Joined score and pheno data.")
         } else {
-            stop("Something went wrong with getting the score data.")
+            warning("Something went wrong with getting the score data for endpoint", endpt, ".")
             study_data <- NULL
         }
     # Otherwise only need the phenotype data
@@ -70,12 +73,15 @@ get_pheno_score_data  <- function(score_type,
             train_status <- dplyr::select(endpts_indvs_mat, ID, endpt)
             colnames(train_status) <- c("ID", "TRAIN_STATUS")
             train_status <- dplyr::mutate(train_status, TRAIN_STATUS=!TRAIN_STATUS)
+            print(train_status)
+            print(study_data)
             study_data <- dplyr::left_join(study_data, train_status, by="ID")
             study_data$TRAIN_STATUS[is.na(study_data$TRAIN_STATUS)] <- 0
         } else {
             study_data <- dplyr::mutate(study_data, TRAIN_STATUS=0)
         }
     }
+    if(write_progress) writeLines("Added training status.")
     return(study_data)
 }
 
@@ -115,6 +121,9 @@ get_relevant_pheno_data_cols <- function(pheno_data,
                      "END_OF_FOLLOWUP")
     if(("BATCH" %in% colnames(pheno_data))) {
         select_cols <- c(select_cols, "BATCH")
+    }
+    if(("CHIP" %in% colnames(pheno_data))) {
+        select_cols <- c(select_cols, "CHIP")
     }
     if(("ZIP" %in% colnames(pheno_data))) {
         select_cols <- c(select_cols, "ZIP")

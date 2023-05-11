@@ -46,7 +46,6 @@ create_test_df <- function(n_indv=10) {
         EDU=create_EDU_data(n_indv),
         COHORT="TODO",
         CHIP="TODO",
-        BATCH="TODO",
         R3=0
     )
 

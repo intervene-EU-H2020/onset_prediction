@@ -18,9 +18,9 @@ write_pheno_score_files <- function(pheno_score_data,
                                     surv_ana) {
     if(!is.null(pheno_score_data)) {
         file_path <- get_full_file_name_path(res_type="pheno_score",
-                                            study_setup=study_setup,
-                                            endpt=endpt,
-                                            surv_ana=surv_ana)
+                                             study_setup=study_setup,
+                                             endpt=endpt,
+                                             surv_ana=surv_ana)
         readr::write_delim(x=pheno_score_data,
                            file=file_path,
                            delim="\t")

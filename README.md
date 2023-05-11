@@ -7,8 +7,7 @@ This project includes different R packages to help working with INTERVENE longit
 
 ## Installation
 
-To download the packages, clone this repository and compress the packages `IHRC`, `IUTils`, `Istudy`, separately. Then upload to the goal environemnt and install as described below.
-
+Upload to the packages 'ICCI', 'comorbidity' (https://cran.r-project.org/web/packages/comorbidity/), 'IHRC', 'Istudy', and 'IUtils' from this GitHub repository, to the goal environemnt and install as described below.
 
 ```{r example}
 install.packages("/finngen/green/path/to/package/packag_name.tar.xz",
@@ -16,7 +15,8 @@ install.packages("/finngen/green/path/to/package/packag_name.tar.xz",
                  repos = NULL, type="source")
 ```
 
-You can also find helpful functions for installing all relevant files in the script `installtion_script.R`.
+You can also find helpful functions for installing all relevant files in the script `installtion_script.R`. Simply change the location for the R library if necessary.
+
 ### FinnGen
 To install any of the previous named packages in the FinnGen Sandbox, compress it and upload it through green uploads and then use i.e.
 

@@ -34,7 +34,6 @@ read_prs_files <- function(dir_path,
      for(file_name in file_names) {
         file_path <- paste0(dir_path, file_name)
         disease <- sub(paste0("(.*)", prs_file_end, "$"), "\\1", file_name)
-        print(disease)
         if(disease %in% prs_endpts_map$prs) {
             prs_data <- add_prs_col(file_path, disease, prs_endpts_map, prs_data)
         }
@@ -61,7 +60,6 @@ add_prs_col <- function(file_path,
                         disease,
                         col_map,
                         prs_data) {
-    prs_data <- tibble::tibble()
     tryCatch({
         crnt_prs <- readr::read_delim(file_path, 
                                       delim="\t", 
@@ -72,9 +70,9 @@ add_prs_col <- function(file_path,
                         dplyr::select(ID, SCORE1_AVG) 
         names(crnt_prs)[names(crnt_prs) == "SCORE1_AVG"] <- paste0(endpt, "_PRS")
         prs_data <- dplyr::full_join(crnt_prs, prs_data, by="ID", na_matches="na")
-    }, error=function(e) {writeLines(paste0("Could not read PRS file ", file_path))})
+    }, error=function(e) {writeLines(paste0("Could not read PRS file ", file_path, " /nError: ", e))})
     if(nrow(prs_data) == 0) {
-        warning(writeLines(paste0("PRS file ", file_path, " is empty.")))
+        warning(writeLines(paste0("PRS data from ", file_path, " is empty.")))
     }
     return(prs_data)
 }

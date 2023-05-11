@@ -109,7 +109,8 @@ run_surv_studies <- function(pheno_data,
                              filter_1998=FALSE,
                              res_descr=NULL,
                              write_res=FALSE,
-                             res_dir=NULL) {
+                             res_dir=NULL,
+                             write_progress=FALSE) {
     res_dir <- get_full_res_path(write_res=write_res,  
                                  res_dir=res_dir,
                                  down_fctr=down_fctr, 
@@ -122,7 +123,8 @@ run_surv_studies <- function(pheno_data,
                              create_score_combos=create_score_combos,
                              covs=covs,
                              write_res=write_res,
-                             res_dir=res_dir)
+                             res_dir=res_dir,
+                             write_progress=write_progress)
     study_setup <- methods::new("study_setup",
                                 study_type="backward",
                                 exp_age=0,
@@ -197,7 +199,8 @@ create_pheno_score_files <- function(study_setup,
                                          zip_data=zip_data,
                                          endpt=endpt,
                                          min_indvs=surv_ana@min_indvs,
-                                         error_file=surv_ana@error_file)
+                                         error_file=surv_ana@error_file,
+                                         write_progress=surv_ana@write_progress)
         # Writing log files
         write_pheno_score_files(pheno_score_data=pheno_score_data,
                                 study_setup=study_setup,

@@ -34,14 +34,16 @@ surv_ana <- methods::setClass("surv_ana",
                            preds="character",
                            write_res="logical",
                            res_dir="character",
-                           error_file="character"),
+                           error_file="character",
+                           write_progress="logical"),
                 prototype=list(min_indvs=5,
                                create_score_combos=FALSE,
                                score_combos=list(),
                                preds=c("SEX", "YEAR_OF_BIRTH"),
                                write_res=FALSE,
                                res_dir=NA_character_,
-                               error_file=NA_character_))
+                               error_file=NA_character_,
+                               write_progress=FALSE))
 
 #' Constructor for the `surv_ana` class
 #' 

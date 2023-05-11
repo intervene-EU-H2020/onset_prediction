@@ -54,6 +54,9 @@ get_setup <- function(setup_file_path) {
     if(is.null(setup$prs_file_end)) {
         setup$prs_file_end <- "_PRS_hm3.sscore"
     }
+    if(is.null(setup$write_progress)) {
+        setup$write_progress <- FALSE
+    }
     setup$obs_end_date <- obs_end_date
     return(setup)
 }

@@ -78,7 +78,7 @@ add_time_interact_terms <- function(coxph_formula,
     
     # Creating new formula
     coxph_formula <- as.formula(paste0(surv_part, " ~ ", preds, " + ", interact_terms))
-    print(deparse(coxph_formula))
+    writeLines(deparse(coxph_formula))
     return(coxph_formula)
 }
 

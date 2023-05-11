@@ -13,9 +13,9 @@
 #' 
 #' @author Kira E. Detrois
 join_endpts_indvs_mats <- function(crnt_endpts_indvs_mat,
-                                  endpt,
-                                  prev_endpts_indvs_mat=NULL,
-                                  set_nas_true=FALSE) {
+                                   endpt,
+                                   prev_endpts_indvs_mat=NULL,
+                                   set_nas_true=FALSE) {
     if(!is.null(prev_endpts_indvs_mat)) {            
         endpts_indvs_mat <- dplyr::full_join(prev_endpts_indvs_mat, 
                                              crnt_endpts_indvs_mat, 
