@@ -46,7 +46,7 @@ Both templates run models for all possible combinations of scores. To only get t
 ### Add File Paths to Templates
 - `res_dir`: Path to a direcotry where all the results are written to
   - **IMPORTANT, add the final `/` to the path**
-- `pheno_file_path`: Path to the [INTERVENE phenotype file](https://docs.google.com/document/d/1GbZszpPeyf-hyb0V_YDx828YbM7woh8OBJhvzkEwo2g/edit) with **added columns** EDU, and ZIP if used as score
+- `pheno_file_path`: Path to the [INTERVENE phenotype file](https://docs.google.com/document/d/1GbZszpPeyf-hyb0V_YDx828YbM7woh8OBJhvzkEwo2g/edit) with **added columns** EDU, and ZIP if used as score. **IMPORTANT** Controls should be marked with 0s not NAs, otherwise they will all be excluded.
 - `icd_file_path`: [INTERVENE format longitudinal ICD-code file](https://docs.google.com/document/d/1E2Jc72CmMItEchgQaCvfA4MhZUkQYjALwTu3dCl7qd8/edit) 
 - `prs_dir_path`: Path to the directory with all PRS files. The files are expected to be named `[diseas].sscore` see function `IUtils/R/get_prs_endpt_descr.R` for all the disease names. These are the same as used in the flagship paper.
   - **IMPORTANT, add the final `/` to the path**
