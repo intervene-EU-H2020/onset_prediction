@@ -13,7 +13,7 @@ Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Imports: 
-    dplyr (>= 1.0.10),
+    dplyr (>= 1.0.9‚),
     ggplot2 (>= 3.4.0),
     Hmisc (>= 4.4-2),
     ICCI (>= 1.1.0),
