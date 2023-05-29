@@ -39,7 +39,7 @@ preprocess_score_data <- function(score_type,
                                      score_type=score_type,
                                      prs_data=prs_data,
                                      endpt=endpt)
-    writeLines("Have PRS data")
+    if(write_progress) writeLines("Have PRS data")
     score_data <- add_phers_endpt_data(score_data=score_data,
                                        score_type=score_type,
                                        phers_data=phers_data,

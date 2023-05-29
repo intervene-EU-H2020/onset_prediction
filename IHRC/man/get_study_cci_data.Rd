@@ -11,7 +11,7 @@ get_study_cci_data(pheno_data, icd_data, score_type, study_setup)
 and \code{DATE_OF_BIRTH}.}
 
 \item{icd_data}{A data.frame. The ICD diagnoses codes. Needs at least columns
-\code{ID}, \code{Event_age}, and \code{PRIMARY_ICD}.}
+\code{ID}, \code{EVENT_AGE}, and \code{PRIMARY_ICD}.}
 
 \item{score_type}{A string. Can be either \code{charlson} or \code{elixhauser}.}
 

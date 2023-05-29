@@ -4,7 +4,11 @@
 \alias{read_prs_files}
 \title{Reads the PRS files for the endpoints from a common directory}
 \usage{
-read_prs_files(dir_path, prs_endpts_map = NULL)
+read_prs_files(
+  dir_path,
+  prs_endpts_map = NULL,
+  prs_file_end = "_PRS_hm3.sscore"
+)
 }
 \arguments{
 \item{dir_path}{A string. The path to the PRS file directory.}
