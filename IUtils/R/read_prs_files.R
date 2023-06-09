@@ -21,7 +21,9 @@
 #' @export 
 read_prs_files <- function(dir_path,
                            prs_endpts_map=NULL,
-                           prs_file_end="_PRS_hm3.sscore") {
+                           prs_file_end="_PRS_hm3.sscore",
+                           prs_score_col_name="SCORE1_AVG",
+                           prs_id_col_name="#IID") {
     if(is.null(prs_endpts_map)) {
         endpts <- get_endpts()
         get_prs_endpt_descr <- get_prs_endpt_descr()  
@@ -35,7 +37,12 @@ read_prs_files <- function(dir_path,
         file_path <- paste0(dir_path, file_name)
         disease <- sub(paste0("(.*)", prs_file_end, "$"), "\\1", file_name)
         if(disease %in% prs_endpts_map$prs) {
-            prs_data <- add_prs_col(file_path, disease, prs_endpts_map, prs_data)
+            prs_data <- add_prs_col(file_path=file_path, 
+                                    disease=disease, 
+                                    col_map=prs_endpts_map, 
+                                    prs_data=prs_data, 
+                                    prs_score_col_name=prs_score_col_name,
+                                    prs_id_col_name=prs_id_col_name)
         }
     }
     return(prs_data)
@@ -59,20 +66,24 @@ read_prs_files <- function(dir_path,
 add_prs_col <- function(file_path,
                         disease,
                         col_map,
-                        prs_data) {
+                        prs_data,
+                        prs_score_col_name,
+                        prs_id_col_name) {
+
     tryCatch({
         crnt_prs <- readr::read_delim(file_path, 
                                       delim="\t", 
                                       show_col_types=FALSE,
                                       col_types=list(IID="c"))
         endpt <- col_map[col_map$prs == disease,]$endpt
-        crnt_prs <- dplyr::rename(crnt_prs, ID=IID) %>%
-                        dplyr::select(ID, SCORE1_AVG) 
-        names(crnt_prs)[names(crnt_prs) == "SCORE1_AVG"] <- paste0(endpt, "_PRS")
+        colnames(crnt_prs)[colnames(crnt_prs) == prs_id_col_name] <- "ID"
+        colnames(crnt_prs)[colnames(crnt_prs) == prs_score_col_name] <- paste0(endpt, "_PRS")
+        crnt_prs <- dplyr::select(crnt_prs, ID, paste0(endpt, "_PRS")) %>% 
+                        dplyr::mutate(ID=as.character(ID))
         prs_data <- dplyr::full_join(crnt_prs, prs_data, by="ID", na_matches="na")
-    }, error=function(e) {writeLines(paste0("Could not read PRS file ", file_path))})
+    }, error=function(e) {writeLines(paste0("Could not read PRS file ", file_path, "\nerror: ", e$message))})
     if(nrow(prs_data) == 0) {
-        warning(writeLines(paste0("PRS file ", file_path, " is empty.")))
+        warning(writeLines(paste0("PRS data read from ", file_path, " is empty. Either the file is empty or the column names are wrong. Please change paramters `prs_score_col_name`and `prs_id_col_name` accordingly in the setup file.")))
     }
     return(prs_data)
 }

@@ -71,7 +71,7 @@ get_phers_endpt_data <- function(score_data,
 #' @param pheno_data A data.frame. The phenotype data. Needs at least columns `ID` 
 #'                   and `DATE_OF_BIRTH`.
 #' @param icd_data A data.frame. The ICD diagnoses codes. Needs at least columns 
-#'                 `ID`, `Event_age`, and `PRIMARY_ICD`.
+#'                 `ID`, `EVENT_AGE`, and `PRIMARY_ICD`.
 #' @param score_type A string. Can be either `charlson` or `elixhauser`.
 #' @param study_setup An S4 `study_setup` object. The current study setup. 
 #'                      See class definition [Istudy::study_setup].

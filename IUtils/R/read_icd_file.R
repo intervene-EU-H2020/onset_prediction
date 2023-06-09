@@ -9,7 +9,7 @@
 #' 
 #' @export 
 #' 
-#' @return A tibble with at least columns `ID`, `Event_age`, `ICD_version`, and 
+#' @return A tibble with at least columns `ID`, `EVENT_AGE`, `ICD_version`, and 
 #' `primary_ICD`. Additionally, can have column `secondary_ICD` if available in 
 #' the data.
 #' 
@@ -26,7 +26,7 @@ read_icd_file <- function(file_path) {
     if(nrow(icd_data) == 0) {
         warning(paste0("Warning. ICD-file contained no entries. Given path: ", file_path, "\nGot: ", file_path))
     }
-    expect_cols <- c("ID", "Event_age", "ICD_version", "primary_ICD")
+    expect_cols <- c("ID", "EVENT_AGE", "ICD_version", "primary_ICD")
     check_cols(expect_cols, colnames(icd_data), file_path)
 
     return(icd_data)
