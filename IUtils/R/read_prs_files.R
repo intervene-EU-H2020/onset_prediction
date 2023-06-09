@@ -81,15 +81,9 @@ add_prs_col <- function(file_path,
         crnt_prs <- dplyr::select(crnt_prs, ID, paste0(endpt, "_PRS")) %>% 
                         dplyr::mutate(ID=as.character(ID))
         prs_data <- dplyr::full_join(crnt_prs, prs_data, by="ID", na_matches="na")
-<<<<<<< HEAD
     }, error=function(e) {writeLines(paste0("Could not read PRS file ", file_path, "\nerror: ", e$message))})
     if(nrow(prs_data) == 0) {
         warning(writeLines(paste0("PRS data read from ", file_path, " is empty. Either the file is empty or the column names are wrong. Please change paramters `prs_score_col_name`and `prs_id_col_name` accordingly in the setup file.")))
-=======
-    }, error=function(e) {writeLines(paste0("Could not read PRS file ", file_path, " /nError: ", e))})
-    if(nrow(prs_data) == 0) {
-        warning(writeLines(paste0("PRS data from ", file_path, " is empty.")))
->>>>>>> 1c65450bc0672f1bf58fdb82a5f41f123c6e9bfe
     }
     return(prs_data)
 }

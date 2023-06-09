@@ -54,16 +54,14 @@ get_setup <- function(setup_file_path) {
     if(is.null(setup$prs_file_end)) {
         setup$prs_file_end <- "_PRS_hm3.sscore"
     }
-<<<<<<< HEAD
     if(is.null(setup$prs_score_col_name)) {
         setup$prs_score_col_name <- "SCORE1_AVG"
     }
     if(is.null(setup$prs_id_col_name)) {
         setup$prs_id_col_name <- "#IID"
-=======
+    }
     if(is.null(setup$write_progress)) {
         setup$write_progress <- FALSE
->>>>>>> 1c65450bc0672f1bf58fdb82a5f41f123c6e9bfe
     }
     setup$obs_end_date <- obs_end_date
     return(setup)
