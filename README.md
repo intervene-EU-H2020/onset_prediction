@@ -7,16 +7,23 @@ This project includes different R packages to help working with INTERVENE longit
 
 ## Installation
 
-To download the packages, clone this repository and compress the packages `IHRC`, `IUTils`, `Istudy`, separately. Then upload to the goal environemnt and install as described below.
+Upload to the packages 'ICCI', 'comorbidity' (https://cran.r-project.org/web/packages/comorbidity/), 'IHRC', 'Istudy', and 'IUtils' from this GitHub repository, to the goal environemnt and install as described below.
 
+You can create any directory `/path/to/rpcks/` to install the packages to 
 
 ```{r example}
-install.packages("/finngen/green/path/to/package/packag_name.tar.xz",
-                 "/home/ivm/R/x86_64-pc-linux-gnu-library/4.1",
+  .libPaths(target_dir, .libPaths())
+install.packages("/path/to/rpcks/packag_name.tar.gz",
+                 "/path/to/rpcks/",
                  repos = NULL, type="source")
 ```
 
-You can also find helpful functions for installing all relevant files in the script `installtion_script.R`.
+You can also find helpful functions for installing all relevant files in the script `installtion_script.R`. Simply change the location for the R library if necessary.
+
+If there are warnings about versions of packages that cannot easily be updated, write me and I might be able to change the minimum necessary version. 
+
+To reinstall packages, delete the folder for the package at `/path/to/rpcks/`, if you work in Rstudio additionally run .rs.restartR() afterwards.
+
 ### FinnGen
 To install any of the previous named packages in the FinnGen Sandbox, compress it and upload it through green uploads and then use i.e.
 
@@ -46,7 +53,7 @@ Both templates run models for all possible combinations of scores. To only get t
 ### Add File Paths to Templates
 - `res_dir`: Path to a direcotry where all the results are written to
   - **IMPORTANT, add the final `/` to the path**
-- `pheno_file_path`: Path to the [INTERVENE phenotype file](https://docs.google.com/document/d/1GbZszpPeyf-hyb0V_YDx828YbM7woh8OBJhvzkEwo2g/edit) with **added columns** EDU, and ZIP if used as score
+- `pheno_file_path`: Path to the [INTERVENE phenotype file](https://docs.google.com/document/d/1GbZszpPeyf-hyb0V_YDx828YbM7woh8OBJhvzkEwo2g/edit) with **added columns** EDU, and ZIP if used as score. **IMPORTANT** Controls should be marked with 0s not NAs, otherwise they will all be excluded.
 - `icd_file_path`: [INTERVENE format longitudinal ICD-code file](https://docs.google.com/document/d/1E2Jc72CmMItEchgQaCvfA4MhZUkQYjALwTu3dCl7qd8/edit) 
 - `prs_dir_path`: Path to the directory with all PRS files. The files are expected to be named `[diseas].sscore` see function `IUtils/R/get_prs_endpt_descr.R` for all the disease names. These are the same as used in the flagship paper.
   - **IMPORTANT, add the final `/` to the path**

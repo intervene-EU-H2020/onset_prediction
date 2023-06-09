@@ -13,9 +13,9 @@
 #' 
 #' @author Kira E. Detrois
 join_endpts_indvs_mats <- function(crnt_endpts_indvs_mat,
-                                  endpt,
-                                  prev_endpts_indvs_mat=NULL,
-                                  set_nas_true=FALSE) {
+                                   endpt,
+                                   prev_endpts_indvs_mat=NULL,
+                                   set_nas_true=FALSE) {
     if(!is.null(prev_endpts_indvs_mat)) {            
         endpts_indvs_mat <- dplyr::full_join(prev_endpts_indvs_mat, 
                                              crnt_endpts_indvs_mat, 
@@ -76,8 +76,9 @@ read_phers_endpts_indvs_mat <- function(dir_path,
         file_path <- paste0(dir_path, endpt, "_", study_descr, "/target-", endpt, "-PheRS-ML-input.txt.gz")
         if(file.exists(file_path)) {
             # Reading in data
-            info_data <- readr::read_delim(file_path, delim="\t", show_col_types=FALSE) %>% 
-                                dplyr::rename(ID=`#ID`)
+            info_data <- tibble::as_tibble(data.table::fread(file_path)) %>% 
+                                dplyr::rename(ID=`#ID`) %>%
+                                dplyr::mutate(ID=as.character(ID))
             # Initializing dataframe
             crnt_endpts_indvs_mat <- tibble::tibble(ID=info_data$ID)
             crnt_endpts_indvs_mat[,paste0(endpt, "_crnt")] <- !info_data$train_status

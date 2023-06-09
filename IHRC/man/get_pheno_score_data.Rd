@@ -16,7 +16,8 @@ get_pheno_score_data(
   zip_data = NULL,
   endpt = NULL,
   min_indvs = min_indvs,
-  error_file = NULL
+  error_file = NULL,
+  write_progress = FALSE
 )
 }
 \arguments{

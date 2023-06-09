@@ -14,7 +14,8 @@ get_all_data(
   prs_endpts_map = NULL,
   phers_dir_path = "",
   phers_study_descr = NULL,
-  zip_dir_path = ""
+  zip_dir_path = "",
+  prs_file_end
 )
 }
 \arguments{

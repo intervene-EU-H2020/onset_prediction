@@ -29,7 +29,8 @@ run_surv_studies(
   filter_1998 = FALSE,
   res_descr = NULL,
   write_res = FALSE,
-  res_dir = NULL
+  res_dir = NULL,
+  write_progress = FALSE
 )
 }
 \arguments{

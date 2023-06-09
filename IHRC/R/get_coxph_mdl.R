@@ -19,18 +19,19 @@
 #' @author Kira E. Detrois
 get_coxph_mdl <- function(surv_ana,
                           study) {
-    coxph_mdl <- NULL
 
+    coxph_mdl <- NULL
     if(nrow(study@study_data) > 0) {
         coxph_formula <- get_coxph_formula(preds=surv_ana@preds, endpt=study@endpt)  
-        study <-  Istudy::updateStudyData(study, scale_preds(preds=surv_ana@preds, study_data=study@study_data))
+        study@study_data <- scale_preds(preds=surv_ana@preds, study_data=study@study_data)
+
         coxph_mdl <- tryCatch({
-            suppressWarnings(survival::coxph(formula=coxph_formula, 
+            survival::coxph(formula=coxph_formula, 
                                              data=study@study_data,
                                              # Larger fit object but no need for
                                              # other functions to reconstruct
                                              # which fails in this setup
-                                             model=TRUE))
+                                             model=TRUE)
                       }, error = function(e) {
                                 write_to_error_file(surv_ana@error_file, msg=paste0(e, collapse="\n"))
                                 return(NULL)})
@@ -78,7 +79,7 @@ add_time_interact_terms <- function(coxph_formula,
     
     # Creating new formula
     coxph_formula <- as.formula(paste0(surv_part, " ~ ", preds, " + ", interact_terms))
-    print(deparse(coxph_formula))
+    writeLines(deparse(coxph_formula))
     return(coxph_formula)
 }
 
@@ -149,6 +150,8 @@ update_coxph_log <- function(coxph_mdl, study, surv_ana) {
 #' @export
 scale_preds <- function(preds,
                         study_data) {
+    study_data$ID <- as.character(study_data$ID)
+
     for(pred in preds) {
         if(pred %in% colnames(study_data)) {
             if(pred %in% c("PRS", "CCI", "EI", "YEAR_OF_BIRTH", "MED", "EDU_cont", "PheRS", "Prob")) {
@@ -160,6 +163,10 @@ scale_preds <- function(preds,
         }
     }
 
-    study_data$SEX <- factor(study_data$SEX, levels=c("female", "male"))
+    if(class(study_data$SEX) == "character") {
+        study_data$SEX <- factor(study_data$SEX, levels=c("female", "male"))
+    } else {
+        study_data$SEX <- factor(study_data$SEX, levels=c(0, 1))
+    }
     return(study_data)
 }

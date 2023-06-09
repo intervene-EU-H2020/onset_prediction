@@ -25,7 +25,8 @@ preprocess_score_data <- function(score_type,
                                   zip_data=NULL,
                                   endpt=NULL,
                                   study_setup=NULL,
-                                  error_file=NULL) {
+                                  error_file=NULL,
+                                  write_progress=FALSE) {
     
     score_data = NULL
     score_data <- add_cci_data(score_data=score_data,
@@ -33,14 +34,17 @@ preprocess_score_data <- function(score_type,
                                pheno_data=pheno_data,
                                icd_data=icd_data,
                                study_setup=study_setup)
+    if(write_progress) writeLines("Have CCI data")
     score_data <- add_prs_endpt_data(score_data=score_data,
                                      score_type=score_type,
                                      prs_data=prs_data,
                                      endpt=endpt)
+    if(write_progress) writeLines("Have PRS data")
     score_data <- add_phers_endpt_data(score_data=score_data,
                                        score_type=score_type,
                                        phers_data=phers_data,
                                        endpt=endpt)
+    if(write_progress) writeLines("Have PheRS data")
     score_data <- add_med_endpt_data(score_data=score_data,
                                      score_type=score_type,
                                      pheno_data=pheno_data,
@@ -49,6 +53,7 @@ preprocess_score_data <- function(score_type,
     score_data <- add_edu_cont_data(score_data=score_data,
                                     score_type=score_type,
                                     pheno_data=pheno_data)
+    if(write_progress) writeLines("Have EDU data")
     score_data <- add_prob_data(score_data=score_data,
                                     score_type=score_type,
                                     pheno_data=pheno_data)
@@ -89,9 +94,7 @@ add_cci_data <- function(score_data,
         }
         if(!is.null(new_score_data)) {
             score_data <- new_score_data
-        } else {
-            stop("Something went wrong when getting the CCI data.")
-        }
+        } 
     }     
     if("EI" %in% score_type) {
         ei_data <- get_study_cci_data(pheno_data,
@@ -135,9 +138,7 @@ add_prs_endpt_data <- function(score_data,
         }
         if(!is.null(new_score_data)) {
             score_data <- new_score_data
-        } else {
-            warning("Something went wrong when getting the PRS data for endpoint ", endpt, ".")
-        }
+        } 
     }
     return(score_data)
 }
@@ -168,9 +169,7 @@ add_phers_endpt_data  <- function(score_data,
         }
         if(!is.null(new_score_data)) {
             score_data <- new_score_data
-        } else {
-            warning("Something went wrong when getting the PheRS data for endpoint ", endpt, ".")
-        }
+        } 
     }
     return(score_data)
 }
@@ -199,9 +198,7 @@ add_med_endpt_data <- function(score_data,
         }
         if(!is.null(new_score_data)) {
             score_data <- new_score_data
-        } else {
-            stop("Something went wrong when getting the medication data.")
-        }
+        } 
     }
     return(score_data)
 }
@@ -233,9 +230,7 @@ add_edu_cont_data <- function(score_data,
         }
         if(!is.null(new_score_data)) {
             score_data <- new_score_data
-        } else {
-            stop("Something went wrong when getting the education data.")
-        }
+        } 
     }
     return(score_data)
 }
@@ -266,8 +261,6 @@ add_prob_data <- function(score_data,
         }
         if(!is.null(new_score_data)) {
             score_data <- new_score_data
-        }else {
-            stop("Something went wrong when getting the probability data.")
         }
     }
     return(score_data)

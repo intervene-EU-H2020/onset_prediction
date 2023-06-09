@@ -10,8 +10,8 @@ read_icd_file(file_path)
 \item{file_path}{A string (string). The path to the file.}
 }
 \value{
-A tibble with at least columns \code{ID}, \code{Event_age}, \code{ICD_version}, and
-\code{primary_ICD}. Additionally, can have column \code{secondary_ICD} if available in
+A tibble with at least columns \code{ID}, \code{EVENT_AGE}, \code{ICD_VERSION}, and
+\code{PRIMARY_ICD}. Additionally, can have column \code{secondary_ICD} if available in
 the data.
 }
 \description{

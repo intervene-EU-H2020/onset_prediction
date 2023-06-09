@@ -50,5 +50,6 @@ run_ana_setup_file <- function(setup_file_path) {
                                   min_indvs=setup$min_indvs,
                                   write_res=TRUE,
                                   res_dir=setup$res_dir,
-                                  res_descr=setup$res_descr)
+                                  res_descr=setup$res_descr,
+                                  write_progress=setup$write_progress)
 } 
