@@ -1,7 +1,8 @@
 pckg_install_ICCI()
 pckg_install()
+pckg_load()
 
-IHRC::run_ana_setup_file("standard_setup_ukbb.tsv")
+IHRC::run_ana_setup_file("/scratch/project_2007428/users/detrois/scripts/onset_pred/standard_setup_prs_phers.tsv")
 
 #########################################################################################
 ######## PACKAGES #######################################################################
@@ -9,48 +10,48 @@ IHRC::run_ana_setup_file("standard_setup_ukbb.tsv")
 #' Installs the ICCI package along with its dependency comorbidity
 #'
 #' @param target_dir R directory for installing the package
-pckg_install_ICCI <- function(target_dir="/home/ivm/R/x86_64-pc-linux-gnu-library/4.2/") {
-  .libPaths(target_dir, .libPaths())
-  
-  install.packages("/finngen/green/detrois_up/pckg_share/comorbidity_1.0.7.tar.gz",
+pckg_install_ICCI <- function(target_dir="/scratch/project_2007428/users/detrois/rpckgs/") {
+  .libPaths(c("/scratch/project_2007428/users/detrois/rpckgs/", .libPaths()))  
+  libpath <- .libPaths()[1]
+  install.packages("/scratch/project_2007428/users/detrois/rpckgs/comorbidity_1.0.7.tar.gz",
                    target_dir, 
                    repos=NULL, 
                    type="source")
   library(comorbidity)
-  install.packages("/finngen/green/detrois_up/pckg_share/ICCI_2.2.2.tar.gz",
+  install.packages("/scratch/project_2007428/users/detrois/rpckgs/ICCI_2.3.0.tar.gz",
                    target_dir, 
                    repos=NULL, 
                    type="source")
   library(ICCI)
 }
 #' Installs personal packages in the sandbox
-pckg_install <- function(target_dir="/home/ivm/R/x86_64-pc-linux-gnu-library/4.2/") {
-  .libPaths(target_dir, .libPaths())
-
-  install.packages("/home/ivm/R/pckg_uploads/Istudy_3.3.0.tar.gz",
-                   target_dir, 
+pckg_install <- function() {
+  .libPaths(c("/scratch/project_2007428/users/detrois/rpckgs/", .libPaths()))  
+  libpath <- .libPaths()[1]
+  install.packages("/scratch/project_2007428/users/detrois/rpckgs/Istudy_3.3.0.tar.gz",
+                   "/scratch/project_2007428/users/detrois/rpckgs/", 
                    repos=NULL, 
                    type="source")
   library(Istudy)
   
-  install.packages("/home/ivm/R/pckg_uploads/IUtils_2.1.0.tar.gz",
-                   target_dir, 
+  install.packages("/scratch/project_2007428/users/detrois/rpckgs/IUtils_2.1.0.tar.gz",
+                   "/scratch/project_2007428/users/detrois/rpckgs/", 
                    repos=NULL, 
                    type="source")
   library(IUtils)
 
 
-  install.packages("/home/ivm/R/pckg_uploads/IHRC_4.0.0.tar.gz",
-                   target_dir, 
+  install.packages("/scratch/project_2007428/users/detrois/rpckgs/IHRC_4.0.0.tar.gz",
+                   "/scratch/project_2007428/users/detrois/rpckgs/", 
                    repos=NULL, 
                    type="source")
   library(IHRC)
 }
 
 #' Loads personal packages in the sandbox
-pckg_load <- function(target_dir="/home/ivm/R/x86_64-pc-linux-gnu-library/4.2/") {
+pckg_load <- function() {
   #rm(list = ls())
-  .libPaths(target_dir, .libPaths())
+  .libPaths(c("/scratch/project_2007428/users/detrois/rpckgs/", .libPaths()))  
   library(Istudy)
   library(IUtils)
   library(ICCI)

@@ -24,7 +24,9 @@ run_ana_setup_file <- function(setup_file_path) {
                                                                         wash_len=setup$wash_len,
                                                                         obs_len=setup$obs_len),
                                  zip_dir_path=setup$zip_dir_path,
-                                 prs_file_end=setup$prs_file_end)
+                                 prs_file_end=setup$prs_file_end,
+                                 prs_id_col_name=setup$prs_id_col_name,
+                                 prs_score_col_name=setup$prs_score_col_name)
     res <- IHRC::run_surv_studies(pheno_data=data$pheno, 
                                   endpts_indvs_mat=IUtils::get_endpts_indvs_mat(setup, data$pheno),
                                   icd_data=data$icd,

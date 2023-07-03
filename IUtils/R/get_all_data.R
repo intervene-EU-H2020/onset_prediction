@@ -58,7 +58,9 @@ get_all_data <- function(score_type,
                          phers_dir_path="",
                          phers_study_descr=NULL,
                          zip_dir_path="",
-                         prs_file_end) {
+                         prs_file_end=".sscore",
+                         prs_id_col_name="#IID",
+                         prs_score_col_name="SCORE1_AVG") {
     if(is.null(endpts)) {
         endpts <- get_endpts()
     }
@@ -91,7 +93,11 @@ get_all_data <- function(score_type,
     }
     if(any(stringr::str_detect(score_type, "PRS"))) {
         if(dir.exists(prs_dir_path)) {
-            prs_data <- read_prs_files(prs_dir_path, prs_endpts_map, prs_file_end)
+            prs_data <- read_prs_files(dir_path=prs_dir_path, 
+                                       prs_endpts_map=prs_endpts_map, 
+                                       prs_file_end=prs_file_end, 
+                                       prs_score_col_name=prs_score_col_name, 
+                                       prs_id_col_name=prs_id_col_name)
         } else {
             stop(paste0("nError. PRS selected as predictor, selected: ",
             paste0(score_type, collapse=", "),

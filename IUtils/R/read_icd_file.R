@@ -10,7 +10,7 @@
 #' @export 
 #' 
 #' @return A tibble with at least columns `ID`, `EVENT_AGE`, `ICD_VERSION`, and 
-#' `PRIMARY_ICD`. Additionally, can have column `secondary_ICD` if available in 
+#' `PRIMARY_ICD`. Additionally, can have column `SECONDARY_ICD` if available in 
 #' the data.
 #' 
 #' @export 
