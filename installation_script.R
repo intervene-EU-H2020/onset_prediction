@@ -28,20 +28,20 @@ pckg_install_ICCI <- function(target_dir="/scratch/project_2007428/users/detrois
 pckg_install <- function() {
   .libPaths(c("/scratch/project_2007428/users/detrois/rpckgs/", .libPaths()))  
   libpath <- .libPaths()[1]
-  install.packages("/scratch/project_2007428/users/detrois/rpckgs/Istudy_3.3.0.tar.gz",
+  install.packages("/scratch/project_2007428/users/detrois/rpckgs/Istudy_3.4.0.tar.gz",
                    "/scratch/project_2007428/users/detrois/rpckgs/", 
                    repos=NULL, 
                    type="source")
   library(Istudy)
   
-  install.packages("/scratch/project_2007428/users/detrois/rpckgs/IUtils_2.1.0.tar.gz",
+  install.packages("/scratch/project_2007428/users/detrois/rpckgs/IUtils_2.3.0.tar.gz",
                    "/scratch/project_2007428/users/detrois/rpckgs/", 
                    repos=NULL, 
                    type="source")
   library(IUtils)
 
 
-  install.packages("/scratch/project_2007428/users/detrois/rpckgs/IHRC_4.0.0.tar.gz",
+  install.packages("/scratch/project_2007428/users/detrois/rpckgs/IHRC_4.2.0.tar.gz",
                    "/scratch/project_2007428/users/detrois/rpckgs/", 
                    repos=NULL, 
                    type="source")
