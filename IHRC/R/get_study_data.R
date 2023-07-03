@@ -73,8 +73,6 @@ get_pheno_score_data  <- function(score_type,
             train_status <- dplyr::select(endpts_indvs_mat, ID, endpt)
             colnames(train_status) <- c("ID", "TRAIN_STATUS")
             train_status <- dplyr::mutate(train_status, TRAIN_STATUS=!TRAIN_STATUS)
-            print(train_status)
-            print(study_data)
             study_data <- dplyr::left_join(study_data, train_status, by="ID")
             study_data$TRAIN_STATUS[is.na(study_data$TRAIN_STATUS)] <- 0
         } else {
@@ -131,6 +129,9 @@ get_relevant_pheno_data_cols <- function(pheno_data,
     if(("EDU" %in% colnames(pheno_data))) {
         select_cols <- c(select_cols, "EDU")
     }
+    if(("BMI" %in% colnames(pheno_data))) {
+        select_cols <- c(select_cols, "BMI")
+    }
     if(("EDU_cont" %in% colnames(pheno_data))) {
         select_cols <- c(select_cols, "EDU_cont")
     }
@@ -138,6 +139,5 @@ get_relevant_pheno_data_cols <- function(pheno_data,
         select_cols <- c(select_cols, "Prob")
     }
     pheno_data <- dplyr::select(pheno_data, all_of(select_cols), dplyr::starts_with("PC"))
-
     return(pheno_data)
 }

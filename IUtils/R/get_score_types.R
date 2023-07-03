@@ -37,7 +37,6 @@ get_score_types <- function(score_type,
 #' @export 
 #' 
 #' @examples score_types <- get_all_possible_score_type_combs(c("PRS", "CCI", "PheRS"))
-#'           print(score_types)
 get_all_possible_score_type_combs <- function(score_type) {
     score_type_combs <- list()    
     score_type_combs[[1]] <- score_type
@@ -48,7 +47,6 @@ get_all_possible_score_type_combs <- function(score_type) {
         score_type_combs[n] <- score_type[n-2]
         n = n + 1
     }
-
     if(length(score_type) > 2) {
         m = 1
         while(m <= length(score_type)) {

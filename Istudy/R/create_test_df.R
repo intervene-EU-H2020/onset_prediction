@@ -44,6 +44,7 @@ create_test_df <- function(n_indv=10) {
         PC1=0.2,
         PC2=0.01,
         EDU=create_EDU_data(n_indv),
+        BMI=1,
         COHORT="TODO",
         CHIP="TODO",
         R3=0

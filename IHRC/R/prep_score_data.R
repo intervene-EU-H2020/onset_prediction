@@ -43,7 +43,7 @@ preprocess_score_data <- function(score_type,
     score_data <- add_phers_endpt_data(score_data=score_data,
                                        score_type=score_type,
                                        phers_data=phers_data,
-                                       endpt=endpt)
+                                      endpt=endpt)
     if(write_progress) writeLines("Have PheRS data")
     score_data <- add_med_endpt_data(score_data=score_data,
                                      score_type=score_type,
@@ -57,12 +57,12 @@ preprocess_score_data <- function(score_type,
     score_data <- add_prob_data(score_data=score_data,
                                     score_type=score_type,
                                     pheno_data=pheno_data)
-    if(!all(score_type[!(score_type %in% c("EDU", "ZIP"))] %in% colnames(score_data))) {
-        missing_score <- score_type[!(score_type %in% c("EDU", "ZIP")) & !(score_type %in% colnames(score_data))]
+
+    if(!all(score_type[!(score_type %in% c("BMI", "EDU", "ZIP"))] %in% colnames(score_data))) {
+        missing_score <- score_type[!(score_type %in% c("EDU", "ZIP", "BMI")) & !(score_type %in% colnames(score_data))]
         write_to_error_file(error_file, paste0("Something went wrong when getting the score data for endpoint ", endpt, ". Missing ", paste0(missing_score, collapse=", "), " data.\n"))
         score_data <- NULL
     }
-
     return(score_data)
 }
 

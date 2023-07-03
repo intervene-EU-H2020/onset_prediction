@@ -385,8 +385,7 @@ read_pheno_score_file <- function(study_setup,
                                          surv_ana=surv_ana)
     pheno_score_data <- readr::read_delim(file_path, delim="\t", show_col_types=FALSE)
     pheno_score_data <- dplyr::filter(pheno_score_data, TRAIN_STATUS==0)
-    print(pheno_score_data)
     writeLines("non-na column counts")
     print(colSums(!is.na(pheno_score_data)))
-    return(pheno_score_data)t
+    return(pheno_score_data)
 }

@@ -68,7 +68,6 @@ format_preds_for_plots <- function(coxph_hrs,
     coxph_hrs$HR[coxph_hrs$VAR == "Age"] <- (1-coxph_hrs$HR[coxph_hrs$VAR == "Age"])+1
     coxph_hrs$CI_NEG[coxph_hrs$VAR == "Age"] <- (1-coxph_hrs$CI_NEG[coxph_hrs$VAR == "Age"])+1
     coxph_hrs$CI_NEG[coxph_hrs$VAR == "Age"] <- (1-coxph_hrs$CI_NEG[coxph_hrs$VAR == "Age"])+1
-    print(coxph_hrs)
 
     coxph_hrs$VAR <- factor(coxph_hrs$VAR, levels=preds)
 
