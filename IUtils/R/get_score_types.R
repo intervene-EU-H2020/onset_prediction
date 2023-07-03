@@ -15,13 +15,18 @@
 #' 
 #' @export 
 get_score_types <- function(score_type,
-                            create_score_combos=FALSE) {
-    if(create_score_combos) {
+                            create_score_combos=FALSE,
+                            bunch_phenos=FALSE) {
+    if(create_score_combos & !bunch_phenos) {
         score_types <- get_all_possible_score_type_combs(score_type)
-    } else {
+    } else{
         score_types <- list()
-        score_types[[1]] <- score_type
-        score_types[[2]] <- ""
+        score_types[[1]] <- score_type # Full model
+        score_types[[2]] <- "" # Baseline model
+    }
+    if(bunch_phenos) {
+        score_types[[3]] <- score_type[score_type != "PRS"] # Full pheno model
+        score_types[[4]] <- "PRS" # PRS model
     }
     return(score_types)
 }

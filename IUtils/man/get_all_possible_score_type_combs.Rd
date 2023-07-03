@@ -17,7 +17,6 @@ Creates a list of all possible combinations of the selected scores
 }
 \examples{
 score_types <- get_all_possible_score_type_combs(c("PRS", "CCI", "PheRS"))
-          print(score_types)
 }
 \author{
 Kira E. Detrois

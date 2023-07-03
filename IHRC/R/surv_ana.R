@@ -30,6 +30,7 @@ surv_ana <- methods::setClass("surv_ana",
                            score_types="character",
                            covs="character",
                            create_score_combos="logical",
+                           bunch_phenos="logical",
                            score_combos="list",
                            preds="character",
                            write_res="logical",
@@ -51,14 +52,9 @@ surv_ana <- methods::setClass("surv_ana",
 setMethod("initialize", "surv_ana", function(.Object, ...) {
     .Object <- callNextMethod()
     .Object@error_file <- create_log_file(.Object)
-    if(.Object@create_score_combos) {
-        .Object@score_combos <- IUtils::get_score_types(.Object@score_types, 
-                                                        .Object@create_score_combos)
-    } else {
-        .Object@score_combos <- list()
-        .Object@score_combos[[1]] <- .Object@score_types
-        .Object@score_combos[[2]] <- ""
-    }
+    .Object@score_combos <- IUtils::get_score_types(.Object@score_types, 
+                                                    .Object@create_score_combos,
+                                                    .Object@bunch_phenos)
     .Object@preds <- get_all_preds_sorted(.Object@score_types, .Object@covs)
     return(.Object)
 })

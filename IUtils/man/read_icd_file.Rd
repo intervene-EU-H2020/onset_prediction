@@ -11,7 +11,7 @@ read_icd_file(file_path)
 }
 \value{
 A tibble with at least columns \code{ID}, \code{EVENT_AGE}, \code{ICD_VERSION}, and
-\code{PRIMARY_ICD}. Additionally, can have column \code{secondary_ICD} if available in
+\code{PRIMARY_ICD}. Additionally, can have column \code{SECONDARY_ICD} if available in
 the data.
 }
 \description{

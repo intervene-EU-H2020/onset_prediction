@@ -4,7 +4,14 @@
 \alias{add_prs_col}
 \title{Reads in PRS file and adds it as a column to the data.frame}
 \usage{
-add_prs_col(file_path, disease, col_map, prs_data)
+add_prs_col(
+  file_path,
+  disease,
+  col_map,
+  prs_data,
+  prs_score_col_name,
+  prs_id_col_name
+)
 }
 \arguments{
 \item{file_path}{A string (string). The path to the PRS file.}

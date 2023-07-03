@@ -4,7 +4,7 @@
 \alias{get_score_types}
 \title{Get list of score types for the analysis}
 \usage{
-get_score_types(score_type, create_score_combos = FALSE)
+get_score_types(score_type, create_score_combos = FALSE, bunch_phenos = FALSE)
 }
 \arguments{
 \item{score_type}{A string (vector). The score types to be used for the analysis.}

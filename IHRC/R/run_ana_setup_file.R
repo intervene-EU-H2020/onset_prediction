@@ -36,6 +36,7 @@ run_ana_setup_file <- function(setup_file_path) {
                                   zip_data=data$zip,
                                   score_type=setup$score_type,
                                   create_score_combos=setup$create_score_combos,
+                                  bunch_phenos=setup$bunch_phenos,
                                   study_type=setup$study_type,
                                   endpts=setup$endpts,
                                   exp_len=setup$exp_len,

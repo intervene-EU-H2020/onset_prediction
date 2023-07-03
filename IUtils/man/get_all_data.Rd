@@ -15,7 +15,9 @@ get_all_data(
   phers_dir_path = "",
   phers_study_descr = NULL,
   zip_dir_path = "",
-  prs_file_end
+  prs_file_end = "",
+  prs_id_col_name = "",
+  prs_score_col_name = ""
 )
 }
 \arguments{
