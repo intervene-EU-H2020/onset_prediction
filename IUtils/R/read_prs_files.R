@@ -73,8 +73,7 @@ add_prs_col <- function(file_path,
     tryCatch({
         crnt_prs <- readr::read_delim(file_path, 
                                       delim="\t", 
-                                      show_col_types=FALSE,
-                                      col_types=list(IID="c"))
+                                      show_col_types=FALSE)
         endpt <- col_map[col_map$prs == disease,]$endpt
         colnames(crnt_prs)[colnames(crnt_prs) == prs_id_col_name] <- "ID"
         colnames(crnt_prs)[colnames(crnt_prs) == prs_score_col_name] <- paste0(endpt, "_PRS")
@@ -84,6 +83,8 @@ add_prs_col <- function(file_path,
     }, error=function(e) {writeLines(paste0("Could not read PRS file ", file_path, "\nerror: ", e$message))})
     if(nrow(prs_data) == 0) {
         warning(writeLines(paste0("PRS data read from ", file_path, " is empty. Either the file is empty or the column names are wrong. Please change paramters `prs_score_col_name`and `prs_id_col_name` accordingly in the setup file.")))
+        writeLines(paste0("Have columns: ", paste0(colnames(crnt_prs), collapse=", ")))
+        writeLines(paste0("Expected columns: ", paste0(prs_id_col_name, ", ", prs_score_col_name)))
     }
     return(prs_data)
 }
