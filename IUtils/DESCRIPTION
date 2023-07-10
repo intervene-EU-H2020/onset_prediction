@@ -1,6 +1,6 @@
 Package: IUtils
 Title: Helper functions for working with INTERVENE Longitudinal Files
-Version: 2.3.0
+Version: 2.3.1
 Authors@R: 
     person("Kira", "Detrois", , "kira.detrois@helsinki.fi", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-7193-624X"))
