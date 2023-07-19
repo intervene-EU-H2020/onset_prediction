@@ -26,7 +26,8 @@ get_score_types <- function(score_type,
     }
     if(bunch_phenos) {
         score_types[[3]] <- score_type[score_type != "PRS"] # Full pheno model
-        score_types[[4]] <- "PRS" # PRS model
+        score_types[[4]] <- score_type[!(score_type %in% c("PRS", "PheRS"))] # Full pheno model
+        score_types[[5]] <- "PRS" # PRS model
     }
     return(score_types)
 }

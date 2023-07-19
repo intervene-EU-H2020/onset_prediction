@@ -63,6 +63,9 @@ get_setup <- function(setup_file_path) {
     if(is.null(setup$write_progress)) {
         setup$write_progress <- FALSE
     }
+    if(is.null(setup$bunch_phenos)) {
+        setup$bunch_phenos <- FALSE
+    }
     setup$obs_end_date <- obs_end_date
     return(setup)
 }
