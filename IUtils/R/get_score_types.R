@@ -25,9 +25,18 @@ get_score_types <- function(score_type,
         score_types[[2]] <- "" # Baseline model
     }
     if(bunch_phenos) {
-        score_types[[3]] <- score_type[score_type != "PRS"] # Full pheno model
-        score_types[[4]] <- score_type[!(score_type %in% c("PRS", "PheRS"))] # Full pheno model
-        score_types[[5]] <- "PRS" # PRS model
+        crnt_idx <- 3
+        # Check if full pheno model not already in list
+        full_pheno <- score_type[score_type != "PRS"]
+        if(!all(full_pheno == score_types[[1]])) {
+            score_types[[crnt_idx]] <- full_pheno
+            crnt_idx <- crnt_idx + 1
+        } 
+        score_types[[crnt_idx]] <- score_type[!(score_type %in% c("PRS", "PheRS"))] # Full pheno model
+        crnt_idx <- crnt_idx + 1
+        if("PRS" %in% score_type) {
+            score_types[[crnt_idx]] <- "PRS" # PRS model
+        }
     }
     return(score_types)
 }
