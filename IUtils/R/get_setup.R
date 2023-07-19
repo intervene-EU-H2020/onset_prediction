@@ -66,6 +66,9 @@ get_setup <- function(setup_file_path) {
     if(is.null(setup$bunch_phenos)) {
         setup$bunch_phenos <- FALSE
     }
+    if(is.null(setup$trained_external)) {
+        setup$trained_external <- FALSE
+    }
     setup$obs_end_date <- obs_end_date
     return(setup)
 }
