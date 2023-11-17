@@ -26,7 +26,7 @@ get_all_preds_sorted <- function(score_type,
             score_type <- score_type[order(score_type)]
         }
     }
-    if(!is.null(covs)) {
+    if(!is.null(covs) & !(all(covs == ""))) {
         covs <- covs[order(covs)]
         if(all(score_type != "")) {
             score_type <- c(score_type, covs)

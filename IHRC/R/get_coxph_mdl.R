@@ -154,10 +154,10 @@ scale_preds <- function(preds,
 
     for(pred in preds) {
         if(pred %in% colnames(study_data)) {
-            if(pred %in% c("PRS", "CCI", "EI", "YEAR_OF_BIRTH", "MED", "EDU_cont", "PheRS", "Prob", "BMI")) {
+            if(pred %in% c("PRS", "CCI", "EI", "YEAR_OF_BIRTH", "MED", "EDU_cont", "PheRS", "PheRS_transfer", "Prob", "BMI")) {
                 study_data[,pred] <- scale(study_data[,pred])
             } 
-            if(pred %in% c("EDU", "ZIP")) {
+            if(pred %in% c("EDU", "ZIP", "SMOKING")) {
                 study_data[,pred] <- as.factor(dplyr::pull(study_data, pred))
             }
         }

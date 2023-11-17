@@ -29,37 +29,23 @@ preprocess_score_data <- function(score_type,
                                   write_progress=FALSE) {
     
     score_data = NULL
-    score_data <- add_cci_data(score_data=score_data,
-                               score_type=score_type,
-                               pheno_data=pheno_data,
-                               icd_data=icd_data,
-                               study_setup=study_setup)
-    if(write_progress) writeLines("Have CCI data")
     score_data <- add_prs_endpt_data(score_data=score_data,
                                      score_type=score_type,
                                      prs_data=prs_data,
                                      endpt=endpt)
-    if(write_progress) writeLines("Have PRS data")
     score_data <- add_phers_endpt_data(score_data=score_data,
                                        score_type=score_type,
                                        phers_data=phers_data,
-                                      endpt=endpt)
-    if(write_progress) writeLines("Have PheRS data")
-    score_data <- add_med_endpt_data(score_data=score_data,
-                                     score_type=score_type,
-                                     pheno_data=pheno_data,
-                                     study_setup=study_setup,
-                                     atc_data=atc_data)
+                                       endpt=endpt)
     score_data <- add_edu_cont_data(score_data=score_data,
                                     score_type=score_type,
                                     pheno_data=pheno_data)
-    if(write_progress) writeLines("Have EDU data")
     score_data <- add_prob_data(score_data=score_data,
                                     score_type=score_type,
                                     pheno_data=pheno_data)
 
-    if(!all(score_type[!(score_type %in% c("BMI", "EDU", "ZIP"))] %in% colnames(score_data))) {
-        missing_score <- score_type[!(score_type %in% c("EDU", "ZIP", "BMI")) & !(score_type %in% colnames(score_data))]
+    if(!all(score_type[!(score_type %in% c("BMI", "EDU", "ZIP", "CCI", "SMOKING"))] %in% colnames(score_data))) {
+        missing_score <- score_type[!(score_type %in% c("EDU", "ZIP", "BMI", "CCI", "SMOKING")) & !(score_type %in% colnames(score_data))]
         write_to_error_file(error_file, paste0("Something went wrong when getting the score data for endpoint ", endpt, ". Missing ", paste0(missing_score, collapse=", "), " data.\n"))
         score_data <- NULL
     }
@@ -157,7 +143,7 @@ add_phers_endpt_data  <- function(score_data,
                                   score_type,
                                   phers_data,
                                   endpt) {
-    if("PheRS" %in% score_type) {
+    if(("PheRS" %in% score_type)) {
         PheRS_data <- get_phers_endpt_data(score_data=phers_data,
                                            endpt=endpt)
         if(!is.null(score_data) & !is.null(PheRS_data)) {
@@ -171,6 +157,24 @@ add_phers_endpt_data  <- function(score_data,
             score_data <- new_score_data
         } 
     }
+
+    # Repeat for transfer
+    if(("PheRS_transfer" %in% score_type)) {
+        PheRS_data <- get_phers_endpt_data(score_data=phers_data,
+                                           endpt=endpt,
+                                           transfer=TRUE)
+        if(!is.null(score_data) & !is.null(PheRS_data)) {
+            new_score_data <- dplyr::full_join(PheRS_data, 
+                                               score_data, 
+                                               by="ID")
+        } else {
+            new_score_data <- PheRS_data
+        }
+        if(!is.null(new_score_data)) {
+            score_data <- new_score_data
+        } 
+    }
+    print(score_data)
     return(score_data)
 }
 

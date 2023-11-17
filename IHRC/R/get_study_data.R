@@ -41,8 +41,9 @@ get_pheno_score_data  <- function(score_type,
                                   write_progress=FALSE) {
                                   # Get data of individuals who can be used for the current endpoint
     pheno_data <- get_relevant_pheno_data_cols(pheno_data, endpt)
+    print(colnames(pheno_data))
     # Need to preprocess score data for these score types
-    if(any(stringr::str_detect(score_type, "(CCI)|(PRS)|(EI)|(PheRS)|(MED)|(EDU_cont)|(Prob)"))) {
+    if(any(stringr::str_detect(score_type, "(PRS)|(EI)|(PheRS)|(PheRS_transfer)|(MED)|(EDU_cont)|(Prob)"))) {
         score_data <- preprocess_score_data(score_type=score_type, 
                                             pheno_data=pheno_data,
                                             icd_data=icd_data, 
@@ -120,6 +121,9 @@ get_relevant_pheno_data_cols <- function(pheno_data,
     if(("BATCH" %in% colnames(pheno_data))) {
         select_cols <- c(select_cols, "BATCH")
     }
+    if(("CCI" %in% colnames(pheno_data))) {
+        select_cols <- c(select_cols, "CCI")
+    }
     if(("CHIP" %in% colnames(pheno_data))) {
         select_cols <- c(select_cols, "CHIP")
     }
@@ -131,6 +135,9 @@ get_relevant_pheno_data_cols <- function(pheno_data,
     }
     if(("BMI" %in% colnames(pheno_data))) {
         select_cols <- c(select_cols, "BMI")
+    }
+    if(("SMOKING" %in% colnames(pheno_data))) {
+        select_cols <- c(select_cols, "SMOKING")
     }
     if(("EDU_cont" %in% colnames(pheno_data))) {
         select_cols <- c(select_cols, "EDU_cont")

@@ -52,122 +52,31 @@ get_prs_endpt_data <- function(score_data,
 #' 
 #' @export 
 get_phers_endpt_data <- function(score_data,
-                                 endpt) {
-    
-    phers_col_name <- paste0(endpt, "_PheRS")
-    if(phers_col_name %in% colnames(score_data)) {
-        score_data <- dplyr::select(.data=score_data, 
-                                    ID, 
-                                    {{ phers_col_name }}) %>% 
-                        dplyr::rename("PheRS" = {{ phers_col_name }})
+                                 endpt,
+                                 transfer=FALSE) {
+    if(!transfer) {
+        phers_col_name <- paste0(endpt, "_PheRS")
+        if(phers_col_name %in% colnames(score_data)) {
+            score_data <- dplyr::select(.data=score_data, 
+                                        ID, 
+                                        {{ phers_col_name }}) %>% 
+                            dplyr::rename("PheRS" = {{ phers_col_name }})
+        } else {
+            score_data <- NULL
+        }
     } else {
-        score_data <- NULL
+        phers_col_name <- paste0(endpt, "_PheRS_transfer")
+        if(phers_col_name %in% colnames(score_data)) {
+            score_data <- dplyr::select(.data=score_data, 
+                                        ID, 
+                                        {{ phers_col_name }}) %>% 
+                            dplyr::rename("PheRS_transfer" = {{ phers_col_name }})
+        } else {
+            score_data <- NULL
+        }
     }
+
     return(score_data)
-}
-
-#' Gets the CCI score on the exposure window from ICD data
-#' 
-#' @param pheno_data A data.frame. The phenotype data. Needs at least columns `ID` 
-#'                   and `DATE_OF_BIRTH`.
-#' @param icd_data A data.frame. The ICD diagnoses codes. Needs at least columns 
-#'                 `ID`, `EVENT_AGE`, and `PRIMARY_ICD`.
-#' @param score_type A string. Can be either `charlson` or `elixhauser`.
-#' @param study_setup An S4 `study_setup` object. The current study setup. 
-#'                      See class definition [Istudy::study_setup].
-#'  
-#' @return A tibble with columns `ID` and `CCI`, or `EI` depending on the 
-#'         `score_type` used. Contains the charlson weighted comorbidity 
-#'          scores for each individual.
-#' 
-#' @author Kira E. Detrois
-#' 
-#' @export 
-get_study_cci_data <- function(pheno_data,
-                               icd_data,
-                               score_type,
-                               study_setup) {
-    # Adds info to be able to calculate exposure start and end age
-    pheno_data <- Istudy::set_study_dates(pheno_data, study_setup)
-    cci_data <- ICCI::calc_cci(icd_data,
-                               exp_start=calc_exp_start_age(pheno_data),
-                               exp_end=calc_exp_end_age(pheno_data),
-                               score_type=ifelse(score_type == "CCI", "charlson", "elixhauser"))  
-    return(cci_data)
-}
-
-#' Gets the CCI score on the exposure window from ICD data
-#' 
-#' @param pheno_data A data.frame. The phenotype data. Needs at least columns `ID` 
-#'                   and `DATE_OF_BIRTH`.
-#' @param atc_data A data.frame. The ATC codes. Needs at least columns 
-#'                 `ID`, `ATC`, and `WEIGHT`.
-#' @param study_setup An S4 `study_setup` object. The current study setup. 
-#'                      See class definition [Istudy::study_setup].
-#'  
-#' @return A tibble with columns `ID` and `MED`. Contains the weighted medication
-#'          scores for each individual.
-#' 
-#' @author Kira E. Detrois
-#' 
-#' @export 
-get_study_med_data <- function(pheno_data,
-                               study_setup,
-                               atc_data) {
-    # Adds info to be able to calculate exposure start and end age
-    pheno_data <- Istudy::set_study_dates(pheno_data, study_setup)
-    med_data <- ICCI::calc_med(atc_data,
-                               exp_start=calc_exp_start_age(pheno_data),
-                               exp_end=calc_exp_end_age(pheno_data)) 
-    return(med_data)
-}
-
-#' Calcualtes the age of individuals at exposure start
-#' 
-#' Calculates the length of the exposure period in (exact) years
-#' from birth until the start date of the exposure period.
-#'
-#' @param elig_indv A data.frame of individuals with columns 
-#'                   `ID`, `DATE_OF_BIRTH`, and `EXP_START_DATE`.
-#' 
-#' @return tibble with columns `ID` and `EXP_START`,
-#'           which is the ID of the individual and the corresponding 
-#'           calculated exposure start date.
-#' 
-#' @import dplyr
-#' @importFrom lubridate %--%
-#' 
-#' @author Kira E. Detrois
-#' 
-#' @export
-calc_exp_start_age <- function(elig_indv) {
-    elig_indv <- dplyr::mutate(elig_indv, 
-                               EXP_START = lubridate::time_length(DATE_OF_BIRTH %--% EXP_START_DATE, "years"))
-    return(dplyr::select(elig_indv, ID, EXP_START))
-}
-
-#' Calcualtes the age of individuals at exposure end
-#' 
-#' Calculates the length of the exposure period in years
-#' from birth until the end date of the exposure period.
-#'
-#' @param elig_indv A data.frame of individuals with columns 
-#'                   `ID`, `DATE_OF_BIRTH`, and `EXP_END_DATE`.
-#' 
-#' @return tibble with columns `ID` and `EXP_END`,
-#'           which is the ID of the individual and the corresponding 
-#'           calculated exposure end date.
-#' 
-#' @export
-#' 
-#' @import dplyr
-#' @importFrom lubridate %--%
-#' 
-#' @author Kira E. Detrois
-calc_exp_end_age <- function(elig_indv) {
-    elig_indv <- dplyr::mutate(elig_indv, 
-                               EXP_END = lubridate::time_length(DATE_OF_BIRTH %--% EXP_END_DATE, "years"))
-    return(dplyr::select(elig_indv, ID, EXP_END))
 }
 
 #' Gets the current endpoint ZIP probability columns

@@ -4,11 +4,11 @@
 \alias{run_models}
 \title{Runs the Cox-PH on the data}
 \usage{
-run_models(study_setup, endpts, surv_ana)
+run_models(study_setup, endpts, surv_ana, is_first_endpt)
 }
 \arguments{
 \item{study_setup}{An S4 \code{study_setup} object. The current study setup.
-See class definition \link[Istudy:study_setup-class]{Istudy::study_setup}.}
+See class definition \link[Istudy:study_setup]{Istudy::study_setup}.}
 
 \item{endpts}{A string (vector). The endpoints of interest.}
 

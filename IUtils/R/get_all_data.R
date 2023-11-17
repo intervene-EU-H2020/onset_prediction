@@ -56,6 +56,7 @@ get_all_data <- function(score_type,
                          prs_dir_path="",
                          prs_endpts_map=NULL,
                          phers_dir_path="",
+                         phers_transfer_dir_path="",
                          phers_study_descr=NULL,
                          zip_dir_path="",
                          prs_file_end="",
@@ -109,11 +110,24 @@ get_all_data <- function(score_type,
             if(is.null(phers_study_descr)) {
                 phers_study_descr <- get_phers_file_descr()
             }
-            phers_data <- read_phers_files(phers_dir_path, phers_study_descr, endpts)
+            phers_data <- read_phers_files(phers_dir_path, phers_study_descr, endpts, tuomo=TRUE)
         } else {
             stop(paste0("Error. PheRS selected as predictor, selected: ",
             paste0(score_type, collapse=", "),
             "\nHowever, the phers_dir_path is not provided or incorrect.\n", phers_dir_path))
+        }
+    }
+    if(any(stringr::str_detect(score_type, "PheRS_transfer"))) {
+        if(dir.exists(phers_dir_path)) {
+            if(is.null(phers_study_descr)) {
+                phers_study_descr <- get_phers_file_descr()
+            }
+            phers_transfer_data <- read_phers_files(phers_transfer_dir_path, phers_study_descr, endpts, tuomo=FALSE)
+            phers_data <- dplyr::full_join(phers_data, phers_transfer_data, by=c("ID"))
+        } else {
+            stop(paste0("Error. PheRS transfer selected as predictor, selected: ",
+            paste0(score_type, collapse=", "),
+            "\nHowever, the phers_transfer_dir_path is not provided or incorrect.\n", phers_dir_path))
         }
     }
     if(any(stringr::str_detect(score_type, "ZIP_prob"))) {

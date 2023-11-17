@@ -8,7 +8,7 @@ log_msg_string(study)
 }
 \arguments{
 \item{study}{An S4 \code{study} object. The current study.
-See class definition \link[Istudy:study-class]{Istudy::study}.}
+See class definition \link[Istudy:study]{Istudy::study}.}
 }
 \value{
 The log message character string

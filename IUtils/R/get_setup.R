@@ -27,6 +27,9 @@ get_setup <- function(setup_file_path) {
     if(is.null(setup$endpts)) {
         setup$endpts <- IUtils::get_endpts()
     } 
+    if(is.null(setup$covs)) {
+        setup$covs <- ""
+    } 
     if(is.null(setup$create_score_combos)) {
         setup$create_score_combos <- FALSE
     }
@@ -47,6 +50,9 @@ get_setup <- function(setup_file_path) {
     }
     if(is.null(setup$ancs)) {
         setup$ancs <- NA_character_
+    }
+    if(is.null(setup$is_first_endpt)) {
+        setup$is_first_endpt <- TRUE
     }
     if(is.null(setup$score_type)) {
         setup$score_type <- c("")
