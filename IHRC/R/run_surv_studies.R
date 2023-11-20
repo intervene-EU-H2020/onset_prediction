@@ -150,13 +150,6 @@ run_surv_studies <- function(pheno_data,
                              prs_data = prs_data,
                              phers_data = phers_data,
                              zip_data = zip_data)
-    rm(pheno_data)
-    rm(icd_data)
-    rm(atc_data)
-    rm(prs_data)
-    rm(phers_data)
-    rm(zip_data)
-    gc(verbose=TRUE)
     run_models(study_setup=study_setup,
                endpts=endpts,
                surv_ana=surv_ana,
@@ -195,6 +188,12 @@ create_pheno_score_files <- function(study_setup,
                                     phers_data,
                                     zip_data) {
     writeLines("Creating pheno score files")
+    cci_data <- get_study_cci_data(pheno_data,
+                                   icd_data,
+                                   score_type="CCI",
+                                   study_setup) 
+    pheno_data <- dplyr::full_join(pheno_data, cci_data, by="ID")
+
     for(endpt in endpts) {
         writeLines(paste0("Endpoint: ", endpt))
         # Getting all data for current endpoint
@@ -221,6 +220,7 @@ create_pheno_score_files <- function(study_setup,
     }
     return(pheno_score_data)
 }
+
 
 #' Runs the Cox-PH on the data
 #' 
@@ -283,7 +283,6 @@ run_models <- function(study_setup,
                                                          by="ID")
                     rm(study)
                     rm(indv_model_probs)
-                    gc(verbose=TRUE)
                 }
             } else {
                 write_to_error_file(surv_ana@error_file, paste0("Not enough data for endpoint ", endpt))
@@ -304,7 +303,6 @@ run_models <- function(study_setup,
         rm(pheno_score_data)
         rm(hr_res)
         rm(cidx_res)
-        gc(verbose=TRUE)
     }
 }
 
