@@ -21,7 +21,7 @@ save_results(
 \item{cidx_res}{A tibble containing the c-index for each exposure age.}
 
 \item{study_setup}{An S4 \code{study_setup} object. The current study setup.
-See class definition \link[Istudy:study_setup-class]{Istudy::study_setup}.}
+See class definition \link[Istudy:study_setup]{Istudy::study_setup}.}
 
 \item{surv_ana}{An S4 \code{surv_ana} object. The current survival analysis setup.
 See class definition \link{surv_ana}.}

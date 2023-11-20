@@ -54,8 +54,10 @@ setMethod("initialize", "surv_ana", function(.Object, ...) {
     .Object@error_file <- create_log_file(.Object)
     .Object@score_combos <- IUtils::get_score_types(.Object@score_types, 
                                                     .Object@create_score_combos,
-                                                    .Object@bunch_phenos)
+                                                    .Object@bunch_phenos,
+                                                    no_covs=ifelse(all(.Object@covs == ""), TRUE, FALSE))
     .Object@preds <- get_all_preds_sorted(.Object@score_types, .Object@covs)
+
     return(.Object)
 })
 

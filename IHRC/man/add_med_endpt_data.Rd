@@ -27,7 +27,7 @@ Should at least contain the columns as described  in
 \link{get_relevant_pheno_data_cols}.}
 
 \item{study_setup}{An S4 \code{study_setup} object. The current study setup.
-See class definition \link[Istudy:study_setup-class]{Istudy::study_setup}.}
+See class definition \link[Istudy:study_setup]{Istudy::study_setup}.}
 
 \item{atc_data}{A data.frame. The ATC codes of the individuals. Needs at least the
 columns as described in \link{get_study_med_data}.}

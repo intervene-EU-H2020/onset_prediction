@@ -11,7 +11,7 @@ get_min_indvs_data(coxph_mdl, study)
 \item{coxph_mdl}{A \code{coxph} object. See function \link[survival:coxph]{survival::coxph}.}
 
 \item{study}{An S4 \code{study} object. The current study.
-See class definition \link[Istudy:study-class]{Istudy::study}.}
+See class definition \link[Istudy:study]{Istudy::study}.}
 }
 \value{
 A list. The filtered results.

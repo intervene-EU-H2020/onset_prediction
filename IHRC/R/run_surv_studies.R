@@ -111,7 +111,8 @@ run_surv_studies <- function(pheno_data,
                              res_descr=NULL,
                              write_res=FALSE,
                              res_dir=NULL,
-                             write_progress=FALSE) {
+                             write_progress=FALSE,
+                             is_first_endpt=TRUE) {
     res_dir <- get_full_res_path(write_res=write_res,  
                                  res_dir=res_dir,
                                  down_fctr=down_fctr, 
@@ -151,7 +152,8 @@ run_surv_studies <- function(pheno_data,
                              zip_data = zip_data)
     run_models(study_setup=study_setup,
                endpts=endpts,
-               surv_ana=surv_ana)
+               surv_ana=surv_ana,
+               is_first_endpt=is_first_endpt)
 }
 
 #' Create phenotype score files
@@ -186,6 +188,12 @@ create_pheno_score_files <- function(study_setup,
                                     phers_data,
                                     zip_data) {
     writeLines("Creating pheno score files")
+    cci_data <- get_study_cci_data(pheno_data,
+                                   icd_data,
+                                   score_type="CCI",
+                                   study_setup) 
+    pheno_data <- dplyr::full_join(pheno_data, cci_data, by="ID")
+
     for(endpt in endpts) {
         writeLines(paste0("Endpoint: ", endpt))
         # Getting all data for current endpoint
@@ -204,6 +212,7 @@ create_pheno_score_files <- function(study_setup,
                                          error_file=surv_ana@error_file,
                                          write_progress=surv_ana@write_progress)
         # Writing log files
+        print(pheno_score_data)
         write_pheno_score_files(pheno_score_data=pheno_score_data,
                                 study_setup=study_setup,
                                 endpt=endpt,
@@ -211,6 +220,7 @@ create_pheno_score_files <- function(study_setup,
     }
     return(pheno_score_data)
 }
+
 
 #' Runs the Cox-PH on the data
 #' 
@@ -229,10 +239,10 @@ create_pheno_score_files <- function(study_setup,
 #' @export
 run_models <- function(study_setup,
                        endpts,
-                       surv_ana) {
+                       surv_ana,
+                       is_first_endpt) {
     writeLines(paste0("\nRunning models"))
     # Running analaysis for all score type combinations
-    is_first_endpt <- TRUE
     for(endpt in endpts) {
         writeLines(paste0("Endpoint: ", endpt))
         # Initialize empty tibbles for storing results 
@@ -271,6 +281,8 @@ run_models <- function(study_setup,
                     pheno_score_data <- dplyr::left_join(pheno_score_data, 
                                                          indv_model_probs,
                                                          by="ID")
+                    rm(study)
+                    rm(indv_model_probs)
                 }
             } else {
                 write_to_error_file(surv_ana@error_file, paste0("Not enough data for endpoint ", endpt))
@@ -288,6 +300,9 @@ run_models <- function(study_setup,
         #          study_setup=study_setup,
         #          surv_ana=surv_ana) 
         is_first_endpt <- FALSE
+        rm(pheno_score_data)
+        rm(hr_res)
+        rm(cidx_res)
     }
 }
 
@@ -331,52 +346,23 @@ save_results <- function(hr_res,
             hr_res <- dplyr::filter(hr_res, N_CASES > surv_ana@min_indvs)
             if(is_first_endpt) { # Creating / overwriting files for first endpoint
                 readr::write_delim(x=hr_res, 
-                                file=file_path_coxph, 
-                                delim="\t")
+                                   file=file_path_coxph, 
+                                   delim="\t")
                 readr::write_delim(x=cidx_res,
-                                file=file_path_cidx,
-                                delim="\t")
+                                  file=file_path_cidx,
+                                  delim="\t")
             } else { # Appending files for other endpoints
                 readr::write_delim(x=hr_res, 
-                                file=file_path_coxph, 
-                                delim="\t",
-                                append=TRUE)
+                                  file=file_path_coxph, 
+                                  delim="\t",
+                                  append=TRUE)
                 readr::write_delim(x=cidx_res,
-                                file=file_path_cidx,
-                                delim="\t",
-                                append=TRUE)
+                                  file=file_path_cidx,
+                                  delim="\t",
+                                  append=TRUE)
             }
         }
     }}
-
-#' Creates a study object 
-#' 
-#' Reads in previously created phenotype-score files. If the file doesn't exist
-#' for the endpoint creates an empty tibble. Then creates a `study` object for 
-#' each selected endpoint and given `study_setup`.
-#' 
-#' @param surv_ana An S4 `surv_ana` object. The current survival analysis setup. 
-#'                      See class definition [IHRC::surv_ana].
-#' @param study_setup An S4 `study_setup` object. The current study setup. 
-#'                      See class definition [Istudy::study_setup].
-#' @param endpt A string. The current endpoint.
-#' 
-#' @return An S4 study object with the current endpoint.
-#' 
-#' @author Kira E. Detrois
-#' 
-#' @export 
-create_crnt_study_from_file <- function(surv_ana,
-                                        study_setup,
-                                        endp, pheno_score_d) {
-
-    study <- methods::new("study",
-                          study_setup=study_setup,
-                          study_data=pheno_score_data,
-                          endpt=endpt)
-    return(study)
-}
-
 
 read_pheno_score_file <- function(study_setup,
                                   endpt,

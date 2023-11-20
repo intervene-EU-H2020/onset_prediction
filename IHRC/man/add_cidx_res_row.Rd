@@ -15,7 +15,7 @@ add_cidx_res_row(c_idxs_res, c_idx_res, surv_ana, study)
 See class definition \link{surv_ana}.}
 
 \item{study}{An S4 \code{study} object. The current study.
-See class definition \link[Istudy:study-class]{Istudy::study}.}
+See class definition \link[Istudy:study]{Istudy::study}.}
 }
 \value{
 A tibble. The updated \code{c_idxs_res} with the added results for

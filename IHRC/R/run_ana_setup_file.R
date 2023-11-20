@@ -18,6 +18,7 @@ run_ana_setup_file <- function(setup_file_path) {
         atc_file_path = setup$atc_file_path,
         prs_dir_path = setup$prs_dir_path,
         phers_dir_path = setup$phers_dir_path,
+        phers_transfer_dir_path = setup$phers_transfer_dir_path,
         phers_study_descr = IUtils::get_phers_file_descr(
             study_type = setup$study_type,
             obs_end_date = setup$obs_end_date,
@@ -30,7 +31,7 @@ run_ana_setup_file <- function(setup_file_path) {
         prs_id_col_name = setup$prs_id_col_name,
         prs_score_col_name = setup$prs_score_col_name
     )
-    res <- IHRC::run_surv_studies(
+    IHRC::run_surv_studies(
         pheno_data = data$pheno,
         endpts_indvs_mat = IUtils::get_endpts_indvs_mat(setup, data$pheno),
         icd_data = data$icd,
@@ -56,6 +57,7 @@ run_ana_setup_file <- function(setup_file_path) {
         write_res = TRUE,
         res_dir = setup$res_dir,
         res_descr = setup$res_descr,
-        write_progress = setup$write_progress
+        write_progress = setup$write_progress,
+        is_first_endpt=setup$is_first_endpt
     )
 }

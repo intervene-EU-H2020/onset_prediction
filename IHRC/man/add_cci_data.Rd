@@ -30,7 +30,7 @@ Should at least contain the columns as described  in
 columns as described in \link{get_study_cci_data}.}
 
 \item{study_setup}{An S4 \code{study_setup} object. The current study setup.
-See class definition \link[Istudy:study_setup-class]{Istudy::study_setup}.}
+See class definition \link[Istudy:study_setup]{Istudy::study_setup}.}
 }
 \value{
 A tibble. The score data with added columns \code{CCI}, or \code{EI} depending

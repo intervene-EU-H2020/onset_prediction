@@ -16,13 +16,15 @@
 #' @export 
 get_score_types <- function(score_type,
                             create_score_combos=FALSE,
-                            bunch_phenos=FALSE) {
+                            bunch_phenos=FALSE,
+                            no_covs=FALSE) {
     if(create_score_combos & !bunch_phenos) {
-        score_types <- get_all_possible_score_type_combs(score_type)
+        score_types <- get_all_possible_score_type_combs(score_type, no_covs)
     } else{
         score_types <- list()
         score_types[[1]] <- score_type # Full model
-        score_types[[2]] <- "" # Baseline model
+        if(!no_covs)
+            score_types[[2]] <- "" # Baseline model
     }
     if(bunch_phenos) {
         crnt_idx <- 3
@@ -35,7 +37,23 @@ get_score_types <- function(score_type,
         score_types[[crnt_idx]] <- score_type[!(score_type %in% c("PRS", "PheRS"))] # Full pheno model
         crnt_idx <- crnt_idx + 1
         if("PRS" %in% score_type) {
-            score_types[[crnt_idx]] <- "PRS" # PRS model
+            if(!all("PRS" == score_types[[1]])) {
+                score_types[[crnt_idx]] <- "PRS" # PRS model
+                crnt_idx <- crnt_idx + 1
+            }
+        }
+        if("PheRS" %in% score_type) {
+            if(!all("PheRS" == score_types[[1]])) {
+                score_types[[crnt_idx]] <- "PheRS" # PheRS model
+                crnt_idx <- crnt_idx + 1
+            }
+        }
+        if("PheRS_transfer" %in% score_type) {
+            if(!all("PheRS_transfer" == score_types[[1]])) {
+                score_types[[crnt_idx]] <- "PheRS_transfer" # PheRS_transfer model
+                crnt_idx <- crnt_idx + 1
+            }
+            score_types[[crnt_idx]] <- c("PheRS", "PheRS_transfer") # Both PheRS models
         }
     }
     return(score_types)
@@ -52,10 +70,12 @@ get_score_types <- function(score_type,
 #' @export 
 #' 
 #' @examples score_types <- get_all_possible_score_type_combs(c("PRS", "CCI", "PheRS"))
-get_all_possible_score_type_combs <- function(score_type) {
+get_all_possible_score_type_combs <- function(score_type,
+                                              no_covs=FALSE) {
     score_type_combs <- list()    
     score_type_combs[[1]] <- score_type
-    score_type_combs[[2]] <- ""
+    if(!no_covs)
+        score_type_combs[[2]] <- ""
     n = 3
 
     while(n <= length(score_type)+2) {

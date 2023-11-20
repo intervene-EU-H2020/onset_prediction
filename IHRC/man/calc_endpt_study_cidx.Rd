@@ -11,7 +11,7 @@ calc_endpt_study_cidx(surv_ana, study, coxph_mdl = NULL)
 See class definition \link{surv_ana}.}
 
 \item{study}{An S4 \code{study} object. The current study.
-See class definition \link[Istudy:study-class]{Istudy::study}.}
+See class definition \link[Istudy:study]{Istudy::study}.}
 
 \item{coxph_mdl}{A \code{coxph} object. See function \link[survival:coxph]{survival::coxph}. If \code{NULL}
 creates a new object from the \code{surv_ana} and \code{study} information.}

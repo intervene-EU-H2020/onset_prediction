@@ -52,17 +52,30 @@ get_prs_endpt_data <- function(score_data,
 #' 
 #' @export 
 get_phers_endpt_data <- function(score_data,
-                                 endpt) {
-    
-    phers_col_name <- paste0(endpt, "_PheRS")
-    if(phers_col_name %in% colnames(score_data)) {
-        score_data <- dplyr::select(.data=score_data, 
-                                    ID, 
-                                    {{ phers_col_name }}) %>% 
-                        dplyr::rename("PheRS" = {{ phers_col_name }})
+                                 endpt,
+                                 transfer=FALSE) {
+    if(!transfer) {
+        phers_col_name <- paste0(endpt, "_PheRS")
+        if(phers_col_name %in% colnames(score_data)) {
+            score_data <- dplyr::select(.data=score_data, 
+                                        ID, 
+                                        {{ phers_col_name }}) %>% 
+                            dplyr::rename("PheRS" = {{ phers_col_name }})
+        } else {
+            score_data <- NULL
+        }
     } else {
-        score_data <- NULL
+        phers_col_name <- paste0(endpt, "_PheRS_transfer")
+        if(phers_col_name %in% colnames(score_data)) {
+            score_data <- dplyr::select(.data=score_data, 
+                                        ID, 
+                                        {{ phers_col_name }}) %>% 
+                            dplyr::rename("PheRS_transfer" = {{ phers_col_name }})
+        } else {
+            score_data <- NULL
+        }
     }
+
     return(score_data)
 }
 
@@ -88,38 +101,13 @@ get_study_cci_data <- function(pheno_data,
                                score_type,
                                study_setup) {
     # Adds info to be able to calculate exposure start and end age
+    writeLines(paste0("Calculating CCIs"))
     pheno_data <- Istudy::set_study_dates(pheno_data, study_setup)
     cci_data <- ICCI::calc_cci(icd_data,
                                exp_start=calc_exp_start_age(pheno_data),
                                exp_end=calc_exp_end_age(pheno_data),
                                score_type=ifelse(score_type == "CCI", "charlson", "elixhauser"))  
     return(cci_data)
-}
-
-#' Gets the CCI score on the exposure window from ICD data
-#' 
-#' @param pheno_data A data.frame. The phenotype data. Needs at least columns `ID` 
-#'                   and `DATE_OF_BIRTH`.
-#' @param atc_data A data.frame. The ATC codes. Needs at least columns 
-#'                 `ID`, `ATC`, and `WEIGHT`.
-#' @param study_setup An S4 `study_setup` object. The current study setup. 
-#'                      See class definition [Istudy::study_setup].
-#'  
-#' @return A tibble with columns `ID` and `MED`. Contains the weighted medication
-#'          scores for each individual.
-#' 
-#' @author Kira E. Detrois
-#' 
-#' @export 
-get_study_med_data <- function(pheno_data,
-                               study_setup,
-                               atc_data) {
-    # Adds info to be able to calculate exposure start and end age
-    pheno_data <- Istudy::set_study_dates(pheno_data, study_setup)
-    med_data <- ICCI::calc_med(atc_data,
-                               exp_start=calc_exp_start_age(pheno_data),
-                               exp_end=calc_exp_end_age(pheno_data)) 
-    return(med_data)
 }
 
 #' Calcualtes the age of individuals at exposure start

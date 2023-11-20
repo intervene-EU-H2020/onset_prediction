@@ -15,7 +15,7 @@ with columns: \code{ENDPOINT}, \code{EXP_AGE}, \code{VAR},
 \item{coxph_mdl}{A \code{coxph} object. See function \link[survival:coxph]{survival::coxph}.}
 
 \item{study}{An S4 \code{study} object. The current study.
-See class definition \link[Istudy:study-class]{Istudy::study}.}
+See class definition \link[Istudy:study]{Istudy::study}.}
 }
 \value{
 A tibble. The updated \code{hr_res} with the added row for

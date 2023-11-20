@@ -12,7 +12,7 @@ Needs to at least contain the columns \code{ENDPOINT}, \code{HR},
 \code{CI_NEG}, \code{CI_POS}, \code{VAR}}
 
 \item{study_setup}{An S4 \code{study_setup} object. The current study setup.
-See class definition \link[Istudy:study_setup-class]{Istudy::study_setup}.}
+See class definition \link[Istudy:study_setup]{Istudy::study_setup}.}
 
 \item{preds}{A string (vector). The predictors of the analysis.}
 }

@@ -10,7 +10,7 @@ get_full_file_name_path(res_type, study_setup, endpt = NULL, surv_ana)
 \item{res_type}{A string. The results type.}
 
 \item{study_setup}{An S4 \code{study_setup} object. The current study setup.
-See class definition \link[Istudy:study_setup-class]{Istudy::study_setup}.}
+See class definition \link[Istudy:study_setup]{Istudy::study_setup}.}
 
 \item{endpt}{A string. The current endpoint.}
 
