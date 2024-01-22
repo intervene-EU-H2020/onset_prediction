@@ -17,7 +17,8 @@
 read_phers_files <- function(dir_path,
                              study_descr=NULL,
                              endpts=NULL,
-                             tuomo=TRUE) {
+                             tuomo=TRUE,
+                             tuomo_file_append="") {
     if(is.null(study_descr)) {
         study_descr <- get_phers_file_descr()
     }
@@ -34,7 +35,7 @@ read_phers_files <- function(dir_path,
         if(tuomo) {
             if(dir.exists(file_path)) {
                 # Reading
-                file_name_phers <- paste0(file_path, "pred_probas.txt.gz")
+                file_name_phers <- paste0(file_path, tuomo_file_append, "pred_probas.txt.gz")
                 phers_probs <- readr::read_delim(file_name_phers, 
                                                 delim="\t",
                                                 show_col_types=FALSE,

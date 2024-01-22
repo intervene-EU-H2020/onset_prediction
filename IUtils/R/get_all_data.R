@@ -61,7 +61,8 @@ get_all_data <- function(score_type,
                          zip_dir_path="",
                          prs_file_end="",
                          prs_id_col_name="",
-                         prs_score_col_name="") {
+                         prs_score_col_name="",
+                         tuomo_file_append="") {
     if(is.null(endpts)) {
         endpts <- get_endpts()
     }
@@ -110,7 +111,7 @@ get_all_data <- function(score_type,
             if(is.null(phers_study_descr)) {
                 phers_study_descr <- get_phers_file_descr()
             }
-            phers_data <- read_phers_files(phers_dir_path, phers_study_descr, endpts, tuomo=TRUE)
+            phers_data <- read_phers_files(phers_dir_path, phers_study_descr, endpts, tuomo=TRUE, tuomo_file_append=tuomo_file_append)
         } else {
             stop(paste0("Error. PheRS selected as predictor, selected: ",
             paste0(score_type, collapse=", "),

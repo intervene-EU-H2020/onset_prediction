@@ -75,6 +75,9 @@ get_setup <- function(setup_file_path) {
     if(is.null(setup$trained_external)) {
         setup$trained_external <- FALSE
     }
+    if(is.null(setup$tuomo_file_append)) {
+        setup$tuomo_file_append <- ""
+    }
     setup$obs_end_date <- obs_end_date
     return(setup)
 }
