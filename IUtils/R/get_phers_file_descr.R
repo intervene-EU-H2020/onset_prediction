@@ -17,6 +17,7 @@ get_phers_file_descr <- function(study_type="backward",
                                  exp_len=10,
                                  wash_len=2,
                                  obs_len=8) {
+    writeLines(paste0("get_phers_file_descr got arguments: Observation end date: ", obs_end_date, " exposure length: ", exp_len, " wash length: ", wash_len, " observation length: ", obs_len ))
     exp_start_date <- Istudy::calc_backward_exp_start_date(obs_end_date,
                                                            exp_len,
                                                            wash_len,
