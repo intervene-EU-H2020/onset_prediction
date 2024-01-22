@@ -188,11 +188,14 @@ create_pheno_score_files <- function(study_setup,
                                     phers_data,
                                     zip_data) {
     writeLines("Creating pheno score files")
-    cci_data <- get_study_cci_data(pheno_data,
-                                   icd_data,
-                                   score_type="CCI",
-                                   study_setup) 
-    pheno_data <- dplyr::full_join(pheno_data, cci_data, by="ID")
+    if(!("CCI" %in% colnames(pheno_data))) {
+        cci_data <- get_study_cci_data(pheno_data,
+                                    icd_data,
+                                    score_type="CCI",
+                                    study_setup) 
+        pheno_data <- dplyr::left_join(pheno_data, cci_data, by="ID")
+        writeLines(paste0("what: ", colnames(pheno_data), collapse=", "))
+    }
 
     for(endpt in endpts) {
         writeLines(paste0("Endpoint: ", endpt))
