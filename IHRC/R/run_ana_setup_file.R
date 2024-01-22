@@ -23,13 +23,13 @@ run_ana_setup_file <- function(setup_file_path) {
             study_type = setup$study_type,
             obs_end_date = setup$obs_end_date,
             exp_len = setup$exp_len,
-            wash_len = setup$wash_len,
-            obs_len = setup$obs_len
+            wash_len = setup$wash_len,            obs_len = setup$obs_len
         ),
         zip_dir_path = setup$zip_dir_path,
         prs_file_end = setup$prs_file_end,
         prs_id_col_name = setup$prs_id_col_name,
-        prs_score_col_name = setup$prs_score_col_name
+        prs_score_col_name = setup$prs_score_col_name,
+        tuomo_file_append = setup$tuomo_file_append
     )
     IHRC::run_surv_studies(
         pheno_data = data$pheno,
