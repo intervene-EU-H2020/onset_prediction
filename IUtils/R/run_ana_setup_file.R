@@ -22,7 +22,7 @@ get_endpts_indvs_mat <- function(setup,
                                                indvs_ids=pheno_data$ID,
                                                set_nas_true = TRUE,
                                                endpts=setup$endpts,
-                                               study_descr=IUtils::get_phers_file_descr(
+                                                       study_descr=IUtils::get_phers_file_descr(
                                                         study_type = setup$study_type,
                                                         obs_end_date = setup$obs_end_date,
                                                         exp_len = setup$exp_len,

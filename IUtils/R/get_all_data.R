@@ -62,7 +62,8 @@ get_all_data <- function(score_type,
                          prs_file_end="",
                          prs_id_col_name="",
                          prs_score_col_name="",
-                         tuomo_file_append="") {
+                         tuomo_file_append="",
+                         exp_len_transfer=NULL) {
     if(is.null(endpts)) {
         endpts <- get_endpts()
     }
@@ -123,7 +124,7 @@ get_all_data <- function(score_type,
             if(is.null(phers_study_descr)) {
                 phers_study_descr <- get_phers_file_descr()
             }
-            phers_transfer_data <- read_phers_files(phers_transfer_dir_path, phers_study_descr, endpts, tuomo=FALSE)
+            phers_transfer_data <- read_phers_files(phers_transfer_dir_path, phers_study_descr, endpts, tuomo=FALSE, exp_len_transfer=exp_len_transfer)
             phers_data <- dplyr::full_join(phers_data, phers_transfer_data, by=c("ID"))
         } else {
             stop(paste0("Error. PheRS transfer selected as predictor, selected: ",

@@ -18,7 +18,8 @@ read_phers_files <- function(dir_path,
                              study_descr=NULL,
                              endpts=NULL,
                              tuomo=TRUE,
-                             tuomo_file_append="") {
+                             tuomo_file_append="",
+                             exp_len_transfer=NULL) {
     if(is.null(study_descr)) {
         study_descr <- get_phers_file_descr()
     }
@@ -30,7 +31,11 @@ read_phers_files <- function(dir_path,
         if(tuomo) {
             file_path <- paste0(dir_path, endpt, "_", study_descr, "/")
         } else {
-            file_path <- paste0(dir_path, endpt, "_2019-01-01_o8_w2_e10_32_70_elig_indv.tsv")
+            if(is.null(exp_len_transfer)) {
+                file_path <- paste0(dir_path, endpt, "_2019-01-01_o8_w2_e10_32_70_elig_indv.tsv")
+            } else {
+                file_path <- paste0(dir_path, endpt, "_2019-01-01_o8_w2_e", exp_len_transfer, "_32_70_elig_indv.tsv")
+            }
         }
         if(tuomo) {
             if(dir.exists(file_path)) {
