@@ -5,6 +5,49 @@
 
 This project includes different R packages to help working with INTERVENE longitudinal and phenotype files with the goal of predicting the late-onset of different endpoints using Cox-proporiontal hazards models.
 
+
+To make the PheRS and PGS comparable we regressed out the effect of age, sex and the first 10 genetic PCs from all continuous scores using the residuals from a logistic regression with the score as outcome and Subsequently we scaled all predictors to have a mean of zero and standard deviation of 1. 
+
+```{r example}
+scale(residuals(glm(scale(PRS_orig)~scale(YEAR_OF_BIRTH)+SEX+scale(PC1)+scale(PC2)+scale(PC3)+scale(PC4)+scale(PC5)+scale(PC6)+scale(PC7)+scale(PC8)+scale(PC9)+scale(PC10), data=score_data)))[,1]
+```
+
+We then used these scores in separate Cox proportional-hazards models (Cox-PH), with the survival time defined as the time from 2011 until either diagnosis, censoring (end of follow-up), or the end of the prediction period. 
+
+```{r example}
+  surv_obj <- survival::Surv(time=dplyr::pull(study_data, paste0(endpt, "_AGE_FROM_BASE")), event=dplyr::pull(study_data, endpt))
+  coxph_formula <- stats::as.formula(paste0(surv_obj, " ~ ",  "[PheRS/PRS/CCI+Age+Sex etc.]"))
+
+  coxph_mdl <- survival::coxph(formula=coxph_formula, 
+                               data=study@study_data, 
+                               # Larger fit object but no need for
+                               # other functions to reconstruct
+                               # which fails in this setup
+                               model=TRUE)
+
+  # HRs
+  betas <- summary(coxph_mdl)$coefficients[,"coef"]
+  SE <- summary(coxph_mdl)$coefficients[,"se(coef)"]
+  pvals <- summary(coxph_mdl)$coefficients[,"Pr(>|z|)"]
+  OR <- exp(betas)
+  CI <- get_CI(betas, SE)
+  preds <- rownames(summary(coxph_mdl)$coefficients)
+```
+
+We used the survival package in R for creating the Cox-PH models and the Hmisc package to calculate the c-indices and 95% CIs. 
+
+```{r example}
+preds <- (-1)*predict(coxph_mdl, type="lp")
+c_idx <- Hmisc::rcorr.cens(preds, surv_obj)
+
+SE<-c_idx["S.D."]/2
+C_IDX<-c_idx["C Index"]
+C_IDX_CI_NEG <- C_IDX-1.96*SE
+C_IDX_CI_POS <- C_IDX+1.96*SE
+```
+
+For the CCI we compared the top 10% of individuals with the highest CCI to the rest. The high risk group included individuals with a CCI>=2 and a few younger ones with a CCI of 1. For the highest education level we compared the risk of individuals with basic education (ISCED-11: 1-4) to those who achieved high education levels (ISCED-11: 5-7). 
+
 ## Installation
 
 Upload to the packages 'ICCI', 'comorbidity' (https://cran.r-project.org/web/packages/comorbidity/), 'IHRC', 'Istudy', and 'IUtils' from this GitHub repository, to the goal environemnt and install as described below.
@@ -98,45 +141,3 @@ The important column names for the input data are indicated in each function doc
 ## IHRC
 
 This package builds the Cox-propotional hazards models (Cox-PH) for the different endpoints and study setups. Calcualtes the Hazard Ratios(HRs) and the c-index for the different models. 
-
-To make the PheRS and PGS comparable we regressed out the effect of age, sex and the first 10 genetic PCs from all continuous scores using the residuals from a logistic regression with the score as outcome and Subsequently we scaled all predictors to have a mean of zero and standard deviation of 1. 
-
-```{r example}
-scale(residuals(glm(scale(PRS_orig)~scale(YEAR_OF_BIRTH)+SEX+scale(PC1)+scale(PC2)+scale(PC3)+scale(PC4)+scale(PC5)+scale(PC6)+scale(PC7)+scale(PC8)+scale(PC9)+scale(PC10), data=score_data)))[,1]
-```
-
-We then used these scores in separate Cox proportional-hazards models (Cox-PH), with the survival time defined as the time from 2011 until either diagnosis, censoring (end of follow-up), or the end of the prediction period. 
-
-```{r example}
-  surv_obj <- survival::Surv(time=dplyr::pull(study_data, paste0(endpt, "_AGE_FROM_BASE")), event=dplyr::pull(study_data, endpt))
-  coxph_formula <- stats::as.formula(paste0(surv_obj, " ~ ",  "[PheRS/PRS/CCI+Age+Sex etc.]"))
-
-  coxph_mdl <- survival::coxph(formula=coxph_formula, 
-                               data=study@study_data, 
-                               # Larger fit object but no need for
-                               # other functions to reconstruct
-                               # which fails in this setup
-                               model=TRUE)
-
-  # HRs
-  betas <- summary(coxph_mdl)$coefficients[,"coef"]
-  SE <- summary(coxph_mdl)$coefficients[,"se(coef)"]
-  pvals <- summary(coxph_mdl)$coefficients[,"Pr(>|z|)"]
-  OR <- exp(betas)
-  CI <- get_CI(betas, SE)
-  preds <- rownames(summary(coxph_mdl)$coefficients)
-```
-
-We used the survival package in R for creating the Cox-PH models and the Hmisc package to calculate the c-indices and 95% CIs. 
-
-```{r example}
-preds <- (-1)*predict(coxph_mdl, type="lp")
-c_idx <- Hmisc::rcorr.cens(preds, surv_obj)
-
-SE<-c_idx["S.D."]/2
-C_IDX<-c_idx["C Index"]
-C_IDX_CI_NEG <- C_IDX-1.96*SE
-C_IDX_CI_POS <- C_IDX+1.96*SE
-```
-
-For the CCI we compared the top 10% of individuals with the highest CCI to the rest. The high risk group included individuals with a CCI>=2 and a few younger ones with a CCI of 1. For the highest education level we compared the risk of individuals with basic education (ISCED-11: 1-4) to those who achieved high education levels (ISCED-11: 5-7). 
