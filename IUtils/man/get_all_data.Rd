@@ -11,13 +11,16 @@ get_all_data(
   icd_file_path = "",
   atc_file_path = "",
   prs_dir_path = "",
-  prs_endpts_map = NULL,
+  prs_endpts_names = NULL,
   phers_dir_path = "",
+  phers_transfer_dir_path = "",
   phers_study_descr = NULL,
   zip_dir_path = "",
   prs_file_end = "",
   prs_id_col_name = "",
-  prs_score_col_name = ""
+  prs_score_col_name = "",
+  tuomo_file_append = "",
+  exp_len_transfer = NULL
 )
 }
 \arguments{
@@ -56,11 +59,6 @@ columns as described in \link[IHRC:get_study_med_data]{IHRC::get_study_med_data}
 The file needs at least the columns as described in
 \link[IHRC:get_prs_endpt_data]{IHRC::get_prs_endpt_data}.}
 
-\item{prs_endpts_map}{A tibble. Mapping the endpoint names to the ones used
-in the PRS files. If not provided uses standard
-mapping from \link{get_endpts} to
-\link{get_prs_endpt_descr}.}
-
 \item{phers_dir_path}{A string. Path to the directory containing the PRS files.
 The file needs at least the columns as described in
 \link[IHRC:get_prs_endpt_data]{IHRC::get_prs_endpt_data}.}
@@ -70,6 +68,11 @@ provided uses standard call to \link{get_phers_file_descr}.}
 
 \item{zip_dir_path}{A string. Path to the ZIP score data. The file needs at least
 the columns as described in \link[IHRC:get_zip_data]{IHRC::get_zip_data}.}
+
+\item{prs_endpts_map}{A tibble. Mapping the endpoint names to the ones used
+in the PRS files. If not provided uses standard
+mapping from \link{get_endpts} to
+\link{get_prs_endpt_descr}.}
 }
 \value{
 A list all the data. At least \code{pheno} will contain data.
