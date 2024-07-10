@@ -32,9 +32,6 @@ get_setup <- function(setup_file_path) {
     if(is.null(setup$covs)) {
         setup$covs <- ""
     } 
-    if(is.null(setup$create_score_combos)) {
-        setup$create_score_combos <- FALSE
-    }
     if(is.null(setup$read_pheno_score_files)) {
         setup$read_pheno_score_files <- FALSE
     }

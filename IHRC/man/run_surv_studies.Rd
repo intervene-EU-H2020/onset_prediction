@@ -7,7 +7,6 @@
 run_surv_studies(
   pheno_data,
   score_type,
-  create_score_combos = FALSE,
   bunch_phenos = FALSE,
   covs = c("SEX", "YEAR_OF_BIRTH"),
   models = NULL,
@@ -54,10 +53,6 @@ Available options include:
 be called \code{EDU} in the \code{pheno_data}.
 \item \code{ZIP} for zip scores,
 }}
-
-\item{create_score_combos}{A boolean, whether or not to create all possible
-score type combinations from the score_type vector.
-see function \link[IUtils:get_all_possible_score_type_combs]{IUtils::get_all_possible_score_type_combs}.}
 
 \item{covs}{A vector of characters. The column names of the covariates
 to add to the predictor of the Cox-PH model.}

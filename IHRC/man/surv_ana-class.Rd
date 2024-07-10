@@ -19,10 +19,6 @@ group in the analyses needs to have.}
 \item{\code{covs}}{A string (vector). The added covariates for the Cox-PH model
 additional to the \code{score_types}.}
 
-\item{\code{create_score_combos}}{A boolean, whether or not to create all possible
-score type combinations from the score_type vector.
-see function \link[IUtils:get_all_possible_score_type_combs]{IUtils::get_all_possible_score_type_combs}.}
-
 \item{\code{score_combos}}{A list. The score type combinations to be run in the
 analyses.}
 
