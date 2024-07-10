@@ -56,11 +56,13 @@ get_phers_endpt_data <- function(score_data,
                                  transfer=FALSE) {
     if(!transfer) {
         phers_col_name <- paste0(endpt, "_PheRS")
+        train_col_name <- paste0(endpt, "_TRAIN_STATUS")
         if(phers_col_name %in% colnames(score_data)) {
             score_data <- dplyr::select(.data=score_data, 
                                         ID, 
-                                        {{ phers_col_name }}) %>% 
-                            dplyr::rename("PheRS" = {{ phers_col_name }})
+                                        {{ phers_col_name }},
+                                        {{ train_col_name }}) %>% 
+                            dplyr::rename("PheRS" = {{ phers_col_name }}, "TRAIN_STATUS" = {{ train_col_name }})
         } else {
             score_data <- NULL
         }
@@ -106,7 +108,7 @@ get_study_cci_data <- function(pheno_data,
     cci_data <- ICCI::calc_cci(icd_data,
                                exp_start=calc_exp_start_age(pheno_data),
                                exp_end=calc_exp_end_age(pheno_data),
-                               score_type=ifelse(score_type == "CCI", "charlson", "elixhauser"))  
+                               score_type=ifelse(score_type == "CCI", "charlson", "elixhauser"))
     return(cci_data)
 }
 

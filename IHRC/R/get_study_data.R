@@ -41,9 +41,9 @@ get_pheno_score_data  <- function(score_type,
                                   write_progress=FALSE) {
                                   # Get data of individuals who can be used for the current endpoint
     pheno_data <- get_relevant_pheno_data_cols(pheno_data, endpt)
-    print(colnames(pheno_data))
+    if(!(endpt %in% c("C3_PROSTATE", "C3_BREAST", "T2D"))) pheno_data[,endpt][is.na(pheno_data[,endpt])] <- 0 # Removing control exclusions
     # Need to preprocess score data for these score types
-    if(any(stringr::str_detect(score_type, "(PRS)|(EI)|(PheRS)|(PheRS_transfer)|(MED)|(EDU_cont)|(Prob)"))) {
+    if(any(stringr::str_detect(score_type, "(PRS)|(EI)|(PheRS)|(PheRS_group)|(PheRS_transfer)|(MED)|(EDU_cont)|(Prob)"))) {
         score_data <- preprocess_score_data(score_type=score_type, 
                                             pheno_data=pheno_data,
                                             icd_data=icd_data, 
@@ -69,18 +69,22 @@ get_pheno_score_data  <- function(score_type,
     } else {
         study_data <- pheno_data
     }
+    if("TRAIN_STATUS" %in% colnames(study_data)) {
+        study_data <- dplyr::filter(study_data, !is.na(TRAIN_STATUS))
+    } else {
+        study_data$TRAIN_STATUS <- 0
+    }
+
     if(!is.null(study_data)) {
         if(endpt %in% colnames(endpts_indvs_mat)) {
-            train_status <- dplyr::select(endpts_indvs_mat, ID, endpt)
-            colnames(train_status) <- c("ID", "TRAIN_STATUS")
-            train_status <- dplyr::mutate(train_status, TRAIN_STATUS=!TRAIN_STATUS)
-            study_data <- dplyr::left_join(study_data, train_status, by="ID")
-            study_data$TRAIN_STATUS[is.na(study_data$TRAIN_STATUS)] <- 0
-        } else {
-            study_data <- dplyr::mutate(study_data, TRAIN_STATUS=0)
-        }
+            extra_exclusion <- dplyr::select(endpts_indvs_mat, ID, endpt)
+            colnames(extra_exclusion) <- c("ID", "EXTRA_EXCLUSION")
+            study_data <- dplyr::left_join(study_data, extra_exclusion, by="ID")
+            study_data <- dplyr::filter(study_data, EXTRA_EXCLUSION)
+            study_data <- dplyr::select(study_data, -EXTRA_EXCLUSION)
+        } 
     }
-    if(write_progress) writeLines("Added training status.")
+    if(write_progress) writeLines("Filtered eligible population.")
     return(study_data)
 }
 
@@ -121,17 +125,11 @@ get_relevant_pheno_data_cols <- function(pheno_data,
     if(("BATCH" %in% colnames(pheno_data))) {
         select_cols <- c(select_cols, "BATCH")
     }
-    if(("CCI" %in% colnames(pheno_data))) {
-        select_cols <- c(select_cols, "CCI")
-    }
     if(("CHIP" %in% colnames(pheno_data))) {
         select_cols <- c(select_cols, "CHIP")
     }
     if(("ZIP" %in% colnames(pheno_data))) {
         select_cols <- c(select_cols, "ZIP")
-    }
-    if(("EDU" %in% colnames(pheno_data))) {
-        select_cols <- c(select_cols, "EDU")
     }
     if(("BMI" %in% colnames(pheno_data))) {
         select_cols <- c(select_cols, "BMI")
@@ -139,12 +137,9 @@ get_relevant_pheno_data_cols <- function(pheno_data,
     if(("SMOKING" %in% colnames(pheno_data))) {
         select_cols <- c(select_cols, "SMOKING")
     }
-    if(("EDU_cont" %in% colnames(pheno_data))) {
-        select_cols <- c(select_cols, "EDU_cont")
-    }
     if(("Prob" %in% colnames(pheno_data))) {
         select_cols <- c(select_cols, "Prob")
     }
-    pheno_data <- dplyr::select(pheno_data, all_of(select_cols), dplyr::starts_with("PC"))
+    pheno_data <- dplyr::select(pheno_data, all_of(select_cols), dplyr::starts_with("PC"), matches("EDU"))
     return(pheno_data)
 }

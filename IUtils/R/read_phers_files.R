@@ -28,6 +28,7 @@ read_phers_files <- function(dir_path,
     }
     phers_data <- tibble::tibble(ID=character())
     for(endpt in endpts) {
+        writeLines(paste0("Reading PheRS file for ", endpt))
         if(tuomo) {
             file_path <- paste0(dir_path, endpt, "_", study_descr, "/")
         } else {
@@ -40,16 +41,23 @@ read_phers_files <- function(dir_path,
         if(tuomo) {
             if(dir.exists(file_path)) {
                 # Reading
-                file_name_phers <- paste0(file_path, tuomo_file_append, "pred_probas.txt.gz")
+                file_name_phers <- paste0(file_path, tuomo_file_append, "pred_probas_all.txt.gz")
+                writeLines(paste0("Reading PheRS file for ", endpt, " ", file_name_phers))
                 phers_probs <- readr::read_delim(file_name_phers, 
-                                                delim="\t",
-                                                show_col_types=FALSE,
-                                                col_types=list(`#ID`="c"))
+                                                 delim="\t",
+                                                 show_col_types=FALSE,
+                                                 col_types=list(`#ID`="c"))
                 # Renaming
-                phers_probs <- dplyr::rename(phers_probs, ID = `#ID`) %>%
-                                dplyr::select(ID, pred_class1_prob)
+                if("set" %in% colnames(phers_probs))
+                    phers_probs <- dplyr::rename(phers_probs, ID = `#ID`) %>%
+                                    dplyr::select(ID, pred_class1_prob, set) %>%
+                                    dplyr::rename(TRAIN_STATUS=set)
+                else 
+                    phers_probs <- dplyr::rename(phers_probs, ID = `#ID`) %>%
+                                    dplyr::select(ID, pred_class1_prob, split) %>%
+                                    dplyr::rename(TRAIN_STATUS=split)
                 names(phers_probs)[names(phers_probs) == "pred_class1_prob"] <- paste0(endpt, "_PheRS")
-
+                names(phers_probs)[names(phers_probs) == "TRAIN_STATUS"] <- paste0(endpt, "_TRAIN_STATUS")
             } else {
                 stop(paste0("Directory for PheRS files ", file_path, " does not exist."))
             }
@@ -58,7 +66,7 @@ read_phers_files <- function(dir_path,
                                              delim="\t",
                                              show_col_types=FALSE,
                                              col_types=list(`ID`="c"))
-            phers_probs <- dplyr::select(phers_probs, ID, PheRS)
+            phers_probs <- dplyr::select(phers_probs, ID, PheRS, TRAIN_STATUS)
             names(phers_probs)[names(phers_probs) == "PheRS"] <- paste0(endpt, "_PheRS_transfer")
         }
         # Joining
