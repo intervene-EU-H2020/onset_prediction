@@ -11,7 +11,7 @@ write_pheno_score_files(pheno_score_data, study_setup, endpt, surv_ana)
 written to file.}
 
 \item{study_setup}{An S4 \code{study_setup} object. The current study setup.
-See class definition \link[Istudy:study_setup]{Istudy::study_setup}.}
+See class definition \link[Istudy:study_setup-class]{Istudy::study_setup}.}
 
 \item{endpt}{A string. The current endpoint.}
 

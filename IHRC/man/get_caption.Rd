@@ -8,7 +8,7 @@ get_caption(study_setup, preds)
 }
 \arguments{
 \item{study_setup}{An S4 \code{study_setup} object. The current study setup.
-See class definition \link[Istudy:study_setup]{Istudy::study_setup}.}
+See class definition \link[Istudy:study_setup-class]{Istudy::study_setup}.}
 
 \item{preds}{A string (vector). The predictors of the analysis.}
 }

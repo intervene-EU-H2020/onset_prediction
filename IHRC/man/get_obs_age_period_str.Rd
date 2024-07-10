@@ -11,7 +11,7 @@ get_obs_age_period_str(coxph_hrs, study_setup)
 Needs to at least contain the columns \code{EXP_AGE}-}
 
 \item{study_setup}{An S4 \code{study_setup} object. The current study setup.
-See class definition \link[Istudy:study_setup]{Istudy::study_setup}.}
+See class definition \link[Istudy:study_setup-class]{Istudy::study_setup}.}
 }
 \value{
 A string vector with the observation period strings

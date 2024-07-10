@@ -55,7 +55,7 @@ columns as described in \link{get_zip_data}.}
 Required if \code{PRS} or \code{PheRS} is present in \code{score_type}.}
 
 \item{study_setup}{An S4 \code{study_setup} object. The current study setup.
-See class definition \link[Istudy:study_setup]{Istudy::study_setup}.}
+See class definition \link[Istudy:study_setup-class]{Istudy::study_setup}.}
 
 \item{error_file}{A string. The path to the error file.}
 }

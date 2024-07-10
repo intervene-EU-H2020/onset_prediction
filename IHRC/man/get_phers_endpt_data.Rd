@@ -4,7 +4,7 @@
 \alias{get_phers_endpt_data}
 \title{Gets the current endpoint PheRS score column}
 \usage{
-get_phers_endpt_data(score_data, endpt)
+get_phers_endpt_data(score_data, endpt, transfer = FALSE)
 }
 \arguments{
 \item{score_data}{A data.frame. The PheRS data.
