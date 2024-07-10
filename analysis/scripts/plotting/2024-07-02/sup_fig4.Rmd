@@ -1,0 +1,98 @@
+# Setup
+```{r}
+source("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/scripts/utils.R")
+
+color_list <- get_final_color_list()
+bb_colors <- get_bb_colors()
+date <- "2024-07-02"
+plt_res_dir <- paste0("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/results/plots/", date, "/manuscript/")
+tbl_res_dir <- paste0("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/results/tables/", date, "/")
+if(!dir.exists(tbl_res_dir)) dir.create(tbl_res_dir, recursive=TRUE)
+
+base_size <- 28
+size_small <- 20
+size_medium <- 22
+font <- "Sans Serif"
+axis_line_size <- 1
+
+
+library(showtext)
+library(extrafont)
+# Import Open Sans font
+font_import(paths = "/home/detrokir/Documents/DSGE/extra/Open_Sans", prompt = FALSE)
+loadfonts(device = "win")
+# Add Open Sans to showtext
+font_add("Open Sans", "/home/detrokir/Documents/DSGE/extra/Open_Sans/OpenSans-Regular.ttf")
+showtext_auto()
+# Ensure showtext is enabled for ggsave
+showtext_opts(dpi = 600) # Set DPI for showtext rendering
+
+# Data
+endpt_map <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/results/tables/endpt_name_maps/endpoint_map.csv")
+crnt_cidx_path <- "/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/processed/2024-07-02/bbs/meta/2019-01-01_o8_w2_10_32_70_cidx.tsv"
+all_cidx <- readr::read_delim(crnt_cidx_path)
+crnt_hrs_path <- "/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/processed/2024-07-02/bbs/meta/2019-01-01_o8_w2_10_32_70_coxph.tsv"
+all_hrs <- readr::read_delim(crnt_hrs_path)
+```
+
+
+```{r}
+base <- "Surv~Sex+Age"
+phers <- "Surv~PheRS"
+phers_base <- "Surv~PheRS+Sex+Age"
+phers_transfer_base <- "Surv~PheRS_transfer+Sex+Age"
+phers_transfer <- "Surv~PheRS_transfer"
+base_cci <- "Surv~CCI_group+Sex+Age"
+base_edu <- "Surv~Edu+Sex+Age"
+cci_edu <- "Surv~CCI_group+Edu+Sex+Age" 
+pheno <- "Surv~CCI_group+Edu+PheRS+Sex+Age" 
+```
+```{r}
+young_hrs <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/orig/finngen/fg_down_2024-07-02/coxph/2019-01-01_o8_w2_e10_32_51_coxph.tsv")
+old_hrs <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/orig/finngen/fg_down_2024-07-02/coxph/2019-01-01_o8_w2_e10_51_70_coxph.tsv")
+
+young_hrs$COHORT <- "young"
+old_hrs$COHORT <- "old"
+
+all_hrs <- rbind(young_hrs, old_hrs)
+```
+
+```{r}
+all_hrs_wider <- all_hrs %>% filter((SURV_MODEL == "Surv~PheRS" & VAR == "PheRS") | (SURV_MODEL == "Surv~PRS" & VAR == "PRS")) %>% 
+    pivot_wider(id_cols=c(ENDPOINT, VAR), names_from=COHORT, values_from=c(HR, BETA, SE, CI_NEG, CI_POS))
+all_hrs_wider <- dplyr::left_join(all_hrs_wider, endpt_map, by="ENDPOINT")
+all_hrs_wider <- dplyr::filter(all_hrs_wider, !is.na(Endpoint))
+
+plt_a <- ggplot(all_hrs_wider, aes(x=HR_young, y=HR_old, color=Endpoint)) +
+         # Guide Lines
+            geom_hline(yintercept=1, linetype=1, size=axis_line_size) +
+            geom_vline(xintercept=1, linetype=1, size=axis_line_size) +
+            geom_abline(intercept=0, slope=1, linetype=6, size=1) +
+    # Confidence intervals
+    geom_linerange(aes(xmin=CI_NEG_young, xmax=CI_POS_young), size=line_size) +
+    geom_linerange(aes(ymin=CI_NEG_old, ymax=CI_POS_old), size=line_size) +
+    # Points
+    geom_point(size=point_size) +
+    # Scales
+    scale_color_manual(values=color_list, name="") +
+    labs(x="", y="") +
+    guides(alpha="none", shape=FALSE, color=guide_legend(nrow=3)) +
+   # scale_x_continuous(breaks=c(1, 1.25, 1.5)) +
+   # scale_y_continuous(breaks=c(1, 1.25, 1.5)) +
+    # Theme
+    #theme(legend.position = "bottom") +
+    # Labels
+    theme_comp(base_size=base_size, legend_pos="none", plot_top_margin=-10, legend_box_spacing=0)  +
+                theme(legend.text=element_text(size=size_medium, family=font), 
+                  axis.text=element_text(size=size_small, family=font),
+                  axis.title=element_text(size=size_medium, family=font),
+                  plot.subtitle=element_text(size=size_medium, family=font)) +
+    facet_wrap(~VAR, nrow=1, scales="free")
+plt_a
+```
+
+```{r}
+full_plt <- cowplot::plot_grid(NULL, plt_a, NULL,ncol=1, rel_heights=c(0.075, 0.6, 0.25))
+
+#ggsave(paste0(plt_res_dir, "sup/fig4_v1.pdf"),full_plt, width=22, height=11, dpi=600, unit="in", bg="white")
+```

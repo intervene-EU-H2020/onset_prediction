@@ -1,0 +1,75 @@
+
+# Setup
+```{r}
+
+source("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/scripts/utils.R")
+
+color_list <- get_final_color_list()
+bb_colors <- get_bb_colors()
+date <- "2024-07-02"
+plt_res_dir <- paste0("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/results/plots/", date, "/manuscript/")
+tbl_res_dir <- paste0("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/results/tables/", date, "/")
+if(!dir.exists(tbl_res_dir)) dir.create(tbl_res_dir, recursive=TRUE)
+
+base_size <- 28
+size_small <- 20
+size_medium <- 22
+font <- "Sans Serif"
+axis_line_size <- 1
+
+
+library(showtext)
+library(extrafont)
+# Import Open Sans font
+font_import(paths = "/home/detrokir/Documents/DSGE/extra/Open_Sans", prompt = FALSE)
+loadfonts(device = "win")
+# Add Open Sans to showtext
+font_add("Open Sans", "/home/detrokir/Documents/DSGE/extra/Open_Sans/OpenSans-Regular.ttf")
+showtext_auto()
+# Ensure showtext is enabled for ggsave
+showtext_opts(dpi = 600) # Set DPI for showtext rendering
+
+# Data
+endpt_map <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/results/tables/endpt_name_maps/endpoint_map.csv")
+crnt_cidx_path <- "/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/processed/2024-07-02/bbs/meta/2019-01-01_o8_w2_10_32_70_cidx.tsv"
+all_cidx <- readr::read_delim(crnt_cidx_path)
+crnt_hrs_path <- "/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/processed/2024-07-02/bbs/meta/2019-01-01_o8_w2_10_32_70_coxph.tsv"
+all_hrs <- readr::read_delim(crnt_hrs_path)
+```
+
+# Plotting
+```{r}
+var <- "PheRS"
+model <- "Surv~PheRS"
+bbs <- names(bb_colors)[names(bb_colors) != "Meta-analysis"]
+
+hrs_data <- all_hrs %>% dplyr::filter(SURV_MODEL == model, VAR==var) %>% get_new_crnt_endpt_data()
+hrs_data <- hrs_data %>% dplyr::mutate(highlight=ifelse(Biobank == "Meta-analysis", 1, 0.5)) 
+
+hrs_data <- strip_column(hrs_data, includes_prs=ifelse(var=="PRS", TRUE, FALSE), hrs=TRUE)
+hrs_data$Biobank <- factor(hrs_data$Biobank, levels=c( "Meta-analysis", bbs))
+hrs_data <- hrs_data[order(hrs_data$Biobank),]
+limits <- c(0.95, 1.7)
+
+legend_plt <- ggplot(hrs_data, 
+                aes(x=HR, y=reorder(Endpoint, CRNT_ENDPT_ORDER), color=Biobank)) +
+            scale_color_manual(values=bb_colors, name="") +
+            # Data points
+            geom_point(shape=18, position=position_dodge(0.5)) +
+            guides(colour=guide_legend(override.aes = list(shape=15, size=8))) +
+            theme_hrs(base_size=base_size, plot_top_margin=-20, legend_pos="right") +
+            theme(legend.text=element_text(size=size_medium, family=font), 
+                  axis.text.x=element_text(size=size_small, family=font),
+                  axis.text.y=element_text(size=size_medium, family=font),
+                  axis.title=element_text(size=size_medium, family=font))
+
+legend_plt
+legend_plt <- cowplot::get_plot_component(legend_plt, "guide-box", return_all=TRUE)[[1]]
+legend_plt <- cowplot::plot_grid(legend_plt)
+legend_plt
+```
+
+
+```{r}
+ggsave(paste0(plt_res_dir, "bb_legend_v1.pdf"), legend_plt, width=3, height=3, dpi=600, unit="in", bg="white")
+```

@@ -1,0 +1,73 @@
+# Setup
+```{r}
+library(dplyr)
+library(ggplot2)
+library(IUtils)
+library(gghighlight)
+source("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/scripts/utils.R")
+library(ggpubr)
+
+color_list <- get_final_color_list()
+bb_colors <- get_bb_colors()
+date <- "2024-07-02"
+plt_res_dir <- paste0("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/results/plots/", date, "/manuscript/")
+tbl_res_dir <- paste0("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/results/tables/", date, "/")
+if(!dir.exists(tbl_res_dir)) dir.create(tbl_res_dir, recursive=TRUE)
+
+base_size <- 28
+size_small <- 20
+size_medium <- 22
+font <- "Sans Serif"
+axis_line_size <- 1
+
+
+library(showtext)
+library(extrafont)
+# Import Open Sans font
+font_import(paths = "/home/detrokir/Documents/DSGE/extra/Open_Sans", prompt = FALSE)
+loadfonts(device = "win")
+# Add Open Sans to showtext
+font_add("Open Sans", "/home/detrokir/Documents/DSGE/extra/Open_Sans/OpenSans-Regular.ttf")
+showtext_auto()
+# Ensure showtext is enabled for ggsave
+showtext_opts(dpi = 600) # Set DPI for showtext rendering
+
+# Data
+endpt_map <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/results/tables/endpt_name_maps/endpoint_map.csv")
+crnt_cidx_path <- "/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/processed/2024-07-02/bbs/meta/2019-01-01_o8_w2_10_32_70_cidx.tsv"
+all_cidx <- readr::read_delim(crnt_cidx_path)
+crnt_hrs_path <- "/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/processed/2024-07-02/bbs/meta/2019-01-01_o8_w2_10_32_70_coxph.tsv"
+all_hrs <- readr::read_delim(crnt_hrs_path)
+```
+
+### Panel A
+
+```{r}
+case_data <- readr::read_delim(paste0(tbl_res_dir, "case_control_counts.csv"))
+case_data <- tidyr::pivot_longer(case_data, cols=c("N_CASES_FinnGen", "N_CASES_UKB", "N_CASES_EstB"), names_to="Biobank", values_to="N_CASES", names_pattern="N_CASES_(.*)")
+case_data <- dplyr::group_by(case_data, Disease) %>% dplyr::filter(SET=="All") %>% dplyr::reframe(N_TOTAL_CASES=sum(N_CASES), N_CASES=N_CASES,Biobank=Biobank)
+
+sum(case_data %>% group_by(Disease) %>% summarise(N_CASES=sum(N_CASES)) %>% pull(N_CASES))
+```
+
+```{r}
+plt_a <- ggplot(case_data, aes(y=reorder(Disease, N_TOTAL_CASES), x=N_CASES, fill=Biobank)) +
+    geom_bar(stat="identity", position="stack") +
+    scale_fill_manual(values=bb_colors, name="") +
+    scale_x_continuous(labels=function(x) so_formatter(x), breaks=c(5000, 10000, 15000, 20000, 25000, 30000, 35000, 40000)) +
+    labs(x="Number of Cases", y="") +
+    theme_hrs(base_size = base_size, legend_pos="none") +
+    # Grid
+    # Grid
+    theme(panel.grid.major.y = element_blank(), 
+          panel.grid.major.x=element_line(linetype=2, linewidth = 1), 
+          panel.grid.minor.x=element_line(linetype=2, linewidth = 0.5)) +
+     theme(legend.text=element_text(size=size_medium, family=font), 
+                  axis.text.x=element_text(size=size_small, family=font),
+                  axis.text.y=element_text(size=size_medium, family=font),
+                  axis.title=element_text(size=size_medium, family=font)) 
+plt_a
+
+#ggsave(paste0(res_dir, "fig_1_v1.pdf"), width=20, height=7, unit="in")
+
+```

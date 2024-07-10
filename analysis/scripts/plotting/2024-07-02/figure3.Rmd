@@ -1,0 +1,191 @@
+
+# Setup
+```{r}
+source("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/scripts/utils.R")
+
+color_list <- get_final_color_list()
+bb_colors <- get_bb_colors()
+date <- "2024-07-02"
+plt_res_dir <- paste0("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/results/plots/", date, "/manuscript/")
+tbl_res_dir <- paste0("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/results/tables/", date, "/")
+if(!dir.exists(tbl_res_dir)) dir.create(tbl_res_dir, recursive=TRUE)
+
+base_size <- 28
+size_small <- 20
+size_medium <- 22
+font <- "Sans Serif"
+axis_line_size <- 1
+
+
+library(showtext)
+library(extrafont)
+# Import Open Sans font
+font_import(paths = "/home/detrokir/Documents/DSGE/extra/Open_Sans", prompt = FALSE)
+loadfonts(device = "win")
+# Add Open Sans to showtext
+font_add("Open Sans", "/home/detrokir/Documents/DSGE/extra/Open_Sans/OpenSans-Regular.ttf")
+showtext_auto()
+# Ensure showtext is enabled for ggsave
+showtext_opts(dpi = 600) # Set DPI for showtext rendering
+
+# Data
+endpt_map <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/results/tables/endpt_name_maps/endpoint_map.csv")
+crnt_cidx_path <- "/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/processed/2024-07-02/bbs/meta/2019-01-01_o8_w2_10_32_70_cidx.tsv"
+all_cidx <- readr::read_delim(crnt_cidx_path)
+crnt_hrs_path <- "/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/processed/2024-07-02/bbs/meta/2019-01-01_o8_w2_10_32_70_coxph.tsv"
+all_hrs <- readr::read_delim(crnt_hrs_path)
+```
+
+
+```{r}
+base <- "Surv~Sex+Age"
+phers <- "Surv~PheRS"
+phers_base <- "Surv~PheRS+Sex+Age"
+phers_transfer_base <- "Surv~PheRS_transfer+Sex+Age"
+phers_transfer <- "Surv~PheRS_transfer"
+```
+
+
+# Panel C - transfer correlation
+
+```{r}
+cors_estb <- get_data("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/orig/finngen/fg_down_2024-05-29/estb/2019-01-01_o8_w2_e10_32_70_cors.tsv", "EstB")
+cors_ukb <- get_data("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/orig/finngen/fg_down_2024-05-29/ukb/2019-01-01_o8_w2_e10_32_70_cors.tsv", "UKB")
+
+cors <- rbind(cors_estb, cors_ukb)
+cors <- cors %>% filter(VAR_1 == "PheRS", VAR_2 == "PheRS_transfer", SET == "Test")
+#cors <- dplyr::left_join(cors %>% filter(Biobank == "EstBB"), cors %>% filter(Biobank == "UKBB"), by="Endpoint")
+cors_wide <- cors %>% tidyr::pivot_wider(values_from=c(COR, CIneg, CIpos, P_value), names_from=Biobank, id_cols = Endpoint)
+
+readr::write_delim(cors_wide, (paste0(res_dir, "manuscript/tables/transfer_correlations.tsv")), delim="\t")
+
+cors_wide %>% mutate(mean(COR_EstB))
+cors %>% get_new_crnt_endpt_data() %>% filter(COR > 0.5 & Endpoint != "Prostate") %>% summarise(mean(COR), sd(COR), min(COR), max(COR))
+cors %>% filter(COR < 0)
+
+cors_wide <- cors_wide %>% get_new_crnt_endpt_data()
+
+mean(c(cors_wide$COR_EstB, cors_wide$COR_UKB))
+min(c(cors_wide$COR_EstB, cors_wide$COR_UKB))
+max(c(cors_wide$COR_EstB, cors_wide$COR_UKB))
+
+cors_wide %>% filter(COR_EstB > 0.4, COR_UKB > 0.4)
+```
+
+```{r}
+plt_c <- ggplot(cors_wide, aes(x=COR_EstB, y=COR_UKB, color=Endpoint)) +
+            # Guide Lines
+            geom_hline(yintercept=0, linetype=1, size=axis_line_size) +
+            geom_vline(xintercept=0, linetype=1, size=axis_line_size) +
+            geom_abline(intercept=0, slope=1, linetype=6, size=1) +
+                  # Confidence intervals
+                              # Data
+                geom_linerange(aes(xmin=CIneg_EstB, xmax=CIpos_EstB), size=line_size) +
+                geom_linerange(aes(ymin=CIneg_UKB, ymax=CIpos_UKB), size=line_size) +
+                geom_point(size=point_size) +
+                # Scales
+                scale_color_manual(values=color_list, name="") +
+               # # Limits
+#                coord_cartesian(xlim=c(0, 1), ylim=c(0, 1)) +
+                # Theme
+                labs(x="", y="", title="", subtitle="")  +
+                theme_comp(base_size=base_size, legend_pos="none", plot_top_margin=-10)  +
+                theme(legend.text=element_text(size=size_medium, family=font), 
+                  axis.text=element_text(size=size_small, family=font),
+                  axis.title=element_text(size=size_medium, family=font))
+plt_c
+```
+
+
+# D
+```{r}
+fg_hrs <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/processed/2024-05-30/bbs/fg/2019-01-01_o8_w2_e10_32_70_coxph.tsv", delim="\t")
+transfer_hrs <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/processed/2024-05-30/bbs/fg/transfer/2019-01-01_o8_w2_e10_32_70_coxph.tsv", delim="\t")
+meta_hrs <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/processed/2024-05-30/bbs/fg_transfer/meta_2019-01-01_o8_w2_10_32_70_coxph.tsv", delim="\t")
+fg_hrs <- rbind(fg_hrs, transfer_hrs)
+````
+
+```{r}
+point_size <- 4
+line_size <- 1
+
+ukbb <- dplyr::left_join(fg_hrs %>% dplyr::filter(SURV_MODEL == phers_base, Biobank == "FinnGen", VAR == "PheRS"), 
+                         fg_hrs %>% dplyr::filter(SURV_MODEL == phers_transfer_base, Biobank == "UKB->FinnGen", VAR == "PheRS_transfer"),
+                         by="Endpoint")
+ukbb$Biobank <- "UKB"
+ukbb <- get_new_crnt_endpt_data(ukbb)
+
+estbb <- dplyr::left_join(fg_hrs %>% dplyr::filter(SURV_MODEL == phers_base, Biobank == "FinnGen", VAR == "PheRS"), 
+                         fg_hrs %>% dplyr::filter(SURV_MODEL == phers_transfer, Biobank == "EstB->FinnGen", VAR == "PheRS_transfer"),
+                         by="Endpoint")
+estbb$Biobank <- "EstB"
+estbb <- get_new_crnt_endpt_data(estbb)
+
+data <- rbind(ukbb, estbb)
+data$Biobank <- factor(data$Biobank, levels=c("UKB", "EstB"))
+data$Endpoint <- factor(data$Endpoint, levels=names(color_list))
+
+plt_d <- ggplot(estbb, aes(x=HR.x, y=HR.y, color=Endpoint)) +
+         # Guide Lines
+            geom_hline(yintercept=1, linetype=1, size=axis_line_size) +
+            geom_vline(xintercept=1, linetype=1, size=axis_line_size) +
+            geom_abline(intercept=0, slope=1, linetype=6, size=1) +
+    # Confidence intervals
+    geom_linerange(aes(xmin=CI_NEG.x, xmax=CI_POS.x), size=line_size) +
+    geom_linerange(aes(ymin=CI_NEG.y, ymax=CI_POS.y), size=line_size) +
+    # Points
+    geom_point(size=point_size) +
+    # Scales
+    scale_color_manual(values=color_list, name="") +
+    guides(alpha="none", shape=FALSE, color=guide_legend(nrow=3)) +
+    scale_x_continuous(breaks=c(1, 1.25, 1.5)) +
+    scale_y_continuous(breaks=c(1, 1.25, 1.5)) +
+    # Theme
+    #theme(legend.position = "bottom") +
+    # Labels
+    labs(x="", y="", subtitle="EstB", caption="") +
+    theme_comp(base_size=base_size, legend_pos="none", plot_top_margin=-10, legend_box_spacing=0)  +
+                theme(legend.text=element_text(size=size_medium, family=font), 
+                  axis.text=element_text(size=size_small, family=font),
+                  axis.title=element_text(size=size_medium, family=font),
+                  plot.subtitle=element_text(size=size_medium, family=font))
+
+plt_d
+
+plt_e <- ggplot(ukbb, aes(x=HR.x, y=HR.y, color=Endpoint)) +
+    # Guide Lines
+         geom_hline(yintercept=1, linetype=1, size=axis_line_size) +
+            geom_vline(xintercept=1, linetype=1, size=axis_line_size) +
+            geom_abline(intercept=0, slope=1, linetype=6, size=1) +
+    # Confidence intervals
+    geom_linerange(aes(xmin=CI_NEG.x, xmax=CI_POS.x), size=line_size) +
+    geom_linerange(aes(ymin=CI_NEG.y, ymax=CI_POS.y), size=line_size) +
+    # Points
+    geom_point(size=point_size) +
+    # Scales
+    scale_color_manual(values=color_list, name="") +
+    guides(alpha="none", shape=FALSE, color=guide_legend(nrow=3)) +
+    scale_x_continuous(breaks=c(1, 1.25, 1.5)) +
+    scale_y_continuous(breaks=c(1, 1.25, 1.5)) +
+    labs(x="", y="", subtitle="UKB", caption="") +
+    theme_comp(base_size=base_size, legend_pos="none", plot_top_margin=-10, legend_box_spacing=0)  +
+                theme(legend.text=element_text(size=size_medium, family=font), 
+                  axis.text=element_text(size=size_small, family=font),
+                  axis.title=element_text(size=size_medium, family=font),
+                  plot.subtitle=element_text(size=size_medium, family=font))
+plt_e
+
+#ggsave(paste0(res_dir, "manuscript/fig3_v4.png"), full_plt, width=17, height=7.5, dpi=600, bg="white")
+
+```
+
+
+```{r}
+top_plt <- cowplot::plot_grid(NULL, plt_c,  NULL, plt_d, plt_e, nrow=1, align="h", rel_widths=c(0.05,1,0.1,1,1))
+top_plt
+full_plt <- cowplot::plot_grid(NULL, top_plt,NULL, nrow=3, rel_heights=c(0.05, 0.75, 0.25))
+
+full_plt
+
+#ggsave(paste0(plts_res_dir, "fig3_v6.pdf"), full_plt, width=22, height=10, dpi=600, unit="in", bg="white")
+```

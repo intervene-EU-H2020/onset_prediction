@@ -1,0 +1,423 @@
+```{r}
+library(readr)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+source("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/scripts/utils.R")
+library(extrafont)
+library(showtext)
+
+base_size <- 28
+bb_colors <- get_bb_colors()
+
+res_dir <- "/home/kira/Documents/mac_backup_03-10-2024/Documents/Projects/onset_prediction/results/plots/current/2024-07-01/manuscript/"
+font <- "Open Sans"
+size_medium <- 22
+size_small <- 20
+
+# Import Open Sans font
+font_import(paths = "/home/detrokir/Documents/DSGE/extra/Open_Sans", prompt = FALSE)
+loadfonts(device = "win")
+# Add Open Sans to showtext
+font_add("Open Sans", "/home/detrokir/Documents/DSGE/extra/Open_Sans/OpenSans-Regular.ttf")
+showtext_auto()
+# Ensure showtext is enabled for ggsave
+showtext_opts(dpi = 600) # Set DPI for showtext rendering
+```
+
+
+```{r}
+phecode_counts <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/processed/2024-05-30/phecode_counts.tsv")
+code_def <- readr::read_delim("/home/kira/Documents/mac_backup_03-10-2024/Documents/Projects/onset_prediction/results/phecode_counts/phecode_definitions1.2_manual_additions - phecode_definitions1.2_manual_additions.csv")
+phecode_counts <- phecode_counts %>% left_join(code_def %>% select(phecode, phenotype, category), by=c("PheCode"="phecode"))
+
+n_indv <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/processed/2024-05-30/indv_counts.tsv")
+n_indv <- n_indv %>% filter(Group %in% c("male", "female")) %>% select(-Group) %>% colSums() %>% as.list()
+n_indv <- tibble::tibble(cohort=names(n_indv), N_total=as.numeric(n_indv))
+n_indv <- add_row(n_indv, cohort="Total", N_total=sum(n_indv$N_total))
+n_indv
+
+phecode_counts <- phecode_counts %>% 
+                    filter(Group == "All", Level == "Both") %>% 
+                    select(-Level, -Group, -matches("N_occurances")) %>% 
+                    unique() %>% 
+                    pivot_longer(names_to="cohort", 
+                                 values_to="N_individuals", 
+                                 cols=c("N_individuals_FinnGen", "N_individuals_EstB", "N_individuals_UKB", "N_individuals_Total"), 
+                                 names_pattern=".*_(FinnGen|EstB|UKB|Total)")
+phecode_counts <- dplyr::left_join(phecode_counts, n_indv, by="cohort")
+phecode_counts <- phecode_counts %>% mutate(percentage=scales::percent((N_individuals/N_total), accuracy=0.1), fraction=(N_individuals/N_total))
+phecode_counts %>% filter(PheCode == 465)
+
+phecode_counts$cohort <- factor(phecode_counts$cohort, levels=c("FinnGen", "UKB", "EstB", "Total"))
+phecode_counts$percentage[is.na(phecode_counts$percentage)] <- "0.0%"
+
+
+phecode_counts_overview <- phecode_counts %>% group_by(PheCode) %>% arrange(cohort) %>% reframe(phenotype, category, phecode_percentage=paste0(cohort, ": ", percentage, collapse=", ")) %>% unique()
+phecode_counts_wider <- phecode_counts %>% 
+                            dplyr::filter(cohort != "Total") %>%
+                            group_by(PheCode,phenotype, category)  %>% 
+                            mutate(fraction=N_individuals/N_total, mean=mean(fraction, na.rm=TRUE), sd=sd(fraction, na.rm=TRUE)) %>%
+                            pivot_wider(id_cols=c(PheCode, phenotype, category, mean, sd), names_from=cohort, values_from=fraction) 
+phecode_counts_wider <- phecode_counts_wider %>% left_join(phecode_counts_overview, by=c("PheCode", "phenotype", "category")) 
+phecode_counts_wider
+phecode_counts_overview %>% filter(PheCode == 316)
+#readr::write_delim(phecode_counts_wider, "/home/kira/Documents/mac_backup_03-10-2024/Documents/Projects/onset_prediction/results/plots/current/2024-06-10/phecode_counts_overview.csv", delim=",")
+
+phecode_counts %>% mutate(frac=N_individuals/N_total) %>% filter(cohort != "Total") %>% group_by(PheCode) %>% summarise(cohort,frac, mean=mean(frac), sd=sd(frac)) %>% pivot_wider(names_from=cohort, values_from=frac, id_cols=c("PheCode", "mean", "sd")) %>% arrange(desc(sd))
+
+phecode_counts_wider  %>% arrange(desc(mean))
+```
+
+```{r}
+coef_data <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/processed/2024-05-30/coefs.tsv")
+coef_data <- coef_data %>% left_join(phecode_counts_overview %>% select(PheCode, phecode_percentage), by=c("feature_name"="PheCode"))
+#coef_data <- coef_data %>% get_new_crnt_endpt_data() %>% filter(!(ENDPOINT %in% c("C3_MELANOMA_SKIN", "C3_BREAST", "C3_PROSTATE", "C3_COLORECTAL", "G6_EPLEPSY")))
+
+total_data = tibble::tibble(ENDPOINT=character(), Endpoint=character(), phecode=character(),  phenotype=character(), category=character(), phecode_percentage=character(),cohort=character(), coef=numeric(), rank=numeric(), sign=character(), rank_scaled=numeric(), total_rank=numeric())
+
+for(endpt in unique(coef_data$Endpoint)) {
+    crnt_data <- coef_data %>% filter(Endpoint == endpt)
+    crnt_data <- dplyr::group_by(crnt_data, COHORT) %>% 
+                    dplyr::arrange(desc((coefficient))) %>% 
+                    dplyr::distinct(phenotype, COHORT, coefficient, .keep_all = TRUE) %>%
+                    dplyr::filter(!is.na(coefficient)) %>%
+                    dplyr::mutate(coefficient=ifelse(coefficient == 0, -1, coefficient),
+                                  rank = c(1:sum(!is.na(coefficient)), rep(sum(!is.na(coefficient)), n()-sum(!is.na(coefficient)))), 
+                                  sign=ifelse(coefficient < 0, ifelse(coefficient == -1, "zero", "negative"), "positive"),
+                                  total_rank=sum(!is.na(coefficient)), 
+                                  rank_scaled=rank/total_rank)
+    print(crnt_data %>% arrange(rank))
+    colnames(crnt_data) <- c("phecode","coef", "phenotype", "category", "ENDPOINT", "Endpoint", "cohort",  "phecode_percentage",  "rank", "sign", "total_rank", "rank_scaled")
+    total_data <- rbind(total_data, crnt_data %>% select("ENDPOINT", "Endpoint", "phecode", "phenotype", "category", "phecode_percentage",  "cohort", "coef", "rank", "sign", "rank_scaled", "total_rank"))
+}
+total_data  %>% filter(sign == "negative")
+```
+
+
+# Prevalence bar charts
+## In all cohorts
+```{r}
+plt_data <- phecode_counts_wider %>% filter(PheCode %in% c("760", "401", "766", "295", "318", "278", "340", "317", "351", "339"))
+
+new_pheno <- tibble(phenotype=plt_data %>% pull(phenotype) %>% unique(), 
+                    pheno_short=c("hypertension", "back pain", "peripheral nerve disorders", "headaches", "alcohol abuse", "neuralgia",  "overweight",  "tobacco use disorder", "migraine", "schizophrenia"))
+plt_data <- plt_data %>% left_join(new_pheno, by=c("phenotype"="phenotype"))
+plt_data$pheno_label <- paste0(plt_data$PheCode, " - ", plt_data$pheno_short)
+plt_data_long <- plt_data %>% pivot_longer(cols=c(FinnGen, UKB, EstB), names_to="cohort", values_to="fraction")
+plt_data_long
+
+plt <- ggplot(plt_data_long, aes(x=reorder(pheno_short, desc(fraction)), y=fraction, fill=cohort)) +
+    geom_col(position="dodge") +
+    theme_custom_facet(base_size=base_size, panel_bg="white", axis_y_right_margin=20) +
+    scale_fill_manual(values=bb_colors) +
+    theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
+    labs(x="", y="fraction of individuals") +
+    geom_hline(yintercept=0.01, linetype="dashed", linewidth=1) +
+    scale_y_continuous(labels=scales::percent) +
+    theme(legend.position="none") +
+    guides(colour=guide_legend(override.aes = list(shape=15, size=7))) +
+            theme(legend.text=element_text(size=size_medium, family=font), 
+                  axis.text.x=element_text(size=size_medium, family=font),
+                  axis.text.y=element_text(size=size_medium, family=font),
+                  axis.title=element_text(size=size_medium, family=font))
+plt
+```
+
+
+
+```{r}
+set.seed(0)
+crnt_coefs <- dplyr::filter(coef_data, ENDPOINT == "F5_DEPRESSIO") 
+crnt_coefs <- dplyr::group_by(crnt_coefs, COHORT) %>% dplyr::mutate(coef_scale=scale(coefficient))
+crnt_coefs <- crnt_coefs %>% group_by(Endpoint, phenotype) %>% mutate(N_bbs=n(), group=ifelse(N_bbs > 1, "Shared", "unique"))
+
+crnt_coefs$group_label <- crnt_coefs$group
+crnt_coefs$group_label[crnt_coefs$group == "unique"] <- as.character(crnt_coefs$COHORT[crnt_coefs$group == "unique"])
+crnt_coefs$group_label <- factor(crnt_coefs$group_label, levels=c("FinnGen", "UKB",  "EstB", "Shared"))
+crnt_coefs$COHORT <- factor(crnt_coefs$COHORT, levels=c("FinnGen", "UKB",  "EstB"))
+
+crnt_coefs$Position <- "One"
+crnt_coefs$phecode_label <- paste0(crnt_coefs$feature_name, " - ", crnt_coefs$phenotype)
+
+crnt_coefs <- crnt_coefs %>% filter(phenotype != "intercept" & phenotype != "Sex" & phenotype != "Age")
+
+source("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/scripts/utils.R")
+
+plt_c <- ggplot(crnt_coefs, aes(x=Position, y=coef_scale, colour=as.factor(group_label), label=phecode_label)) +
+    ggforce::geom_sina(maxwidth=1, size=4) +
+  # ggrepel::geom_text_repel(aes(label=phenotype), position=position_jitter(width=0.2), size=5,  key_glyph="point") +
+    theme_custom_facet(base_size = base_size, legend_pos = "bottom", plot_top_margin=0) +
+    #theme_hrs(base_size = base_size) +
+    geom_hline(yintercept=0, linetype=1, size=1) +
+    scale_color_manual(values=c(bb_colors, "Shared"="grey30")) +
+    labs(x="", y="scaled PheRS coefficient", subtitle="") +
+    facet_wrap(~COHORT)  +
+    guides(colour = guide_legend(ncol = 4)) +
+    guides(colour=guide_legend(override.aes = list(shape=15, size=7))) +
+            theme(legend.text=element_text(size=size_medium, family=font), 
+                  axis.text.x=element_blank(),
+                  axis.text.y=element_text(size=size_medium, family=font),
+                  axis.title=element_text(size=size_medium, family=font))
+plt_c
+library(plotly)
+ggplotly(plt_c)
+```
+
+
+```{r}
+top_plt <- cowplot::plot_grid(NULL,plt, ncol=2,rel_widths=c( 0.4, 0.6))
+bottom_plt <- cowplot::plot_grid(NULL, plt_c + theme(legend.position="none"), NULL, ncol=3, rel_widths=c(0.6, 0.4, 0.01), align="h")
+full_plt <- cowplot::plot_grid(NULL, top_plt, bottom_plt, NULL, nrow=4, rel_heights=c(0.04, 0.4, 0.6, 0.004))
+full_plt
+ggsave(paste0(res_dir, "fig4_v7.png"), full_plt, width=22, height=21, dpi=300, bg="white", units="in")
+ggsave(paste0(res_dir, "fig4_v7.pdf"), full_plt, width=22, height=21, bg="white", units="in", device=cairo_pdf)
+```
+
+
+# Other coefs 
+```{r}
+set.seed(0)
+crnt_coefs <- dplyr::filter(coef_data, ENDPOINT == "GOUT") 
+crnt_coefs <- dplyr::group_by(crnt_coefs, COHORT) %>% dplyr::mutate(coef_scale=scale(coefficient))
+crnt_coefs <- crnt_coefs %>% group_by(Endpoint, phenotype) %>% mutate(N_bbs=n(), group=ifelse(N_bbs > 1, "Shared", "unique"))
+
+crnt_coefs$group_label <- crnt_coefs$group
+crnt_coefs$group_label[crnt_coefs$group == "unique"] <- as.character(crnt_coefs$COHORT[crnt_coefs$group == "unique"])
+crnt_coefs$group_label <- factor(crnt_coefs$group_label, levels=c("FinnGen", "UKB",  "EstB", "Shared"))
+crnt_coefs$COHORT <- factor(crnt_coefs$COHORT, levels=c("FinnGen", "UKB",  "EstB"))
+
+crnt_coefs$Position <- "One"
+crnt_coefs$phecode_label <- paste0(crnt_coefs$feature_name, " - ", crnt_coefs$phenotype)
+
+crnt_coefs <- crnt_coefs %>% filter(phenotype != "intercept" & phenotype != "Sex" & phenotype != "Age")
+
+source("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/scripts/utils.R")
+
+plt_gout <- ggplot(crnt_coefs, aes(x=Position, y=coef_scale, colour=as.factor(group_label), label=phecode_label)) +
+    ggforce::geom_sina(maxwidth=1, size=4) +
+  # ggrepel::geom_text_repel(aes(label=phenotype), position=position_jitter(width=0.2), size=5,  key_glyph="point") +
+    theme_custom_facet(base_size = base_size, legend_pos = "bottom", plot_top_margin=0) +
+    #theme_hrs(base_size = base_size) +
+    geom_hline(yintercept=0, linetype=1, size=1) +
+    scale_color_manual(values=c(bb_colors, "Shared"="grey30")) +
+    labs(x="", y="scaled PheRS coefficient", subtitle="") +
+    facet_wrap(~COHORT)  +
+    guides(colour = guide_legend(ncol = 4)) +
+    guides(colour=guide_legend(override.aes = list(shape=15, size=7))) +
+            theme(legend.text=element_text(size=size_medium, family=font), 
+                  axis.text.x=element_blank(),
+                  axis.text.y=element_text(size=size_medium, family=font),
+                  axis.title=element_text(size=size_medium, family=font))
+plt_gout
+library(plotly)
+ggplotly(plt_gout)
+```
+
+```{r}
+set.seed(0)
+crnt_coefs <- dplyr::filter(coef_data, ENDPOINT == "J10_ASTHMA") 
+crnt_coefs <- dplyr::group_by(crnt_coefs, COHORT) %>% dplyr::mutate(coef_scale=scale(coefficient))
+crnt_coefs <- crnt_coefs %>% group_by(Endpoint, phenotype) %>% mutate(N_bbs=n(), group=ifelse(N_bbs > 1, "Shared", "unique"))
+
+crnt_coefs$group_label <- crnt_coefs$group
+crnt_coefs$group_label[crnt_coefs$group == "unique"] <- as.character(crnt_coefs$COHORT[crnt_coefs$group == "unique"])
+crnt_coefs$group_label <- factor(crnt_coefs$group_label, levels=c("FinnGen", "UKB",  "EstB", "Shared"))
+crnt_coefs$COHORT <- factor(crnt_coefs$COHORT, levels=c("FinnGen", "UKB",  "EstB"))
+
+crnt_coefs$Position <- "One"
+crnt_coefs$phecode_label <- paste0(crnt_coefs$feature_name, " - ", crnt_coefs$phenotype)
+
+crnt_coefs <- crnt_coefs %>% filter(phenotype != "intercept" & phenotype != "Sex" & phenotype != "Age")
+
+source("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/scripts/utils.R")
+
+plt_asthm <- ggplot(crnt_coefs, aes(x=Position, y=coef_scale, colour=as.factor(group_label), label=phecode_label)) +
+    ggforce::geom_sina(maxwidth=1, size=4) +
+  # ggrepel::geom_text_repel(aes(label=phenotype), position=position_jitter(width=0.2), size=5,  key_glyph="point") +
+    theme_custom_facet(base_size = base_size, legend_pos = "bottom", plot_top_margin=0) +
+    #theme_hrs(base_size = base_size) +
+    geom_hline(yintercept=0, linetype=1, size=1) +
+    scale_color_manual(values=c(bb_colors, "Shared"="grey30")) +
+    labs(x="", y="scaled PheRS coefficient", subtitle="") +
+    facet_wrap(~COHORT)  +
+    guides(colour = guide_legend(ncol = 4)) +
+    guides(colour=guide_legend(override.aes = list(shape=15, size=7))) +
+            theme(legend.text=element_text(size=size_medium, family=font), 
+                  axis.text.x=element_blank(),
+                  axis.text.y=element_text(size=size_medium, family=font),
+                  axis.title=element_text(size=size_medium, family=font))
+plt_asthm
+library(plotly)
+ggplotly(plt_asthm)
+```
+
+
+```{r}
+set.seed(0)
+crnt_coefs <- dplyr::filter(coef_data, ENDPOINT == "KNEE_ARTHROSIS") 
+crnt_coefs <- dplyr::group_by(crnt_coefs, COHORT) %>% dplyr::mutate(coef_scale=scale(coefficient))
+crnt_coefs <- crnt_coefs %>% group_by(Endpoint, phenotype) %>% mutate(N_bbs=n(), group=ifelse(N_bbs > 1, "Shared", "unique"))
+
+crnt_coefs$group_label <- crnt_coefs$group
+crnt_coefs$group_label[crnt_coefs$group == "unique"] <- as.character(crnt_coefs$COHORT[crnt_coefs$group == "unique"])
+crnt_coefs$group_label <- factor(crnt_coefs$group_label, levels=c("FinnGen", "UKB",  "EstB", "Shared"))
+crnt_coefs$COHORT <- factor(crnt_coefs$COHORT, levels=c("FinnGen", "UKB",  "EstB"))
+
+crnt_coefs$Position <- "One"
+crnt_coefs$phecode_label <- paste0(crnt_coefs$feature_name, " - ", crnt_coefs$phenotype)
+
+crnt_coefs <- crnt_coefs %>% filter(phenotype != "intercept" & phenotype != "Sex" & phenotype != "Age")
+
+source("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/scripts/utils.R")
+
+plt_koa <- ggplot(crnt_coefs, aes(x=Position, y=coef_scale, colour=as.factor(group_label), label=phecode_label)) +
+    ggforce::geom_sina(maxwidth=1, size=4) +
+  # ggrepel::geom_text_repel(aes(label=phenotype), position=position_jitter(width=0.2), size=5,  key_glyph="point") +
+    theme_custom_facet(base_size = base_size, legend_pos = "bottom", plot_top_margin=0) +
+    #theme_hrs(base_size = base_size) +
+    geom_hline(yintercept=0, linetype=1, size=1) +
+    scale_color_manual(values=c(bb_colors, "Shared"="grey30")) +
+    labs(x="", y="scaled PheRS coefficient", subtitle="") +
+    facet_wrap(~COHORT)  +
+    guides(colour = guide_legend(ncol = 4)) +
+    guides(colour=guide_legend(override.aes = list(shape=15, size=7))) +
+            theme(legend.text=element_text(size=size_medium, family=font), 
+                  axis.text.x=element_blank(),
+                  axis.text.y=element_text(size=size_medium, family=font),
+                  axis.title=element_text(size=size_medium, family=font))
+plt_koa
+library(plotly)
+ggplotly(plt_koa)
+```
+
+
+```{r}
+set.seed(0)
+crnt_coefs <- dplyr::filter(coef_data, ENDPOINT == "T2D") 
+crnt_coefs <- dplyr::group_by(crnt_coefs, COHORT) %>% dplyr::mutate(coef_scale=scale(coefficient))
+crnt_coefs <- crnt_coefs %>% group_by(Endpoint, phenotype) %>% mutate(N_bbs=n(), group=ifelse(N_bbs > 1, "Shared", "unique"))
+
+crnt_coefs$group_label <- crnt_coefs$group
+crnt_coefs$group_label[crnt_coefs$group == "unique"] <- as.character(crnt_coefs$COHORT[crnt_coefs$group == "unique"])
+crnt_coefs$group_label <- factor(crnt_coefs$group_label, levels=c("FinnGen", "UKB",  "EstB", "Shared"))
+crnt_coefs$COHORT <- factor(crnt_coefs$COHORT, levels=c("FinnGen", "UKB",  "EstB"))
+
+crnt_coefs$Position <- "One"
+crnt_coefs$phecode_label <- paste0(crnt_coefs$feature_name, " - ", crnt_coefs$phenotype)
+
+crnt_coefs <- crnt_coefs %>% filter(phenotype != "intercept" & phenotype != "Sex" & phenotype != "Age")
+
+source("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/scripts/utils.R")
+
+plt_t2d <- ggplot(crnt_coefs, aes(x=Position, y=coef_scale, colour=as.factor(group_label), label=phecode_label)) +
+    ggforce::geom_sina(maxwidth=1, size=4) +
+  # ggrepel::geom_text_repel(aes(label=phenotype), position=position_jitter(width=0.2), size=5,  key_glyph="point") +
+    theme_custom_facet(base_size = base_size, legend_pos = "bottom", plot_top_margin=0) +
+    #theme_hrs(base_size = base_size) +
+    geom_hline(yintercept=0, linetype=1, size=1) +
+    scale_color_manual(values=c(bb_colors, "Shared"="grey30")) +
+    labs(x="", y="scaled PheRS coefficient", subtitle="") +
+    facet_wrap(~COHORT)  +
+    guides(colour = guide_legend(ncol = 4)) +
+    guides(colour=guide_legend(override.aes = list(shape=15, size=7))) +
+            theme(legend.text=element_text(size=size_medium, family=font), 
+                  axis.text.x=element_blank(),
+                  axis.text.y=element_text(size=size_medium, family=font),
+                  axis.title=element_text(size=size_medium, family=font))
+plt_t2d
+library(plotly)
+ggplotly(plt_t2d)
+```
+
+
+
+```{r}
+set.seed(0)
+crnt_coefs <- dplyr::filter(coef_data, ENDPOINT == "I9_CHD") 
+crnt_coefs <- dplyr::group_by(crnt_coefs, COHORT) %>% dplyr::mutate(coef_scale=scale(coefficient))
+crnt_coefs <- crnt_coefs %>% group_by(Endpoint, phenotype) %>% mutate(N_bbs=n(), group=ifelse(N_bbs > 1, "Shared", "unique"))
+
+crnt_coefs$group_label <- crnt_coefs$group
+crnt_coefs$group_label[crnt_coefs$group == "unique"] <- as.character(crnt_coefs$COHORT[crnt_coefs$group == "unique"])
+crnt_coefs$group_label <- factor(crnt_coefs$group_label, levels=c("FinnGen", "UKB",  "EstB", "Shared"))
+crnt_coefs$COHORT <- factor(crnt_coefs$COHORT, levels=c("FinnGen", "UKB",  "EstB"))
+
+crnt_coefs$Position <- "One"
+crnt_coefs$phecode_label <- paste0(crnt_coefs$feature_name, " - ", crnt_coefs$phenotype)
+
+crnt_coefs <- crnt_coefs %>% filter(phenotype != "intercept" & phenotype != "Sex" & phenotype != "Age")
+
+source("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/scripts/utils.R")
+
+plt_chd <- ggplot(crnt_coefs, aes(x=Position, y=coef_scale, colour=as.factor(group_label), label=phecode_label)) +
+    ggforce::geom_sina(maxwidth=1, size=4) +
+  # ggrepel::geom_text_repel(aes(label=phenotype), position=position_jitter(width=0.2), size=5,  key_glyph="point") +
+    theme_custom_facet(base_size = base_size, legend_pos = "bottom", plot_top_margin=0) +
+    #theme_hrs(base_size = base_size) +
+    geom_hline(yintercept=0, linetype=1, size=1) +
+    scale_color_manual(values=c(bb_colors, "Shared"="grey30")) +
+    labs(x="", y="scaled PheRS coefficient", subtitle="") +
+    facet_wrap(~COHORT)  +
+    guides(colour = guide_legend(ncol = 4)) +
+    guides(colour=guide_legend(override.aes = list(shape=15, size=7))) +
+            theme(legend.text=element_text(size=size_medium, family=font), 
+                  axis.text.x=element_blank(),
+                  axis.text.y=element_text(size=size_medium, family=font),
+                  axis.title=element_text(size=size_medium, family=font))
+plt_chd
+library(plotly)
+ggplotly(plt_chd)
+```
+
+```{r}
+set.seed(0)
+crnt_coefs <- dplyr::filter(coef_data, ENDPOINT == "I9_AF") 
+crnt_coefs <- dplyr::group_by(crnt_coefs, COHORT) %>% dplyr::mutate(coef_scale=scale(coefficient))
+crnt_coefs <- crnt_coefs %>% group_by(Endpoint, phenotype) %>% mutate(N_bbs=n(), group=ifelse(N_bbs > 1, "Shared", "unique"))
+
+crnt_coefs$group_label <- crnt_coefs$group
+crnt_coefs$group_label[crnt_coefs$group == "unique"] <- as.character(crnt_coefs$COHORT[crnt_coefs$group == "unique"])
+crnt_coefs$group_label <- factor(crnt_coefs$group_label, levels=c("FinnGen", "UKB",  "EstB", "Shared"))
+crnt_coefs$COHORT <- factor(crnt_coefs$COHORT, levels=c("FinnGen", "UKB",  "EstB"))
+
+crnt_coefs$Position <- "One"
+crnt_coefs$phecode_label <- paste0(crnt_coefs$feature_name, " - ", crnt_coefs$phenotype)
+
+crnt_coefs <- crnt_coefs %>% filter(phenotype != "intercept" & phenotype != "Sex" & phenotype != "Age")
+
+source("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/scripts/utils.R")
+
+plt_af <- ggplot(crnt_coefs, aes(x=Position, y=coef_scale, colour=as.factor(group_label), label=phecode_label)) +
+    ggforce::geom_sina(maxwidth=1, size=4) +
+  # ggrepel::geom_text_repel(aes(label=phenotype), position=position_jitter(width=0.2), size=5,  key_glyph="point") +
+    theme_custom_facet(base_size = base_size, legend_pos = "bottom", plot_top_margin=0) +
+    #theme_hrs(base_size = base_size) +
+    geom_hline(yintercept=0, linetype=1, size=1) +
+    scale_color_manual(values=c(bb_colors, "Shared"="grey30")) +
+    labs(x="", y="scaled PheRS coefficient", subtitle="") +
+    facet_wrap(~COHORT)  +
+    guides(colour = guide_legend(ncol = 4)) +
+    guides(colour=guide_legend(override.aes = list(shape=15, size=7))) +
+            theme(legend.text=element_text(size=size_medium, family=font), 
+                  axis.text.x=element_blank(),
+                  axis.text.y=element_text(size=size_medium, family=font),
+                  axis.title=element_text(size=size_medium, family=font))
+plt_af
+library(plotly)
+ggplotly(plt_af)
+```
+
+```{r}
+plt_sup <- cowplot::plot_grid(plt_gout + theme(legend.position="none"), 
+                   plt_asthm+ theme(legend.position="none"), 
+                   plt_koa + theme(legend.position="none"), 
+                   plt_t2d+ theme(legend.position="none"), 
+                   plt_chd + theme(legend.position="none"), 
+                   plt_af + theme(legend.position="none"), ncol=3, 
+                   rel_widths=c(1, 1, 1))
+plt_sup <- cowplot::plot_grid(NULL, plt_sup, NULL, nrow=3, rel_heights=c(0.05, 0.9, 0.05))
+
+ggsave(paste0(res_dir, "sup/sup_fig4_v1.pdf"), plt_sup, width=22, height=21, bg="white", units="in", device=cairo_pdf)
+
+```

@@ -1,0 +1,204 @@
+# Setup
+```{r}
+source("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/scripts/utils.R")
+
+color_list <- get_final_color_list()
+bb_colors <- get_bb_colors()
+date <- "2024-07-02"
+plt_res_dir <- paste0("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/results/plots/", date, "/manuscript/")
+tbl_res_dir <- paste0("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/results/tables/", date, "/")
+if(!dir.exists(tbl_res_dir)) dir.create(tbl_res_dir, recursive=TRUE)
+
+base_size <- 28
+size_small <- 20
+size_medium <- 22
+font <- "Sans Serif"
+axis_line_size <- 1
+
+
+library(showtext)
+library(extrafont)
+# Import Open Sans font
+font_import(paths = "/home/detrokir/Documents/DSGE/extra/Open_Sans", prompt = FALSE)
+loadfonts(device = "win")
+# Add Open Sans to showtext
+font_add("Open Sans", "/home/detrokir/Documents/DSGE/extra/Open_Sans/OpenSans-Regular.ttf")
+showtext_auto()
+# Ensure showtext is enabled for ggsave
+showtext_opts(dpi = 600) # Set DPI for showtext rendering
+
+# Data
+endpt_map <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/results/tables/endpt_name_maps/endpoint_map.csv")
+crnt_cidx_path <- "/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/processed/2024-07-02/bbs/meta/2019-01-01_o8_w2_10_32_70_cidx.tsv"
+all_cidx <- readr::read_delim(crnt_cidx_path)
+crnt_hrs_path <- "/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/processed/2024-07-02/bbs/meta/2019-01-01_o8_w2_10_32_70_coxph.tsv"
+all_hrs <- readr::read_delim(crnt_hrs_path)
+```
+
+
+```{r}
+base <- "Surv~Sex+Age"
+phers <- "Surv~PheRS"
+phers_base <- "Surv~PheRS+Sex+Age"
+phers_transfer_base <- "Surv~PheRS_transfer+Sex+Age"
+phers_transfer <- "Surv~PheRS_transfer"
+base_cci <- "Surv~CCI_group+Sex+Age"
+cci_edu <- "Surv~CCI_group+Edu+Sex+Age" 
+pheno <- "Surv~CCI_group+Edu+PheRS+Sex+Age" 
+
+```
+
+
+### Panel A
+
+# Base vs. PheRS
+
+```{r}
+lower_mdl <- base
+upper_mdl <- phers_base
+
+crnt_cidx <- dplyr::filter(all_cidx, SURV_MODEL %in% c(lower_mdl, upper_mdl))
+
+crnt_cidx <- crnt_cidx %>% 
+                get_new_crnt_endpt_data()   %>%
+                mutate(SURV_MODEL=case_when(SURV_MODEL == lower_mdl ~ "mdl1", 
+                                            SURV_MODEL == upper_mdl ~ "mdl2")) %>%
+                pivot_wider(values_from=c(C_IDX, C_IDX_CI_NEG, C_IDX_CI_POS, SE), names_from=SURV_MODEL, id_cols=c(Endpoint, Biobank))
+crnt_cidx$P_VAL_DIFFERENCE <- as.numeric(calc_cidx_pval(crnt_cidx %>% select(C_IDX_mdl1, SE_mdl1), crnt_cidx %>% select(C_IDX_mdl2, SE_mdl2))$pvals)
+crnt_cidx
+#readr::write_delim(hrs_wide, paste0(res_dir, "sub/comp_models/hrs/cross/prs_vs_phers.tsv"), delim="\t")
+crnt_cidx$sign <- as.numeric(calc_cidx_pval(crnt_cidx %>% select(C_IDX_mdl1, SE_mdl1), crnt_cidx %>% select(C_IDX_mdl2, SE_mdl2))$sign)
+
+crnt_cidx$Biobank <- factor(crnt_cidx$Biobank, levels=c("FinnGen", "UKB", "EstB", "Meta-analysis"))
+crnt_cidx <- dplyr::filter(crnt_cidx, Biobank != "Meta-analysis")
+
+plt_a <- ggplot( crnt_cidx, aes(x=C_IDX_mdl1, y=C_IDX_mdl2, color=Endpoint, alpha=sign)) +
+            scale_alpha_continuous(range=c(0.5, 1)) + guides(alpha=FALSE) +
+            # Guide Lines
+            geom_hline(yintercept=0.5, linetype=1, size=line_size) +
+            geom_vline(xintercept=0.5, linetype=1, size=line_size) +
+            geom_abline(intercept=0, slope=1, linetype=6, size=line_size) +
+            # Confidence intervals
+            # Data
+            geom_linerange(aes(xmin=C_IDX_CI_NEG_mdl1, xmax=C_IDX_CI_POS_mdl1), size=line_size) +
+            geom_linerange(aes(ymin=C_IDX_CI_NEG_mdl2, ymax=C_IDX_CI_POS_mdl2), size=line_size) +
+            geom_point(size=point_size) +
+            # Scales
+            scale_color_manual(values=color_list, name="") +
+            # Limits
+            # Theme
+            theme_comp(base_size=base_size) +
+            labs(x="", y="", title="", subtitle="")  +
+            facet_wrap(~Biobank, nrow=1) +
+            theme_comp(base_size=base_size, legend_pos="none", plot_top_margin=-30, legend_box_spacing=0) +
+                theme(legend.text=element_text(size=size_medium, family=font), 
+                  axis.text=element_text(size=size_small, family=font),
+                  axis.title=element_text(size=size_medium, family=font),
+                  plot.subtitle=element_text(size=size_medium, family=font))
+plt_a 
+```
+
+
+
+# Base with CCI and Edu vs. PheRS
+```{r}
+lower_mdl <- cci_edu
+upper_mdl <- pheno
+
+crnt_cidx <- dplyr::filter(all_cidx, SURV_MODEL %in% c(lower_mdl, upper_mdl))
+
+crnt_cidx <- crnt_cidx %>% 
+                get_new_crnt_endpt_data()   %>%
+                mutate(SURV_MODEL=case_when(SURV_MODEL == lower_mdl ~ "mdl1", 
+                                            SURV_MODEL == upper_mdl ~ "mdl2")) %>%
+                pivot_wider(values_from=c(C_IDX, C_IDX_CI_NEG, C_IDX_CI_POS, SE), names_from=SURV_MODEL, id_cols=c(Endpoint, Biobank))
+crnt_cidx$P_VAL_DIFFERENCE <- as.numeric(calc_cidx_pval(crnt_cidx %>% select(C_IDX_mdl1, SE_mdl1), crnt_cidx %>% select(C_IDX_mdl2, SE_mdl2))$pvals)
+crnt_cidx
+crnt_cidx$sign <- as.numeric(calc_cidx_pval(crnt_cidx %>% select(C_IDX_mdl1, SE_mdl1), crnt_cidx %>% select(C_IDX_mdl2, SE_mdl2))$sign)
+
+crnt_cidx$Biobank <- factor(crnt_cidx$Biobank, levels=c("FinnGen", "UKB", "EstB", "Meta-analysis"))
+crnt_cidx <- dplyr::filter(crnt_cidx, Biobank != "Meta-analysis")
+
+plt_b <- ggplot( crnt_cidx, aes(x=C_IDX_mdl1, y=C_IDX_mdl2, color=Endpoint, alpha=sign)) +
+            scale_alpha_continuous(range=c(0.5, 1)) + guides(alpha=FALSE) +
+            # Guide Lines
+            geom_hline(yintercept=0.5, linetype=1, size=line_size) +
+            geom_vline(xintercept=0.5, linetype=1, size=line_size) +
+            geom_abline(intercept=0, slope=1, linetype=6, size=line_size) +
+            # Confidence intervals
+            # Data
+            geom_linerange(aes(xmin=C_IDX_CI_NEG_mdl1, xmax=C_IDX_CI_POS_mdl1), size=line_size) +
+            geom_linerange(aes(ymin=C_IDX_CI_NEG_mdl2, ymax=C_IDX_CI_POS_mdl2), size=line_size) +
+            geom_point(size=point_size) +
+            # Scales
+            scale_color_manual(values=color_list, name="") +
+            # Limits
+            # Theme
+            theme_comp(base_size=base_size) +
+            labs(x="", y="", title="", subtitle="")  +
+            facet_wrap(~Biobank, nrow=1) +
+            theme_comp(base_size=base_size, legend_pos="none", plot_top_margin=-30, legend_box_spacing=0) +
+                theme(legend.text=element_text(size=size_medium, family=font), 
+                  axis.text=element_text(size=size_small, family=font),
+                  axis.title=element_text(size=size_medium, family=font),
+                  plot.subtitle=element_text(size=size_medium, family=font))
+plt_b + theme(legend.position="none")
+
+#ggsave(paste0(res_dir, "sub/comp_models/cidx/cross/increase/base_vs_full.png"), fig_a, width=17, height=7, bg="white", dpi=300)
+```
+
+
+```{r}
+all_cidx <- dplyr::left_join(all_cidx, endpt_map, by="Endpoint") 
+all_cidx$Endpoint <- all_cidx$Disease_short
+all_cidx <- all_cidx %>% dplyr::filter(!is.na(Endpoint))
+
+plt_c <- draw_meta_cidx(all_cidx, phers, base_size=base_size, limits=c(0.5, 0.7), point_size=7, line_size=1.5)
+plt_c <- plt_c + labs(caption="", x="") + theme(legend.position="none") +
+                theme(legend.text=element_text(size=size_medium, family=font), 
+                  axis.text=element_text(size=size_small, family=font),
+                  axis.title=element_text(size=size_medium, family=font),
+                  plot.subtitle=element_text(size=size_medium, family=font))
+plt_c
+```
+
+# D
+```{r}
+n_diag_cor <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/orig/finngen/fg_down_2024-07-02/cor_with_n_diags.tsv")
+n_diag_cor <- dplyr::left_join(n_diag_cor, endpt_map, by="ENDPOINT") %>% filter(!is.na(Disease_short))
+n_diag_cor <- dplyr::arrange(n_diag_cor, desc(COR_SIMPLE)) %>% mutate(ENDPT_ORDER=1:n(), STRIP=ifelse(ENDPT_ORDER %% 2 == 0, "even", "odd"))
+
+plt_d <- ggplot(n_diag_cor, aes(x=COR_SIMPLE, y=reorder(Disease_short, desc(ENDPT_ORDER)), color=Endpoint)) +
+            scale_fill_manual(values = c("white", "grey50"), name="", guide="none") +
+            # Guide Lines
+            geom_vline(xintercept=0, linetype=1, size=line_size) +
+            # Data
+            geom_linerange(aes(xmin=COR_SIMPLE_CIneg, xmax=COR_SIMPLE_CIpos), size=line_size) +
+            geom_point(size=point_size, position = position_dodge(width=0.3)) +
+            scale_color_manual(values=color_list, name="") +
+            # Strip
+           geom_rect(aes(ymax = ENDPT_ORDER+0.5, ymin = ENDPT_ORDER-0.5, xmin=-Inf, xmax=Inf, fill=STRIP), color=NA, alpha=0.1) +
+           # scale_color_manual(values=bb_colors, name="") +
+            # Theme
+            theme_hrs(base_size=base_size, legend_pos="none") +
+            scale_x_continuous(breaks=c(-0.25, 0, 0.25, 0.5, 0.75)) +
+            labs(x="", y="", title="", subtitle="")  +
+                theme(legend.text=element_text(size=size_medium, family=font), 
+                  axis.text=element_text(size=size_small, family=font),
+                  axis.title=element_text(size=size_medium, family=font),
+                  plot.subtitle=element_text(size=size_medium, family=font))
+plt_d 
+
+min(n_diag_cor$COR_SIMPLE)
+```
+
+```{r}
+top_plt <- cowplot::plot_grid(plt_a, plt_b, nrow=2)
+bottom_plt <- cowplot::plot_grid(NULL,plt_c,NULL,plt_d, NULL,nrow=1, rel_widths=c(0.02,0.6, -0.02,0.4,0.02), align="h")
+full_plt <- cowplot::plot_grid(NULL, top_plt, NULL, bottom_plt, nrow=4, rel_heights=c(0.05, 0.65, 0.15, 0.35))
+full_plt
+
+full_plt
+
+#ggsave(paste0(plt_res_dir, "sup/fig1_v1.pdf"), full_plt, width=22, height=24, dpi=600, unit="in", bg="white")
+```

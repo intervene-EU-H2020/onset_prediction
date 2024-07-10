@@ -1,0 +1,103 @@
+# Setup
+```{r}
+library(dplyr)
+library(ggplot2)
+library(IUtils)
+library(gghighlight)
+source("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/scripts/utils.R")
+library(ggpubr)
+
+color_list <- get_final_color_list()
+bb_colors <- get_bb_colors()
+date <- "2024-07-02"
+plt_res_dir <- paste0("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/results/plots/", date, "/manuscript/")
+tbl_res_dir <- paste0("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/results/tables/", date, "/")
+if(!dir.exists(tbl_res_dir)) dir.create(tbl_res_dir, recursive=TRUE)
+
+base_size <- 28
+size_small <- 20
+size_medium <- 22
+font <- "Sans Serif"
+axis_line_size <- 1
+
+
+library(showtext)
+library(extrafont)
+# Import Open Sans font
+font_import(paths = "/home/detrokir/Documents/DSGE/extra/Open_Sans", prompt = FALSE)
+loadfonts(device = "win")
+# Add Open Sans to showtext
+font_add("Open Sans", "/home/detrokir/Documents/DSGE/extra/Open_Sans/OpenSans-Regular.ttf")
+showtext_auto()
+# Ensure showtext is enabled for ggsave
+showtext_opts(dpi = 600) # Set DPI for showtext rendering
+
+# Data
+endpt_map <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/results/tables/endpt_name_maps/endpoint_map.csv")
+crnt_cidx_path <- "/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/processed/2024-07-02/bbs/meta/2019-01-01_o8_w2_10_32_70_cidx.tsv"
+all_cidx <- readr::read_delim(crnt_cidx_path)
+crnt_hrs_path <- "/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/processed/2024-07-02/bbs/meta/2019-01-01_o8_w2_10_32_70_coxph.tsv"
+all_hrs <- readr::read_delim(crnt_hrs_path)
+```
+
+
+
+```{r}
+base <- "Surv~Sex+Age"
+phers <- "Surv~PheRS"
+phers_base <- "Surv~PheRS+Sex+Age"
+phers_transfer_base <- "Surv~PheRS_transfer+Sex+Age"
+phers_transfer <- "Surv~PheRS_transfer"
+```
+
+### Panel B
+
+```{r}
+# Some data to plot
+cidx_wide <- all_cidx %>% filter(SURV_MODEL %in% c(base, phers_base), Biobank=="Meta-analysis") 
+cidx_wide <- cidx_wide %>% 
+                get_new_crnt_endpt_data()   %>%
+                mutate(SURV_MODEL=case_when(SURV_MODEL == base ~ "base", 
+                                            SURV_MODEL == phers_base ~ "PheRS")) %>%
+                tidyr::pivot_wider(values_from=c(C_IDX, C_IDX_CI_NEG, C_IDX_CI_POS, SE, P_VAL), names_from=SURV_MODEL, id_cols=c(Endpoint, Biobank))
+
+# Order and names
+color_list <- get_final_color_list()
+color_tib <- tibble::tibble(Endpoint=names(color_list), Color=as.character(color_list))
+color_tib <- get_new_crnt_endpt_data(color_tib)
+color_tib$Disease <- c("Asthma", "Epilepsy", "Breast cancer", "Type 2 diabetes (T2D)", "Knee osteoarthritis (knee OA)", "Major depression (MDD)", "Hip osteoarthritis (hip OA)", "Colorectal cancer", "Coronary heart disease (CHD)", "Lung cancer", "Gout", "Prostate cancer", "Atrial fibrillation (AF)", "Alzheimer's")
+color_tib$Order <- c(1, 2, 13, 3, 5, 6, 4, 10, 7, 11, 9, 12, 8, 14)
+color_tib <- color_tib[order(color_tib$Order),]
+color_list <- color_tib$Color
+names(color_list) <- color_tib$Disease
+color_tib <- dplyr::filter(color_tib, Endpoint != "Alzheimer’s")
+color_tib$ENDPOINT <- c("J10_ASTHMA", "G6_EPLEPSY", "T2D", "COX_ARTHROSIS", "KNEE_ARTHROSIS", "F5_DEPRESSIO", "I9_CHD", "I9_AF", "GOUT", "C3_COLORECTAL", "C3_BRONCHUS_LUNG", "C3_PROSTATE", "C3_BREAST")
+color_tib
+
+cidx_wide <- dplyr::left_join(cidx_wide, color_tib, by="Endpoint")
+cidx_wide <- cidx_wide[order(cidx_wide$Order),]
+cidx_wide$Disease <- factor(cidx_wide$Disease, levels=unique(cidx_wide$Disease))
+
+legend_plt <- ggplot(cidx_wide, aes(x=C_IDX_base, y=C_IDX_PheRS, color=Disease)) +
+            geom_point() +
+            # Scales
+            scale_color_manual(values=color_list, name="") +
+            # shape of dot
+            guides(colour=guide_legend(override.aes = list(shape=16, size=8))) +
+            # Theme
+            theme_comp(base_size=base_size, legend_pos="bottom", legend_box_spacing=0) +
+            theme(legend.text=element_text(size=size_medium, family=font))
+legend_plt <- cowplot::get_plot_component(legend_plt, "guide-box", return_all=TRUE)[[3]]
+legend_plt <- cowplot::plot_grid(legend_plt)
+legend_plt
+```
+
+
+```{r}
+#ggsave(paste0(plt_res_dir, "color_legend_v1.pdf"), legend_plt, width=20, height=3, dpi=600, unit="in", bg="white")
+
+# readr::write_delim(color_tib %>% select(ENDPOINT, Endpoint, Disease, Color, Order), 
+#                    paste0(tbl_res_dir, "endpoint_map.csv"), 
+#                    delim=",",
+#                    quote="needed")
+```

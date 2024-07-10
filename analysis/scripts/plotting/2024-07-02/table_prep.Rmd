@@ -1,0 +1,403 @@
+# Setup
+```{r}
+source("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/scripts/utils.R")
+
+color_list <- get_final_color_list()
+bb_colors <- get_bb_colors()
+date <- "2024-07-02"
+plt_res_dir <- paste0("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/results/plots/", date, "/manuscript/")
+tbl_res_dir <- paste0("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/results/tables/", date, "/")
+if(!dir.exists(tbl_res_dir)) dir.create(tbl_res_dir, recursive=TRUE)
+
+base_size <- 28
+size_small <- 20
+size_medium <- 22
+font <- "Sans Serif"
+axis_line_size <- 1
+
+# Data
+endpt_map <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/results/tables/endpt_name_maps/endpoint_map.csv")
+crnt_cidx_path <- "/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/processed/2024-07-02/bbs/meta/2019-01-01_o8_w2_10_32_70_cidx.tsv"
+all_cidx <- readr::read_delim(crnt_cidx_path)
+crnt_hrs_path <- "/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/processed/2024-07-02/bbs/meta/2019-01-01_o8_w2_10_32_70_coxph.tsv"
+all_hrs <- readr::read_delim(crnt_hrs_path)
+```
+
+# N cases and controls
+```{r}
+fg_cases <- get_data("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/orig/finngen/fg_down_2024-05-14/fg_indv_counts.tsv", "FinnGen")
+ukb_cases <- get_data("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/orig/ukbb/ukbb_down_2024-05-14/ukb_indv_counts.txt", "UKB")
+estb_cases <- get_data("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/orig/estbb/estbb_down_2024-05/INTERVENE_EstBB_PheRS_results_2024-05_2/indv_counts.txt", "EstB")
+case_data <- rbind(fg_cases, estb_cases, ukb_cases)
+case_data
+
+case_data <- dplyr::left_join(case_data %>% select(-Endpoint), endpt_map, by=c("ENDPOINT"="ENDPOINT"))
+case_data <- dplyr::filter(case_data, !is.na(Endpoint))
+case_data <- dplyr::select(case_data, Disease, SET, N_CASES, N_CONTROLS, Biobank, Order)
+case_data$Biobank <- factor(case_data$Biobank, levels=c("FinnGen", "UKB", "EstB")) 
+case_data <- dplyr::arrange(case_data, Biobank, Order)
+case_data <- case_data %>% pivot_wider(id_cols=c(Disease, SET, Order), names_from=Biobank, values_from=c(N_CASES, N_CONTROLS)) %>% arrange(SET, Order)
+case_data <- dplyr::select(case_data, -Order)
+readr::write_delim(case_data, (paste0(tbl_res_dir, "case_control_counts.csv")), delim=",", quote="needed")
+```
+
+# N total
+```{r}
+fg_indvs <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/orig/finngen/fg_down_2024-07-02/extra_counts/fg_indvs_counts.txt") %>% dplyr::mutate(STUDY="FinnGen")
+ukb_indvs <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/orig/ukbb/ukbb_down_2024-07-02/extra_counts/ukb_indv_counts.txt") %>% dplyr::mutate(STUDY="UKB")
+estb_indvs <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/orig/estbb/estbb_down_2024-05/estb_indv_counts.txt") %>% dplyr::mutate(STUDY="EstB")
+n_indvs <- rbind(fg_indvs, ukb_indvs, estb_indvs)
+n_indvs
+
+n_total <- n_indvs %>% filter(Group %in% c("female", "male")) %>% group_by(STUDY) %>% reframe(N_individuals=sum(N_individuals)) %>% mutate(Group="total") %>% select(Group, N_individuals, STUDY)
+n_total
+
+n_indvs <- rbind(n_indvs, n_total)
+n_indvs 
+
+n_indvs_all <- n_indvs %>% pivot_wider(id_cols=Group, names_from=STUDY, values_from=N_individuals) %>% arrange(Group) %>% replace_na(list(UKB=0)) %>% filter(Group %in% c("Excluded", "total", "female", "male")) %>% mutate(Group=factor(Group, levels=c("total", "Excluded", "male", "female"))) %>% arrange(Group)
+
+#readr::write_delim(n_indvs_all, (paste0(tbl_res_dir, "n_indvs.csv")), delim=",", quote="needed")
+```
+
+## Extra stuff
+```{r}
+case_data %>% filter(SET == "All") %>% summarise(sum(N_CASES))
+case_data %>% filter(SET == "All") %>% group_by(Endpoint) %>% summarise(N_TOTAL=sum(N_CASES)) %>% arrange(desc(N_TOTAL))
+
+n_estb <- 115674
+n_fg <- 113959+152220
+n_ukb <- 209705+254371
+
+# Hip oa prevalence
+case_data %>% filter(SET == "All") %>% filter(Endpoint == "Knee Osteoarthritis") %>% mutate(PERCENT_CASES=scales::percent(N_CASES/c(n_fg, n_estb, n_ukb)))
+case_data %>% filter(SET == "All") %>% filter(Endpoint == "Type 2 Diabetes") %>% mutate(PERCENT_CASES=scales::percent(N_CASES/c(n_fg, n_estb, n_ukb)))
+```
+
+# PheCodes
+
+```{r}
+phecodes <- readr::read_delim("/home/detrokir/Documents/DSGE/GitHub/INTERVENE_PheRS/data/phecode_definitions1.2_manual_additions_v2.csv")
+phecodes <- phecodes %>% filter(!stringr::str_detect(phecode, "\\."))
+phecodes <- phecodes %>% select(phecode, phenotype, category) %>% arrange(category, phecode)
+phecodes$category[phecodes$category == "NULL"] <- "other"
+
+icd_map <- readr::read_delim("/home/detrokir/Documents/DSGE/GitHub/INTERVENE_PheRS/data/phecode_icd10_v2_manual_curation_2024-05_v2.csv")
+icd_map <- dplyr::select(icd_map, ICD10, PheCode)
+colnames(icd_map) <- c("icd10", "phecode")
+
+icd_names <- readr::read_delim(paste0(tbl_res_dir, "phecode_icd10.csv"))
+icd_names <- dplyr::select(icd_names, ICD10,`ICD10 String`)
+colnames(icd_names) <- c("icd10", "icd10_string")
+icd_names <- dplyr::group_by(icd_names, icd10) %>% slice(1L)
+
+icd_map <- dplyr::left_join(icd_map, icd_names, by="icd10")
+icd_map <- icd_map %>% mutate(phecode = stringr::str_split(phecode, "\\.", simplify=TRUE)[,1])
+
+icd_map <- icd_map %>% left_join(phecodes, by="phecode")
+icd_map <- dplyr::select(icd_map, icd10, icd10_string, phecode, phenotype, category)
+icd_map <- dplyr::arrange(icd_map, category, phecode)
+
+icd_map <- dplyr::filter(icd_map, !is.na(phecode))
+icd_map[icd_map$phecode == "305",]$category <- "mental disorders"
+icd_map[icd_map$phecode == "305",]$phenotype <- "Eating disorders"
+
+#readr::write_delim(icd_map, (paste0(tbl_res_dir, "icd10_and_phecodes.csv")), delim=",", quote="all")
+```
+
+
+# Phecode counts
+```{r}
+fg_phecodes <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/orig/finngen/fg_down_2024-07-02/extra_counts/fg_phecode_counts.txt") %>% filter(Group == "All") %>% select(-Level, -Group, -N_occurances)
+fg_phecodes$Biobank <- "FinnGen"
+fg_phecodes$N_total <- n_indvs_all %>% filter(Group == "total") %>% pull(FinnGen)
+fg_phecodes
+
+ukb_phecodes <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/orig/ukbb/ukbb_down_2024-07-02/extra_counts/ukb_phecode_counts.txt") %>% filter(Group == "All") %>% select(-Level, -Group, -N_occurances)
+ukb_phecodes$Biobank <- "UKB"
+ukb_phecodes$N_total <- n_indvs_all %>% filter(Group == "total") %>% pull(UKB)
+ukb_phecodes
+
+estb_phecodes <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/orig/estbb/estbb_down_2024-05/estb_phecode_counts.txt") %>% filter(Group == "All") %>% select(-Level, -Group, -N_occurances)
+estb_phecodes
+estb_phecodes$Biobank <- "EstB"
+estb_phecodes$N_total <- n_indvs_all %>% filter(Group == "total") %>% pull(EstB)
+estb_phecodes
+
+phecode_counts <- rbind(fg_phecodes, ukb_phecodes, estb_phecodes)
+colnames(phecode_counts) <- c("phecode", "N_individuals", "Biobank", "N_total")
+phecode_counts <- dplyr::mutate(phecode_counts, frac=N_individuals/N_total)
+
+phecode_counts <- phecode_counts %>% pivot_wider(names_from=Biobank, values_from=c("N_individuals", "frac"), id_cols=phecode) 
+phecode_counts <- dplyr::left_join(phecode_counts, icd_map %>% select(phecode, phenotype, category) %>% distinct(), by="phecode")
+phecode_counts
+
+library(matrixStats)
+phecode_counts <- phecode_counts %>% mutate(frac_mean=rowMeans(phecode_counts %>% select(frac_FinnGen, frac_UKB, frac_EstB), na.rm=TRUE),
+                          frac_var=matrixStats::rowVars(phecode_counts %>% select(frac_FinnGen, frac_UKB, frac_EstB) %>% as.matrix())) %>% arrange(desc(frac_mean))
+phecode_counts <- dplyr::select(phecode_counts, dplyr::matches("N_individuals"), dplyr::matches("frac"), phecode, phenotype, category)
+
+phecode_counts <- phecode_counts %>% mutate(prev_text=paste0("FinnGen: ", scales::percent(round(frac_FinnGen, 3)), ", UKB: ", scales::percent(round(frac_UKB, 3)), ", EstB: ", scales::percent(round(frac_EstB, 3))))
+
+#readr::write_delim(phecode_counts, (paste0(tbl_res_dir, "phecode_counts.csv")), delim=",", quote="all")
+```
+
+
+# PheRS coefficients
+```{r}
+coefs_fg <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/orig/finngen/fg_down_2024-05-29/extra_counts/coefs_fg_2024-05-11.tsv")
+coefs_ukb <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/orig/ukbb/ukbb_phers_2024-05/ukb_phers_all_levels_2024_05_info/coefs_ukb_2024-06-04.tsv")
+coefs_estb <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/orig/estbb/estbb_down_2024-05/INTERVENE_EstBB_PheRS_results_2024-05_2/coefs_estb_2024-06-04.tsv")
+coefs <- rbind(coefs_fg, coefs_ukb, coefs_estb)
+
+coefs <- coefs %>% select(feature_name, coefficient, Endpoint, COHORT) 
+colnames(coefs) <- c("phecode", "coef", "Endpoint", "STUDY")
+coefs
+coefs <- dplyr::left_join(coefs, endpt_map, by="Endpoint") %>% select(Disease, Endpoint, phecode, coef, Order, STUDY) %>% filter(!is.na(Disease))
+coefs
+coefs <- dplyr::left_join(coefs, icd_map %>% select(phecode, phenotype, category) %>% distinct(), by="phecode") %>% select(Disease, coef, phecode, phenotype, category, Order, STUDY)
+coefs
+coefs$phenotype[coefs$phecode == "age"] <- "Age"
+coefs$phenotype[coefs$phecode == "sex"] <- "Sex"
+coefs$phenotype[coefs$phecode == "intercept"] <- "Intercept"
+coefs$category[coefs$phecode == "age"] <- "baseline"
+coefs$category[coefs$phecode == "sex"] <- "baseline"
+coefs$category[coefs$phecode == "intercept"] <- "baseline"
+
+coefs$STUDY <- factor(coefs$STUDY, levels=c("FinnGen", "UKB", "EstB"))
+coefs <- coefs %>% 
+            group_by(Disease, STUDY) %>% 
+            mutate(inter_coef=ifelse(phenotype %in% c("Age", "Sex"), abs(coef), coef)) %>% 
+            arrange(desc(inter_coef)) %>% mutate(rank=1:n()) %>% 
+            arrange(STUDY, Order, rank)
+
+coefs <- coefs %>% 
+            pivot_wider(id_cols=c(Disease, phecode, phenotype, category, Order), names_from=STUDY, values_from=c(coef, rank)) %>% 
+            select(Disease, matches("coef"), matches("rank"), phecode, phenotype, category, Order) %>%
+            ungroup()
+coefs
+
+coefs$total_coef <- rowSums(coefs %>% 
+                                    mutate(rank_rel_FinnGen=rank_FinnGen/max(rank_FinnGen, na.rm=TRUE), 
+                                             rank_rel_UKB=rank_UKB/max(rank_UKB, na.rm=TRUE), 
+                                             rank_rel_EstB=rank_EstB/max(rank_EstB, na.rm=TRUE)) %>%
+                                    select(rank_rel_FinnGen, rank_rel_UKB, rank_rel_EstB), na.rm=TRUE)
+
+coefs <- dplyr::arrange(coefs, Order, (total_coef)) %>% select(-(total_coef), -Order)
+coefs <- dplyr::left_join(coefs, phecode_counts %>% select(phecode, prev_text), by="phecode")
+coefs <- dplyr::filter(coefs, !is.na(phenotype))
+coefs <- coefs %>% filter(!((is.na(coef_FinnGen) | coef_FinnGen == 0) & (is.na(coef_UKB | coef_UKB == 0) & (is.na(coef_EstB) | coef_EstB == 0))))
+
+coefs <- coefs %>% mutate(top_bbs=case_when(rank_FinnGen <= 20 & rank_UKB <= 20 & rank_EstB <= 20 ~ "FinnGen, UKB, EstB", 
+                                   rank_FinnGen <= 20 & rank_UKB <= 20 ~ "FinnGen, UKB", 
+                                   rank_FinnGen <= 20 & rank_EstB <= 20 ~ "FinnGen, EstB", 
+                                   rank_UKB <= 20 & rank_EstB <= 20 ~ "UKB, EstB", 
+                                   rank_FinnGen <= 20 ~ "FinnGen", 
+                                   rank_UKB <= 20 ~ "UKB", 
+                                   rank_EstB <= 20 ~ "EstB", 
+                                   TRUE ~ "") ) 
+coefs <- coefs %>% select(Disease, matches("coef"), matches("rank"), top_bbs, phecode, phenotype, category, prev_text) 
+coefs
+#readr::write_delim(coefs, (paste0(tbl_res_dir, "phers_coefficients.csv")), delim=",", quote="all")
+```
+
+# Phecode exclusions
+
+```{r}
+base_dir <- "/home/detrokir/Documents/DSGE/GitHub/INTERVENE_PheRS/data/"
+exclusions <- tibble(ENDPOINT=character(), phecode=character())
+for(file in list.files("/home/kira/Documents/mac_backup_03-10-2024/Documents/Projects/onset_prediction/code/INTERVENE_PheRS/data", full.names=FALSE)) {
+    if(stringr::str_detect(file, "-excluded-phecodes.txt")) {
+        endpt <- stringr::str_extract(file, "^[^-excluded-phecodes.txt]+")
+        if(endpt %in% endpt_map$ENDPOINT) {
+            exclude_phes <- stringr::str_split(readr::read_lines(paste0(base_dir, file)), ",")[[1]]
+            exclude_phes
+            for(phecode in exclude_phes) exclusions <- exclusions %>% add_row(ENDPOINT=endpt, phecode=phecode)
+            print(endpt)
+        }
+    }
+}
+exclusions <- dplyr::left_join(exclusions, endpt_map %>% select(ENDPOINT, Disease, Order), by="ENDPOINT")
+exclusions <- dplyr::left_join(exclusions, phecodes %>% select(phecode, phenotype, category) %>% distinct(), by="phecode")
+exclusion <- exclusions %>% filter(!is.na(phenotype)) %>% arrange(Order, phecode) %>% select(Disease, phecode, phenotype, category)
+
+readr::write_delim(exclusion, (paste0(tbl_res_dir, "phecode_exclusions.csv")), delim=",", quote="all")
+```
+
+# HRs
+```{r}
+normal_hrs <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/processed/2024-07-02/bbs/meta/2019-01-01_o8_w2_10_32_70_coxph.tsv")
+normal_hrs %>% filter(SURV_MODEL == "Surv~CCI_group+Sex+Age", Biobank == "Meta-analysis") %>% arrange(desc(HR))
+normal_hrs %>% filter(SURV_MODEL == "Surv~Edu+Sex+Age", Biobank == "Meta-analysis") %>% arrange(desc(HR))
+
+unique(normal_hrs$SURV_MODEL)
+
+normal_hrs <- normal_hrs %>% 
+                dplyr::filter(SURV_MODEL %in% c("Surv~PheRS", "Surv~PRS", "Surv~PheRS+PRS", "Surv~PheRS+Sex+Age", "Surv~CCI_group+Sex+Age", "Surv~Edu+Sex+Age", "Surv~CCI_group+Edu+PheRS+Sex+Age", "Surv~PheRS_group", "Surv~PRS_group")) %>%
+                dplyr::mutate(SURV_MODEL=stringr::str_replace(SURV_MODEL, "CCI_group", "CCI"), 
+                              VAR=ifelse(VAR == "YEAR_OF_BIRTH", "Age", VAR)) %>%
+                get_new_crnt_endpt_data() %>% 
+                dplyr::filter(GROUP %in% c(-1, 7)) %>% 
+                dplyr::mutate(GROUP=case_when(GROUP == -1 ~ "All", GROUP == 7 ~ "Top 10%"))
+
+normal_hrs <- dplyr::left_join(normal_hrs, endpt_map, by="Endpoint")
+normal_hrs <- dplyr::select(normal_hrs, Disease, SURV_MODEL, Biobank, N_BBs, N_CASES, N_CONTROLS, VAR, GROUP, HR, P_VAL, CI_NEG, CI_POS, I2, I2_CIneg, I2_CIpos, Order)
+unique(normal_hrs$SURV_MODEL)
+
+normal_hrs$SURV_MODEL <- factor(normal_hrs$SURV_MODEL, levels=c("Surv~PheRS", "Surv~PheRS_group", "Surv~PRS", "Surv~PRS_group", "Surv~PheRS+PRS", "Surv~PheRS+Sex+Age", "Surv~CCI+Sex+Age", "Surv~Edu+Sex+Age", "Surv~CCI+Edu+PheRS+Sex+Age"))
+normal_hrs$Biobank <- factor(normal_hrs$Biobank, levels=c("FinnGen", "UKB", "EstB", "Meta-analysis"))
+unique(normal_hrs$VAR)
+normal_hrs$VAR <- factor(normal_hrs$VAR, levels=c("PheRS", "PRS", "Age", "Sex", "CCI", "Edu"))
+normal_hrs <- normal_hrs %>% arrange(Order, VAR, GROUP, SURV_MODEL, Biobank)
+
+transfer_hrs <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/processed/2024-05-30/bbs/fg/transfer/2019-01-01_o8_w2_e10_32_70_coxph.tsv")
+transfer_hrs
+unique(transfer_hrs$SURV_MODEL)
+transfer_hrs <- transfer_hrs %>% 
+                dplyr::filter(SURV_MODEL %in% c("Surv~PheRS_transfer", "Surv~PheRS_transfer_group", "Surv~PheRS_transfer+Sex+Age", "Surv~PheRS+PheRS_transfer")) %>%
+                dplyr::mutate(SURV_MODEL=stringr::str_replace(SURV_MODEL, "CCI_group", "CCI"), 
+                              VAR=ifelse(VAR == "YEAR_OF_BIRTH", "Age", VAR)) %>%
+                get_new_crnt_endpt_data() %>% 
+                dplyr::filter(GROUP %in% c(-1, 7)) %>% 
+                dplyr::mutate(GROUP=case_when(GROUP == -1 ~ "All", GROUP == 7 ~ "Top 10%"))
+transfer_hrs
+transfer_hrs <- dplyr::left_join(transfer_hrs, endpt_map, by="Endpoint")
+transfer_hrs$I2 <- NA
+transfer_hrs$I2_CIneg <- NA
+transfer_hrs$I2_CIpos <- NA
+transfer_hrs$N_BBs <- 1
+
+transfer_hrs <- dplyr::select(transfer_hrs, Disease, SURV_MODEL, Biobank, N_BBs, N_CASES, N_CONTROLS, VAR, GROUP, HR, P_VAL, CI_NEG, CI_POS, I2, I2_CIneg, I2_CIpos,Order)
+unique(transfer_hrs$SURV_MODEL)
+
+transfer_hrs$SURV_MODEL <- factor(transfer_hrs$SURV_MODEL, levels=c("Surv~PheRS_transfer", "Surv~PheRS_transfer+Sex+Age", "Surv~PheRS_transfer_group", "Surv~PheRS+PheRS_transfer"))
+transfer_hrs$Biobank <- factor(transfer_hrs$Biobank, levels=c("UKB->FinnGen","EstB->FinnGen"))
+unique(transfer_hrs$VAR)
+transfer_hrs$VAR <- factor(transfer_hrs$VAR, levels=c("PheRS_transfer", "PheRS", "Age", "Sex"))
+transfer_hrs <- transfer_hrs %>% arrange(Order, VAR, GROUP, SURV_MODEL, Biobank)
+
+all_hrs <- rbind(normal_hrs, transfer_hrs)
+all_hrs
+
+readr::write_delim(all_hrs, (paste0(tbl_res_dir, "all_hrs.csv")), delim=",", quote="all")
+
+```
+
+
+# C-index
+```{r}
+normal_cidx <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/processed/2024-07-02/bbs/meta/2019-01-01_o8_w2_10_32_70_cidx.tsv")
+normal_cidx %>% filter(Biobank == "UKB", Endpoint == "Major Depression", SURV_MODEL %in% c("Surv~Sex+Age", "Surv~CCI_group+Sex+Age"))
+unique(normal_cidx$SURV_MODEL)
+round(calc_cidx_pval(normal_cidx %>% filter(Biobank == "UKB", Endpoint == "Major Depression", SURV_MODEL %in% c("Surv~Sex+Age")),
+normal_cidx %>% filter(Biobank == "UKB", Endpoint == "Major Depression", SURV_MODEL %in% c("Surv~CCI_group+Sex+Age")))$pvals, 20)
+
+normal_cidx <- normal_cidx %>% 
+                dplyr::mutate(SURV_MODEL=stringr::str_replace(SURV_MODEL, "CCI_group", "CCI")) %>%
+                dplyr::filter(SURV_MODEL %in% c("Surv~PheRS", "Surv~PRS",  "Surv~PheRS+PRS", "Surv~Sex+Age", "Surv~PheRS+Sex+Age", "Surv~PheRS+PRS+Sex+Age", "Surv~CCI+Sex+Age", "Surv~Edu+Sex+Age", "Surv~CCI+Edu+PheRS+Sex+Age", "Surv~CCI+Edu+PheRS+PRS+Sex+Age")) %>%
+                get_new_crnt_endpt_data()
+
+normal_cidx <- dplyr::left_join(normal_cidx, endpt_map, by="Endpoint")
+normal_cidx
+normal_cidx <- dplyr::select(normal_cidx, Disease, SURV_MODEL, Biobank, N_BBs, N_CASES, N_CONTROLS, C_IDX, C_IDX_CI_NEG, C_IDX_CI_POS, Order)
+unique(normal_cidx$SURV_MODEL)
+
+normal_cidx$SURV_MODEL <- factor(normal_cidx$SURV_MODEL, levels=c( "Surv~Sex+Age", "Surv~PheRS","Surv~PheRS+Sex+Age", "Surv~PRS",  "Surv~PheRS+PRS", "Surv~PheRS+PRS+Sex+Age", "Surv~CCI+Sex+Age", "Surv~Edu+Sex+Age", "Surv~CCI+Edu+PheRS+Sex+Age", "Surv~CCI+Edu+PheRS+PRS+Sex+Age"))
+normal_cidx$Biobank <- factor(normal_cidx$Biobank, levels=c("FinnGen", "UKB", "EstB", "Meta-analysis"))
+unique(normal_cidx$SURV_MODEL)
+normal_cidx <- normal_cidx %>% arrange(Order, SURV_MODEL, Biobank)
+normal_cidx
+
+transfer_cidx <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/processed/2024-05-30/bbs/fg/transfer/2019-01-01_o8_w2_e10_32_70_cidx.tsv")
+
+unique(transfer_cidx$SURV_MODEL)
+
+transfer_cidx <- transfer_cidx %>% 
+                dplyr::filter(SURV_MODEL %in% c("Surv~PheRS_transfer", "Surv~PheRS_transfer+Sex+Age", "Surv~PheRS+PheRS_transfer")) %>%
+                get_new_crnt_endpt_data()
+
+transfer_cidx <- dplyr::left_join(transfer_cidx, endpt_map, by="Endpoint")
+transfer_cidx$N_BBs <- 1
+transfer_cidx <- dplyr::select(transfer_cidx, Disease, SURV_MODEL, Biobank, N_BBs, N_CASES, N_CONTROLS, C_IDX, C_IDX_CI_NEG, C_IDX_CI_POS, Order)
+unique(transfer_cidx$SURV_MODEL)
+
+transfer_cidx$SURV_MODEL <- factor(transfer_cidx$SURV_MODEL, levels=c("Surv~PheRS_transfer", "Surv~PheRS_transfer+Sex+Age", "Surv~PheRS+PheRS_transfer"))
+transfer_cidx$Biobank <- factor(transfer_cidx$Biobank, levels=c("UKB->FinnGen","EstB->FinnGen"))
+transfer_cidx <- transfer_cidx %>% arrange(Order, SURV_MODEL, Biobank)
+transfer_cidx
+
+all_cidx <- rbind(normal_cidx, transfer_cidx)
+all_cidx
+readr::write_delim(all_cidx, (paste0(tbl_res_dir, "all_cidx.csv")), delim=",", quote="all")
+
+```
+
+# Correlations
+# tRANSFER
+```{r}
+cors_estb <- get_data("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/orig/finngen/fg_down_2024-05-29/estb/2019-01-01_o8_w2_e10_32_70_cors.tsv", "EstB")
+cors_ukb <- get_data("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/orig/finngen/fg_down_2024-05-29/ukb/2019-01-01_o8_w2_e10_32_70_cors.tsv", "UKB")
+
+cors <- rbind(cors_estb, cors_ukb)
+cors <- cors %>% filter(VAR_1 == "PheRS", VAR_2 == "PheRS_transfer", SET == "Test")
+#cors <- dplyr::left_join(cors %>% filter(Biobank == "EstBB"), cors %>% filter(Biobank == "UKBB"), by="Endpoint")
+cors_wide <- cors %>% tidyr::pivot_wider(values_from=c(COR, CIneg, CIpos, P_value), names_from=Biobank, id_cols = Endpoint)
+cors_wide <- cors_wide %>% left_join(endpt_map) %>% select(Disease, COR_EstB, COR_UKB, P_value_EstB, P_value_UKB)
+cors_wide <- dplyr::filter(cors_wide, !is.na(Disease))
+readr::write_delim(cors_wide, (paste0(tbl_res_dir, "transfer_cor.csv")), delim=",", quote="all")
+
+```
+# pgs
+```{r}
+fg_cors <- get_data("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/orig/finngen/fg_down_2024-05-29/fg/PheRS_PRS/2019-01-01_o8_w2_e10_32_70_cors.tsv", "FinnGen")
+
+fg_cors_cciedu <- get_data("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/orig/finngen/fg_down_2024-05-29/fg/EDU_CCI/2019-01-01_o8_w2_e10_32_70_cors.tsv", "FinnGen")
+
+ukb_cors_prs <- get_data("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/orig/ukbb/ukbb_down_2024-07-02/prs/2019-01-01_o8_w2_e10_32_70_cors.tsv", "UKB")
+estb_cors <- get_data("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/orig/estbb/estbb_down_2024-06-10/2019-01-01_o8_w2_e6_32_70_cors.tsv", "EstB")
+
+ukb_cors <- get_data("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/orig/ukbb/ukbb_down_2024-07-02/2019-01-01_o8_w2_e10_32_70_cors.tsv", "UKB")
+cors <- bind_rows(fg_cors, ukb_cors, ukb_cors_prs, fg_cors_cciedu, estb_cors) %>% filter(SET == "All") %>% distinct(ENDPOINT, VAR_1, VAR_2, Biobank, .keep_all = TRUE)
+
+cors_wide <- cors %>% filter(VAR_1 == "PheRS", VAR_2=="PRS") %>% tidyr::pivot_wider(values_from=c(COR, CIneg, CIpos, P_value), names_from=Biobank, id_cols = Endpoint)
+cors_wide <- cors_wide %>% left_join(endpt_map) %>% select(Disease, COR_FinnGen, COR_EstB, COR_UKB, P_value_FinnGen, P_value_EstB, P_value_UKB)
+cors_wide <- dplyr::filter(cors_wide, !is.na(Disease))
+cors_wide
+
+readr::write_delim(cors_wide, (paste0(tbl_res_dir, "phers_pgs_cor.csv")), delim=",", quote="all")
+
+```
+
+# n-diag
+```{r}
+n_diag_cor <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/orig/finngen/fg_down_2024-07-02/cor_with_n_diags.tsv")
+n_diag_cor <- dplyr::left_join(n_diag_cor, endpt_map, by="ENDPOINT") %>% filter(!is.na(Disease_short))
+n_diag_cor <- dplyr::arrange(n_diag_cor, desc(COR_SIMPLE)) %>% mutate(ENDPT_ORDER=1:n(), STRIP=ifelse(ENDPT_ORDER %% 2 == 0, "even", "odd"))
+
+n_diag_cor <- n_diag_cor %>% left_join(endpt_map) %>% select(Disease, COR_SIMPLE, COR_SIMPLE_Pval)
+n_diag_cor <- dplyr::filter(n_diag_cor, !is.na(Disease))
+
+n_diag_cor
+readr::write_delim(n_diag_cor, (paste0(tbl_res_dir, "n_diags_cor.csv")), delim=",", quote="all")
+
+```
+## CCI
+```{r}
+fg_cors <- get_data("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/orig/finngen/fg_down_2024-05-29/fg/PheRS_PRS/2019-01-01_o8_w2_e10_32_70_cors.tsv", "FinnGen")
+
+fg_cors_cciedu <- get_data("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/orig/finngen/fg_down_2024-05-29/fg/EDU_CCI/2019-01-01_o8_w2_e10_32_70_cors.tsv", "FinnGen")
+
+ukb_cors_prs <- get_data("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/orig/ukbb/ukbb_down_2024-07-02/prs/2019-01-01_o8_w2_e10_32_70_cors.tsv", "UKB")
+estb_cors <- get_data("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/orig/estbb/estbb_down_2024-06-10/2019-01-01_o8_w2_e6_32_70_cors.tsv", "EstB")
+
+ukb_cors <- get_data("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/orig/ukbb/ukbb_down_2024-07-02/2019-01-01_o8_w2_e10_32_70_cors.tsv", "UKB")
+cors <- bind_rows(fg_cors, ukb_cors, ukb_cors_prs, fg_cors_cciedu, estb_cors) %>% filter(SET == "All") %>% distinct(ENDPOINT, VAR_1, VAR_2, Biobank, .keep_all = TRUE)
+cors$Biobank <- factor(cors$Biobank, levels=c("FinnGen", "UKB", "EstB"))
+cors <- arrange(cors, Biobank)
+cors_wide <- cors %>% filter(VAR_1 == "PheRS", VAR_2=="CCI") %>% tidyr::pivot_wider(values_from=c(COR, CIneg, CIpos, P_value), names_from=Biobank, id_cols = Endpoint)
+cors_wide <- cors_wide %>% left_join(endpt_map) %>% select(Disease, COR_FinnGen, COR_UKB, COR_EstB, P_value_FinnGen, P_value_UKB, P_value_EstB)
+cors_wide <- dplyr::filter(cors_wide, !is.na(Disease))
+cors_wide
+
+readr::write_delim(cors_wide, (paste0(tbl_res_dir, "phers_cci_cor.csv")), delim=",", quote="all")
+```
