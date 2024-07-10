@@ -22,13 +22,12 @@ read_icd_file <- function(file_path) {
                                       delim="\t",
                                       col_types=c("cdccc"))
     }, error=function(e) {writeLines(paste0("Could not read ICD file ", file_path))})
-
     if(nrow(icd_data) == 0) {
         warning(paste0("Warning. ICD-file contained no entries. Given path: ", file_path, "\nGot: ", file_path))
     }
     expect_cols <- c("ID", "EVENT_AGE", "ICD_VERSION", "PRIMARY_ICD")
     check_cols(expect_cols, colnames(icd_data), file_path)
-
+    
     return(icd_data)
 }
 

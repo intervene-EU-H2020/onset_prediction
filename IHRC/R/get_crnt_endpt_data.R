@@ -35,3 +35,4 @@ get_crnt_endpt_data <- function(endpts_indvs_mat = NULL,
     }
     return(pheno_data)
 }
+
