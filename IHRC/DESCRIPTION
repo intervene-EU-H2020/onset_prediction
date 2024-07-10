@@ -1,6 +1,6 @@
 Package: IHRC
 Title: Fits a Cox-proportional hazards model for specific study setups and risk scores
-Version: 4.2.3
+Version: 4.3.2
 Authors@R: 
     person("Kira E.", "Detrois", , "kira.detrois@helsinki.fi", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-7193-624X"))
@@ -8,13 +8,12 @@ Description: The goal of this package is to fit a Cox-proportional hazards model
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Imports: 
     dplyr (>= 1.0.9),
-    ggplot2 (>= 3.3.6),
     lubridate (>= 1.8.0),
     methods (>= 4.2.1),
     readr (>= 2.1.3),
