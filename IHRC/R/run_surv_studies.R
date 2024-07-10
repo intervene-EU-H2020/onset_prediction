@@ -90,6 +90,7 @@ run_surv_studies <- function(pheno_data,
                              create_score_combos=FALSE,
                              bunch_phenos=FALSE,
                              covs=c("SEX", "YEAR_OF_BIRTH"),
+                             models=NULL,
                              endpts_indvs_mat=NULL,
                              icd_data=NULL,
                              atc_data=NULL,
@@ -112,7 +113,8 @@ run_surv_studies <- function(pheno_data,
                              write_res=FALSE,
                              res_dir=NULL,
                              write_progress=FALSE,
-                             is_first_endpt=TRUE) {
+                             is_first_endpt=TRUE,
+                             subset_train=TRUE) {
     res_dir <- get_full_res_path(write_res=write_res,  
                                  res_dir=res_dir,
                                  down_fctr=down_fctr, 
@@ -122,8 +124,7 @@ run_surv_studies <- function(pheno_data,
     surv_ana <- methods::new("surv_ana",
                              min_indvs=min_indvs,
                              score_types=score_type,
-                             create_score_combos=create_score_combos,
-                             bunch_phenos=bunch_phenos,
+                             models=models,
                              covs=covs,
                              write_res=write_res,
                              res_dir=res_dir,
@@ -153,7 +154,8 @@ run_surv_studies <- function(pheno_data,
     run_models(study_setup=study_setup,
                endpts=endpts,
                surv_ana=surv_ana,
-               is_first_endpt=is_first_endpt)
+               is_first_endpt=is_first_endpt,
+               subset_train=subset_train)
 }
 
 #' Create phenotype score files
@@ -188,15 +190,17 @@ create_pheno_score_files <- function(study_setup,
                                     phers_data,
                                     zip_data) {
     writeLines("Creating pheno score files")
-    if(!("CCI" %in% colnames(pheno_data))) {
-        cci_data <- get_study_cci_data(pheno_data,
-                                    icd_data,
-                                    score_type="CCI",
-                                    study_setup) 
-        pheno_data <- dplyr::left_join(pheno_data, cci_data, by="ID")
-        writeLines(paste0("what: ", colnames(pheno_data), collapse=", "))
-    }
-
+    # if(!("CCI" %in% colnames(pheno_data)) & ("CCI" %in% score_type)) {
+    #     print(pheno_data)
+    #     cci_data <- get_study_cci_data(pheno_data,
+    #                                 icd_data,
+    #                                 score_type="CCI",
+    #                                 study_setup) 
+    #     print(cci_data)
+    #     pheno_data <- dplyr::left_join(pheno_data, cci_data, by="ID")
+    #     writeLines(paste0("what: ", paste0(colnames(pheno_data), collapse=", ")))
+    # }
+    cor_data <- tibble::tibble(ENDPOINT=character(), SET=character(), VAR_1=character(), VAR_2=character(), COR=numeric(), CIneg=numeric(), CIpos=numeric(), P_value=numeric())
     for(endpt in endpts) {
         writeLines(paste0("Endpoint: ", endpt))
         # Getting all data for current endpoint
@@ -215,15 +219,379 @@ create_pheno_score_files <- function(study_setup,
                                          error_file=surv_ana@error_file,
                                          write_progress=surv_ana@write_progress)
         # Writing log files
-        print(pheno_score_data)
         write_pheno_score_files(pheno_score_data=pheno_score_data,
                                 study_setup=study_setup,
                                 endpt=endpt,
-                                surv_ana=surv_ana)       
+                                surv_ana=surv_ana)
+        cor_data <- get_cor_data(pheno_score_data, score_type, endpt, cor_data)
     }
+    write_cor_data(cor_data, study_setup, surv_ana)
     return(pheno_score_data)
 }
 
+write_cor_data <- function(cor_data, study_setup, surv_ana) {
+    res_path <- get_full_file_name_path(res_type="cor",
+                            study_setup=study_setup,
+                            surv_ana=surv_ana)
+    readr::write_delim(cor_data, res_path, delim="\t")
+}
+
+get_cor_data <- function(pheno_score_data,
+                               score_type,
+                               endpt,
+                               cor_data) {
+    pheno_score_data$YEAR_OF_BIRTH <- lubridate::year(pheno_score_data$DATE_OF_BIRTH)
+    pheno_score_data$SEX <- ifelse(pheno_score_data$SEX == "male", 0, 1)
+    test_data <- dplyr::filter(pheno_score_data, TRAIN_STATUS==0)
+
+    if("PheRS" %in% score_type & "PRS" %in% score_type) {
+        cor <- cor.test(test_data$PheRS, test_data$PRS)
+        cor_data <- rbind(cor_data, tibble::tibble(ENDPOINT=endpt, 
+                                                SET="Test",
+                                                VAR_1="PheRS", 
+                                                VAR_2="PRS", 
+                                                COR=cor$estimate, 
+                                                CIneg=cor$conf.int[1], 
+                                                CIpos=cor$conf.int[2], 
+                                                P_value=cor$p.value))
+
+        cor <- cor.test(pheno_score_data$PheRS, pheno_score_data$PRS)
+        cor_data <- rbind(cor_data, tibble::tibble(ENDPOINT=endpt, 
+                                                SET="All",
+                                                VAR_1="PheRS", 
+                                                VAR_2="PRS", 
+                                                COR=cor$estimate, 
+                                                CIneg=cor$conf.int[1], 
+                                                CIpos=cor$conf.int[2], 
+                                                P_value=cor$p.value))
+    }
+    if("PheRS" %in% score_type) {
+        cor <- cor.test(pheno_score_data$PheRS_orig, pheno_score_data$PheRS)
+        cor_data <- rbind(cor_data, tibble::tibble(ENDPOINT=endpt, 
+                                                SET="All",
+                                                VAR_1="PheRS_orig", 
+                                                VAR_2="PheRS", 
+                                                COR=cor$estimate, 
+                                                CIneg=cor$conf.int[1], 
+                                                CIpos=cor$conf.int[2], 
+                                                P_value=cor$p.value))
+
+        cor <- cor.test(pheno_score_data$PheRS_orig, pheno_score_data$YEAR_OF_BIRTH)
+        cor_data <- rbind(cor_data, tibble::tibble(ENDPOINT=endpt, 
+                                                SET="All",
+                                                VAR_1="PheRS_orig", 
+                                                VAR_2="Age", 
+                                                COR=cor$estimate, 
+                                                CIneg=cor$conf.int[1], 
+                                                CIpos=cor$conf.int[2], 
+                                                P_value=cor$p.value))
+
+        cor <- cor.test(pheno_score_data$PheRS, pheno_score_data$YEAR_OF_BIRTH)
+        cor_data <- rbind(cor_data, tibble::tibble(ENDPOINT=endpt, 
+                                                SET="All",
+                                                VAR_1="PheRS", 
+                                                VAR_2="Age", 
+                                                COR=cor$estimate, 
+                                                CIneg=cor$conf.int[1], 
+                                                CIpos=cor$conf.int[2], 
+                                                P_value=cor$p.value))
+
+        cor <- cor.test(pheno_score_data$PheRS_orig, pheno_score_data$SEX)
+        cor_data <- rbind(cor_data, tibble::tibble(ENDPOINT=endpt, 
+                                                SET="All",
+                                                VAR_1="PheRS_orig", 
+                                                VAR_2="SEX", 
+                                                COR=cor$estimate, 
+                                                CIneg=cor$conf.int[1], 
+                                                CIpos=cor$conf.int[2], 
+                                                P_value=cor$p.value))
+
+        cor <- cor.test(pheno_score_data$PheRS, pheno_score_data$SEX)
+        cor_data <- rbind(cor_data, tibble::tibble(ENDPOINT=endpt, 
+                                                SET="All",
+                                                VAR_1="PheRS", 
+                                                VAR_2="SEX", 
+                                                COR=cor$estimate, 
+                                                CIneg=cor$conf.int[1], 
+                                                CIpos=cor$conf.int[2], 
+                                                P_value=cor$p.value))
+    }
+
+
+    if("CCI" %in% score_type & "PheRS" %in% score_type) {
+        cor <- cor.test(pheno_score_data$PheRS, as.numeric(pheno_score_data$CCI_group))
+        cor_data <- rbind(cor_data, tibble::tibble(ENDPOINT=endpt, 
+                                                SET="All",
+                                                VAR_1="PheRS", 
+                                                VAR_2="CCI_group", 
+                                                COR=cor$estimate, 
+                                                CIneg=cor$conf.int[1], 
+                                                CIpos=cor$conf.int[2], 
+                                                P_value=cor$p.value))
+
+        cor <- cor.test(test_data$PheRS, as.numeric(test_data$CCI_group))
+        cor_data <- rbind(cor_data, tibble::tibble(ENDPOINT=endpt, 
+                                                SET="Test",
+                                                VAR_1="PheRS", 
+                                                VAR_2="CCI_group", 
+                                                COR=cor$estimate, 
+                                                CIneg=cor$conf.int[1], 
+                                                CIpos=cor$conf.int[2], 
+                                                P_value=cor$p.value))
+    }
+
+
+    if("CCI" %in% score_type) {
+        cor <- cor.test(pheno_score_data$CCI, pheno_score_data$YEAR_OF_BIRTH)
+        cor_data <- rbind(cor_data, tibble::tibble(ENDPOINT=endpt, 
+                                                SET="All",
+                                                VAR_1="CCI", 
+                                                VAR_2="Age", 
+                                                COR=cor$estimate, 
+                                                CIneg=cor$conf.int[1], 
+                                                CIpos=cor$conf.int[2], 
+                                                P_value=cor$p.value))
+
+        cor <- cor.test(pheno_score_data$CCI_orig, pheno_score_data$YEAR_OF_BIRTH)
+        cor_data <- rbind(cor_data, tibble::tibble(ENDPOINT=endpt, 
+                                                SET="All",
+                                                VAR_1="CCI_orig", 
+                                                VAR_2="Age", 
+                                                COR=cor$estimate, 
+                                                CIneg=cor$conf.int[1], 
+                                                CIpos=cor$conf.int[2], 
+                                                P_value=cor$p.value))
+
+        cor <- cor.test(pheno_score_data$CCI, pheno_score_data$SEX)
+        cor_data <- rbind(cor_data, tibble::tibble(ENDPOINT=endpt, 
+                                                SET="All",
+                                                VAR_1="CCI", 
+                                                VAR_2="SEX", 
+                                                COR=cor$estimate, 
+                                                CIneg=cor$conf.int[1], 
+                                                CIpos=cor$conf.int[2], 
+                                                P_value=cor$p.value))
+
+        cor <- cor.test(pheno_score_data$CCI_orig, pheno_score_data$SEX)
+        cor_data <- rbind(cor_data, tibble::tibble(ENDPOINT=endpt, 
+                                                SET="All",
+                                                VAR_1="CCI_orig", 
+                                                VAR_2="SEX", 
+                                                COR=cor$estimate, 
+                                                CIneg=cor$conf.int[1], 
+                                                CIpos=cor$conf.int[2], 
+                                                P_value=cor$p.value))
+    }
+
+
+    if("EDU" %in% score_type) {
+        pheno_score_data <- dplyr::mutate(pheno_score_data, EDU=case_when(EDU == "Basic" ~ 1, EDU == "Intermediate" ~ 1, EDU == "Advanced" ~ 2))
+        cor <- cor.test(pheno_score_data$EDU, pheno_score_data$YEAR_OF_BIRTH)
+        cor_data <- rbind(cor_data, tibble::tibble(ENDPOINT=endpt, 
+                                                SET="All",
+                                                VAR_1="EDU", 
+                                                VAR_2="Age", 
+                                                COR=cor$estimate, 
+                                                CIneg=cor$conf.int[1], 
+                                                CIpos=cor$conf.int[2], 
+                                                P_value=cor$p.value))
+        cor <- cor.test(pheno_score_data$EDU, pheno_score_data$SEX)
+
+        cor_data <- rbind(cor_data, tibble::tibble(ENDPOINT=endpt, 
+                                                SET="All",
+                                                VAR_1="EDU", 
+                                                VAR_2="SEX", 
+                                                COR=cor$estimate, 
+                                                CIneg=cor$conf.int[1], 
+                                                CIpos=cor$conf.int[2], 
+                                                P_value=cor$p.value))
+    }
+    if("EDU_cont" %in% score_type) {
+        cor <- cor.test(pheno_score_data$EDU_cont, pheno_score_data$YEAR_OF_BIRTH)
+        cor_data <- rbind(cor_data, tibble::tibble(ENDPOINT=endpt, 
+                                                SET="All",
+                                                VAR_1="EDU_cont", 
+                                                VAR_2="Age", 
+                                                COR=cor$estimate, 
+                                                CIneg=cor$conf.int[1], 
+                                                CIpos=cor$conf.int[2], 
+                                                P_value=cor$p.value))
+
+        cor <- cor.test(pheno_score_data$EDU_cont, pheno_score_data$SEX)
+        cor_data <- rbind(cor_data, tibble::tibble(ENDPOINT=endpt, 
+                                                SET="All",
+                                                VAR_1="EDU_cont", 
+                                                VAR_2="SEX", 
+                                                COR=cor$estimate, 
+                                                CIneg=cor$conf.int[1], 
+                                                CIpos=cor$conf.int[2], 
+                                                P_value=cor$p.value))
+
+        cor <- cor.test(as.numeric(pheno_score_data$EDU_cont_group), pheno_score_data$YEAR_OF_BIRTH)
+        cor_data <- rbind(cor_data, tibble::tibble(ENDPOINT=endpt, 
+                                                SET="All",
+                                                VAR_1="EDU_cont_group", 
+                                                VAR_2="Age", 
+                                                COR=cor$estimate, 
+                                                CIneg=cor$conf.int[1], 
+                                                CIpos=cor$conf.int[2], 
+                                                P_value=cor$p.value))
+
+
+        cor <- cor.test(as.numeric(pheno_score_data$EDU_cont_group), pheno_score_data$SEX)
+        cor_data <- rbind(cor_data, tibble::tibble(ENDPOINT=endpt, 
+                                                SET="All",
+                                                VAR_1="EDU_cont_group", 
+                                                VAR_2="SEX", 
+                                                COR=cor$estimate, 
+                                                CIneg=cor$conf.int[1], 
+                                                CIpos=cor$conf.int[2], 
+                                                P_value=cor$p.value))
+    }
+
+    if("PheRS" %in% score_type & "PheRS_transfer" %in% score_type) {
+        cor <- cor.test(pheno_score_data$PheRS, pheno_score_data$PheRS_transfer)
+        cor_data <- rbind(cor_data, tibble::tibble(ENDPOINT=endpt, 
+                                                SET="All",
+                                                VAR_1="PheRS", 
+                                                VAR_2="PheRS_transfer", 
+                                                COR=cor$estimate, 
+                                                CIneg=cor$conf.int[1], 
+                                                CIpos=cor$conf.int[2], 
+                                                P_value=cor$p.value))
+
+        cor <- cor.test(test_data$PheRS, test_data$PheRS_transfer)
+        cor_data <- rbind(cor_data, tibble::tibble(ENDPOINT=endpt, 
+                                                SET="Test",
+                                                VAR_1="PheRS", 
+                                                VAR_2="PheRS_transfer", 
+                                                COR=cor$estimate, 
+                                                CIneg=cor$conf.int[1], 
+                                                CIpos=cor$conf.int[2], 
+                                                P_value=cor$p.value))
+    }
+
+    if("PRS" %in% score_type) {
+        cor <- cor.test(pheno_score_data$PRS_orig, pheno_score_data$PRS)
+        cor_data <- rbind(cor_data, tibble::tibble(ENDPOINT=endpt, 
+                                                SET="All",
+                                                VAR_1="PRS_orig", 
+                                                VAR_2="PRS", 
+                                                COR=cor$estimate, 
+                                                CIneg=cor$conf.int[1], 
+                                                CIpos=cor$conf.int[2], 
+                                                P_value=cor$p.value))
+        cor <- cor.test(pheno_score_data$PRS, pheno_score_data$YEAR_OF_BIRTH)
+        cor_data <- rbind(cor_data, tibble::tibble(ENDPOINT=endpt, 
+                                                SET="All",
+                                                VAR_1="PRS", 
+                                                VAR_2="Age", 
+                                                COR=cor$estimate, 
+                                                CIneg=cor$conf.int[1], 
+                                                CIpos=cor$conf.int[2], 
+                                                P_value=cor$p.value))
+
+        cor <- cor.test(pheno_score_data$PRS_orig, pheno_score_data$YEAR_OF_BIRTH)
+        cor_data <- rbind(cor_data, tibble::tibble(ENDPOINT=endpt, 
+                                                SET="All",
+                                                VAR_1="PRS_orig", 
+                                                VAR_2="Age", 
+                                                COR=cor$estimate, 
+                                                CIneg=cor$conf.int[1], 
+                                                CIpos=cor$conf.int[2], 
+                                                P_value=cor$p.value))
+        cor <- cor.test(pheno_score_data$PRS, pheno_score_data$SEX)
+        cor_data <- rbind(cor_data, tibble::tibble(ENDPOINT=endpt, 
+                                                SET="All",
+                                                VAR_1="PRS", 
+                                                VAR_2="SEX", 
+                                                COR=cor$estimate, 
+                                                CIneg=cor$conf.int[1], 
+                                                CIpos=cor$conf.int[2], 
+                                                P_value=cor$p.value))
+
+        cor <- cor.test(pheno_score_data$PRS_orig, pheno_score_data$SEX)
+        cor_data <- rbind(cor_data, tibble::tibble(ENDPOINT=endpt, 
+                                                SET="All",
+                                                VAR_1="PRS_orig", 
+                                                VAR_2="SEX", 
+                                                COR=cor$estimate, 
+                                                CIneg=cor$conf.int[1], 
+                                                CIpos=cor$conf.int[2], 
+                                                P_value=cor$p.value))
+        cor <- cor.test(pheno_score_data$PRS, pheno_score_data$PC1)
+        cor_data <- rbind(cor_data, tibble::tibble(ENDPOINT=endpt, 
+                                                SET="All",
+                                                VAR_1="PRS", 
+                                                VAR_2="PC1", 
+                                                COR=cor$estimate, 
+                                                CIneg=cor$conf.int[1], 
+                                                CIpos=cor$conf.int[2], 
+                                                P_value=cor$p.value))
+
+        cor <- cor.test(pheno_score_data$PRS_orig, pheno_score_data$PC1)
+        cor_data <- rbind(cor_data, tibble::tibble(ENDPOINT=endpt, 
+                                                SET="All",
+                                                VAR_1="PRS_orig", 
+                                                VAR_2="PC1", 
+                                                COR=cor$estimate, 
+                                                CIneg=cor$conf.int[1], 
+                                                CIpos=cor$conf.int[2], 
+                                                P_value=cor$p.value))
+    }
+
+    if("CCI" %in% score_type & "PheRS" %in% score_type) {
+        cor <- cor.test(pheno_score_data$PheRS, pheno_score_data$CCI)
+        cor_data <- rbind(cor_data, tibble::tibble(ENDPOINT=endpt, 
+                                                SET="All",
+                                                VAR_1="PheRS", 
+                                                VAR_2="CCI", 
+                                                COR=cor$estimate, 
+                                                CIneg=cor$conf.int[1], 
+                                                CIpos=cor$conf.int[2], 
+                                                P_value=cor$p.value))
+    }
+
+
+    if("EDU_cont" %in% score_type & "PheRS" %in% score_type) {
+        cor <- cor.test(pheno_score_data$PheRS, pheno_score_data$EDU_cont)
+        cor_data <- rbind(cor_data, tibble::tibble(ENDPOINT=endpt, 
+                                                SET="All",
+                                                VAR_1="PheRS", 
+                                                VAR_2="Education", 
+                                                COR=cor$estimate, 
+                                                CIneg=cor$conf.int[1], 
+                                                CIpos=cor$conf.int[2], 
+                                                P_value=cor$p.value))
+    }
+
+    if("CCI" %in% score_type & "PRS" %in% score_type) {
+        cor <- cor.test(pheno_score_data$PRS, pheno_score_data$CCI)
+        cor_data <- rbind(cor_data, tibble::tibble(ENDPOINT=endpt, 
+                                                SET="All",
+                                                VAR_1="PRS", 
+                                                VAR_2="CCI", 
+                                                COR=cor$estimate, 
+                                                CIneg=cor$conf.int[1], 
+                                                CIpos=cor$conf.int[2], 
+                                                P_value=cor$p.value))
+    }
+
+
+    if("EDU_cont" %in% score_type & "PRS" %in% score_type) {
+        cor <- cor.test(pheno_score_data$PRS, pheno_score_data$EDU_cont)
+        cor_data <- rbind(cor_data, tibble::tibble(ENDPOINT=endpt, 
+                                                SET="All",
+                                                VAR_1="PRS", 
+                                                VAR_2="Education", 
+                                                COR=cor$estimate, 
+                                                CIneg=cor$conf.int[1], 
+                                                CIpos=cor$conf.int[2], 
+                                                P_value=cor$p.value))
+    }
+
+    return(cor_data)
+}
 
 #' Runs the Cox-PH on the data
 #' 
@@ -243,7 +611,8 @@ create_pheno_score_files <- function(study_setup,
 run_models <- function(study_setup,
                        endpts,
                        surv_ana,
-                       is_first_endpt) {
+                       is_first_endpt,
+                       subset_train) {
     writeLines(paste0("\nRunning models"))
     # Running analaysis for all score type combinations
     for(endpt in endpts) {
@@ -253,8 +622,9 @@ run_models <- function(study_setup,
         cidx_res <- create_empty_cidx_res()
         pheno_score_data <- read_pheno_score_file(study_setup=study_setup,
                                                   endpt=endpt,
-                                                  surv_ana=surv_ana)
-        for(crnt_score_type in surv_ana@score_combos) {
+                                                  surv_ana=surv_ana,
+                                                  subset_train=subset_train)
+        for(crnt_score_type in surv_ana@models) {
             study <- methods::new("study",
                                   study_setup=study_setup,
                                   study_data=pheno_score_data,
@@ -331,10 +701,10 @@ save_results <- function(hr_res,
                          endpt,
                          pheno_score_data,
                          is_first_endpt) {
-    write_pheno_score_files(pheno_score_data=pheno_score_data,
-                            study_setup=study_setup,
-                            endpt=endpt,
-                            surv_ana=surv_ana)
+    #write_pheno_score_files(pheno_score_data=pheno_score_data,
+    #                        study_setup=study_setup,
+    #                        endpt=endpt,
+    #                        surv_ana=surv_ana)
     if(nrow(hr_res) > 0 | nrow(cidx_res) > 0) {
         file_path_coxph <- get_full_file_name_path(res_type="coxph",
                                                 study_setup=study_setup,
@@ -369,13 +739,19 @@ save_results <- function(hr_res,
 
 read_pheno_score_file <- function(study_setup,
                                   endpt,
-                                  surv_ana) {
+                                  surv_ana,
+                                  subset_train=TRUE) {
     file_path <- get_full_file_name_path(res_type="pheno_score",
                                          study_setup=study_setup,
                                          endpt=endpt,
                                          surv_ana=surv_ana)
     pheno_score_data <- readr::read_delim(file_path, delim="\t", show_col_types=FALSE)
-    pheno_score_data <- dplyr::filter(pheno_score_data, TRAIN_STATUS==0)
+    writeLines("non-na column counts")
+    print(colSums(!is.na(pheno_score_data)))
+    if(subset_train) {
+        writeLines("Subsetting")
+        pheno_score_data <- dplyr::filter(pheno_score_data, TRAIN_STATUS==0)
+    }
     writeLines("non-na column counts")
     print(colSums(!is.na(pheno_score_data)))
     return(pheno_score_data)
