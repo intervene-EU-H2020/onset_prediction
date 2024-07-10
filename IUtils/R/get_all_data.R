@@ -54,14 +54,16 @@ get_all_data <- function(score_type,
                          icd_file_path="",
                          atc_file_path="",
                          prs_dir_path="",
-                         prs_endpts_map=NULL,
+                         prs_endpts_names=NULL,
                          phers_dir_path="",
                          phers_transfer_dir_path="",
                          phers_study_descr=NULL,
                          zip_dir_path="",
                          prs_file_end="",
                          prs_id_col_name="",
-                         prs_score_col_name="") {
+                         prs_score_col_name="",
+                         tuomo_file_append="",
+                         exp_len_transfer=NULL) {
     if(is.null(endpts)) {
         endpts <- get_endpts()
     }
@@ -95,7 +97,7 @@ get_all_data <- function(score_type,
     if(any(stringr::str_detect(score_type, "PRS"))) {
         if(dir.exists(prs_dir_path)) {
             prs_data <- read_prs_files(dir_path=prs_dir_path, 
-                                       prs_endpts_map=prs_endpts_map, 
+                                       prs_endpts_names=prs_endpts_names, 
                                        prs_file_end=prs_file_end, 
                                        prs_score_col_name=prs_score_col_name, 
                                        prs_id_col_name=prs_id_col_name)
@@ -110,7 +112,7 @@ get_all_data <- function(score_type,
             if(is.null(phers_study_descr)) {
                 phers_study_descr <- get_phers_file_descr()
             }
-            phers_data <- read_phers_files(phers_dir_path, phers_study_descr, endpts, tuomo=TRUE)
+            phers_data <- read_phers_files(phers_dir_path, phers_study_descr, endpts, tuomo=TRUE, tuomo_file_append=tuomo_file_append)
         } else {
             stop(paste0("Error. PheRS selected as predictor, selected: ",
             paste0(score_type, collapse=", "),
@@ -122,7 +124,7 @@ get_all_data <- function(score_type,
             if(is.null(phers_study_descr)) {
                 phers_study_descr <- get_phers_file_descr()
             }
-            phers_transfer_data <- read_phers_files(phers_transfer_dir_path, phers_study_descr, endpts, tuomo=FALSE)
+            phers_transfer_data <- read_phers_files(phers_transfer_dir_path, phers_study_descr, endpts, tuomo=FALSE, exp_len_transfer=exp_len_transfer)
             phers_data <- dplyr::full_join(phers_data, phers_transfer_data, by=c("ID"))
         } else {
             stop(paste0("Error. PheRS transfer selected as predictor, selected: ",

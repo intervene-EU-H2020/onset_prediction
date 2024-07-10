@@ -7,6 +7,5 @@ get_prs_endpt_descr <- function() {
     c("Appendicitis", "Asthma", "Atrial_Fibrillation", 
     "Breast_Cancer", "CHD", "Colorectal_Cancer", "Epilepsy", 
     "Gout", "Hip_Osteoarthritis", "Knee_Osteoarthritis", "MDD", "Melanoma", 
-    "Prostate_Cancer", "Rheumatoid_Arthritis", "T2D", "ILD", "Lung_Cancer", 
-    "G6_AD_WIDE", "Inflammatory_Bowel_Disease")
+    "Prostate_Cancer", "Rheumatoid_Arthritis", "T2D", "ILD", "Lung_Cancer", "AllCancers")
 }

@@ -24,7 +24,7 @@ custom_colors_brewer <- function(N_colors) {
       c("#841C26", "#B53389", "#C6878F", "#A81C07", "#D5694F", "#FBCF9D", "#59260B", "#CCB6AF", "#7D7C7F", "#91A3B0",
          "#3C4E2D", "#7BA05B", "#9BB59B", "#588986","#29557B","#748AAA", "#ADD8E6")
     } else if(N_colors == 18) {
-      c("#841C26", "#B53389", "#C6878F", "#A81C07", "#D5694F", "#FBCF9D", "#59260B", "#CCB6AF", "#7D7C7F", "#91A3B0",
+      c("#841C26", "#B53389", "#C6878F", "#A81C07", "#D5694F", "#FBCF9D", "#FBCF9D", "#CCB6AF", "#7D7C7F", "#91A3B0",
          "#3C4E2D", "#7BA05B", "#9BB59B", "#588986","#29557B","#748AAA", "#ADD8E6", "#D6ECFF")
     }
 }

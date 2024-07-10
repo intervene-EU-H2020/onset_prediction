@@ -6,7 +6,7 @@
 \usage{
 read_prs_files(
   dir_path,
-  prs_endpts_map = NULL,
+  prs_endpts_names = NULL,
   prs_file_end = "_PRS_hm3.sscore",
   prs_score_col_name = "SCORE1_AVG",
   prs_id_col_name = "#IID"

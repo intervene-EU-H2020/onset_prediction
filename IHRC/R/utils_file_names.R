@@ -64,7 +64,7 @@ get_full_res_path <- function(write_res,
         } else {
             score_type_dir_name <- "baseline"
         }
-        res_dir <- paste0(res_dir, study_type, "/", get_down_dir(down_fctr), score_type_dir_name, "/")
+        res_dir <- paste0(res_dir, score_type_dir_name, "/")
     } else {
         res_dir <- NULL
     }
@@ -125,12 +125,13 @@ get_full_file_name_path <- function(res_type,
                                     study_setup,
                                     endpt=NULL,
                                     surv_ana) {
-    crnt_res_dir <- paste0(surv_ana@res_dir, res_type, "/")
+    if(res_type %in% c("pheno_score", "log")) crnt_res_dir <- paste0(surv_ana@res_dir, res_type, "/")
+    else crnt_res_dir <- surv_ana@res_dir
     check_res_dir(surv_ana@write_res, crnt_res_dir)
 
     # Make the folder if it doesn't exist yet
     res_file_end <- dplyr::case_when(
-                                res_type == "HR" ~ "_HRs.png",
+                                res_type == "cor" ~ "_cors.tsv",
                                 res_type == "coxph" ~ "_coxph.tsv",
                                 res_type == "cidx" ~ "_cidx.tsv",
                                 res_type == "pheno_score" ~ "_elig_indv.tsv",

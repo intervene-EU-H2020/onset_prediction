@@ -30,7 +30,7 @@ extract_coxph_res <- function(coxph_mdl,
         pvals <- summary(coxph_mdl)$coefficients[,"Pr(>|z|)"]
         OR <- exp(betas)
         CI <- get_CI(betas, SE)
-        preds <- names(summary(coxph_mdl)$coefficients[,"coef"])
+        preds <- rownames(summary(coxph_mdl)$coefficients)
         groups <- "no groups"
 
         return(list(beta=betas, std_err=SE, p_val=pvals, HR=OR, CI_neg=exp(CI$neg), CI_pos=exp(CI$pos), groups=groups, preds=preds))

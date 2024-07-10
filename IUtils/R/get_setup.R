@@ -17,11 +17,13 @@ get_setup <- function(setup_file_path) {
     obs_end_date <- as.Date(setup$obs_end_date)
     #setup["score_type"] <- ifelse(is.null(setup$score_type), "", setup$score_type)
     for(elem_name in names(setup)) {
-        setup[[elem_name]] <- stringr::str_remove_all(setup[[elem_name]], " ")
-        if(!all(stringr::str_detect(setup[[elem_name]], "\\D"))) {
-            setup[[elem_name]] <- as.numeric(setup[[elem_name]])
-        } else if(all(stringr::str_detect(setup[[elem_name]], "^(TRUE|FALSE)$"))) {
-            setup[[elem_name]] <- as.logical(setup[[elem_name]])
+        if(elem_name != "models") {
+            setup[[elem_name]] <- stringr::str_remove_all(setup[[elem_name]], " ")
+            if(!all(stringr::str_detect(setup[[elem_name]], "\\D"))) {
+                setup[[elem_name]] <- as.numeric(setup[[elem_name]])
+            } else if(all(stringr::str_detect(setup[[elem_name]], "^(TRUE|FALSE)$"))) {
+                setup[[elem_name]] <- as.logical(setup[[elem_name]])
+            }
         }
     }
     if(is.null(setup$endpts)) {
@@ -75,6 +77,15 @@ get_setup <- function(setup_file_path) {
     if(is.null(setup$trained_external)) {
         setup$trained_external <- FALSE
     }
+    if(is.null(setup$tuomo_file_append)) {
+        setup$tuomo_file_append <- ""
+    }
+    if(is.null(setup$exp_len_transfer)) {
+        setup$exp_len_transfer <- NULL
+    }
+    if(is.null(setup$subset_train)) {
+        setup$subset_train <- FALSE
+    }
     setup$obs_end_date <- obs_end_date
     return(setup)
 }
@@ -89,7 +100,6 @@ get_setup <- function(setup_file_path) {
 #' @export 
 read_setup_file <- function(setup_file_path) {
     setup_tib <- readr::read_delim(setup_file_path, 
-                                   delim="\t",
                                    col_names=FALSE, 
                                    show_col_types=FALSE)
     # Turning tibble into list
@@ -112,11 +122,26 @@ read_setup_file <- function(setup_file_path) {
 #' @export
 split_vecs <- function(setup) {
     for(elem_name in names(setup)) {
-        if(stringr::str_detect(setup[[elem_name]], ", ")) {
-            setup[elem_name] <- stringr::str_split(setup[[elem_name]], pattern=", ")
-        } else if(stringr::str_detect(setup[[elem_name]], ",")) {
-            setup[elem_name] <- as.vector(stringr::str_split(setup[[elem_name]], pattern=","))
-        } 
+        if(elem_name == "models") {
+            if(stringr::str_detect(setup[[elem_name]], ",")) {
+                setup[elem_name] <- stringr::str_remove_all(setup[[elem_name]], " ")
+                unsplit_models <- unlist(stringr::str_split(setup[[elem_name]], pattern=","))
+                n = 1
+                setup[[elem_name]] <- list()
+                for(model in unsplit_models) {
+                    setup[[elem_name]][[n]] <- as.character(unlist(stringr::str_split(model, pattern="\\+")))
+                    n = n + 1
+                }
+            } else {
+                setup[[elem_name]][[1]] <- as.character(unlist(stringr::str_split(setup[[elem_name]], pattern="\\+")))
+            }
+        } else {
+            if(stringr::str_detect(setup[[elem_name]], ", ")) {
+                setup[elem_name] <- stringr::str_split(setup[[elem_name]], pattern=", ")
+            } else if(stringr::str_detect(setup[[elem_name]], ",")) {
+                setup[elem_name] <- as.vector(stringr::str_split(setup[[elem_name]], pattern=","))
+            } 
+        }
     }
     return(setup)
 }

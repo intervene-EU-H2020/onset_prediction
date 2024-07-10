@@ -10,6 +10,7 @@ run_surv_studies(
   create_score_combos = FALSE,
   bunch_phenos = FALSE,
   covs = c("SEX", "YEAR_OF_BIRTH"),
+  models = NULL,
   endpts_indvs_mat = NULL,
   icd_data = NULL,
   atc_data = NULL,
@@ -32,7 +33,8 @@ run_surv_studies(
   write_res = FALSE,
   res_dir = NULL,
   write_progress = FALSE,
-  is_first_endpt = TRUE
+  is_first_endpt = TRUE,
+  subset_train = TRUE
 )
 }
 \arguments{

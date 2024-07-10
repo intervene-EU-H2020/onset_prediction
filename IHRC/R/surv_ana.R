@@ -29,17 +29,14 @@ surv_ana <- methods::setClass("surv_ana",
                 slots=list(min_indvs="numeric",
                            score_types="character",
                            covs="character",
-                           create_score_combos="logical",
-                           bunch_phenos="logical",
-                           score_combos="list",
+                           models="list",
                            preds="character",
                            write_res="logical",
                            res_dir="character",
                            error_file="character",
                            write_progress="logical"),
                 prototype=list(min_indvs=5,
-                               create_score_combos=FALSE,
-                               score_combos=list(),
+                               models=list(),
                                preds=c("SEX", "YEAR_OF_BIRTH"),
                                write_res=FALSE,
                                res_dir=NA_character_,
@@ -52,14 +49,23 @@ surv_ana <- methods::setClass("surv_ana",
 setMethod("initialize", "surv_ana", function(.Object, ...) {
     .Object <- callNextMethod()
     .Object@error_file <- create_log_file(.Object)
-    .Object@score_combos <- IUtils::get_score_types(.Object@score_types, 
-                                                    .Object@create_score_combos,
-                                                    .Object@bunch_phenos,
-                                                    no_covs=ifelse(all(.Object@covs == ""), TRUE, FALSE))
     .Object@preds <- get_all_preds_sorted(.Object@score_types, .Object@covs)
+
+    .Object@models <- process_models(.Object@models)
+
 
     return(.Object)
 })
+
+process_models <- function(models) {
+    for(model_nr in 1:length(models)) {
+        if("PCs" %in% models[[model_nr]]) {
+            models[[model_nr]] <- models[[model_nr]][-which(models[[model_nr]] == "PCs")]
+            models[[model_nr]] <- c(models[[model_nr]], paste0("PC", 1:10))
+        } 
+    }
+    return(models)
+}
 
 #' Creates log file
 #' 
@@ -129,7 +135,10 @@ setGeneric(name="setPreds",
 setMethod(f="setPreds",
           signature="surv_ana",
           definition=function(.Object, crnt_score_types) {
-                .Object@preds <- get_all_preds_sorted(crnt_score_types, .Object@covs)
+                crnt_covs <- crnt_score_types[crnt_score_types %in% .Object@covs]
+                crnt_non_covs <- crnt_score_types[!(crnt_score_types %in% crnt_covs)]
+
+                .Object@preds <- get_all_preds_sorted(crnt_non_covs, crnt_covs)
                 methods::validObject(.Object)
                 return(.Object)
           }

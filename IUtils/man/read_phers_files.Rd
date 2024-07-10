@@ -4,7 +4,14 @@
 \alias{read_phers_files}
 \title{Reads the PheRS files for the endpoints from a common directory}
 \usage{
-read_phers_files(dir_path, study_descr = NULL, endpts = NULL)
+read_phers_files(
+  dir_path,
+  study_descr = NULL,
+  endpts = NULL,
+  tuomo = TRUE,
+  tuomo_file_append = "",
+  exp_len_transfer = NULL
+)
 }
 \arguments{
 \item{dir_path}{A string (string). The path to the directory.}

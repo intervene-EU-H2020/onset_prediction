@@ -39,7 +39,7 @@ Should at least contain the columns as described  in
 \link{get_relevant_pheno_data_cols}.}
 
 \item{study_setup}{An S4 \code{study_setup} object. The current study setup.
-See class definition \link[Istudy:study_setup]{Istudy::study_setup}.}
+See class definition \link[Istudy:study_setup-class]{Istudy::study_setup}.}
 
 \item{endpts_indvs_mat}{A data.frame. A matrix with the individuals that can
 be used for each endpoint. Contains a column of individual

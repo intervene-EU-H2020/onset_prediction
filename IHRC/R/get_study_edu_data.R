@@ -32,14 +32,15 @@
 get_edu_cont_data <- function(study_data) {
     # Read in ISCED 2011 mapping
     file_path <- system.file("extdata", "finngen_age_modes.tsv", package = "IHRC")
-    isced_map <- readr::read_delim(file_path, delim="\t", show_col_types=FALSE)
-    class(isced_map$ISCED_2011) <- class(study_data$ISCED_2011)
+    #file_path <- "/home/ivm/socio_processed/data/age_modes_R10.tsv"
+    isced_map <- readr::read_delim(file_path, delim="\t", col_types=c("ddd"))
 
     # Add age mode based on Finngen R10 to the data
     edu_data <- dplyr::left_join(study_data, 
                                  isced_map,
-                                 by=c("EDU"="ISCED_2011"))
-    edu_data <- dplyr::rename(edu_data, EDU=FIN_AGE_MODE) %>% 
-                    dplyr::select(ID, EDU)
+                                 by=c("EDUCATION_11"))
+
+    edu_data <- dplyr::rename(edu_data, EDU_cont=FIN_AGE_MODE) %>% 
+                    dplyr::select(ID, EDU_cont)
     return(edu_data)
 }

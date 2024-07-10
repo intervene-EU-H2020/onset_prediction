@@ -35,6 +35,7 @@ get_coxph_mdl <- function(surv_ana,
                       }, error = function(e) {
                                 write_to_error_file(surv_ana@error_file, msg=paste0(e, collapse="\n"))
                                 return(NULL)})
+        print(coxph_mdl)
         write_coxph_to_log(coxph_mdl, study, surv_ana) 
     }
 
@@ -58,7 +59,6 @@ get_coxph_mdl <- function(surv_ana,
 get_coxph_formula <- function(preds,
                               endpt) {
     pred_string <- paste0(preds, collapse="+")
-    #pred_string <- paste0(pred_string, " + tt(YEAR_OF_BIRTH)")
     coxph_formula <- stats::as.formula(paste0("survival::Surv(", endpt, "_AGE_FROM_BASE, ",  endpt, ") ~ ",  pred_string))
     return(coxph_formula)
 }
@@ -154,11 +154,28 @@ scale_preds <- function(preds,
 
     for(pred in preds) {
         if(pred %in% colnames(study_data)) {
-            if(pred %in% c("PRS", "CCI", "EI", "YEAR_OF_BIRTH", "MED", "EDU_cont", "PheRS", "PheRS_transfer", "Prob", "BMI")) {
-                study_data[,pred] <- scale(study_data[,pred])
+            if(pred %in% c("YEAR_OF_BIRTH", "BMI") | stringr::str_detect(pred, "PC")) {
+                study_data[,pred] <- scale(study_data[,pred])[,1]
             } 
-            if(pred %in% c("EDU", "ZIP", "SMOKING")) {
-                study_data[,pred] <- as.factor(dplyr::pull(study_data, pred))
+            # if(pred %in% c("EDU", "ZIP", "SMOKING", "EDUCATION_11", "EDUCATION_97", "EDU_UKBB")) {
+            #     study_data[,pred] <- as.factor(dplyr::pull(study_data, pred))
+            # }
+            # if(pred %in% c("EDUCATION_11")) {
+            #     study_data <- dplyr::mutate(study_data, EDUCATION_11=case_when(EDUCATION_11 <= 1 ~ "0", EDUCATION_11 > 1 & EDUCATION_11 < 5 ~ "1", EDUCATION_11 >= 5 ~ "2"))
+            #     study_data[,pred] <- factor(as.character(dplyr::pull(study_data, pred)), levels=c("1", "0", "2"))
+            # }
+
+            if(pred %in% c("EDU","EDUCATION_97")) {
+                study_data[,pred] <- factor(as.character(ifelse(study_data[,pred] == "Advanced", "1", "0")), levels=c("1", "0"))
+            }
+
+            if(stringr::str_detect(pred, "_group")) {
+                if(pred %in% c("PheRS_group", "PRS_group"))
+                    study_data[,pred] <- factor(as.character(dplyr::pull(study_data, pred)), levels=c("4","1","2","3","5","6","7"))
+                if(pred == "CCI_group")
+                    study_data[,pred] <- factor(as.character(dplyr::pull(study_data, pred)), levels=c("0", "1"))
+                if(pred == "EDU_cont_group")
+                    study_data[,pred] <- factor(as.character(dplyr::pull(study_data, pred)), levels=c("1", "0"))
             }
         }
     }

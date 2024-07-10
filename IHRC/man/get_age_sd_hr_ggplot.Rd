@@ -11,7 +11,7 @@ get_age_sd_hr_ggplot(coxph_hrs, study_setup, preds, endpt, min_y, max_y)
 the current endpoint.}
 
 \item{study_setup}{An S4 \code{study_setup} object. The current study setup.
-See class definition \link[Istudy:study_setup]{Istudy::study_setup}.}
+See class definition \link[Istudy:study_setup-class]{Istudy::study_setup}.}
 
 \item{preds}{A string (vector). The predictors of the analysis
 for the caption.}
