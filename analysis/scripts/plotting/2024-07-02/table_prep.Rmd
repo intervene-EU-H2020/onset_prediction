@@ -279,7 +279,7 @@ transfer_hrs <- transfer_hrs %>% arrange(Order, VAR, GROUP, SURV_MODEL, Biobank)
 all_hrs <- rbind(normal_hrs, transfer_hrs)
 all_hrs
 
-readr::write_delim(all_hrs, (paste0(tbl_res_dir, "all_hrs.csv")), delim=",", quote="all")
+#readr::write_delim(all_hrs, (paste0(tbl_res_dir, "all_hrs.csv")), delim=",", quote="all")
 
 ```
 
@@ -328,7 +328,7 @@ transfer_cidx
 
 all_cidx <- rbind(normal_cidx, transfer_cidx)
 all_cidx
-readr::write_delim(all_cidx, (paste0(tbl_res_dir, "all_cidx.csv")), delim=",", quote="all")
+#readr::write_delim(all_cidx, (paste0(tbl_res_dir, "all_cidx.csv")), delim=",", quote="all")
 
 ```
 
@@ -344,7 +344,7 @@ cors <- cors %>% filter(VAR_1 == "PheRS", VAR_2 == "PheRS_transfer", SET == "Tes
 cors_wide <- cors %>% tidyr::pivot_wider(values_from=c(COR, CIneg, CIpos, P_value), names_from=Biobank, id_cols = Endpoint)
 cors_wide <- cors_wide %>% left_join(endpt_map) %>% select(Disease, COR_EstB, COR_UKB, P_value_EstB, P_value_UKB)
 cors_wide <- dplyr::filter(cors_wide, !is.na(Disease))
-readr::write_delim(cors_wide, (paste0(tbl_res_dir, "transfer_cor.csv")), delim=",", quote="all")
+#readr::write_delim(cors_wide, (paste0(tbl_res_dir, "transfer_cor.csv")), delim=",", quote="all")
 
 ```
 # pgs
@@ -364,7 +364,7 @@ cors_wide <- cors_wide %>% left_join(endpt_map) %>% select(Disease, COR_FinnGen,
 cors_wide <- dplyr::filter(cors_wide, !is.na(Disease))
 cors_wide
 
-readr::write_delim(cors_wide, (paste0(tbl_res_dir, "phers_pgs_cor.csv")), delim=",", quote="all")
+#readr::write_delim(cors_wide, (paste0(tbl_res_dir, "phers_pgs_cor.csv")), delim=",", quote="all")
 
 ```
 
@@ -378,7 +378,7 @@ n_diag_cor <- n_diag_cor %>% left_join(endpt_map) %>% select(Disease, COR_SIMPLE
 n_diag_cor <- dplyr::filter(n_diag_cor, !is.na(Disease))
 
 n_diag_cor
-readr::write_delim(n_diag_cor, (paste0(tbl_res_dir, "n_diags_cor.csv")), delim=",", quote="all")
+#readr::write_delim(n_diag_cor, (paste0(tbl_res_dir, "n_diags_cor.csv")), delim=",", quote="all")
 
 ```
 ## CCI
@@ -399,5 +399,5 @@ cors_wide <- cors_wide %>% left_join(endpt_map) %>% select(Disease, COR_FinnGen,
 cors_wide <- dplyr::filter(cors_wide, !is.na(Disease))
 cors_wide
 
-readr::write_delim(cors_wide, (paste0(tbl_res_dir, "phers_cci_cor.csv")), delim=",", quote="all")
+#readr::write_delim(cors_wide, (paste0(tbl_res_dir, "phers_cci_cor.csv")), delim=",", quote="all")
 ```
