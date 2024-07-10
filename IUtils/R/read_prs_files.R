@@ -20,15 +20,19 @@
 #' 
 #' @export 
 read_prs_files <- function(dir_path,
-                           prs_endpts_map=NULL,
+                           prs_endpts_names=NULL,
                            prs_file_end="_PRS_hm3.sscore",
                            prs_score_col_name="SCORE1_AVG",
                            prs_id_col_name="#IID") {
-    if(is.null(prs_endpts_map)) {
+    if(is.null(prs_endpts_names)) {
         endpts <- get_endpts()
         get_prs_endpt_descr <- get_prs_endpt_descr()  
         prs_endpts_map <- tibble::tibble(endpt=endpts, 
                                          prs=get_prs_endpt_descr)
+        print(prs_endpts_map)
+        writeLines(paste0("This is the mapping from endpoint names to PRS endpoint descriptions. 
+                            Please check that it is correct. If not, please provide also a comma separated list prs_endpts_names matching the order printed here.")) 
+        
     }
     prs_data <- tibble::tibble(ID=character())
 
@@ -74,7 +78,13 @@ add_prs_col <- function(file_path,
         crnt_prs <- readr::read_delim(file_path, 
                                       delim="\t", 
                                       show_col_types=FALSE)
-        endpt <- col_map[col_map$prs == disease,]$endpt
+        if(disease %in% col_map$prs) {
+            endpt <- col_map[col_map$prs == disease,]$endpt
+        } else if(disease %in% col_map$endpt) {
+            endpt <- disease
+        } else {
+            stop(paste0("Could not find PRS endpoint description for ", disease, ". Please check the PRS file name."))
+        }
         colnames(crnt_prs)[colnames(crnt_prs) == prs_id_col_name] <- "ID"
         colnames(crnt_prs)[colnames(crnt_prs) == prs_score_col_name] <- paste0(endpt, "_PRS")
         crnt_prs <- dplyr::select(crnt_prs, ID, paste0(endpt, "_PRS")) %>% 
