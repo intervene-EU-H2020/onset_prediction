@@ -41,3 +41,9 @@ vignettes/*.pdf
 # Analysis files/dirs to exclude
 *old/
 *data/
+*manuscript/
+*.png
+*.pdf
+*.svg
+*.csv
+*.tsv
