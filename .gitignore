@@ -38,3 +38,6 @@ vignettes/*.pdf
 # Some mac thing
 .DS_Store
 
+# Analysis files/dirs to exclude
+*old/
+*data/
