@@ -41,7 +41,7 @@ so_formatter <- function(num,
 
 #' Reads in data with biobank information and some filtering
 get_data <- function(path, biobank="FinnGen") {
-    endpt_names <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/results/tables/endpt_name_maps/endpoint_name_map.csv")
+    endpt_names <- readr::read_delim("/home/detrokir/Documents/DSGE/GitHub/onset_prediction/analysis/results/tables/endpt_name_maps/endpoint_name_map.csv")
     data <- readr::read_delim(path)
     data <- dplyr::filter(data, !(ENDPOINT %in% c("G6_SLEEPAPNO", "K11_IBD_STRICT", "I9_HEARTFAIL_NS", "N14_CHRONKIDNEYDIS", "G6_AD_WIDE", "C3_CANCER")))
     endpt_names <- dplyr::select(endpt_names, ENDPOINT, Endpoint)
@@ -103,7 +103,7 @@ get_new_crnt_endpt_data <- function(data) {
 
 #' Original color list
 get_color_list <- function() {
-    endpt_names <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/results/tables/endpt_name_maps/endpoint_name_map.csv")
+    endpt_names <- readr::read_delim("/home/detrokir/Documents/DSGE/GitHub/onset_prediction/analysis/results/tables/endpt_name_maps/endpoint_name_map.csv")
 
     color_list <- endpt_names$NEW_COLOR
     names(color_list) <- endpt_names$Endpoint
@@ -120,7 +120,7 @@ get_new_color_list <- function() {
 #' Final color list for manuscript
 get_final_color_list <- function() {
 
-    endpt_names <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/results/tables/endpt_name_maps/endpoint_name_map.csv")
+    endpt_names <- readr::read_delim("/home/detrokir/Documents/DSGE/GitHub/onset_prediction/analysis/results/tables/endpt_name_maps/endpoint_name_map.csv")
 
     color_list <- endpt_names$NEW_COLOR
     names(color_list) <- endpt_names$Endpoint
@@ -199,7 +199,7 @@ cidx_mdl_comp <- function(crnt_cidx,
 meta_hrs <- function(data, var, surv_model, bbs=c("FinnGen", "UKB", "EstB"), group=-1, crnt_method="REML"){
     data <- dplyr::filter(data, SURV_MODEL == surv_model, Biobank %in% bbs, VAR == var, GROUP==group)
     # For order - deprecated
-    endpt_names <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/results/tables/endpt_name_maps/endpoint_name_map.csv")
+    endpt_names <- readr::read_delim("/home/detrokir/Documents/DSGE/GitHub/onset_prediction/analysis/results/tables/endpt_name_maps/endpoint_name_map.csv")
     # Results tibble
     meta <- tibble(Endpoint=character(), SURV_MODEL=character(), VAR=character(), GROUP=numeric(), N_CONTROLS=numeric(), N_CASES=numeric(), 
                    BETA=numeric(), BETA_SE=numeric(), P_VAL=numeric(), I2=numeric(), I2_CIneg=numeric(), I2_CIpos=numeric(), QHet=numeric(), QHet_CIneg=numeric(), 
@@ -294,7 +294,7 @@ meta_hrs <- function(data, var, surv_model, bbs=c("FinnGen", "UKB", "EstB"), gro
 #'  meta analysis of c-indices same as for HRs
 meta_cidx <- function(data, surv_model, bbs=c("FinnGen", "UKB", "EstB"), crnt_method="REML"){
     data <- dplyr::filter(data, SURV_MODEL == surv_model, Biobank %in% bbs)
-    endpt_names <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/results/tables/endpt_name_maps/endpoint_name_map.csv")
+    endpt_names <- readr::read_delim("/home/detrokir/Documents/DSGE/GitHub/onset_prediction/analysis/results/tables/endpt_name_maps/endpoint_name_map.csv")
     meta <- tibble(Endpoint=character(), SURV_MODEL=character(), N_CONTROLS=numeric(), N_CASES=numeric(), 
                    P_VAL=numeric(), I2=numeric(), I2_CIneg=numeric(), I2_CIpos=numeric(), QHet=numeric(), QHet_CIneg=numeric(), 
                    QHet_CIpos=numeric(), Q_pval=numeric(), N_BBs=numeric(), C_IDX=numeric(), SE=numeric(), C_IDX_CI_NEG=numeric(), C_IDX_CI_POS=numeric(), ENDPT_ORDER=numeric())    
