@@ -1,0 +1,260 @@
+
+```{r}
+library(dplyr)
+source("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/scripts/utils.R")
+```
+
+```{r}
+# Load the data
+icd_10_map <- readr::read_delim("/home/detrokir/Documents/DSGE/GitHub/INTERVENE_PheRS/data/phecode_icd10_v2_manual_curation_2024-05_v2.csv")
+icd_10_map
+data <- readr::read_delim("/home/kira/Documents/mac_backup_03-10-2024/Documents/Projects/onset_prediction/PheRS/UKBB_definitions_special_excludes.csv")
+data <- dplyr::rename(data, Endpoint=NAME)
+data %>% filter(Endpoint == "G6_EPLEPSY")
+code_def <- readr::read_delim("/home/kira/Documents/mac_backup_03-10-2024/Documents/Projects/onset_prediction/PheRS/phecode_definitions1.2_manual_additions_v2_2024-05.csv")
+code_def %>% filter(stringr::str_detect(phecode, "510"))
+code_def %>% filter(stringr::str_detect(phenotype, "obesity"))
+
+icd_10_map %>% filter(stringr::str_detect(PheCode, "351"))
+icd_10_map %>% filter(stringr::str_detect(ICD10, "M25"))
+
+icd_10_map %>% filter(PheCode == "459")
+
+icd_10_map %>% filter(stringr::str_detect(PheCode, "627"))
+icd_10_map %>% filter(PheCode == "711") %>% pull(Phenotype)
+
+
+code_def %>% filter(stringr::str_detect(phecode, "^136"))
+
+gout_estb <- readr::read_delim("/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/orig/estbb/estbb_down_2024-05/INTERVENE_EstBB_PheRS_results_2024-05/I9_CHD_exposure=2003-01-01-2008-12-31-washoutend=2010-12-31-observationend=2019-01-01/best_model_coefficients.txt")
+gout_estb %>% left_join(code_def %>% select(phecode, phenotype, category), by=c("feature_name"="phecode")) %>% arrange(desc(abs(coefficient)))
+
+gout_estb %>% filter(feature_name == 339)
+```
+
+
+```{r}
+dir_path <- "/home/detrokir/Documents/DSGE/projects/onset_prediction/code/onset_prediction/analysis/data/orig/ukbb/ukbb_phers_2024-05/ukb_phers_all_levels_2024_05_info/"
+# Load the data
+crnt_data <- readr::read_delim(paste0(dir_path, "F5_DEPRESSIO_exposure=1999-01-01-2008-12-31-washoutend=2010-12-31-observationend=2019-01-01/best_model_coefficients.txt"))
+crnt_data <- dplyr::left_join(crnt_data, code_def %>% select(phecode, phenotype, category), by=c("feature_name"="phecode"))
+crnt_data %>% arrange(desc(abs(coefficient)))
+crnt_data$ENDPOINT <- "F5_DEPRESSIO"
+crnt_data$Endpoint <- "Major Depression"
+crnt_data
+crnt_data %>% arrange(desc((coefficient)))
+data <- crnt_data
+
+# Load the data
+crnt_data <- readr::read_delim(paste0(dir_path, "COX_ARTHROSIS_exposure=1999-01-01-2008-12-31-washoutend=2010-12-31-observationend=2019-01-01/best_model_coefficients.txt"))
+crnt_data <- dplyr::left_join(crnt_data, code_def %>% select(phecode, phenotype, category), by=c("feature_name"="phecode"))
+crnt_data %>% arrange(desc(abs(coefficient)))
+crnt_data$ENDPOINT <- "COX_ARTHROSIS"
+crnt_data$Endpoint <- "Hip Osteoarthritis"
+crnt_data
+data <- rbind(data, crnt_data)
+data %>% filter(ENDPOINT == "COX_ARTHROSIS") %>% arrange(desc((coefficient)))
+
+
+# Load the data
+crnt_data <- readr::read_delim(paste0(dir_path, "C3_MELANOMA_SKIN", "_exposure=1999-01-01-2008-12-31-washoutend=2010-12-31-observationend=2019-01-01/best_model_coefficients.txt"))
+crnt_data <- dplyr::left_join(crnt_data, code_def %>% select(phecode, phenotype, category), by=c("feature_name"="phecode"))
+crnt_data %>% arrange(desc(abs(coefficient)))
+crnt_data$ENDPOINT <- "C3_MELANOMA_SKIN"
+crnt_data$Endpoint <- "Skin Cancer"
+crnt_data
+data <- rbind(data, crnt_data)
+data %>% filter(ENDPOINT == "C3_MELANOMA_SKIN") %>% arrange(desc((coefficient)))
+
+# Load the data
+crnt_data <- readr::read_delim(paste0(dir_path, "K11_APPENDACUT", "_exposure=1999-01-01-2008-12-31-washoutend=2010-12-31-observationend=2019-01-01/best_model_coefficients.txt"))
+crnt_data <- dplyr::left_join(crnt_data, code_def %>% select(phecode, phenotype, category), by=c("feature_name"="phecode"))
+crnt_data %>% arrange(desc(abs(coefficient)))
+crnt_data$ENDPOINT <- "K11_APPENDACUT"
+crnt_data$Endpoint <- "Appendicitis"
+crnt_data
+data <- rbind(data, crnt_data)
+data %>% filter(ENDPOINT == "K11_APPENDACUT") %>% arrange(desc((coefficient)))
+
+
+# Load the data
+crnt_data <- readr::read_delim(paste0(dir_path, "C3_BRONCHUS_LUNG", "_exposure=1999-01-01-2008-12-31-washoutend=2010-12-31-observationend=2019-01-01/best_model_coefficients.txt"))
+crnt_data <- dplyr::left_join(crnt_data, code_def %>% select(phecode, phenotype, category), by=c("feature_name"="phecode"))
+crnt_data %>% arrange(desc(abs(coefficient)))
+crnt_data$ENDPOINT <- "C3_BRONCHUS_LUNG"
+crnt_data$Endpoint <- "Lung Cancer"
+crnt_data
+data <- rbind(data, crnt_data)
+data %>% filter(ENDPOINT == "C3_BRONCHUS_LUNG") %>% arrange(desc((coefficient)))
+
+
+crnt_data <- readr::read_delim(paste0(dir_path, "KNEE_ARTHROSIS", "_exposure=1999-01-01-2008-12-31-washoutend=2010-12-31-observationend=2019-01-01/best_model_coefficients.txt"))
+crnt_data <- dplyr::left_join(crnt_data, code_def %>% select(phecode, phenotype, category), by=c("feature_name"="phecode"))
+crnt_data %>% arrange(desc(abs(coefficient)))
+crnt_data$ENDPOINT <- "KNEE_ARTHROSIS"
+crnt_data$Endpoint <- "Knee Osteoarthritis"
+crnt_data
+crnt_data %>% arrange(desc((coefficient)))
+
+data <- rbind(data, crnt_data)
+
+
+crnt_data <- readr::read_delim(paste0(dir_path, "T2D", "_exposure=1999-01-01-2008-12-31-washoutend=2010-12-31-observationend=2019-01-01/best_model_coefficients.txt"))
+crnt_data <- dplyr::left_join(crnt_data, code_def %>% select(phecode, phenotype, category), by=c("feature_name"="phecode"))
+crnt_data %>% arrange(desc(abs(coefficient)))
+crnt_data$ENDPOINT <- "T2D"
+crnt_data$Endpoint <- "Type 2 Diabetes"
+crnt_data
+crnt_data %>% arrange(desc((coefficient)))
+
+data <- rbind(data, crnt_data)
+data %>% filter(ENDPOINT == "T2D") %>% arrange(desc((coefficient)))
+
+
+crnt_data <- readr::read_delim(paste0(dir_path, "C3_BREAST", "_exposure=1999-01-01-2008-12-31-washoutend=2010-12-31-observationend=2019-01-01/best_model_coefficients.txt"))
+crnt_data <- dplyr::left_join(crnt_data, code_def %>% select(phecode, phenotype, category), by=c("feature_name"="phecode"))
+crnt_data %>% arrange(desc(abs(coefficient)))
+crnt_data$ENDPOINT <- "C3_BREAST"
+crnt_data$Endpoint <- "Breast Cancer"
+crnt_data
+crnt_data %>% arrange(desc((coefficient)))
+
+data <- rbind(data, crnt_data)
+data %>% filter(ENDPOINT == "C3_BREAST") %>% arrange(desc((coefficient)))
+
+
+crnt_data <- readr::read_delim(paste0(dir_path, "C3_PROSTATE", "_exposure=1999-01-01-2008-12-31-washoutend=2010-12-31-observationend=2019-01-01/best_model_coefficients.txt"))
+crnt_data <- dplyr::left_join(crnt_data, code_def %>% select(phecode, phenotype, category), by=c("feature_name"="phecode"))
+crnt_data %>% arrange(desc(abs(coefficient)))
+crnt_data$ENDPOINT <- "C3_PROSTATE"
+crnt_data$Endpoint <- "Prostate Cancer"
+crnt_data
+crnt_data %>% arrange(desc((coefficient)))
+
+data <- rbind(data, crnt_data)
+data %>% filter(ENDPOINT == "C3_PROSTATE") %>% arrange(desc((coefficient)))
+
+
+crnt_data <- readr::read_delim(paste0(dir_path, "C3_COLORECTAL", "_exposure=1999-01-01-2008-12-31-washoutend=2010-12-31-observationend=2019-01-01/best_model_coefficients.txt"))
+crnt_data <- dplyr::left_join(crnt_data, code_def %>% select(phecode, phenotype, category), by=c("feature_name"="phecode"))
+crnt_data %>% arrange(desc(abs(coefficient)))
+crnt_data$ENDPOINT <- "C3_COLORECTAL"
+crnt_data$Endpoint <- "Colorectal Cancer"
+crnt_data
+crnt_data %>% arrange(desc((coefficient)))
+
+data <- rbind(data, crnt_data)
+data %>% filter(ENDPOINT == "C3_COLORECTAL") %>% arrange(desc((coefficient)))
+
+crnt_data <- readr::read_delim(paste0(dir_path, "I9_AF", "_exposure=1999-01-01-2008-12-31-washoutend=2010-12-31-observationend=2019-01-01/best_model_coefficients.txt"))
+crnt_data <- dplyr::left_join(crnt_data, code_def %>% select(phecode, phenotype, category), by=c("feature_name"="phecode"))
+crnt_data %>% arrange(desc(abs(coefficient)))
+crnt_data$ENDPOINT <- "I9_AF"
+crnt_data$Endpoint <- "Atrial Fibrillation"
+crnt_data
+crnt_data %>% arrange(desc((coefficient)))
+
+data <- rbind(data, crnt_data)
+data %>% filter(ENDPOINT == "I9_AF") %>% arrange(desc((coefficient)))
+
+
+crnt_data <- readr::read_delim(paste0(dir_path, "J10_ASTHMA", "_exposure=1999-01-01-2008-12-31-washoutend=2010-12-31-observationend=2019-01-01/best_model_coefficients.txt"))
+crnt_data <- dplyr::left_join(crnt_data, code_def %>% select(phecode, phenotype, category), by=c("feature_name"="phecode"))
+crnt_data %>% arrange(desc(abs(coefficient)))
+crnt_data$ENDPOINT <- "J10_ASTHMA"
+crnt_data$Endpoint <- "Asthma"
+crnt_data
+crnt_data %>% arrange(desc((coefficient)))
+
+data <- rbind(data, crnt_data)
+data %>% filter(ENDPOINT == "J10_ASTHMA") %>% arrange(desc((coefficient)))
+
+
+
+
+crnt_data <- readr::read_delim(paste0(dir_path, "I9_CHD", "_exposure=1999-01-01-2008-12-31-washoutend=2010-12-31-observationend=2019-01-01/best_model_coefficients.txt"))
+crnt_data <- dplyr::left_join(crnt_data, code_def %>% select(phecode, phenotype, category), by=c("feature_name"="phecode"))
+crnt_data %>% arrange(desc(abs(coefficient)))
+crnt_data$ENDPOINT <- "I9_CHD"
+crnt_data$Endpoint <- "Coronary Heart Disease"
+crnt_data
+crnt_data %>% arrange(desc((coefficient)))
+
+data <- rbind(data, crnt_data)
+data %>% filter(ENDPOINT == "I9_CHD") %>% arrange(desc((coefficient)))
+
+crnt_data <- readr::read_delim(paste0(dir_path, "G6_EPLEPSY", "_exposure=1999-01-01-2008-12-31-washoutend=2010-12-31-observationend=2019-01-01/best_model_coefficients.txt"))
+crnt_data <- dplyr::left_join(crnt_data, code_def %>% select(phecode, phenotype, category), by=c("feature_name"="phecode"))
+crnt_data %>% arrange(desc(abs(coefficient)))
+crnt_data$ENDPOINT <- "G6_EPLEPSY"
+crnt_data$Endpoint <- "Epilepsy"
+crnt_data
+crnt_data %>% arrange(desc((coefficient)))
+
+data <- rbind(data, crnt_data)
+data %>% filter(ENDPOINT == "G6_EPLEPSY") %>% arrange(desc((coefficient)))
+
+crnt_data <- readr::read_delim(paste0(dir_path, "GOUT", "_exposure=1999-01-01-2008-12-31-washoutend=2010-12-31-observationend=2019-01-01/best_model_coefficients.txt"))
+crnt_data <- dplyr::left_join(crnt_data, code_def %>% select(phecode, phenotype, category), by=c("feature_name"="phecode"))
+crnt_data %>% arrange(desc(abs(coefficient)))
+crnt_data$ENDPOINT <- "GOUT"
+crnt_data$Endpoint <- "Gout"
+crnt_data
+crnt_data %>% arrange(desc((coefficient)))
+
+data <- rbind(data, crnt_data)
+data %>% filter(ENDPOINT == "GOUT") %>% arrange(desc((coefficient)))
+
+crnt_data <- readr::read_delim(paste0(dir_path, "RHEUMA_SEROPOS_OTH", "_exposure=1999-01-01-2008-12-31-washoutend=2010-12-31-observationend=2019-01-01/best_model_coefficients.txt"))
+crnt_data <- dplyr::left_join(crnt_data, code_def %>% select(phecode, phenotype, category), by=c("feature_name"="phecode"))
+crnt_data %>% arrange(desc(abs(coefficient)))
+crnt_data$ENDPOINT <- "RHEUMA_SEROPOS_OTH"
+crnt_data$Endpoint <- "Rheumatoid Arthritis"
+crnt_data
+crnt_data %>% arrange(desc((coefficient)))
+
+data <- rbind(data, crnt_data)
+data %>% filter(ENDPOINT == "RHEUMA_SEROPOS_OTH") %>% arrange(desc((coefficient)))
+
+crnt_data <- readr::read_delim(paste0(dir_path, "ILD", "_exposure=1999-01-01-2008-12-31-washoutend=2010-12-31-observationend=2019-01-01/best_model_coefficients.txt"))
+crnt_data <- dplyr::left_join(crnt_data, code_def %>% select(phecode, phenotype, category), by=c("feature_name"="phecode"))
+crnt_data %>% arrange(desc(abs(coefficient)))
+crnt_data$ENDPOINT <- "ILD"
+crnt_data$Endpoint <- "Interstitial Lung Disease"
+crnt_data
+crnt_data %>% arrange(desc((coefficient)))
+
+data <- rbind(data, crnt_data)
+data %>% filter(ENDPOINT == "ILD") %>% arrange(desc((coefficient)))
+
+data$phenotype[is.na(data$phenotype)] <- data$feature_name[is.na(data$phenotype)]
+data$category[is.na(data$category)] <- "base"
+data$COHORT <- "UKB"
+
+data %>% pull(ENDPOINT) %>% unique()
+length(data %>% pull(ENDPOINT) %>% unique())
+
+readr::write_delim(data, paste0(dir_path, "coefs_ukb_2024-05-11.tsv"), delim="\t")
+```
+
+
+```{r}
+# Load the data
+data <- readr::read_delim(paste0(dir_path, "GOUT.txt")
+data <- dplyr::left_join(data, code_def %>% select(phecode, phenotype, category), by=c("feature_name"="phecode"))
+data %>% arrange(desc(abs(coefficient)))
+
+data %>% arrange(desc((coefficient)))
+
+data %>% filter(is.na(phenotype))
+
+# Load the data
+data <- readr::read_delim("/home/kira/Documents/mac_backup_03-10-2024/Documents/Projects/onset_prediction/PheRS/coefs/prim/GOUT.txt")
+data <- dplyr::left_join(data, code_def %>% select(phecode, phenotype, category), by=c("feature_name"="phecode"))
+data %>% arrange(desc(abs(coefficient)))
+
+data %>% arrange(desc((coefficient)))
+
+data %>% filter(is.na(phenotype))
+
+```
